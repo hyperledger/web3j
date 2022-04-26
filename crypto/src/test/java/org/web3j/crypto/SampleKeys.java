@@ -39,5 +39,10 @@ public class SampleKeys {
 
     public static final Credentials CREDENTIALS = Credentials.create(KEY_PAIR);
 
+    // https://github.com/ethereum/EIPs/issues/155
+    public static final Credentials CREDENTIALS_ETH_EXAMPLE =
+            Credentials.create(
+                    "0x4646464646464646464646464646464646464646464646464646464646464646");
+
     private SampleKeys() {}
 }

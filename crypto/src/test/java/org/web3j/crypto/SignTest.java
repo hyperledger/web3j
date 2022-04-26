@@ -127,7 +127,7 @@ public class SignTest {
         for (int i = 0; i < LOWER_REAL_V; i++) {
             args.add(Arguments.of(i));
         }
-        for (int i = LOWER_REAL_V + 2; i < REPLAY_PROTECTED_V_MIN.intValue(); i++) {
+        for (int i = LOWER_REAL_V + 2; i < REPLAY_PROTECTED_V_MIN; i++) {
             args.add(Arguments.of(i));
         }
 

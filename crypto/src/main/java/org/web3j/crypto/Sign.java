@@ -44,7 +44,8 @@ public class Sign {
     public static final int LOWER_REAL_V = 27;
     // The v signature parameter starts at 37 because 1 is the first valid chainId so:
     // chainId >= 1 implies that 2 * chainId + CHAIN_ID_INC >= 37.
-    static final BigInteger REPLAY_PROTECTED_V_MIN = BigInteger.valueOf(37);
+    // https://eips.ethereum.org/EIPS/eip-155
+    public static final int REPLAY_PROTECTED_V_MIN = 37;
     static final ECDomainParameters CURVE =
             new ECDomainParameters(
                     CURVE_PARAMS.getCurve(),
@@ -91,6 +92,11 @@ public class Sign {
         return createSignatureData(sig, publicKey, messageHash);
     }
 
+    /**
+     * Signature without EIP-155 (Simple replay attack protection)
+     * https://eips.ethereum.org/EIPS/eip-155 To add EIP-155 call
+     * TransactionEncoder.createEip155SignatureData after that.
+     */
     public static Sign.SignatureData createSignatureData(
             ECDSASignature sig, BigInteger publicKey, byte[] messageHash) {
         // Now we have to work backwards to figure out the recId needed to recover the signature.
@@ -286,10 +292,11 @@ public class Sign {
         BigInteger v = Numeric.toBigInt(signatureData.getV());
         BigInteger lowerRealV = BigInteger.valueOf(LOWER_REAL_V);
         BigInteger lowerRealVPlus1 = BigInteger.valueOf(LOWER_REAL_V + 1);
+        BigInteger lowerRealVReplayProtected = BigInteger.valueOf(REPLAY_PROTECTED_V_MIN);
         BigInteger chainIdInc = BigInteger.valueOf(CHAIN_ID_INC);
         if (v.equals(lowerRealV) || v.equals(lowerRealVPlus1)) {
             return v.subtract(lowerRealV).intValue();
-        } else if (v.compareTo(REPLAY_PROTECTED_V_MIN) >= 0) {
+        } else if (v.compareTo(lowerRealVReplayProtected) >= 0) {
             return v.subtract(BigInteger.valueOf(chainId).multiply(TWO))
                     .subtract(chainIdInc)
                     .intValue();
