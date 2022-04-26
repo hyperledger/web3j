@@ -145,7 +145,7 @@ public class Sign {
      * @return An ECKey containing only the public part, or null if recovery wasn't possible.
      */
     public static BigInteger recoverFromSignature(int recId, ECDSASignature sig, byte[] message) {
-        verifyPrecondition(recId >= 0, "recId must be positive");
+        verifyPrecondition(recId >= 0 && recId <= 3, "recId must be in the range of [0, 3]");
         verifyPrecondition(sig.r.signum() >= 0, "r must be positive");
         verifyPrecondition(sig.s.signum() >= 0, "s must be positive");
         verifyPrecondition(message != null, "message cannot be null");
