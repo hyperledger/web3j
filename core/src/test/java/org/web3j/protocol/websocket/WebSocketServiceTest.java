@@ -122,6 +122,21 @@ public class WebSocketServiceTest {
     }
 
     @Test
+    public void testReconnectIfFirstConnectionFailed() throws Exception {
+        when(webSocketClient.connectBlocking()).thenReturn(false);
+        assertThrows(
+                ConnectException.class,
+                () -> {
+                    service.connect();
+                });
+        service.connect();
+        // reconnectBlocking() should be called if 1st attempt was failed, if we call
+        // connectBlocking() for a second time, we will get IllegalStateException with real
+        // webSocketClient
+        verify(webSocketClient, atMostOnce()).reconnectBlocking();
+    }
+
+    @Test
     public void testAddedWebSocketListener() throws Exception {
         doAnswer(
                         invocation -> {

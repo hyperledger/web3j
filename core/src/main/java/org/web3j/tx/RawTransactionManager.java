@@ -18,7 +18,6 @@ import java.math.BigInteger;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.RawTransaction;
-import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -27,6 +26,8 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.service.TxSignService;
+import org.web3j.service.TxSignServiceImpl;
 import org.web3j.tx.exceptions.TxHashMismatchException;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Numeric;
@@ -43,7 +44,7 @@ import org.web3j.utils.TxHashVerifier;
 public class RawTransactionManager extends TransactionManager {
 
     private final Web3j web3j;
-    final Credentials credentials;
+    private final TxSignService txSignService;
 
     private final long chainId;
 
@@ -51,11 +52,16 @@ public class RawTransactionManager extends TransactionManager {
 
     public RawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
         super(web3j, credentials.getAddress());
-
         this.web3j = web3j;
-        this.credentials = credentials;
-
         this.chainId = chainId;
+        this.txSignService = new TxSignServiceImpl(credentials);
+    }
+
+    public RawTransactionManager(Web3j web3j, TxSignService txSignService, long chainId) {
+        super(web3j, txSignService.getAddress());
+        this.web3j = web3j;
+        this.chainId = chainId;
+        this.txSignService = txSignService;
     }
 
     public RawTransactionManager(
@@ -66,9 +72,8 @@ public class RawTransactionManager extends TransactionManager {
         super(transactionReceiptProcessor, credentials.getAddress());
 
         this.web3j = web3j;
-        this.credentials = credentials;
-
         this.chainId = chainId;
+        this.txSignService = new TxSignServiceImpl(credentials);
     }
 
     public RawTransactionManager(
@@ -76,9 +81,8 @@ public class RawTransactionManager extends TransactionManager {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
-        this.credentials = credentials;
-
         this.chainId = chainId;
+        this.txSignService = new TxSignServiceImpl(credentials);
     }
 
     public RawTransactionManager(Web3j web3j, Credentials credentials) {
@@ -93,7 +97,7 @@ public class RawTransactionManager extends TransactionManager {
     protected BigInteger getNonce() throws IOException {
         EthGetTransactionCount ethGetTransactionCount =
                 web3j.ethGetTransactionCount(
-                                credentials.getAddress(), DefaultBlockParameterName.PENDING)
+                                this.getFromAddress(), DefaultBlockParameterName.PENDING)
                         .send();
 
         return ethGetTransactionCount.getTransactionCount();
@@ -179,13 +183,7 @@ public class RawTransactionManager extends TransactionManager {
      */
     public String sign(RawTransaction rawTransaction) {
 
-        byte[] signedMessage;
-
-        if (chainId > ChainId.NONE) {
-            signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
-        } else {
-            signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-        }
+        byte[] signedMessage = txSignService.sign(rawTransaction, chainId);
 
         return Numeric.toHexString(signedMessage);
     }

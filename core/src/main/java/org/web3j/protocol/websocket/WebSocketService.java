@@ -128,11 +128,10 @@ public class WebSocketService implements Web3jService {
                         ? webSocketClient.reconnectBlocking()
                         : webSocketClient.connectBlocking();
 
+        shouldReConnect = true;
         if (!connected) {
             throw new ConnectException("Failed to connect to WebSocket");
         }
-
-        shouldReConnect = true;
     }
 
     private void setWebSocketListener(

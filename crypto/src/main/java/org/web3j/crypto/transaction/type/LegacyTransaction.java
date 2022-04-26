@@ -49,6 +49,8 @@ public class LegacyTransaction implements ITransaction {
         this(LEGACY, nonce, gasPrice, gasLimit, to, value, data);
     }
 
+    // LegacyTransaction can have only one tx type. Use another constructor.
+    @Deprecated
     public LegacyTransaction(
             TransactionType type,
             BigInteger nonce,

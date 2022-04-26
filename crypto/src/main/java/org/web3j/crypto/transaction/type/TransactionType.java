@@ -25,4 +25,12 @@ public enum TransactionType {
     public Byte getRlpType() {
         return type;
     }
+
+    public boolean isLegacy() {
+        return this.equals(TransactionType.LEGACY);
+    }
+
+    public boolean isEip1559() {
+        return this.equals(TransactionType.EIP1559);
+    }
 }

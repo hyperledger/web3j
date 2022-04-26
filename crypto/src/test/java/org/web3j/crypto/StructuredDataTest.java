@@ -224,15 +224,46 @@ public class StructuredDataTest {
 
     // EIP712 v4
     @Test
+    public void testEncodeTypeWithArrays() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/ValidStructuredDataWithArrays.json")); // taken from https://danfinlay.github.io/js-eth-personal-sign-examples/ and updated to int,uint arrays
+        String expectedMailType =
+                "Mail(Person from,Group[] to,string contents)"
+                        + "Group(string name,Person[] members)"
+                        + "Person(string name,address[] wallets)";
+
+        assertEquals(dataEncoder.encodeType("Mail"), expectedMailType);
+
+        String expectedGroupType =
+                "Group(string name,Person[] members)" + "Person(string name,address[] wallets)";
+
+        assertEquals(dataEncoder.encodeType("Group"), expectedGroupType);
+    }
+
+    // EIP712 v4
+    @Test
     public void testValidStructureWithArrays() throws IOException {
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(
                         getResource(
                                 "build/resources/test/"
-                                        + "structured_data_json_files/ValidStructuredArrayData.json")); // taken from https://danfinlay.github.io/js-eth-personal-sign-examples/
+                                        + "structured_data_json_files/ValidStructuredArrayData.json")); // taken from https://danfinlay.github.io/js-eth-personal-sign-examples/ and updated to int,uint arrays
+
+        byte[] dataHash =
+                dataEncoder.hashMessage(
+                        dataEncoder.jsonMessageObject.getPrimaryType(),
+                        (HashMap<String, Object>) dataEncoder.jsonMessageObject.getMessage());
+
+        String expectedMessageStructHash =
+                "0xc1c7d7b7dab9a65b30a6e951923b2d54536778329712e2239ed8a3f2f5f2329f";
+
+        assertEquals(expectedMessageStructHash, Numeric.toHexString(dataHash));
 
         assertEquals(
-                "0xa85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2",
+                "0x935426a6009a3798ee87cd16ebeb9cea26b29d2d3762ac0951166d032f55d522",
                 Numeric.toHexString(dataEncoder.hashStructuredData()));
     }
 

@@ -50,6 +50,10 @@ public abstract class FunctionEncoder {
         return encoder().encodeParameters(parameters);
     }
 
+    public static String encodeConstructorPacked(final List<Type> parameters) {
+        return encoder().encodePackedParameters(parameters);
+    }
+
     public static Function makeFunction(
             String fnname,
             List<String> solidityInputTypes,
@@ -72,6 +76,8 @@ public abstract class FunctionEncoder {
     protected abstract String encodeFunction(Function function);
 
     protected abstract String encodeParameters(List<Type> parameters);
+
+    protected abstract String encodePackedParameters(List<Type> parameters);
 
     protected static String buildMethodSignature(
             final String methodName, final List<Type> parameters) {

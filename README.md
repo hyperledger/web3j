@@ -59,7 +59,7 @@ It has five runtime dependencies:
 
 -   [RxJava](https://github.com/ReactiveX/RxJava) for its
     reactive-functional API
--   [OKHttp](https://hc.apache.org/httpcomponents-client-ga/index.html)
+-   [OKHttp](https://square.github.io/okhttp/)
     for HTTP connections
 -   [Jackson Core](https://github.com/FasterXML/jackson-core) for fast
     JSON serialisation/deserialization
@@ -68,6 +68,7 @@ It has five runtime dependencies:
     crypto
 -   [Jnr-unixsocket](https://github.com/jnr/jnr-unixsocket) for \*nix
     IPC (not available on Android)
+-   [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)
 
 It also uses [JavaPoet](https://github.com/square/javapoet) for
 generating smart contract wrappers.
@@ -95,7 +96,9 @@ Create a new project by running:
 $ web3j new 
 ```
 
-Or use our [Maven](https://github.com/web3j/web3j-maven-plugin) or [Gradle](https://github.com/web3j/web3j-gradle-plugin) plugins.
+Or use our [Maven](https://github.com/web3j/web3j-maven-plugin) or 
+[Gradle](https://github.com/web3j/web3j-gradle-plugin) plugins to 
+generate java files from Solidity contracts.
 
 
 #### Please head to the [Web3j Documentation](https://docs.web3j.io) for further instructions on using Web3j.
@@ -105,7 +108,7 @@ Maven
 
 Java:
 
-```
+```xml
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
@@ -115,7 +118,7 @@ Java:
 
 Android:
 
-```
+```xml
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
@@ -128,11 +131,15 @@ Gradle
 
 Java:
 
+```groovy
 implementation ('org.web3j:core:4.8.7')
+```
 
 Android:
 
+```groovy
 implementation ('org.web3j:core:4.8.7-android')
+```
 
 Build instructions
 ------------------
@@ -157,6 +164,12 @@ Then run the following command:
 
 ``` {.sourceCode .bash}
 $ ./gradlew -Pintegration-tests=true :integration-tests:test
+```
+
+If you do not want the integration test to run:
+
+``` {.sourceCode .bash}
+$ ./gradlew -Pintegration-tests=false :test
 ```
 
 Check the [Docker client API](https://github.com/docker-java/docker-java/blob/master/docs/getting_started.md#instantiating-a-dockerclientconfig)

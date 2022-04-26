@@ -1,0 +1,122 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "bytes[]",
+				"name": "bytesArrayField",
+				"type": "bytes[]"
+			},
+			{
+				"components": [
+					{
+						"internalType": "bytes",
+						"name": "bytesField",
+						"type": "bytes"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "extraData",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "string[]",
+						"name": "stringArrayField",
+						"type": "string[]"
+					},
+					{
+						"internalType": "bytes[]",
+						"name": "bytesArrayField",
+						"type": "bytes[]"
+					},
+					{
+						"internalType": "bytes2[]",
+						"name": "bytes2ArrayField",
+						"type": "bytes2[]"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "bytes32ArrayField",
+						"type": "bytes32[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "unitArrayField",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "unit256ArrayField",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "bool[]",
+						"name": "boolField",
+						"type": "bool[]"
+					},
+					{
+						"internalType": "int256[]",
+						"name": "intArrayField",
+						"type": "int256[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "addressArrayField",
+						"type": "address[]"
+					},
+					{
+						"internalType": "string[5]",
+						"name": "stringArrayFieldStatic",
+						"type": "string[5]"
+					},
+					{
+						"internalType": "bytes[5]",
+						"name": "bytesArrayFieldStatic",
+						"type": "bytes[5]"
+					},
+					{
+						"internalType": "bytes2[5]",
+						"name": "bytes2ArrayFieldStatic",
+						"type": "bytes2[5]"
+					},
+					{
+						"internalType": "bytes32[5]",
+						"name": "bytes32ArrayFieldStatic",
+						"type": "bytes32[5]"
+					},
+					{
+						"internalType": "uint256[5]",
+						"name": "unitArrayFieldStatic",
+						"type": "uint256[5]"
+					},
+					{
+						"internalType": "uint256[5]",
+						"name": "unit256ArrayFieldStatic",
+						"type": "uint256[5]"
+					},
+					{
+						"internalType": "bool[5]",
+						"name": "boolFieldStatic",
+						"type": "bool[5]"
+					},
+					{
+						"internalType": "int256[5]",
+						"name": "intArrayFieldStatic",
+						"type": "int256[5]"
+					},
+					{
+						"internalType": "address[5]",
+						"name": "addressArrayFieldStatic",
+						"type": "address[5]"
+					}
+				],
+				"internalType": "struct ArraysInStruct.Entity",
+				"name": "newEntity",
+				"type": "tuple"
+			}
+		],
+		"name": "callFunction",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

@@ -32,6 +32,7 @@ import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -80,6 +81,14 @@ public class EnsResolverTest {
 
         assertEquals(
                 ensResolver.resolve("web3j.eth"), ("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
+    }
+
+    @Test
+    public void testResolveEnsNameEmptyOrDot() throws Exception {
+        assertNull(ensResolver.resolve(" "));
+        assertNull(ensResolver.resolve(""));
+        assertNull(ensResolver.resolve("."));
+        assertNull(ensResolver.resolve(" . "));
     }
 
     @Test
@@ -165,5 +174,6 @@ public class EnsResolverTest {
         assertFalse(isValidEnsName("19e03255f667bdfd50a32722df860b1eeaf4d635"));
 
         assertTrue(isValidEnsName(""));
+        assertTrue(isValidEnsName("."));
     }
 }

@@ -36,6 +36,7 @@ import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.utils.Numeric;
 
+import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
 import static org.web3j.crypto.Hash.sha3;
 import static org.web3j.crypto.Hash.sha3String;
 
@@ -87,14 +88,20 @@ public class StructuredDataEncoder {
             remainingTypes.remove(remainingTypes.size() - 1);
             deps.add(structName);
 
-            for (StructuredData.Entry entry : types.get(primaryType)) {
-                if (!types.containsKey(entry.getType())) {
+            for (StructuredData.Entry entry : types.get(structName)) {
+                String declarationFieldTypeName = entry.getType();
+                String baseDeclarationTypeName =
+                        arrayTypePattern.matcher(declarationFieldTypeName).find()
+                                ? declarationFieldTypeName.substring(
+                                        0, declarationFieldTypeName.indexOf('['))
+                                : declarationFieldTypeName;
+                if (!types.containsKey(baseDeclarationTypeName)) {
                     // Don't expand on non-user defined types
-                } else if (deps.contains(entry.getType())) {
+                } else if (deps.contains(baseDeclarationTypeName)) {
                     // Skip types which are already expanded
                 } else {
                     // Encountered a user defined type
-                    remainingTypes.add(entry.getType());
+                    remainingTypes.add(baseDeclarationTypeName);
                 }
             }
         }
@@ -227,7 +234,23 @@ public class StructuredDataEncoder {
         try {
             if (baseType.toLowerCase().startsWith("uint")
                     || baseType.toLowerCase().startsWith("int")) {
-                hashBytes = convertToBigInt(data).toByteArray();
+                BigInteger value = convertToBigInt(data);
+                if (value.signum() >= 0) {
+                    hashBytes = Numeric.toBytesPadded(convertToBigInt(data), MAX_BYTE_LENGTH);
+                } else {
+                    byte signPadding = (byte) 0xff;
+                    byte[] rawValue = convertToBigInt(data).toByteArray();
+                    hashBytes = new byte[MAX_BYTE_LENGTH];
+                    for (int i = 0; i < hashBytes.length; i++) {
+                        hashBytes[i] = signPadding;
+                    }
+                    System.arraycopy(
+                            rawValue,
+                            0,
+                            hashBytes,
+                            MAX_BYTE_LENGTH - rawValue.length,
+                            rawValue.length);
+                }
             } else if (baseType.equals("string")) {
                 hashBytes = ((String) data).getBytes();
             } else if (baseType.equals("bytes")) {

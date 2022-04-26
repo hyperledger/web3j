@@ -14,15 +14,17 @@ Thank you for reading this! If you'd like to report a bug or join in the buidl-i
 
 * Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
 
+* Make sure that the code is formated with Spotless by executing `./gradlew spotlessApply` otherwise the build will fail.
+
 #### **Do you intend to add a new feature or change an existing one?**
 
-* Suggest your change in the [gitter channel](https://gitter.im/web3j/web3j) then start writing code.
+* Suggest your change [Discord](https://discord.gg/A9UXfPF2tS) then start writing code.
 
 * Do not open an issue on GitHub until you have collected positive feedback about the change. GitHub issues are primarily intended for bug reports and fixes.
 
 #### **Do you have questions about the source code?**
 
-* Ask any question about how to use web3j should be directed to the [gitter channel](https://gitter.im/web3j/web3j)
+* Ask any question about how to use web3j should be directed to the [discord channel](https://discord.gg/A9UXfPF2tS)
 
 ## :heart: BUIDL :heart:
 

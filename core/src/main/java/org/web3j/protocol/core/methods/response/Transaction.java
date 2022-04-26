@@ -15,10 +15,8 @@ package org.web3j.protocol.core.methods.response;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.web3j.crypto.TransactionUtils;
 import org.web3j.utils.Numeric;
-
-import static org.web3j.crypto.Sign.CHAIN_ID_INC;
-import static org.web3j.crypto.Sign.LOWER_REAL_V;
 
 /** Transaction object used by both {@link EthTransaction} and {@link EthBlock}. */
 public class Transaction {
@@ -26,6 +24,7 @@ public class Transaction {
     private String nonce;
     private String blockHash;
     private String blockNumber;
+    private String chainId;
     private String transactionIndex;
     private String from;
     private String to;
@@ -46,6 +45,8 @@ public class Transaction {
 
     public Transaction() {}
 
+    /** Use constructor with ChainId */
+    @Deprecated
     public Transaction(
             String hash,
             String nonce,
@@ -89,6 +90,57 @@ public class Transaction {
         this.maxFeePerGas = maxFeePerGas;
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
         this.accessList = accessList;
+    }
+
+    public Transaction(
+            String hash,
+            String nonce,
+            String blockHash,
+            String blockNumber,
+            String chainId,
+            String transactionIndex,
+            String from,
+            String to,
+            String value,
+            String gas,
+            String gasPrice,
+            String input,
+            String creates,
+            String publicKey,
+            String raw,
+            String r,
+            String s,
+            long v,
+            String type,
+            String maxFeePerGas,
+            String maxPriorityFeePerGas,
+            List accessList) {
+        this.hash = hash;
+        this.nonce = nonce;
+        this.blockHash = blockHash;
+        this.blockNumber = blockNumber;
+        this.chainId = chainId;
+        this.transactionIndex = transactionIndex;
+        this.from = from;
+        this.to = to;
+        this.value = value;
+        this.gasPrice = gasPrice;
+        this.gas = gas;
+        this.input = input;
+        this.creates = creates;
+        this.publicKey = publicKey;
+        this.raw = raw;
+        this.r = r;
+        this.s = s;
+        this.v = v;
+        this.type = type;
+        this.maxFeePerGas = maxFeePerGas;
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        this.accessList = accessList;
+    }
+
+    public void setChainId(String chainId) {
+        this.chainId = chainId;
     }
 
     public String getHash() {
@@ -267,11 +319,15 @@ public class Transaction {
     //    }
 
     public Long getChainId() {
-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
-            return null;
+        if (chainId != null) {
+            return Numeric.decodeQuantity(chainId).longValue();
         }
-        Long chainId = (v - CHAIN_ID_INC) / 2;
-        return chainId;
+
+        return TransactionUtils.deriveChainId(v);
+    }
+
+    public String getChainIdRaw() {
+        return this.chainId;
     }
 
     public String getType() {
@@ -341,6 +397,13 @@ public class Transaction {
                 : that.getBlockHash() != null) {
             return false;
         }
+
+        if (getChainIdRaw() != null
+                ? !getChainIdRaw().equals(that.getChainIdRaw())
+                : that.getChainIdRaw() != null) {
+            return false;
+        }
+
         if (getBlockNumberRaw() != null
                 ? !getBlockNumberRaw().equals(that.getBlockNumberRaw())
                 : that.getBlockNumberRaw() != null) {
@@ -418,6 +481,7 @@ public class Transaction {
         result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
         result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
         result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
+        result = 31 * result + (getChainIdRaw() != null ? getChainIdRaw().hashCode() : 0);
         result =
                 31 * result
                         + (getTransactionIndexRaw() != null

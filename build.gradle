@@ -6,20 +6,22 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.22.0'
     id 'de.marcphilipp.nexus-publish' version '0.4.0'
     id 'de.undercouch.download' version '4.1.1'
-    id 'org.ajoberstar.git-publish' version '3.0.0'
+    id 'org.ajoberstar.git-publish' version '3.0.1'
 }
+
+
 
 ext {
     bouncycastleVersion = '1.68'
-    jacksonVersion = '2.10.0'
+    jacksonVersion = '2.13.1'
     javaPoetVersion = '1.7.0'
     kotlinVersion = '1.3.72'
     kotlinPoetVersion = '1.5.0'
-    jnr_unixsocketVersion = '0.21'
+    jnr_unixsocketVersion = '0.38.17'
     okhttpVersion = '4.9.0'
     rxjavaVersion = '2.2.2'
     slf4jVersion = '1.7.30'
-    javaWebSocketVersion = '1.3.8'
+    javaWebSocketVersion = '1.5.2'
     picocliVersion = '3.0.0'
     web3jUnitVersion = version
     // test dependencies
