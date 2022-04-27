@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity >=0.4.22;
 
 import "./ConvertLib.sol";
 
@@ -20,7 +20,7 @@ contract MetaCoin {
 		if (balances[msg.sender] < amount) return false;
 		balances[msg.sender] -= amount;
 		balances[receiver] += amount;
-		Transfer(msg.sender, receiver, amount);
+		emit Transfer(msg.sender, receiver, amount);
 		return true;
 	}
 
