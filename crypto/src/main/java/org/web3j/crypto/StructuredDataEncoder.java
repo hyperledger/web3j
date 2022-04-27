@@ -88,14 +88,20 @@ public class StructuredDataEncoder {
             remainingTypes.remove(remainingTypes.size() - 1);
             deps.add(structName);
 
-            for (StructuredData.Entry entry : types.get(primaryType)) {
-                if (!types.containsKey(entry.getType())) {
+            for (StructuredData.Entry entry : types.get(structName)) {
+                String declarationFieldTypeName = entry.getType();
+                String baseDeclarationTypeName =
+                        arrayTypePattern.matcher(declarationFieldTypeName).find()
+                                ? declarationFieldTypeName.substring(
+                                        0, declarationFieldTypeName.indexOf('['))
+                                : declarationFieldTypeName;
+                if (!types.containsKey(baseDeclarationTypeName)) {
                     // Don't expand on non-user defined types
-                } else if (deps.contains(entry.getType())) {
+                } else if (deps.contains(baseDeclarationTypeName)) {
                     // Skip types which are already expanded
                 } else {
                     // Encountered a user defined type
-                    remainingTypes.add(entry.getType());
+                    remainingTypes.add(baseDeclarationTypeName);
                 }
             }
         }
