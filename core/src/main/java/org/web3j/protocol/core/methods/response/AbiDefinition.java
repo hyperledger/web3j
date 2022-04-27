@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.web3j.model.StateMutability;
+
 /** AbiDefinition wrapper. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AbiDefinition {
@@ -51,7 +53,7 @@ public class AbiDefinition {
                 clone(from.outputs),
                 from.type,
                 from.isPayable(),
-                from.stateMutability);
+                from.getStateMutability());
     }
 
     public AbiDefinition(
@@ -76,15 +78,22 @@ public class AbiDefinition {
         this.name = name;
         this.outputs = outputs;
         this.type = type;
-        this.stateMutability = payable ? "payable" : constant ? "pure" : stateMutability;
+        this.stateMutability =
+                payable
+                        ? StateMutability.PAYABLE.getName()
+                        : constant ? StateMutability.PURE.getName() : stateMutability;
     }
 
     public boolean isConstant() {
-        return "pure".equals(stateMutability);
+        return StateMutability.isPure(stateMutability);
     }
 
     public void setConstant(boolean constant) {
-        this.stateMutability = "pure";
+        this.stateMutability = StateMutability.PURE.getName();
+    }
+
+    public boolean isPureOrView() {
+        return StateMutability.isPure(stateMutability) || StateMutability.isView(stateMutability);
     }
 
     public List<NamedType> getInputs() {
@@ -124,11 +133,12 @@ public class AbiDefinition {
     }
 
     public boolean isPayable() {
-        return "payable".equals(stateMutability);
+        return StateMutability.isPayable(stateMutability);
     }
 
     public void setPayable(boolean payable) {
-        this.stateMutability = "payable";
+        this.stateMutability =
+                payable ? StateMutability.PAYABLE.getName() : StateMutability.NON_PAYABLE.getName();
     }
 
     public String getStateMutability() {

@@ -1338,8 +1338,7 @@ public class SolidityFunctionWrapper extends Generator {
         List<MethodSpec> results = new ArrayList<>(2);
         String functionName = functionDefinition.getName();
 
-        String stateMutability = functionDefinition.getStateMutability();
-        boolean pureOrView = "pure".equals(stateMutability) || "view".equals(stateMutability);
+        boolean pureOrView = functionDefinition.isPureOrView();
 
         if (generateBothCallAndSend) {
             final String funcNamePrefix;
