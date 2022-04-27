@@ -43,6 +43,7 @@ import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.JsonRpcError;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractEIP1559GasProvider;
@@ -365,34 +366,39 @@ public abstract class Contract extends ManagedTransaction {
             throws TransactionException, IOException {
 
         TransactionReceipt receipt = null;
-        if (gasProvider instanceof ContractEIP1559GasProvider) {
-            ContractEIP1559GasProvider eip1559GasProvider =
-                    (ContractEIP1559GasProvider) gasProvider;
-            if (eip1559GasProvider.isEIP1559Enabled()) {
+        try {
+            if (gasProvider instanceof ContractEIP1559GasProvider) {
+                ContractEIP1559GasProvider eip1559GasProvider =
+                        (ContractEIP1559GasProvider) gasProvider;
+                if (eip1559GasProvider.isEIP1559Enabled()) {
+                    receipt =
+                            sendEIP1559(
+                                    eip1559GasProvider.getChainId(),
+                                    contractAddress,
+                                    data,
+                                    weiValue,
+                                    eip1559GasProvider.getGasLimit(funcName),
+                                    eip1559GasProvider.getMaxPriorityFeePerGas(funcName),
+                                    eip1559GasProvider.getMaxFeePerGas(funcName),
+                                    constructor);
+                }
+            }
+
+            if (receipt == null) {
                 receipt =
-                        sendEIP1559(
-                                eip1559GasProvider.getChainId(),
+                        send(
                                 contractAddress,
                                 data,
                                 weiValue,
-                                eip1559GasProvider.getGasLimit(funcName),
-                                eip1559GasProvider.getMaxPriorityFeePerGas(funcName),
-                                eip1559GasProvider.getMaxFeePerGas(funcName),
+                                gasProvider.getGasPrice(funcName),
+                                gasProvider.getGasLimit(funcName),
                                 constructor);
             }
-        }
-        if (receipt == null) {
-            receipt =
-                    send(
-                            contractAddress,
-                            data,
-                            weiValue,
-                            gasProvider.getGasPrice(funcName),
-                            gasProvider.getGasLimit(funcName),
-                            constructor);
+        } catch (JsonRpcError error) {
+            throw new TransactionException(error.getData().toString());
         }
 
-        if (!receipt.isStatusOK()) {
+        if (receipt != null && !receipt.isStatusOK()) {
             throw new TransactionException(
                     String.format(
                             "Transaction %s has failed with status: %s. "
@@ -403,7 +409,7 @@ public abstract class Contract extends ManagedTransaction {
                             receipt.getGasUsedRaw() != null
                                     ? receipt.getGasUsed().toString()
                                     : "unknown",
-                            extractRevertReason(receipt, data, web3j, true)),
+                            extractRevertReason(receipt, data, web3j, true, weiValue)),
                     receipt);
         }
         return receipt;
