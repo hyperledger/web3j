@@ -43,6 +43,7 @@ import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.JsonRpcError;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -363,29 +364,34 @@ public abstract class Contract extends ManagedTransaction {
             String data, BigInteger weiValue, String funcName, boolean constructor)
             throws TransactionException, IOException {
 
-        TransactionReceipt receipt =
-                send(
-                        contractAddress,
-                        data,
-                        weiValue,
-                        gasProvider.getGasPrice(funcName),
-                        gasProvider.getGasLimit(funcName),
-                        constructor);
+        TransactionReceipt receipt;
+                try {
+                    receipt =
+                            send(
+                                    contractAddress,
+                                    data,
+                                    weiValue,
+                                    gasProvider.getGasPrice(funcName),
+                                    gasProvider.getGasLimit(funcName),
+                                    constructor);
+                } catch (JsonRpcError error){
+                    throw new TransactionException(error.getData().toString());
+                }
 
-        if (!receipt.isStatusOK()) {
-            throw new TransactionException(
-                    String.format(
-                            "Transaction %s has failed with status: %s. "
-                                    + "Gas used: %s. "
-                                    + "Revert reason: '%s'.",
-                            receipt.getTransactionHash(),
-                            receipt.getStatus(),
-                            receipt.getGasUsedRaw() != null
-                                    ? receipt.getGasUsed().toString()
-                                    : "unknown",
-                            extractRevertReason(receipt, data, web3j, true, weiValue)),
-                    receipt);
-        }
+                if (receipt != null && !receipt.isStatusOK()) {
+                    throw new TransactionException(
+                            String.format(
+                                    "Transaction %s has failed with status: %s. "
+                                            + "Gas used: %s. "
+                                            + "Revert reason: '%s'.",
+                                    receipt.getTransactionHash(),
+                                    receipt.getStatus(),
+                                    receipt.getGasUsedRaw() != null
+                                            ? receipt.getGasUsed().toString()
+                                            : "unknown",
+                                    extractRevertReason(receipt, data, web3j, true, weiValue)),
+                            receipt);
+                }
         return receipt;
     }
 
