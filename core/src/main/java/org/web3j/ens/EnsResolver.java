@@ -107,7 +107,6 @@ public class EnsResolver {
         }
     }
 
-
     /**
      * Returns the address of the resolver for the specified node.
      *
