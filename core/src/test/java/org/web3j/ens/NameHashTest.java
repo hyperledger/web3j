@@ -42,6 +42,10 @@ public class NameHashTest {
         assertEquals(normalise("foo.bar.baz.eth"), ("foo.bar.baz.eth"));
         assertEquals(normalise("fOo.eth"), ("foo.eth"));
         assertEquals(normalise("foo-bar.eth"), ("foo-bar.eth"));
+
+        assertEquals(normalise("Obb.at"), ("obb.at"));
+        assertEquals(normalise("TESTER.eth"), ("tester.eth"));
+        assertEquals(normalise("test\u200btest.com"), ("testtest.com"));
     }
 
     @Test

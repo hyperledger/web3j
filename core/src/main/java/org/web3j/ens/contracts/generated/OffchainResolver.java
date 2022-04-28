@@ -32,13 +32,13 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 1.4.1.
  */
 @SuppressWarnings("rawtypes")
-public class OffchainResolver extends Contract {
+public class OffchainResolver extends PublicResolver {
     public static final String BINARY = "Bin file was not provided";
 
     public static final String FUNC_MAKESIGNATUREHASH = "makeSignatureHash";
@@ -55,26 +55,24 @@ public class OffchainResolver extends Contract {
 
     public static final String FUNC_VERIFY = "verify";
 
-    public static final Event NEWSIGNERS_EVENT = new Event("NewSigners", 
+    public static final Event NEWSIGNERS_EVENT = new Event("NewSigners",
             Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Address>>() {}));
     ;
 
-    @Deprecated
-    protected OffchainResolver(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+    public OffchainResolver(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        super(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    protected OffchainResolver(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+    public OffchainResolver(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        super(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    @Deprecated
-    protected OffchainResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    public OffchainResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    protected OffchainResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
+    public OffchainResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        super(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public List<NewSignersEventResponse> getNewSignersEvents(TransactionReceipt transactionReceipt) {
@@ -109,56 +107,56 @@ public class OffchainResolver extends Contract {
     }
 
     public RemoteFunctionCall<byte[]> makeSignatureHash(String target, BigInteger expires, byte[] request, byte[] result) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_MAKESIGNATUREHASH, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, target), 
-                new org.web3j.abi.datatypes.generated.Uint64(expires), 
-                new org.web3j.abi.datatypes.DynamicBytes(request), 
-                new org.web3j.abi.datatypes.DynamicBytes(result)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_MAKESIGNATUREHASH,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, target),
+                new org.web3j.abi.datatypes.generated.Uint64(expires),
+                new org.web3j.abi.datatypes.DynamicBytes(request),
+                new org.web3j.abi.datatypes.DynamicBytes(result)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }
 
     public RemoteFunctionCall<byte[]> resolve(byte[] name, byte[] data) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVE, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(name), 
-                new org.web3j.abi.datatypes.DynamicBytes(data)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVE,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(name),
+                new org.web3j.abi.datatypes.DynamicBytes(data)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicBytes>() {}));
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }
 
     public RemoteFunctionCall<byte[]> resolveWithProof(byte[] response, byte[] extraData) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVEWITHPROOF, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(response), 
-                new org.web3j.abi.datatypes.DynamicBytes(extraData)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVEWITHPROOF,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(response),
+                new org.web3j.abi.datatypes.DynamicBytes(extraData)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicBytes>() {}));
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }
 
     public RemoteFunctionCall<Boolean> signers(String param0) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_SIGNERS, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, param0)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_SIGNERS,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, param0)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}));
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
     public RemoteFunctionCall<Boolean> supportsInterface(byte[] interfaceID) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_SUPPORTSINTERFACE, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_SUPPORTSINTERFACE,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}));
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
     public RemoteFunctionCall<String> url() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_URL, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_URL,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteFunctionCall<byte[]> verify(byte[] request, byte[] response) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_VERIFY, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(request), 
-                new org.web3j.abi.datatypes.DynamicBytes(response)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_VERIFY,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(request),
+                new org.web3j.abi.datatypes.DynamicBytes(response)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicBytes>() {}));
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }

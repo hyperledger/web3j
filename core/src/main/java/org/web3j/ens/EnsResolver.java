@@ -25,6 +25,7 @@ import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.tx.ClientTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.utils.EnsUtils;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
@@ -106,34 +107,6 @@ public class EnsResolver {
         }
     }
 
-    /**
-     * Resolves a name, as specified by ENSIP 10.
-     *
-     * @param ensName The DNS-encoded name to resolve.
-     * @param callData The ABI encoded data for the underlying resolution function.
-     * @return The return data, ABI encoded identically to the underlying function.
-     */
-    public byte[] resolve(String ensName, byte[] callData) {
-        if (Strings.isBlank(ensName) || (ensName.trim().length() == 1 && ensName.contains("."))) {
-            return null;
-        }
-
-        if (isValidEnsName(ensName, addressLength)) {
-            OffchainResolver resolver = obtainOffchainResolver(ensName);
-
-            byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-            byte[] response;
-            try {
-                response = resolver.resolve(nameHash, callData).send();
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to execute Ethereum request: ", e);
-            }
-
-            return response;
-        } else {
-            throw new EnsException("ENS name is not valid");
-        }
-    }
 
     /**
      * Returns the address of the resolver for the specified node.
@@ -146,24 +119,43 @@ public class EnsResolver {
             return null;
         }
 
-        if (isValidEnsName(ensName, addressLength)) {
-            PublicResolver resolver = obtainPublicResolver(ensName);
+        try {
+            if (isValidEnsName(ensName, addressLength)) {
+                OffchainResolver resolver = obtainOffchainResolver(ensName);
 
-            byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-            String contractAddress;
-            try {
-                contractAddress = resolver.addr(nameHash).send();
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to execute Ethereum request: ", e);
-            }
+                boolean supportWildcard =
+                        resolver.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
 
-            if (!WalletUtils.isValidAddress(contractAddress)) {
-                throw new RuntimeException("Unable to resolve address for name: " + ensName);
+                byte[] nameHash = NameHash.nameHashAsBytes(ensName);
+                String contractAddress;
+
+                if (supportWildcard) {
+                    String callData = resolver.addr(nameHash).encodeFunctionCall();
+
+                    byte[] result =
+                            resolver.resolve(nameHash, Numeric.hexStringToByteArray(callData))
+                                    .send();
+                    return Numeric.toHexString(result);
+                } else {
+                    try {
+                        contractAddress = resolver.addr(nameHash).send();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Unable to execute Ethereum request: ", e);
+                    }
+                }
+
+                if (!WalletUtils.isValidAddress(contractAddress)) {
+                    throw new RuntimeException("Unable to resolve address for name: " + ensName);
+                } else {
+                    return contractAddress;
+                }
+
             } else {
-                return contractAddress;
+                return ensName;
             }
-        } else {
-            return ensName;
+        } catch (Exception e) {
+
+            throw new RuntimeException(e);
         }
     }
 
@@ -215,7 +207,13 @@ public class EnsResolver {
                 ENS.load(registryContract, web3j, transactionManager, new DefaultGasProvider());
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-        return ensRegistry.resolver(nameHash).send();
+        String address = ensRegistry.resolver(nameHash).send();
+
+        if (EnsUtils.isAddressEmpty(address)) {
+            address = getResolverAddress(EnsUtils.getParent(ensName));
+        }
+
+        return address;
     }
 
     boolean isSynced() throws Exception {
