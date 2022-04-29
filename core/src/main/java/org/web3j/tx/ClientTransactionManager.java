@@ -105,7 +105,10 @@ public class ClientTransactionManager extends TransactionManager {
                         .send();
 
         assertCallNotReverted(ethCall);
-        return ethCall.getValue();
+
+        return ethCall.getValue() != null
+                ? ethCall.getValue()
+                : ethCall.getError() != null ? ethCall.getError().getData() : null;
     }
 
     @Override
