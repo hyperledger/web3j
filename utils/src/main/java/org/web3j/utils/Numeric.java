@@ -253,4 +253,25 @@ public final class Numeric {
     public static boolean isIntegerValue(BigDecimal value) {
         return value.signum() == 0 || value.scale() <= 0 || value.stripTrailingZeros().scale() <= 0;
     }
+
+    public static String hexToAscii(String hexStr) {
+        String hex = cleanHexPrefix(cleanString(hexStr));
+
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < hex.length(); i += 2) {
+            String str = hex.substring(i, i + 2);
+            output.append((char) Integer.parseInt(str, 16));
+        }
+
+        return output.toString();
+    }
+
+    public static String cleanString(String string) {
+        if (string != null) {
+            return string.replace("\"", "");
+        } else {
+            return null;
+        }
+    }
 }

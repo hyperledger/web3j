@@ -12,6 +12,21 @@
  */
 package org.web3j.ens;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.web3j.abi.datatypes.ens.OffchainLookup;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.contracts.generated.ENS;
@@ -29,8 +44,12 @@ import org.web3j.utils.EnsUtils;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
+import static org.web3j.service.HSMHTTPRequestProcessor.JSON;
+
 /** Resolution logic for contract addresses. According to https://eips.ethereum.org/EIPS/eip-2544 */
 public class EnsResolver {
+
+    private static final Logger log = LoggerFactory.getLogger(EnsResolver.class);
 
     public static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
     public static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
@@ -130,11 +149,35 @@ public class EnsResolver {
 
                 if (supportWildcard) {
                     String callData = resolver.addr(nameHash).encodeFunctionCall();
-
-                    byte[] result =
+                    String resultHex =
                             resolver.resolve(nameHash, Numeric.hexStringToByteArray(callData))
                                     .send();
-                    return Numeric.toHexString(result);
+
+                    if (EnsUtils.EIP_3668_CCIP_INTERFACE_ID.equals(resultHex.substring(0, 10))) {
+
+                        OffchainLookup offchainLookup =
+                                OffchainLookup.build(
+                                        Numeric.hexStringToByteArray(resultHex.substring(10)));
+
+                        // TODO Check the sender of the OffchainLookup matches the transaction
+                        //                        if(offchainLookup.getSender() !== to) {
+                        //                            throw new Error("Cannot handle OffchainLookup
+                        // raised inside nested call");
+                        //                        }
+
+                        String gatewayResult =
+                                ccipReadFetch(
+                                        offchainLookup.getUrls(),
+                                        offchainLookup.getSender(),
+                                        Numeric.toHexString(offchainLookup.getCallData()));
+
+                        if (gatewayResult == null) {
+                            log.warn("CCIP Read disabled or provided no URLs.");
+                            return null;
+                        }
+                    }
+
+                    return resultHex;
                 } else {
                     try {
                         contractAddress = resolver.addr(nameHash).send();
@@ -157,6 +200,67 @@ public class EnsResolver {
             throw new RuntimeException(e);
         }
     }
+
+    private String ccipReadFetch(List<String> urls, String sender, String data) {
+        OkHttpClient client = new OkHttpClient();
+        List<String> errorMessages = new ArrayList<>();
+
+        for (String url : urls) {
+            // URL expansion
+            String href = url.replace("{sender}", sender).replace("{data}", data);
+
+            Request request;
+            Request.Builder builder = new Request.Builder().url(href);
+
+            if (url.contains("{data}")) {
+                request = builder.get().build();
+            } else {
+                request =
+                        builder.post(RequestBody.create(data, JSON))
+                                .addHeader("Content-Type", "application/json")
+                                .build();
+            }
+
+            try (okhttp3.Response response = client.newCall(request).execute()) {
+                ResponseBody responseBody = response.body();
+                if (response.isSuccessful()) {
+                    if (responseBody != null) {
+                        String result =
+                                new BufferedReader(new InputStreamReader(responseBody.byteStream()))
+                                        .lines()
+                                        .collect(Collectors.joining("\n"));
+
+                        return result;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    int statusCode = response.code();
+                    // 4xx indicates the result is not present; stop
+                    if (statusCode >= 400 && statusCode < 500) {
+                        log.error(
+                                "Response error during CCIP fetch: url {}, error: {}",
+                                url,
+                                response.message());
+                        return null;
+                    }
+
+                    // 5xx indicates server issue; try the next url
+                    errorMessages.add(response.message());
+
+                    log.warn(
+                            "Response error 500 during CCIP fetch: url {}, error: {}",
+                            url,
+                            response.message());
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        ;
+
+        return null;
+    };
 
     /**
      * Reverse name resolution as documented in the <a

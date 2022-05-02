@@ -296,6 +296,11 @@ public abstract class Contract extends ManagedTransaction {
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 
+    protected String executeCallWithoutDecoding(Function function) throws IOException {
+        String encodedFunction = FunctionEncoder.encode(function);
+        return call(contractAddress, encodedFunction, defaultBlockParameter);
+    }
+
     @SuppressWarnings("unchecked")
     protected <T extends Type> T executeCallSingleValueReturn(Function function)
             throws IOException {

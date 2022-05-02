@@ -18,6 +18,7 @@ public class EnsUtils {
 
     // Wildcard resolution
     public static final byte[] ENSIP_10_INTERFACE_ID = Numeric.hexStringToByteArray("0x9061b923");
+    public static final String EIP_3668_CCIP_INTERFACE_ID = "0x556f1830";
 
     public static boolean isAddressEmpty(String address) {
         return EMPTY_ADDRESS.equals(address);

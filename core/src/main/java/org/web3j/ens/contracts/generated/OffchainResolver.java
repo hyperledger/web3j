@@ -2,6 +2,8 @@ package org.web3j.ens.contracts.generated;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
+
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +17,7 @@ import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.ens.OffchainLookup;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -27,6 +30,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.utils.Numeric;
 
 /**
  * <p>Auto generated code.
@@ -116,12 +120,13 @@ public class OffchainResolver extends PublicResolver {
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }
 
-    public RemoteFunctionCall<byte[]> resolve(byte[] name, byte[] data) {
+    public RemoteFunctionCall<String> resolve(byte[] name, byte[] data) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVE,
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(name),
                 new org.web3j.abi.datatypes.DynamicBytes(data)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicBytes>() {}));
-        return executeRemoteCallSingleValueReturn(function, byte[].class);
+
+        return new RemoteFunctionCall<>(function, () -> Numeric.cleanString(executeCallWithoutDecoding(function)));
     }
 
     public RemoteFunctionCall<byte[]> resolveWithProof(byte[] response, byte[] extraData) {
