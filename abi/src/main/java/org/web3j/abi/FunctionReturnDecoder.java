@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionReturnDecoderProvider;
@@ -69,6 +70,15 @@ public abstract class FunctionReturnDecoder {
         List<Type> typeList = decoder.decodeFunctionResult(rawInput, outputParameters);
 
         return typeList.isEmpty() ? null : ((DynamicBytes) typeList.get(0)).getValue();
+    }
+
+    public static String decodeAddress(String rawInput) {
+        List outputParameters = new ArrayList<TypeReference<Type>>();
+        outputParameters.add(new TypeReference<Address>() {});
+
+        List<Type> typeList = decoder.decodeFunctionResult(rawInput, outputParameters);
+
+        return typeList.isEmpty() ? null : ((Address) typeList.get(0)).getValue();
     }
 
     /**

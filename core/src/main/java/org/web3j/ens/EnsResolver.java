@@ -200,14 +200,12 @@ public class EnsResolver {
                                 DefaultFunctionEncoder.encode(
                                         Numeric.toHexString(offchainLookup.getCallbackFunction()),
                                         ensCallBack.getParams());
+
                         resultHex = resolver.executeCallWithoutDecoding(encodedFunction);
-
-                        byte[] result = DefaultFunctionReturnDecoder.decodeDynamicBytes(resultHex);
-
-                        return Numeric.toHexString(result);
                     }
 
-                    return resultHex;
+                    byte[] resultBytes = DefaultFunctionReturnDecoder.decodeDynamicBytes(resultHex);
+                    return DefaultFunctionReturnDecoder.decodeAddress(Numeric.toHexString(resultBytes));
                 } else {
                     try {
                         contractAddress = resolver.addr(nameHash).send();
