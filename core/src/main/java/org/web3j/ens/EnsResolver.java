@@ -170,8 +170,9 @@ public class EnsResolver {
                                 OffchainLookup.build(
                                         Numeric.hexStringToByteArray(resultHex.substring(10)));
 
-                        if(!to.equals(offchainLookup.getSender())){
-                            throw new EnsResolutionException("Cannot handle OffchainLookup raised inside nested call");
+                        if (!to.equals(offchainLookup.getSender())) {
+                            throw new EnsResolutionException(
+                                    "Cannot handle OffchainLookup raised inside nested call");
                         }
 
                         String gatewayResult =
@@ -205,7 +206,8 @@ public class EnsResolver {
                     }
 
                     byte[] resultBytes = DefaultFunctionReturnDecoder.decodeDynamicBytes(resultHex);
-                    return DefaultFunctionReturnDecoder.decodeAddress(Numeric.toHexString(resultBytes));
+                    return DefaultFunctionReturnDecoder.decodeAddress(
+                            Numeric.toHexString(resultBytes));
                 } else {
                     try {
                         contractAddress = resolver.addr(nameHash).send();
