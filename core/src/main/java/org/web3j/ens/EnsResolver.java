@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -26,12 +27,17 @@ import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.web3j.abi.DefaultFunctionEncoder;
+import org.web3j.abi.DefaultFunctionReturnDecoder;
+import org.web3j.abi.datatypes.ens.EnsCallBackFunction;
 import org.web3j.abi.datatypes.ens.OffchainLookup;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.dto.EnsGatewayResponseDTO;
 import org.web3j.ens.contracts.generated.ENS;
 import org.web3j.ens.contracts.generated.OffchainResolver;
 import org.web3j.ens.contracts.generated.PublicResolver;
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -145,12 +151,16 @@ public class EnsResolver {
                         resolver.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
 
                 byte[] nameHash = NameHash.nameHashAsBytes(ensName);
+                // TODO implement dns encoder
+                byte[] dnsEncoded =
+                        Numeric.hexStringToByteArray(
+                                "0x01310f6f6666636861696e6578616d706c650365746800");
                 String contractAddress;
 
                 if (supportWildcard) {
                     String callData = resolver.addr(nameHash).encodeFunctionCall();
                     String resultHex =
-                            resolver.resolve(nameHash, Numeric.hexStringToByteArray(callData))
+                            resolver.resolve(dnsEncoded, Numeric.hexStringToByteArray(callData))
                                     .send();
 
                     if (EnsUtils.EIP_3668_CCIP_INTERFACE_ID.equals(resultHex.substring(0, 10))) {
@@ -175,6 +185,27 @@ public class EnsResolver {
                             log.warn("CCIP Read disabled or provided no URLs.");
                             return null;
                         }
+
+                        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+                        EnsGatewayResponseDTO gatewayResponseDTO =
+                                objectMapper.readValue(gatewayResult, EnsGatewayResponseDTO.class);
+
+                        EnsCallBackFunction ensCallBack =
+                                new EnsCallBackFunction(
+                                        Numeric.hexStringToByteArray(gatewayResponseDTO.getData()),
+                                        offchainLookup.getExtraData());
+
+                        Numeric.toHexString(offchainLookup.getExtraData());
+
+                        String encodedFunction =
+                                DefaultFunctionEncoder.encode(
+                                        Numeric.toHexString(offchainLookup.getCallbackFunction()),
+                                        ensCallBack.getParams());
+                        resultHex = resolver.executeCallWithoutDecoding(encodedFunction);
+
+                        byte[] result = DefaultFunctionReturnDecoder.decodeDynamicBytes(resultHex);
+
+                        return Numeric.toHexString(result);
                     }
 
                     return resultHex;

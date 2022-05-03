@@ -2,12 +2,6 @@ package org.web3j.ens.contracts.generated;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -17,7 +11,6 @@ import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.ens.OffchainLookup;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -31,6 +24,12 @@ import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.utils.Numeric;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>Auto generated code.
@@ -129,12 +128,16 @@ public class OffchainResolver extends PublicResolver {
         return new RemoteFunctionCall<>(function, () -> Numeric.cleanString(executeCallWithoutDecoding(function)));
     }
 
-    public RemoteFunctionCall<byte[]> resolveWithProof(byte[] response, byte[] extraData) {
+    public String executeCallWithoutDecoding(String encodedFunction) throws IOException {
+        return call(contractAddress, encodedFunction, defaultBlockParameter);
+    }
+
+    public RemoteFunctionCall<String> resolveWithProof(byte[] response, byte[] extraData) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVEWITHPROOF,
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(response),
                 new org.web3j.abi.datatypes.DynamicBytes(extraData)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicBytes>() {}));
-        return executeRemoteCallSingleValueReturn(function, byte[].class);
+        return new RemoteFunctionCall<>(function, () -> Numeric.cleanString(executeCallWithoutDecoding(function)));
     }
 
     public RemoteFunctionCall<Boolean> signers(String param0) {

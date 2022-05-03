@@ -12,11 +12,13 @@
  */
 package org.web3j.abi;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionReturnDecoderProvider;
 
@@ -52,6 +54,21 @@ public abstract class FunctionReturnDecoder {
      */
     public static List<Type> decode(String rawInput, List<TypeReference<Type>> outputParameters) {
         return decoder.decodeFunctionResult(rawInput, outputParameters);
+    }
+
+    /**
+     * Decode ABI encoded return value DynamicBytes from smart contract function call.
+     *
+     * @param rawInput ABI encoded input
+     * @return {@link DynamicBytes} of values returned by function, null if invalid response
+     */
+    public static byte[] decodeDynamicBytes(String rawInput) {
+        List outputParameters = new ArrayList<TypeReference<Type>>();
+        outputParameters.add(new TypeReference<DynamicBytes>() {});
+
+        List<Type> typeList = decoder.decodeFunctionResult(rawInput, outputParameters);
+
+        return typeList.isEmpty() ? null : ((DynamicBytes) typeList.get(0)).getValue();
     }
 
     /**

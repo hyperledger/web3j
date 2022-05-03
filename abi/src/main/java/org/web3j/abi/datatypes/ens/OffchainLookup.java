@@ -34,7 +34,13 @@ public class OffchainLookup extends DynamicStruct {
     private String sender;
     private List<String> urls;
     private byte[] callData;
+
+    /**
+     * Callback selector / Abi method Id
+     * org.web3j.abi.FunctionEncoder#buildMethodId(java.lang.String)
+     */
     private byte[] callbackFunction;
+
     private byte[] extraData;
 
     private static final List outputParameters = new ArrayList<TypeReference<Type>>();
