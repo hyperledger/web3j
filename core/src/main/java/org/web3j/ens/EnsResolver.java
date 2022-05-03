@@ -151,16 +151,16 @@ public class EnsResolver {
                         resolver.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
 
                 byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-                // TODO implement dns encoder
-                byte[] dnsEncoded =
-                        Numeric.hexStringToByteArray(
-                                "0x01310f6f6666636861696e6578616d706c650365746800");
+                String dnsEncoded = NameHash.dnsEncode(ensName);
+
                 String contractAddress;
 
                 if (supportWildcard) {
                     String callData = resolver.addr(nameHash).encodeFunctionCall();
                     String resultHex =
-                            resolver.resolve(dnsEncoded, Numeric.hexStringToByteArray(callData))
+                            resolver.resolve(
+                                            Numeric.hexStringToByteArray(dnsEncoded),
+                                            Numeric.hexStringToByteArray(callData))
                                     .send();
 
                     if (EnsUtils.EIP_3668_CCIP_INTERFACE_ID.equals(resultHex.substring(0, 10))) {

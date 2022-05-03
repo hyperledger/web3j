@@ -12,6 +12,8 @@
  */
 package org.web3j.ens;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,6 +56,13 @@ public class NameHashTest {
         testInvalidName("ba\\u007Fr.eth");
         testInvalidName("-baz.eth-");
         testInvalidName("foo_bar.eth");
+    }
+
+    @Test
+    void testDnsEncode() throws IOException {
+        String dnsEncoded = NameHash.dnsEncode("1.offchainexample.eth");
+
+        assertEquals("0x01310f6f6666636861696e6578616d706c650365746800", dnsEncoded);
     }
 
     private void testInvalidName(String ensName) {
