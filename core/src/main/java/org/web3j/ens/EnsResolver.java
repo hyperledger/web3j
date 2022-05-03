@@ -157,6 +157,7 @@ public class EnsResolver {
 
                 if (supportWildcard) {
                     String callData = resolver.addr(nameHash).encodeFunctionCall();
+                    String to = resolver.getContractAddress();
                     String resultHex =
                             resolver.resolve(
                                             Numeric.hexStringToByteArray(dnsEncoded),
@@ -169,11 +170,9 @@ public class EnsResolver {
                                 OffchainLookup.build(
                                         Numeric.hexStringToByteArray(resultHex.substring(10)));
 
-                        // TODO Check the sender of the OffchainLookup matches the transaction
-                        //                        if(offchainLookup.getSender() !== to) {
-                        //                            throw new Error("Cannot handle OffchainLookup
-                        // raised inside nested call");
-                        //                        }
+                        if(!to.equals(offchainLookup.getSender())){
+                            throw new EnsResolutionException("Cannot handle OffchainLookup raised inside nested call");
+                        }
 
                         String gatewayResult =
                                 ccipReadFetch(
