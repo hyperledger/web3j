@@ -15,7 +15,6 @@ package org.web3j.utils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.exceptions.MessageDecodingException;
@@ -60,8 +59,8 @@ public class NumericTest {
     @Test
     public void testQuantityDecode() {
         assertEquals(Numeric.decodeQuantity("0x0"), (BigInteger.valueOf(0L)));
-        assertEquals(Numeric.decodeQuantity("0x400"), (BigInteger.valueOf((1024L))));
-        assertEquals(Numeric.decodeQuantity("0x0"), (BigInteger.valueOf((0L))));
+        assertEquals(Numeric.decodeQuantity("0x400"), (BigInteger.valueOf(1024L)));
+        assertEquals(Numeric.decodeQuantity("0x41"), (BigInteger.valueOf(65L)));
         assertEquals(
                 Numeric.decodeQuantity("0x7fffffffffffffff"),
                 (BigInteger.valueOf((Long.MAX_VALUE))));
@@ -72,13 +71,10 @@ public class NumericTest {
 
     @Test
     public void testQuantityDecodeLeadingZero() {
-        assertEquals(Numeric.decodeQuantity("0x0400"), (BigInteger.valueOf(1024L)));
-        assertEquals(Numeric.decodeQuantity("0x001"), (BigInteger.valueOf(1L)));
+        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x0400"));
+        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x001"));
     }
 
-    // If TestRpc resolves the following issue, we can reinstate this code
-    // https://github.com/ethereumjs/testrpc/issues/220
-    @Disabled
     @Test
     public void testQuantityDecodeLeadingZeroException() {
 
@@ -141,6 +137,9 @@ public class NumericTest {
     @Test
     public void testToHexStringWithPrefix() {
         assertEquals(Numeric.toHexStringWithPrefix(BigInteger.TEN), ("0xa"));
+        assertEquals(Numeric.toHexStringWithPrefix(BigInteger.valueOf(1024)), ("0x400"));
+        assertEquals(Numeric.toHexStringWithPrefix(BigInteger.valueOf(65)), ("0x41"));
+        assertEquals(Numeric.toHexStringWithPrefix(BigInteger.valueOf(0)), ("0x0"));
     }
 
     @Test

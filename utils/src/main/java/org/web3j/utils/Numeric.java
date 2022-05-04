@@ -76,11 +76,9 @@ public final class Numeric {
             return false;
         }
 
-        // If TestRpc resolves the following issue, we can reinstate this code
-        // https://github.com/ethereumjs/testrpc/issues/220
-        // if (value.length() > 3 && value.charAt(2) == '0') {
-        //    return false;
-        // }
+        if (value.length() > 3 && value.charAt(2) == '0') {
+            return false;
+        }
 
         return true;
     }
@@ -141,6 +139,11 @@ public final class Numeric {
         return toHexStringZeroPadded(value, size, true);
     }
 
+    /**
+     * @deprecated use {@link #toHexStringNoPrefix(BigInteger value)} instead, more details <a
+     *     href="https://github.com/web3j/web3j/pull/1679">here</a>
+     */
+    @Deprecated
     public static String toHexStringWithPrefixSafe(BigInteger value) {
         String result = toHexStringNoPrefix(value);
         if (result.length() < 2) {
