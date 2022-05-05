@@ -33,7 +33,7 @@ import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.dto.EnsGatewayResponseDTO;
 import org.web3j.ens.contracts.generated.ENS;
-import org.web3j.ens.contracts.generated.OffchainResolver;
+import org.web3j.ens.contracts.generated.OffchainResolverContract;
 import org.web3j.ens.contracts.generated.PublicResolver;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -121,7 +121,7 @@ public class EnsResolver {
      * @param ensName our user input ENS name
      * @return OffchainResolver
      */
-    protected OffchainResolver obtainOffchainResolver(String ensName) {
+    protected OffchainResolverContract obtainOffchainResolver(String ensName) {
         if (isValidEnsName(ensName, addressLength)) {
             try {
                 if (!isSynced()) {
@@ -150,7 +150,7 @@ public class EnsResolver {
 
         try {
             if (isValidEnsName(ensName, addressLength)) {
-                OffchainResolver resolverContract = obtainOffchainResolver(ensName);
+                OffchainResolverContract resolverContract = obtainOffchainResolver(ensName);
 
                 boolean supportWildcard =
                         resolverContract.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
@@ -191,7 +191,7 @@ public class EnsResolver {
         }
     }
 
-    private String resolve(String resultHex, OffchainResolver resolver, int lookupCounter)
+    private String resolve(String resultHex, OffchainResolverContract resolver, int lookupCounter)
             throws Exception {
         String to = resolver.getContractAddress();
 
@@ -338,8 +338,8 @@ public class EnsResolver {
                 getResolverAddress(ensName), web3j, transactionManager, new DefaultGasProvider());
     }
 
-    private OffchainResolver lookupOffchainResolver(String ensName) throws Exception {
-        return OffchainResolver.load(
+    private OffchainResolverContract lookupOffchainResolver(String ensName) throws Exception {
+        return OffchainResolverContract.load(
                 getResolverAddress(ensName), web3j, transactionManager, new DefaultGasProvider());
     }
 

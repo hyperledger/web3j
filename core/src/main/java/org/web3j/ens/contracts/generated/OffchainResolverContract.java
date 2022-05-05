@@ -41,7 +41,7 @@ import java.util.List;
  * <p>Generated with web3j version 1.4.1.
  */
 @SuppressWarnings("rawtypes")
-public class OffchainResolver extends PublicResolver {
+public class OffchainResolverContract extends PublicResolver {
     public static final String BINARY = "Bin file was not provided";
 
     public static final String FUNC_MAKESIGNATUREHASH = "makeSignatureHash";
@@ -62,19 +62,19 @@ public class OffchainResolver extends PublicResolver {
             Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Address>>() {}));
     ;
 
-    public OffchainResolver(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    public OffchainResolverContract(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    public OffchainResolver(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    public OffchainResolverContract(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
         super(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public OffchainResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    public OffchainResolverContract(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public OffchainResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    public OffchainResolverContract(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
@@ -170,21 +170,21 @@ public class OffchainResolver extends PublicResolver {
     }
 
     @Deprecated
-    public static OffchainResolver load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return new OffchainResolver(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    public static OffchainResolverContract load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return new OffchainResolverContract(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
-    public static OffchainResolver load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        return new OffchainResolver(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    public static OffchainResolverContract load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new OffchainResolverContract(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static OffchainResolver load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return new OffchainResolver(contractAddress, web3j, credentials, contractGasProvider);
+    public static OffchainResolverContract load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        return new OffchainResolverContract(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static OffchainResolver load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
-        return new OffchainResolver(contractAddress, web3j, transactionManager, contractGasProvider);
+    public static OffchainResolverContract load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        return new OffchainResolverContract(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public static class NewSignersEventResponse extends BaseEventResponse {
