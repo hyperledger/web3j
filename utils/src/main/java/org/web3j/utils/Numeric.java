@@ -268,10 +268,6 @@ public final class Numeric {
     }
 
     public static String cleanString(String string) {
-        if (string != null) {
-            return string.replace("\"", "");
-        } else {
-            return null;
-        }
+        return string != null ? string.replace("\"", "") : null;
     }
 }

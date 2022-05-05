@@ -150,37 +150,37 @@ public class EnsResolver {
 
         try {
             if (isValidEnsName(ensName, addressLength)) {
-                OffchainResolverContract resolverContract = obtainOffchainResolver(ensName);
+                OffchainResolverContract resolver = obtainOffchainResolver(ensName);
 
                 boolean supportWildcard =
-                        resolverContract.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
+                        resolver.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
                 byte[] nameHash = NameHash.nameHashAsBytes(ensName);
 
-                String contractAddress;
+                String resolvedName;
                 if (supportWildcard) {
                     String dnsEncoded = NameHash.dnsEncode(ensName);
-                    String callData = resolverContract.addr(nameHash).encodeFunctionCall();
+                    String callData = resolver.addr(nameHash).encodeFunctionCall();
 
-                    String resultHex =
-                            resolverContract
+                    String lookupDataHex =
+                            resolver
                                     .resolve(
                                             Numeric.hexStringToByteArray(dnsEncoded),
                                             Numeric.hexStringToByteArray(callData))
                                     .send();
 
-                    contractAddress = resolve(resultHex, resolverContract, LOOKUP_LIMIT);
+                    resolvedName = resolveOffchain(lookupDataHex, resolver, LOOKUP_LIMIT);
                 } else {
                     try {
-                        contractAddress = resolverContract.addr(nameHash).send();
+                        resolvedName = resolver.addr(nameHash).send();
                     } catch (Exception e) {
                         throw new RuntimeException("Unable to execute Ethereum request: ", e);
                     }
                 }
 
-                if (!WalletUtils.isValidAddress(contractAddress)) {
+                if (!WalletUtils.isValidAddress(resolvedName)) {
                     throw new RuntimeException("Unable to resolve address for name: " + ensName);
                 } else {
-                    return contractAddress;
+                    return resolvedName;
                 }
 
             } else {
@@ -191,16 +191,14 @@ public class EnsResolver {
         }
     }
 
-    private String resolve(String resultHex, OffchainResolverContract resolver, int lookupCounter)
+    private String resolveOffchain(String lookupData, OffchainResolverContract resolver, int lookupCounter)
             throws Exception {
-        String to = resolver.getContractAddress();
-
-        if (EnsUtils.isEIP3668(resultHex)) {
+        if (EnsUtils.isEIP3668(lookupData)) {
 
             OffchainLookup offchainLookup =
-                    OffchainLookup.build(Numeric.hexStringToByteArray(resultHex.substring(10)));
+                    OffchainLookup.build(Numeric.hexStringToByteArray(lookupData.substring(10)));
 
-            if (!to.equals(offchainLookup.getSender())) {
+            if (!resolver.getContractAddress().equals(offchainLookup.getSender())) {
                 throw new EnsResolutionException(
                         "Cannot handle OffchainLookup raised inside nested call");
             }
@@ -219,27 +217,27 @@ public class EnsResolver {
             EnsGatewayResponseDTO gatewayResponseDTO =
                     objectMapper.readValue(gatewayResult, EnsGatewayResponseDTO.class);
 
-            resultHex =
+            String resolvedNameHex =
                     resolver.resolveWithProof(
                                     Numeric.hexStringToByteArray(gatewayResponseDTO.getData()),
                                     offchainLookup.getExtraData())
                             .send();
 
-            byte[] resultBytes = DefaultFunctionReturnDecoder.decodeDynamicBytes(resultHex);
-            resultHex =
-                    DefaultFunctionReturnDecoder.decodeAddress(Numeric.toHexString(resultBytes));
-        }
+            // This protocol can result in multiple lookups being requested by the same contract.
+            if (EnsUtils.isEIP3668(resolvedNameHex)) {
+                if (lookupCounter <= 0) {
+                    throw new EnsResolutionException("Lookup calls is out of limit.");
+                }
 
-        // This protocol can result in multiple lookups being requested by the same contract.
-        if (EnsUtils.isEIP3668(resultHex)) {
-            if (lookupCounter <= 0) {
-                throw new EnsResolutionException("Lookup calls is out of limit.");
+                return resolveOffchain(lookupData, resolver, --lookupCounter);
+            } else {
+                byte[] resolvedNameBytes = DefaultFunctionReturnDecoder.decodeDynamicBytes(resolvedNameHex);
+
+                return DefaultFunctionReturnDecoder.decodeAddress(Numeric.toHexString(resolvedNameBytes));
             }
-
-            resultHex = resolve(resultHex, resolver, --lookupCounter);
         }
 
-        return resultHex;
+        return lookupData;
     }
 
     private String ccipReadFetch(List<String> urls, String sender, String data) {
