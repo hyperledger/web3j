@@ -18,18 +18,18 @@ import java.util.List;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Type;
 
-public class EnsCallBackFunction {
+public class EnsCallBackFunctionParams {
 
     private DynamicBytes gatewayResponse;
 
     private DynamicBytes extraData;
 
-    public EnsCallBackFunction(DynamicBytes gatewayResponse, DynamicBytes extraData) {
+    public EnsCallBackFunctionParams(DynamicBytes gatewayResponse, DynamicBytes extraData) {
         this.gatewayResponse = gatewayResponse;
         this.extraData = extraData;
     }
 
-    public EnsCallBackFunction(byte[] gatewayResponse, byte[] extraData) {
+    public EnsCallBackFunctionParams(byte[] gatewayResponse, byte[] extraData) {
         this.gatewayResponse = new DynamicBytes(gatewayResponse);
         this.extraData = new DynamicBytes(extraData);
     }

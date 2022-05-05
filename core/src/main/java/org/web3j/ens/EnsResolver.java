@@ -27,9 +27,7 @@ import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.web3j.abi.DefaultFunctionEncoder;
 import org.web3j.abi.DefaultFunctionReturnDecoder;
-import org.web3j.abi.datatypes.ens.EnsCallBackFunction;
 import org.web3j.abi.datatypes.ens.OffchainLookup;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
@@ -58,6 +56,10 @@ public class EnsResolver {
     private static final Logger log = LoggerFactory.getLogger(EnsResolver.class);
 
     public static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
+
+    // Permit number offchain calls  for a single contract call.
+    public static final int LOOKUP_LIMIT = 4;
+
     public static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
 
     private final Web3j web3j;
@@ -91,9 +93,12 @@ public class EnsResolver {
     /**
      * Provides an access to a valid public resolver in order to access other API methods.
      *
+     * @deprecated
+     *     <p>Use {@link EnsResolver#obtainOffchainResolver(String)} instead.
      * @param ensName our user input ENS name
      * @return PublicResolver
      */
+    @Deprecated
     protected PublicResolver obtainPublicResolver(String ensName) {
         if (isValidEnsName(ensName, addressLength)) {
             try {
@@ -145,72 +150,28 @@ public class EnsResolver {
 
         try {
             if (isValidEnsName(ensName, addressLength)) {
-                OffchainResolver resolver = obtainOffchainResolver(ensName);
+                OffchainResolver resolverContract = obtainOffchainResolver(ensName);
 
                 boolean supportWildcard =
-                        resolver.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
-
+                        resolverContract.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
                 byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-                String dnsEncoded = NameHash.dnsEncode(ensName);
 
                 String contractAddress;
-
                 if (supportWildcard) {
-                    String callData = resolver.addr(nameHash).encodeFunctionCall();
-                    String to = resolver.getContractAddress();
+                    String dnsEncoded = NameHash.dnsEncode(ensName);
+                    String callData = resolverContract.addr(nameHash).encodeFunctionCall();
+
                     String resultHex =
-                            resolver.resolve(
+                            resolverContract
+                                    .resolve(
                                             Numeric.hexStringToByteArray(dnsEncoded),
                                             Numeric.hexStringToByteArray(callData))
                                     .send();
 
-                    if (EnsUtils.EIP_3668_CCIP_INTERFACE_ID.equals(resultHex.substring(0, 10))) {
-
-                        OffchainLookup offchainLookup =
-                                OffchainLookup.build(
-                                        Numeric.hexStringToByteArray(resultHex.substring(10)));
-
-                        if (!to.equals(offchainLookup.getSender())) {
-                            throw new EnsResolutionException(
-                                    "Cannot handle OffchainLookup raised inside nested call");
-                        }
-
-                        String gatewayResult =
-                                ccipReadFetch(
-                                        offchainLookup.getUrls(),
-                                        offchainLookup.getSender(),
-                                        Numeric.toHexString(offchainLookup.getCallData()));
-
-                        if (gatewayResult == null) {
-                            log.warn("CCIP Read disabled or provided no URLs.");
-                            return null;
-                        }
-
-                        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-                        EnsGatewayResponseDTO gatewayResponseDTO =
-                                objectMapper.readValue(gatewayResult, EnsGatewayResponseDTO.class);
-
-                        EnsCallBackFunction ensCallBack =
-                                new EnsCallBackFunction(
-                                        Numeric.hexStringToByteArray(gatewayResponseDTO.getData()),
-                                        offchainLookup.getExtraData());
-
-                        Numeric.toHexString(offchainLookup.getExtraData());
-
-                        String encodedFunction =
-                                DefaultFunctionEncoder.encode(
-                                        Numeric.toHexString(offchainLookup.getCallbackFunction()),
-                                        ensCallBack.getParams());
-
-                        resultHex = resolver.executeCallWithoutDecoding(encodedFunction);
-                    }
-
-                    byte[] resultBytes = DefaultFunctionReturnDecoder.decodeDynamicBytes(resultHex);
-                    return DefaultFunctionReturnDecoder.decodeAddress(
-                            Numeric.toHexString(resultBytes));
+                    contractAddress = resolve(resultHex, resolverContract, LOOKUP_LIMIT);
                 } else {
                     try {
-                        contractAddress = resolver.addr(nameHash).send();
+                        contractAddress = resolverContract.addr(nameHash).send();
                     } catch (Exception e) {
                         throw new RuntimeException("Unable to execute Ethereum request: ", e);
                     }
@@ -226,9 +187,59 @@ public class EnsResolver {
                 return ensName;
             }
         } catch (Exception e) {
-
             throw new RuntimeException(e);
         }
+    }
+
+    private String resolve(String resultHex, OffchainResolver resolver, int lookupCounter)
+            throws Exception {
+        String to = resolver.getContractAddress();
+
+        if (EnsUtils.isEIP3668(resultHex)) {
+
+            OffchainLookup offchainLookup =
+                    OffchainLookup.build(Numeric.hexStringToByteArray(resultHex.substring(10)));
+
+            if (!to.equals(offchainLookup.getSender())) {
+                throw new EnsResolutionException(
+                        "Cannot handle OffchainLookup raised inside nested call");
+            }
+
+            String gatewayResult =
+                    ccipReadFetch(
+                            offchainLookup.getUrls(),
+                            offchainLookup.getSender(),
+                            Numeric.toHexString(offchainLookup.getCallData()));
+
+            if (gatewayResult == null) {
+                throw new EnsResolutionException("CCIP Read disabled or provided no URLs.");
+            }
+
+            ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+            EnsGatewayResponseDTO gatewayResponseDTO =
+                    objectMapper.readValue(gatewayResult, EnsGatewayResponseDTO.class);
+
+            resultHex =
+                    resolver.resolveWithProof(
+                                    Numeric.hexStringToByteArray(gatewayResponseDTO.getData()),
+                                    offchainLookup.getExtraData())
+                            .send();
+
+            byte[] resultBytes = DefaultFunctionReturnDecoder.decodeDynamicBytes(resultHex);
+            resultHex =
+                    DefaultFunctionReturnDecoder.decodeAddress(Numeric.toHexString(resultBytes));
+        }
+
+        // This protocol can result in multiple lookups being requested by the same contract.
+        if (EnsUtils.isEIP3668(resultHex)) {
+            if (lookupCounter <= 0) {
+                throw new EnsResolutionException("Lookup calls is out of limit.");
+            }
+
+            resultHex = resolve(resultHex, resolver, --lookupCounter);
+        }
+
+        return resultHex;
     }
 
     private String ccipReadFetch(List<String> urls, String sender, String data) {
@@ -302,7 +313,7 @@ public class EnsResolver {
     public String reverseResolve(String address) {
         if (WalletUtils.isValidAddress(address, addressLength)) {
             String reverseName = Numeric.cleanHexPrefix(address) + REVERSE_NAME_SUFFIX;
-            PublicResolver resolver = obtainPublicResolver(reverseName);
+            PublicResolver resolver = obtainOffchainResolver(reverseName);
 
             byte[] nameHash = NameHash.nameHashAsBytes(reverseName);
             String name;

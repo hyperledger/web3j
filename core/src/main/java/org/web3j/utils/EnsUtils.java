@@ -24,6 +24,14 @@ public class EnsUtils {
         return EMPTY_ADDRESS.equals(address);
     }
 
+    public static boolean isEIP3668(String data) {
+        if (data == null || data.length() < 10) {
+            return false;
+        }
+
+        return EnsUtils.EIP_3668_CCIP_INTERFACE_ID.equals(data.substring(0, 10));
+    }
+
     public static String getParent(String url) {
         String ensUrl = url != null ? url.trim() : "";
 
