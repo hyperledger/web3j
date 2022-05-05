@@ -162,8 +162,7 @@ public class EnsResolver {
                     String callData = resolver.addr(nameHash).encodeFunctionCall();
 
                     String lookupDataHex =
-                            resolver
-                                    .resolve(
+                            resolver.resolve(
                                             Numeric.hexStringToByteArray(dnsEncoded),
                                             Numeric.hexStringToByteArray(callData))
                                     .send();
@@ -191,7 +190,8 @@ public class EnsResolver {
         }
     }
 
-    private String resolveOffchain(String lookupData, OffchainResolverContract resolver, int lookupCounter)
+    private String resolveOffchain(
+            String lookupData, OffchainResolverContract resolver, int lookupCounter)
             throws Exception {
         if (EnsUtils.isEIP3668(lookupData)) {
 
@@ -231,9 +231,11 @@ public class EnsResolver {
 
                 return resolveOffchain(lookupData, resolver, --lookupCounter);
             } else {
-                byte[] resolvedNameBytes = DefaultFunctionReturnDecoder.decodeDynamicBytes(resolvedNameHex);
+                byte[] resolvedNameBytes =
+                        DefaultFunctionReturnDecoder.decodeDynamicBytes(resolvedNameHex);
 
-                return DefaultFunctionReturnDecoder.decodeAddress(Numeric.toHexString(resolvedNameBytes));
+                return DefaultFunctionReturnDecoder.decodeAddress(
+                        Numeric.toHexString(resolvedNameBytes));
             }
         }
 
