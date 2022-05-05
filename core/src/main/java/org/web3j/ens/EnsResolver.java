@@ -159,12 +159,12 @@ public class EnsResolver {
                 String resolvedName;
                 if (supportWildcard) {
                     String dnsEncoded = NameHash.dnsEncode(ensName);
-                    String callData = resolver.addr(nameHash).encodeFunctionCall();
+                    String addrFunction = resolver.addr(nameHash).encodeFunctionCall();
 
                     String lookupDataHex =
                             resolver.resolve(
                                             Numeric.hexStringToByteArray(dnsEncoded),
-                                            Numeric.hexStringToByteArray(callData))
+                                            Numeric.hexStringToByteArray(addrFunction))
                                     .send();
 
                     resolvedName = resolveOffchain(lookupDataHex, resolver, LOOKUP_LIMIT);

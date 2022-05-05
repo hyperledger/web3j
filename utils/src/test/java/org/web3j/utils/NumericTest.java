@@ -24,6 +24,7 @@ import org.web3j.exceptions.MessageEncodingException;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.utils.Numeric.asByte;
@@ -256,5 +257,27 @@ public class NumericTest {
     public void testHandleNPE() {
         assertFalse(Numeric.containsHexPrefix(null));
         assertFalse(Numeric.containsHexPrefix(""));
+    }
+
+    @Test
+    void removeDoubleQuotes() {
+        String text = "Some text";
+        String textWithQuotes = "\"Some text\"";
+
+        assertEquals(text, Numeric.removeDoubleQuotes(textWithQuotes));
+    }
+
+    @Test
+    void removeDoubleQuotesWhenStrNull() {
+        assertNull(Numeric.removeDoubleQuotes(null));
+    }
+
+    @Test
+    void removeDoubleQuotesWhenStrEmpty() {
+        String text = "Some text";
+
+        assertEquals("", Numeric.removeDoubleQuotes(""));
+        assertEquals(" ", Numeric.removeDoubleQuotes(" "));
+        assertEquals(text, Numeric.removeDoubleQuotes(text));
     }
 }

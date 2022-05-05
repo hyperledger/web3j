@@ -125,7 +125,7 @@ public class OffchainResolverContract extends PublicResolver {
                 new org.web3j.abi.datatypes.DynamicBytes(data)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicBytes>() {}));
 
-        return new RemoteFunctionCall<>(function, () -> Numeric.cleanString(executeCallWithoutDecoding(function)));
+        return new RemoteFunctionCall<>(function, () -> Numeric.removeDoubleQuotes(executeCallWithoutDecoding(function)));
     }
 
     public String executeCallWithoutDecoding(String encodedFunction) throws IOException {
@@ -137,7 +137,7 @@ public class OffchainResolverContract extends PublicResolver {
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicBytes(response),
                 new org.web3j.abi.datatypes.DynamicBytes(extraData)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicBytes>() {}));
-        return  new RemoteFunctionCall<>(function, () -> Numeric.cleanString(executeCallWithoutDecoding(function)));
+        return  new RemoteFunctionCall<>(function, () -> Numeric.removeDoubleQuotes(executeCallWithoutDecoding(function)));
     }
 
     public RemoteFunctionCall<Boolean> signers(String param0) {
