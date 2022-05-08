@@ -14,15 +14,28 @@ package org.web3j.ens;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.ResponseBody;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.TypeEncoder;
+import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.dto.EnsGatewayResponseDTO;
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSyncing;
@@ -32,7 +45,9 @@ import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -40,12 +55,27 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.web3j.ens.EnsResolver.DEFAULT_SYNC_THRESHOLD;
 import static org.web3j.ens.EnsResolver.isValidEnsName;
+import static org.web3j.protocol.http.HttpService.JSON_MEDIA_TYPE;
 
 public class EnsResolverTest {
 
     private Web3j web3j;
     private Web3jService web3jService;
     private EnsResolver ensResolver;
+
+    private ObjectMapper om = ObjectMapperFactory.getObjectMapper();
+
+    private static List<String> urls = new ArrayList<>();
+
+    private String sender = "0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8";
+
+    private String data = "0x00112233";
+
+    @BeforeAll
+    static void beforeAll() {
+        urls.add("https://example-1.com/gateway/{sender}/{data}.json");
+        urls.add("https://example-2.com/gateway/{sender}/{data}.json");
+    }
 
     @BeforeEach
     public void setUp() {
@@ -104,7 +134,6 @@ public class EnsResolverTest {
         String contractName =
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
                         + TypeEncoder.encode(new Utf8String("web3j.eth"));
-        System.err.println(contractName);
 
         EthCall resolverAddressResponse = new EthCall();
         resolverAddressResponse.setResult(resolverAddress);
@@ -175,5 +204,185 @@ public class EnsResolverTest {
 
         assertTrue(isValidEnsName(""));
         assertTrue(isValidEnsName("."));
+    }
+
+    @Test
+    void buildRequestWhenGetSuccessTest() throws IOException {
+        String url = "https://example.com/gateway/{sender}/{data}.json";
+        String sender = "0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8";
+        String data = "0xd5fa2b00";
+
+        okhttp3.Request request = ensResolver.buildRequest(url, sender, data);
+
+        assertNotNull(request);
+        assertNotNull(request.url());
+        assertEquals("GET", request.method());
+        assertEquals(
+                "https://example.com/gateway/0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8/0xd5fa2b00.json",
+                request.url().url().toString());
+    }
+
+    @Test
+    void buildRequestWhenPostSuccessTest() throws IOException {
+        String url = "https://example.com/gateway/{sender}.json";
+        String sender = "0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8";
+        String data = "0xd5fa2b00";
+
+        okhttp3.Request request = ensResolver.buildRequest(url, sender, data);
+
+        assertNotNull(request);
+        assertNotNull(request.url());
+        assertNotNull(request.body());
+        assertEquals("POST", request.method());
+        assertEquals(
+                "https://example.com/gateway/0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8.json",
+                request.url().url().toString());
+    }
+
+    @Test
+    void buildRequestWhenWithoutDataTest() throws IOException {
+        String url = "https://example.com/gateway/{sender}.json";
+        String sender = "0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8";
+
+        assertThrows(
+                EnsResolutionException.class, () -> ensResolver.buildRequest(url, sender, null));
+    }
+
+    @Test
+    void buildRequestWhenWithoutSenderTest() throws IOException {
+        String url = "https://example.com/gateway/{sender}.json";
+        String data = "0xd5fa2b00";
+
+        assertThrows(EnsResolutionException.class, () -> ensResolver.buildRequest(url, null, data));
+    }
+
+    @Test
+    void buildRequestWhenNotValidSenderTest() throws IOException {
+        String url = "https://example.com/gateway/{sender}.json";
+        String data = "0xd5fa2b00";
+
+        assertThrows(
+                EnsResolutionException.class,
+                () -> ensResolver.buildRequest(url, "not valid address", data));
+    }
+
+    @Test
+    void buildRequestWhenNotValidUrl() throws IOException {
+        String url = "https://example.com/gateway/{data}.json";
+        String sender = "0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8";
+        String data = "0xd5fa2b00";
+
+        assertThrows(
+                EnsResolutionException.class, () -> ensResolver.buildRequest(url, sender, data));
+    }
+
+    @Test
+    void ccipReadFetchWhenSuccess() throws IOException {
+        OkHttpClient httpClientMock = mock(OkHttpClient.class);
+        Call call = mock(Call.class);
+
+        okhttp3.Response responseObj = buildResponse(200, urls.get(0), sender, data);
+
+        ensResolver.setHttpClient(httpClientMock);
+        when(httpClientMock.newCall(any())).thenReturn(call);
+        when(call.execute()).thenReturn(responseObj);
+
+        String responseStr = ensResolver.ccipReadFetch(urls, sender, data);
+
+        assertNotNull(responseStr);
+        EnsGatewayResponseDTO response = om.readValue(responseStr, EnsGatewayResponseDTO.class);
+
+        assertNotNull(response);
+        assertNotNull(response.getData());
+        assertEquals(data, response.getData());
+    }
+
+    @Test
+    void ccipReadFetchWhenFirst400_Second200() throws IOException {
+        OkHttpClient httpClientMock = mock(OkHttpClient.class);
+        Call call = mock(Call.class);
+
+        okhttp3.Response responseObj_1 = buildResponse(400, urls.get(0), sender, data);
+        okhttp3.Response responseObj_2 = buildResponse(200, urls.get(1), sender, data);
+
+        ensResolver.setHttpClient(httpClientMock);
+        when(httpClientMock.newCall(any())).thenReturn(call);
+        when(call.execute()).thenReturn(responseObj_1, responseObj_2);
+
+        assertThrows(
+                EnsResolutionException.class, () -> ensResolver.ccipReadFetch(urls, sender, data));
+    }
+
+    @Test
+    void ccipReadFetchWhenFirst200_Second400() throws IOException {
+        OkHttpClient httpClientMock = mock(OkHttpClient.class);
+        Call call = mock(Call.class);
+
+        okhttp3.Response responseObj_1 = buildResponse(200, urls.get(0), sender, data);
+        okhttp3.Response responseObj_2 = buildResponse(400, urls.get(1), sender, data);
+
+        ensResolver.setHttpClient(httpClientMock);
+        when(httpClientMock.newCall(any())).thenReturn(call);
+        when(call.execute()).thenReturn(responseObj_1, responseObj_2);
+
+        String responseStr = ensResolver.ccipReadFetch(urls, sender, data);
+
+        assertNotNull(responseStr);
+        EnsGatewayResponseDTO response = om.readValue(responseStr, EnsGatewayResponseDTO.class);
+        assertNotNull(response);
+        assertNotNull(response.getData());
+        assertEquals(data, response.getData());
+    }
+
+    @Test
+    void ccipReadFetchWhenFirst500_Second200() throws IOException {
+        OkHttpClient httpClientMock = mock(OkHttpClient.class);
+        Call call = mock(Call.class);
+
+        okhttp3.Response responseObj_1 = buildResponse(500, urls.get(0), sender, data);
+        okhttp3.Response responseObj_2 = buildResponse(200, urls.get(1), sender, data);
+
+        ensResolver.setHttpClient(httpClientMock);
+        when(httpClientMock.newCall(any())).thenReturn(call);
+        when(call.execute()).thenReturn(responseObj_1, responseObj_2);
+
+        String responseStr = ensResolver.ccipReadFetch(urls, sender, data);
+
+        assertNotNull(responseStr);
+        EnsGatewayResponseDTO response = om.readValue(responseStr, EnsGatewayResponseDTO.class);
+        assertNotNull(response);
+        assertNotNull(response.getData());
+        assertEquals(data, response.getData());
+    }
+
+    @Test
+    void ccipReadFetchWhenFirst500_Second500() throws IOException {
+        OkHttpClient httpClientMock = mock(OkHttpClient.class);
+        Call call = mock(Call.class);
+
+        okhttp3.Response responseObj_1 = buildResponse(500, urls.get(0), sender, data);
+        okhttp3.Response responseObj_2 = buildResponse(500, urls.get(1), sender, data);
+
+        ensResolver.setHttpClient(httpClientMock);
+        when(httpClientMock.newCall(any())).thenReturn(call);
+        when(call.execute()).thenReturn(responseObj_1, responseObj_2);
+
+        String responseStr = ensResolver.ccipReadFetch(urls, sender, data);
+
+        assertNull(responseStr);
+    }
+
+
+    private okhttp3.Response buildResponse(int code, String url, String sender, String data)
+            throws JsonProcessingException {
+        EnsGatewayResponseDTO responseDTO = new EnsGatewayResponseDTO(data);
+
+        return new okhttp3.Response.Builder()
+                .request(ensResolver.buildRequest(url, sender, data))
+                .protocol(Protocol.HTTP_2)
+                .code(code)
+                .body(ResponseBody.create(om.writeValueAsString(responseDTO), JSON_MEDIA_TYPE))
+                .message("Some error message Code: " + code)
+                .build();
     }
 }

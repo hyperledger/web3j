@@ -13,13 +13,13 @@
 package org.web3j.dto;
 
 // https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gateway-interface
-public class EnsGatewayResponseDTO {
+public class EnsGatewayRequestDTO {
 
     private String data;
 
-    public EnsGatewayResponseDTO() {}
+    public EnsGatewayRequestDTO() {}
 
-    public EnsGatewayResponseDTO(String data) {
+    public EnsGatewayRequestDTO(String data) {
         this.data = data;
     }
 

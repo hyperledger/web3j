@@ -16,9 +16,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,6 +33,7 @@ import org.web3j.abi.DefaultFunctionReturnDecoder;
 import org.web3j.abi.datatypes.ens.OffchainLookup;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.dto.EnsGatewayRequestDTO;
 import org.web3j.dto.EnsGatewayResponseDTO;
 import org.web3j.ens.contracts.generated.ENS;
 import org.web3j.ens.contracts.generated.OffchainResolverContract;
@@ -65,6 +68,8 @@ public class EnsResolver {
     private final Web3j web3j;
     private final int addressLength;
     private final TransactionManager transactionManager;
+
+    private OkHttpClient client = new OkHttpClient();
     private long syncThreshold; // non-final in case this value needs to be tweaked
 
     public EnsResolver(Web3j web3j, long syncThreshold, int addressLength) {
@@ -190,7 +195,7 @@ public class EnsResolver {
         }
     }
 
-    private String resolveOffchain(
+    protected String resolveOffchain(
             String lookupData, OffchainResolverContract resolver, int lookupCounter)
             throws Exception {
         if (EnsUtils.isEIP3668(lookupData)) {
@@ -242,39 +247,29 @@ public class EnsResolver {
         return lookupData;
     }
 
-    private String ccipReadFetch(List<String> urls, String sender, String data) {
-        OkHttpClient client = new OkHttpClient();
+    protected String ccipReadFetch(List<String> urls, String sender, String data) {
         List<String> errorMessages = new ArrayList<>();
 
         for (String url : urls) {
-            // URL expansion
-            String href = url.replace("{sender}", sender).replace("{data}", data);
-
             Request request;
-            Request.Builder builder = new Request.Builder().url(href);
-
-            if (url.contains("{data}")) {
-                request = builder.get().build();
-            } else {
-                request =
-                        builder.post(RequestBody.create(data, JSON))
-                                .addHeader("Content-Type", "application/json")
-                                .build();
+            try {
+                request = buildRequest(url, sender, data);
+            } catch (JsonProcessingException | EnsResolutionException e) {
+                log.error(e.getMessage(), e);
+                break;
             }
 
             try (okhttp3.Response response = client.newCall(request).execute()) {
-                ResponseBody responseBody = response.body();
                 if (response.isSuccessful()) {
-                    if (responseBody != null) {
-                        String result =
-                                new BufferedReader(new InputStreamReader(responseBody.byteStream()))
-                                        .lines()
-                                        .collect(Collectors.joining("\n"));
-
-                        return result;
-                    } else {
-                        return null;
+                    ResponseBody responseBody = response.body();
+                    if (responseBody == null) {
+                        log.warn("Response body is null, url: {}", url);
+                        break;
                     }
+
+                    return new BufferedReader(new InputStreamReader(responseBody.byteStream()))
+                            .lines()
+                            .collect(Collectors.joining("\n"));
                 } else {
                     int statusCode = response.code();
                     // 4xx indicates the result is not present; stop
@@ -283,7 +278,7 @@ public class EnsResolver {
                                 "Response error during CCIP fetch: url {}, error: {}",
                                 url,
                                 response.message());
-                        return null;
+                        throw new EnsResolutionException(response.message());
                     }
 
                     // 5xx indicates server issue; try the next url
@@ -298,10 +293,39 @@ public class EnsResolver {
                 log.error(e.getMessage(), e);
             }
         }
-        ;
 
+        log.warn(Arrays.toString(errorMessages.toArray()));
         return null;
-    };
+    }
+
+    protected Request buildRequest(String url, String sender, String data)
+            throws JsonProcessingException {
+        if (sender == null || !WalletUtils.isValidAddress(sender)) {
+            throw new EnsResolutionException("Sender address is null or not valid");
+        }
+        if (data == null) {
+            throw new EnsResolutionException("Data is null");
+        }
+        if (!url.contains("{sender}")) {
+            throw new EnsResolutionException("Url is not valid, sender parameter is not exist");
+        }
+
+        // URL expansion
+        String href = url.replace("{sender}", sender).replace("{data}", data);
+
+        Request.Builder builder = new Request.Builder().url(href);
+
+        if (url.contains("{data}")) {
+            return builder.get().build();
+        } else {
+            EnsGatewayRequestDTO requestDTO = new EnsGatewayRequestDTO(data);
+            ObjectMapper om = ObjectMapperFactory.getObjectMapper();
+
+            return builder.post(RequestBody.create(om.writeValueAsString(requestDTO), JSON))
+                    .addHeader("Content-Type", "application/json")
+                    .build();
+        }
+    }
 
     /**
      * Reverse name resolution as documented in the <a
@@ -380,5 +404,9 @@ public class EnsResolver {
     public static boolean isValidEnsName(String input, int addressLength) {
         return input != null // will be set to null on new Contract creation
                 && (input.contains(".") || !WalletUtils.isValidAddress(input, addressLength));
+    }
+
+    public void setHttpClient(OkHttpClient client) {
+        this.client = client;
     }
 }
