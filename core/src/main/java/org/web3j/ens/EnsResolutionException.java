@@ -18,6 +18,10 @@ public class EnsResolutionException extends EnsException {
         super(message);
     }
 
+    public EnsResolutionException(Throwable cause) {
+        super(cause);
+    }
+
     public EnsResolutionException(String message, Throwable cause) {
         super(message, cause);
     }

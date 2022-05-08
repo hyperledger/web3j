@@ -14,6 +14,10 @@ package org.web3j.ens;
 
 public class EnsException extends RuntimeException {
 
+    public EnsException(Throwable cause) {
+        super(cause);
+    }
+
     public EnsException(String message) {
         super(message);
     }

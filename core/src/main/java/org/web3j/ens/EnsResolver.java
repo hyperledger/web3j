@@ -182,7 +182,8 @@ public class EnsResolver {
                 }
 
                 if (!WalletUtils.isValidAddress(resolvedName)) {
-                    throw new RuntimeException("Unable to resolve address for name: " + ensName);
+                    throw new EnsResolutionException(
+                            "Unable to resolve address for name: " + ensName);
                 } else {
                     return resolvedName;
                 }
@@ -191,7 +192,7 @@ public class EnsResolver {
                 return ensName;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new EnsResolutionException(e);
         }
     }
 
