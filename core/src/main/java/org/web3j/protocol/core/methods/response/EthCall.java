@@ -38,6 +38,10 @@ public class EthCall extends Response<String> {
     }
 
     public boolean isReverted() {
+        if (hasError() && getError().getCode() == 3 && getError().getData() != null) {
+            return false;
+        }
+
         return hasError() || isErrorInResult();
     }
 

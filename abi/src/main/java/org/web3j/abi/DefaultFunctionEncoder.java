@@ -33,8 +33,7 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
         final String methodSignature = buildMethodSignature(function.getName(), parameters);
         final String methodId = buildMethodId(methodSignature);
 
-        final StringBuilder result = new StringBuilder();
-        result.append(methodId);
+        final StringBuilder result = new StringBuilder(methodId);
 
         return encodeParameters(parameters, result);
     }
@@ -42,6 +41,12 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
     @Override
     public String encodeParameters(final List<Type> parameters) {
         return encodeParameters(parameters, new StringBuilder());
+    }
+
+    public String encodeWithSelector(String methodId, List<Type> parameters) {
+        final StringBuilder result = new StringBuilder(methodId);
+
+        return encodeParameters(parameters, result);
     }
 
     @Override

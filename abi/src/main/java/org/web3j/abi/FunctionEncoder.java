@@ -46,6 +46,11 @@ public abstract class FunctionEncoder {
         return encoder().encodeFunction(function);
     }
 
+    /** Encode function when we know function method Id / Selector. */
+    public static String encode(final String methodId, final List<Type> parameters) {
+        return encoder().encodeWithSelector(methodId, parameters);
+    }
+
     public static String encodeConstructor(final List<Type> parameters) {
         return encoder().encodeParameters(parameters);
     }
@@ -76,6 +81,10 @@ public abstract class FunctionEncoder {
     protected abstract String encodeFunction(Function function);
 
     protected abstract String encodeParameters(List<Type> parameters);
+
+    /** @param methodId Callback selector / Abi method Id (Hex format) */
+    protected abstract String encodeWithSelector(
+            final String methodId, final List<Type> parameters);
 
     protected abstract String encodePackedParameters(List<Type> parameters);
 

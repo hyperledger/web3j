@@ -12,6 +12,8 @@
  */
 package org.web3j.ens;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.IDN;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -68,5 +70,37 @@ public class NameHash {
         } catch (IllegalArgumentException e) {
             throw new EnsResolutionException("Invalid ENS name provided: " + ensName);
         }
+    }
+
+    public static byte[] toUtf8Bytes(String string) {
+        if (string == null || string.isEmpty()) {
+            return null;
+        }
+        return string.getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Encode Dns name. Reference implementation
+     * https://github.com/ethers-io/ethers.js/blob/fc1e006575d59792fa97b4efb9ea2f8cca1944cf/packages/hash/src.ts/namehash.ts#L49
+     *
+     * @param name Dns name
+     * @return Encoded name in Hex format.
+     * @throws IOException
+     */
+    public static String dnsEncode(String name) throws IOException {
+        String[] parts = name.split("\\.");
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        for (String part : parts) {
+            byte[] bytes = toUtf8Bytes("_" + normalise(part));
+            if (bytes == null) {
+                break;
+            }
+            bytes[0] = (byte) (bytes.length - 1);
+
+            outputStream.write(bytes);
+        }
+
+        return Numeric.toHexString(outputStream.toByteArray()) + "00";
     }
 }

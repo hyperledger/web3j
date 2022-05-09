@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2022 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,17 +12,17 @@
  */
 package org.web3j.ens;
 
-/** ENS resolution exception. */
-public class EnsResolutionException extends EnsException {
-    public EnsResolutionException(String message) {
-        super(message);
-    }
+public class EnsException extends RuntimeException {
 
-    public EnsResolutionException(Throwable cause) {
+    public EnsException(Throwable cause) {
         super(cause);
     }
 
-    public EnsResolutionException(String message, Throwable cause) {
+    public EnsException(String message) {
+        super(message);
+    }
+
+    public EnsException(String message, Throwable cause) {
         super(message, cause);
     }
 }

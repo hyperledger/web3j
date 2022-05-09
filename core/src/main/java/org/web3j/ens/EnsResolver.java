@@ -12,10 +12,33 @@
  */
 package org.web3j.ens;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.web3j.abi.DefaultFunctionReturnDecoder;
+import org.web3j.abi.datatypes.ens.OffchainLookup;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.dto.EnsGatewayRequestDTO;
+import org.web3j.dto.EnsGatewayResponseDTO;
 import org.web3j.ens.contracts.generated.ENS;
+import org.web3j.ens.contracts.generated.OffchainResolverContract;
 import org.web3j.ens.contracts.generated.PublicResolver;
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -24,18 +47,29 @@ import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.tx.ClientTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.utils.EnsUtils;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
+
+import static org.web3j.service.HSMHTTPRequestProcessor.JSON;
 
 /** Resolution logic for contract addresses. According to https://eips.ethereum.org/EIPS/eip-2544 */
 public class EnsResolver {
 
+    private static final Logger log = LoggerFactory.getLogger(EnsResolver.class);
+
     public static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
+
+    // Permit number offchain calls  for a single contract call.
+    public static final int LOOKUP_LIMIT = 4;
+
     public static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
 
     private final Web3j web3j;
     private final int addressLength;
     private final TransactionManager transactionManager;
+
+    private OkHttpClient client = new OkHttpClient();
     private long syncThreshold; // non-final in case this value needs to be tweaked
 
     public EnsResolver(Web3j web3j, long syncThreshold, int addressLength) {
@@ -64,9 +98,12 @@ public class EnsResolver {
     /**
      * Provides an access to a valid public resolver in order to access other API methods.
      *
+     * @deprecated
+     *     <p>Use {@link EnsResolver#obtainOffchainResolver(String)} instead.
      * @param ensName our user input ENS name
      * @return PublicResolver
      */
+    @Deprecated
     protected PublicResolver obtainPublicResolver(String ensName) {
         if (isValidEnsName(ensName, addressLength)) {
             try {
@@ -78,37 +115,216 @@ public class EnsResolver {
             } catch (Exception e) {
                 throw new EnsResolutionException("Unable to determine sync status of node", e);
             }
-
         } else {
             throw new EnsResolutionException("EnsName is invalid: " + ensName);
         }
     }
 
-    public String resolve(String ensName) {
+    /**
+     * Provides an access to a valid offchain resolver in order to access other API methods.
+     *
+     * @param ensName our user input ENS name
+     * @return OffchainResolver
+     */
+    protected OffchainResolverContract obtainOffchainResolver(String ensName) {
+        if (isValidEnsName(ensName, addressLength)) {
+            try {
+                if (!isSynced()) {
+                    throw new EnsResolutionException("Node is not currently synced");
+                } else {
+                    return lookupOffchainResolver(ensName);
+                }
+            } catch (Exception e) {
+                throw new EnsResolutionException("Unable to determine sync status of node", e);
+            }
+        } else {
+            throw new EnsResolutionException("EnsName is invalid: " + ensName);
+        }
+    }
 
+    /**
+     * Returns the address of the resolver for the specified node.
+     *
+     * @param ensName The specified node.
+     * @return address of the resolver.
+     */
+    public String resolve(String ensName) {
         if (Strings.isBlank(ensName) || (ensName.trim().length() == 1 && ensName.contains("."))) {
             return null;
         }
 
-        if (isValidEnsName(ensName, addressLength)) {
-            PublicResolver resolver = obtainPublicResolver(ensName);
+        try {
+            if (isValidEnsName(ensName, addressLength)) {
+                OffchainResolverContract resolver = obtainOffchainResolver(ensName);
 
-            byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-            String contractAddress;
-            try {
-                contractAddress = resolver.addr(nameHash).send();
-            } catch (Exception e) {
-                throw new RuntimeException(
-                        "ENS resolver exception, unable to execute request: ", e);
-            }
+                boolean supportWildcard =
+                        resolver.supportsInterface(EnsUtils.ENSIP_10_INTERFACE_ID).send();
+                byte[] nameHash = NameHash.nameHashAsBytes(ensName);
 
-            if (!WalletUtils.isValidAddress(contractAddress)) {
-                throw new RuntimeException("Unable to resolve address for name: " + ensName);
+                String resolvedName;
+                if (supportWildcard) {
+                    String dnsEncoded = NameHash.dnsEncode(ensName);
+                    String addrFunction = resolver.addr(nameHash).encodeFunctionCall();
+
+                    String lookupDataHex =
+                            resolver.resolve(
+                                            Numeric.hexStringToByteArray(dnsEncoded),
+                                            Numeric.hexStringToByteArray(addrFunction))
+                                    .send();
+
+                    resolvedName = resolveOffchain(lookupDataHex, resolver, LOOKUP_LIMIT);
+                } else {
+                    try {
+                        resolvedName = resolver.addr(nameHash).send();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Unable to execute Ethereum request: ", e);
+                    }
+                }
+
+                if (!WalletUtils.isValidAddress(resolvedName)) {
+                    throw new EnsResolutionException(
+                            "Unable to resolve address for name: " + ensName);
+                } else {
+                    return resolvedName;
+                }
+
             } else {
-                return contractAddress;
+                return ensName;
             }
+        } catch (Exception e) {
+            throw new EnsResolutionException(e);
+        }
+    }
+
+    protected String resolveOffchain(
+            String lookupData, OffchainResolverContract resolver, int lookupCounter)
+            throws Exception {
+        if (EnsUtils.isEIP3668(lookupData)) {
+
+            OffchainLookup offchainLookup =
+                    OffchainLookup.build(Numeric.hexStringToByteArray(lookupData.substring(10)));
+
+            if (!resolver.getContractAddress().equals(offchainLookup.getSender())) {
+                throw new EnsResolutionException(
+                        "Cannot handle OffchainLookup raised inside nested call");
+            }
+
+            String gatewayResult =
+                    ccipReadFetch(
+                            offchainLookup.getUrls(),
+                            offchainLookup.getSender(),
+                            Numeric.toHexString(offchainLookup.getCallData()));
+
+            if (gatewayResult == null) {
+                throw new EnsResolutionException("CCIP Read disabled or provided no URLs.");
+            }
+
+            ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+            EnsGatewayResponseDTO gatewayResponseDTO =
+                    objectMapper.readValue(gatewayResult, EnsGatewayResponseDTO.class);
+
+            String resolvedNameHex =
+                    resolver.resolveWithProof(
+                                    Numeric.hexStringToByteArray(gatewayResponseDTO.getData()),
+                                    offchainLookup.getExtraData())
+                            .send();
+
+            // This protocol can result in multiple lookups being requested by the same contract.
+            if (EnsUtils.isEIP3668(resolvedNameHex)) {
+                if (lookupCounter <= 0) {
+                    throw new EnsResolutionException("Lookup calls is out of limit.");
+                }
+
+                return resolveOffchain(lookupData, resolver, --lookupCounter);
+            } else {
+                byte[] resolvedNameBytes =
+                        DefaultFunctionReturnDecoder.decodeDynamicBytes(resolvedNameHex);
+
+                return DefaultFunctionReturnDecoder.decodeAddress(
+                        Numeric.toHexString(resolvedNameBytes));
+            }
+        }
+
+        return lookupData;
+    }
+
+    protected String ccipReadFetch(List<String> urls, String sender, String data) {
+        List<String> errorMessages = new ArrayList<>();
+
+        for (String url : urls) {
+            Request request;
+            try {
+                request = buildRequest(url, sender, data);
+            } catch (JsonProcessingException | EnsResolutionException e) {
+                log.error(e.getMessage(), e);
+                break;
+            }
+
+            try (okhttp3.Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    ResponseBody responseBody = response.body();
+                    if (responseBody == null) {
+                        log.warn("Response body is null, url: {}", url);
+                        break;
+                    }
+
+                    return new BufferedReader(new InputStreamReader(responseBody.byteStream()))
+                            .lines()
+                            .collect(Collectors.joining("\n"));
+                } else {
+                    int statusCode = response.code();
+                    // 4xx indicates the result is not present; stop
+                    if (statusCode >= 400 && statusCode < 500) {
+                        log.error(
+                                "Response error during CCIP fetch: url {}, error: {}",
+                                url,
+                                response.message());
+                        throw new EnsResolutionException(response.message());
+                    }
+
+                    // 5xx indicates server issue; try the next url
+                    errorMessages.add(response.message());
+
+                    log.warn(
+                            "Response error 500 during CCIP fetch: url {}, error: {}",
+                            url,
+                            response.message());
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        log.warn(Arrays.toString(errorMessages.toArray()));
+        return null;
+    }
+
+    protected Request buildRequest(String url, String sender, String data)
+            throws JsonProcessingException {
+        if (sender == null || !WalletUtils.isValidAddress(sender)) {
+            throw new EnsResolutionException("Sender address is null or not valid");
+        }
+        if (data == null) {
+            throw new EnsResolutionException("Data is null");
+        }
+        if (!url.contains("{sender}")) {
+            throw new EnsResolutionException("Url is not valid, sender parameter is not exist");
+        }
+
+        // URL expansion
+        String href = url.replace("{sender}", sender).replace("{data}", data);
+
+        Request.Builder builder = new Request.Builder().url(href);
+
+        if (url.contains("{data}")) {
+            return builder.get().build();
         } else {
-            return ensName;
+            EnsGatewayRequestDTO requestDTO = new EnsGatewayRequestDTO(data);
+            ObjectMapper om = ObjectMapperFactory.getObjectMapper();
+
+            return builder.post(RequestBody.create(om.writeValueAsString(requestDTO), JSON))
+                    .addHeader("Content-Type", "application/json")
+                    .build();
         }
     }
 
@@ -122,7 +338,7 @@ public class EnsResolver {
     public String reverseResolve(String address) {
         if (WalletUtils.isValidAddress(address, addressLength)) {
             String reverseName = Numeric.cleanHexPrefix(address) + REVERSE_NAME_SUFFIX;
-            PublicResolver resolver = obtainPublicResolver(reverseName);
+            PublicResolver resolver = obtainOffchainResolver(reverseName);
 
             byte[] nameHash = NameHash.nameHashAsBytes(reverseName);
             String name;
@@ -143,6 +359,16 @@ public class EnsResolver {
     }
 
     private PublicResolver lookupResolver(String ensName) throws Exception {
+        return PublicResolver.load(
+                getResolverAddress(ensName), web3j, transactionManager, new DefaultGasProvider());
+    }
+
+    private OffchainResolverContract lookupOffchainResolver(String ensName) throws Exception {
+        return OffchainResolverContract.load(
+                getResolverAddress(ensName), web3j, transactionManager, new DefaultGasProvider());
+    }
+
+    private String getResolverAddress(String ensName) throws Exception {
         NetVersion netVersion = web3j.netVersion().send();
         String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
@@ -150,10 +376,13 @@ public class EnsResolver {
                 ENS.load(registryContract, web3j, transactionManager, new DefaultGasProvider());
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-        String resolverAddress = ensRegistry.resolver(nameHash).send();
+        String address = ensRegistry.resolver(nameHash).send();
 
-        return PublicResolver.load(
-                resolverAddress, web3j, transactionManager, new DefaultGasProvider());
+        if (EnsUtils.isAddressEmpty(address)) {
+            address = getResolverAddress(EnsUtils.getParent(ensName));
+        }
+
+        return address;
     }
 
     boolean isSynced() throws Exception {
@@ -176,5 +405,9 @@ public class EnsResolver {
     public static boolean isValidEnsName(String input, int addressLength) {
         return input != null // will be set to null on new Contract creation
                 && (input.contains(".") || !WalletUtils.isValidAddress(input, addressLength));
+    }
+
+    public void setHttpClient(OkHttpClient client) {
+        this.client = client;
     }
 }

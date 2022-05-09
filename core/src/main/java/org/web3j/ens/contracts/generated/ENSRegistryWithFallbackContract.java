@@ -31,16 +31,18 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 1.4.1.
  */
 @SuppressWarnings("rawtypes")
-public class ENS extends Contract {
+public class ENSRegistryWithFallbackContract extends Contract {
     public static final String BINARY = "Bin file was not provided";
 
     public static final String FUNC_ISAPPROVEDFORALL = "isApprovedForAll";
+
+    public static final String FUNC_OLD = "old";
 
     public static final String FUNC_OWNER = "owner";
 
@@ -64,41 +66,41 @@ public class ENS extends Contract {
 
     public static final String FUNC_TTL = "ttl";
 
-    public static final Event APPROVALFORALL_EVENT = new Event("ApprovalForAll", 
+    public static final Event APPROVALFORALL_EVENT = new Event("ApprovalForAll",
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Bool>() {}));
     ;
 
-    public static final Event NEWOWNER_EVENT = new Event("NewOwner", 
+    public static final Event NEWOWNER_EVENT = new Event("NewOwner",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
     ;
 
-    public static final Event NEWRESOLVER_EVENT = new Event("NewResolver", 
+    public static final Event NEWRESOLVER_EVENT = new Event("NewResolver",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
     ;
 
-    public static final Event NEWTTL_EVENT = new Event("NewTTL", 
+    public static final Event NEWTTL_EVENT = new Event("NewTTL",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint64>() {}));
     ;
 
-    public static final Event TRANSFER_EVENT = new Event("Transfer", 
+    public static final Event TRANSFER_EVENT = new Event("Transfer",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
     ;
 
     @Deprecated
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    protected ENSRegistryWithFallbackContract(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected ENSRegistryWithFallbackContract(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     @Deprecated
-    protected ENS(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    protected ENSRegistryWithFallbackContract(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    protected ENS(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected ENSRegistryWithFallbackContract(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
@@ -272,126 +274,133 @@ public class ENS extends Contract {
     }
 
     public RemoteFunctionCall<Boolean> isApprovedForAll(String owner, String operator) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_ISAPPROVEDFORALL, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, owner), 
-                new org.web3j.abi.datatypes.Address(160, operator)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_ISAPPROVEDFORALL,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, owner),
+                new org.web3j.abi.datatypes.Address(160, operator)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}));
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
+    public RemoteFunctionCall<String> old() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OLD,
+                Arrays.<Type>asList(),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+        return executeRemoteCallSingleValueReturn(function, String.class);
+    }
+
     public RemoteFunctionCall<String> owner(byte[] node) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OWNER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OWNER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteFunctionCall<Boolean> recordExists(byte[] node) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RECORDEXISTS, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RECORDEXISTS,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}));
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
     public RemoteFunctionCall<String> resolver(byte[] node) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RESOLVER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setApprovalForAll(String operator, Boolean approved) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETAPPROVALFORALL, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, operator), 
-                new org.web3j.abi.datatypes.Bool(approved)), 
+                FUNC_SETAPPROVALFORALL,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, operator),
+                new org.web3j.abi.datatypes.Bool(approved)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setOwner(byte[] node, String owner) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETOWNER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.Address(160, owner)), 
+                FUNC_SETOWNER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                new org.web3j.abi.datatypes.Address(160, owner)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setRecord(byte[] node, String owner, String resolver, BigInteger ttl) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETRECORD, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.Address(160, owner), 
-                new org.web3j.abi.datatypes.Address(160, resolver), 
-                new org.web3j.abi.datatypes.generated.Uint64(ttl)), 
+                FUNC_SETRECORD,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                new org.web3j.abi.datatypes.Address(160, owner),
+                new org.web3j.abi.datatypes.Address(160, resolver),
+                new org.web3j.abi.datatypes.generated.Uint64(ttl)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setResolver(byte[] node, String resolver) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETRESOLVER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.Address(160, resolver)), 
+                FUNC_SETRESOLVER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                new org.web3j.abi.datatypes.Address(160, resolver)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setSubnodeOwner(byte[] node, byte[] label, String owner) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETSUBNODEOWNER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.generated.Bytes32(label), 
-                new org.web3j.abi.datatypes.Address(160, owner)), 
+                FUNC_SETSUBNODEOWNER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                new org.web3j.abi.datatypes.generated.Bytes32(label),
+                new org.web3j.abi.datatypes.Address(160, owner)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setSubnodeRecord(byte[] node, byte[] label, String owner, String resolver, BigInteger ttl) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETSUBNODERECORD, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.generated.Bytes32(label), 
-                new org.web3j.abi.datatypes.Address(160, owner), 
-                new org.web3j.abi.datatypes.Address(160, resolver), 
-                new org.web3j.abi.datatypes.generated.Uint64(ttl)), 
+                FUNC_SETSUBNODERECORD,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                new org.web3j.abi.datatypes.generated.Bytes32(label),
+                new org.web3j.abi.datatypes.Address(160, owner),
+                new org.web3j.abi.datatypes.Address(160, resolver),
+                new org.web3j.abi.datatypes.generated.Uint64(ttl)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setTTL(byte[] node, BigInteger ttl) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETTTL, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.generated.Uint64(ttl)), 
+                FUNC_SETTTL,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                new org.web3j.abi.datatypes.generated.Uint64(ttl)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<BigInteger> ttl(byte[] node) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_TTL, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_TTL,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     @Deprecated
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return new ENS(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    public static ENSRegistryWithFallbackContract load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return new ENSRegistryWithFallbackContract(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
-    public static ENS load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        return new ENS(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    public static ENSRegistryWithFallbackContract load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new ENSRegistryWithFallbackContract(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, credentials, contractGasProvider);
+    public static ENSRegistryWithFallbackContract load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        return new ENSRegistryWithFallbackContract(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static ENS load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, transactionManager, contractGasProvider);
+    public static ENSRegistryWithFallbackContract load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        return new ENSRegistryWithFallbackContract(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public static class ApprovalForAllEventResponse extends BaseEventResponse {

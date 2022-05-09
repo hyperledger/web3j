@@ -256,4 +256,8 @@ public final class Numeric {
     public static boolean isIntegerValue(BigDecimal value) {
         return value.signum() == 0 || value.scale() <= 0 || value.stripTrailingZeros().scale() <= 0;
     }
+
+    public static String removeDoubleQuotes(String string) {
+        return string != null ? string.replace("\"", "") : null;
+    }
 }
