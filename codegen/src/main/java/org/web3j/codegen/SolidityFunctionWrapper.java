@@ -1756,13 +1756,13 @@ public class SolidityFunctionWrapper extends Generator {
                 "get" + Strings.capitaliseFirstLetter(functionName) + "Events";
         MethodSpec.Builder transactionMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)
-                        .addModifiers(Modifier.PUBLIC)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addParameter(TransactionReceipt.class, "transactionReceipt")
                         .returns(parameterizedTypeName);
 
         transactionMethodBuilder
                 .addStatement(
-                        "$T valueList = extractEventParametersWithLog("
+                        "$T valueList = staticExtractEventParametersWithLog("
                                 + buildEventDefinitionName(functionName)
                                 + ", "
                                 + "transactionReceipt)",

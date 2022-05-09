@@ -780,6 +780,14 @@ public abstract class Contract extends ManagedTransaction {
                 .collect(Collectors.toList());
     }
 
+    protected static List<EventValuesWithLog> staticExtractEventParametersWithLog(
+            Event event, TransactionReceipt transactionReceipt) {
+        return transactionReceipt.getLogs().stream()
+                .map(log -> staticExtractEventParametersWithLog(event, log))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Subclasses should implement this method to return pre-existing addresses for deployed
      * contracts.
