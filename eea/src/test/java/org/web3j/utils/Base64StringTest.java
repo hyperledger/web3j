@@ -13,7 +13,6 @@
 package org.web3j.utils;
 
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -43,13 +42,15 @@ public class Base64StringTest {
                 -75, 41, 78, 48, -39, -66, 74, 25, -127, -1, -77, 58, 11, -116
             };
 
-    private static final String BASE64_4 = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+NYbGgkOxL7LWJh/68eCsHMOvxydvNO4gck/0KFsoCtkyCS3O7TuYfWwk9tr/2WKAsd3/v1a+XGffwnahB1PEw==";
+    private static final String BASE64_4 =
+            "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+NYbGgkOxL7LWJh/68eCsHMOvxydvNO4gck/0KFsoCtkyCS3O7TuYfWwk9tr/2WKAsd3/v1a+XGffwnahB1PEw==";
     private static final byte[] BASE64_BYTES_4 =
             new byte[] {
-                48, 89, 48, 19, 6, 7, 42, -122, 72, -50, 61, 2, 1, 6, 8, 42, -122, 72, -50, 61, 3, 1, 7, 3, 66, 0, 4, -8,
-                -42, 27, 26, 9, 14, -60, -66, -53, 88, -104, 127, -21, -57, -126, -80, 115, 14, -65, 28, -99, -68, -45, -72,
-                -127, -55, 63, -48, -95, 108, -96, 43, 100, -56, 36, -73, 59, -76, -18, 97, -11, -80, -109, -37, 107, -1,
-                101, -118, 2, -57, 119, -2, -3, 90, -7, 113, -97, 127, 9, -38, -124, 29, 79, 19
+                48, 89, 48, 19, 6, 7, 42, -122, 72, -50, 61, 2, 1, 6, 8, 42, -122, 72, -50, 61, 3,
+                1, 7, 3, 66, 0, 4, -8, -42, 27, 26, 9, 14, -60, -66, -53, 88, -104, 127, -21, -57,
+                -126, -80, 115, 14, -65, 28, -99, -68, -45, -72, -127, -55, 63, -48, -95, 108, -96,
+                43, 100, -56, 36, -73, 59, -76, -18, 97, -11, -80, -109, -37, 107, -1, 101, -118, 2,
+                -57, 119, -2, -3, 90, -7, 113, -97, 127, 9, -38, -124, 29, 79, 19
             };
 
     private static final List<String> BASE64_LIST = Arrays.asList(BASE64_1, BASE64_1);
