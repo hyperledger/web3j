@@ -74,14 +74,17 @@ public class Base64StringTest {
         final Base64String base64String1 = Base64String.wrap(BASE64_1);
         final Base64String base64String2 = Base64String.wrap(BASE64_2);
         final Base64String base64String3 = Base64String.wrap(BASE64_3);
+        final Base64String base64String4 = Base64String.wrap(BASE64_4);
 
         assertEquals(BASE64_1, base64String1.toString());
         assertEquals(BASE64_2, base64String2.toString());
         assertEquals(BASE64_3, base64String3.toString());
+        assertEquals(BASE64_4, base64String4.toString());
 
         assertArrayEquals(BASE64_BYTES_1, base64String1.raw());
         assertArrayEquals(BASE64_BYTES_2, base64String2.raw());
         assertArrayEquals(BASE64_BYTES_3, base64String3.raw());
+        assertArrayEquals(BASE64_BYTES_4, base64String4.raw());
     }
 
     @Test
@@ -89,59 +92,22 @@ public class Base64StringTest {
         final Base64String base64String1 = Base64String.wrap(BASE64_BYTES_1);
         final Base64String base64String2 = Base64String.wrap(BASE64_BYTES_2);
         final Base64String base64String3 = Base64String.wrap(BASE64_BYTES_3);
+        final Base64String base64String4 = Base64String.wrap(BASE64_BYTES_4);
 
         assertEquals(BASE64_1, base64String1.toString());
         assertEquals(BASE64_2, base64String2.toString());
         assertEquals(BASE64_3, base64String3.toString());
+        assertEquals(BASE64_4, base64String4.toString());
 
         assertArrayEquals(BASE64_BYTES_1, base64String1.raw());
         assertArrayEquals(BASE64_BYTES_2, base64String2.raw());
         assertArrayEquals(BASE64_BYTES_3, base64String3.raw());
-    }
-
-    @Test
-    public void testEmptyStringThrows() {
-
-        assertThrows(RuntimeException.class, () -> Base64String.wrap(""));
-    }
-
-    @Test
-    public void testTooShortStringThrows() {
-
-        assertThrows(RuntimeException.class, () -> Base64String.wrap(BASE64_1.substring(0, 43)));
+        assertArrayEquals(BASE64_BYTES_4, base64String4.raw());
     }
 
     @Test
     public void testTooLongStringThrows() {
 
         assertThrows(RuntimeException.class, () -> Base64String.wrap(BASE64_1 + "m"));
-    }
-
-    @Test
-    public void testNonValidBase64StringThrows() {
-
-        assertThrows(
-                RuntimeException.class,
-                () -> Base64String.wrap("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr"));
-    }
-
-    @Test
-    public void testEmptyByteArrayThrows() {
-
-        assertThrows(RuntimeException.class, () -> Base64String.wrap(new byte[] {}));
-    }
-
-    @Test
-    public void testTooShortByteArrayThrows() {
-
-        assertThrows(
-                RuntimeException.class, () -> Base64String.wrap(Arrays.copyOf(BASE64_BYTES_1, 31)));
-    }
-
-    @Test
-    public void testTooLongByteArrayThrows() {
-
-        assertThrows(
-                RuntimeException.class, () -> Base64String.wrap(Arrays.copyOf(BASE64_BYTES_1, 33)));
     }
 }
