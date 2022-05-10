@@ -14,7 +14,6 @@ package org.web3j.utils;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,8 +51,6 @@ public class Base64String {
         }
     }
 
-    private static final Base64.Encoder ENCODER = Base64.getEncoder();
-
     private final Bytes enclaveB64Value;
 
     private Base64String(final String base64String) {
@@ -90,11 +87,11 @@ public class Base64String {
     }
 
     public String toString() {
-        return ENCODER.encodeToString(enclaveB64Value.toArray());
+        return enclaveB64Value.toBase64String();
     }
 
     public byte[] raw() {
-        return enclaveB64Value.toArray();
+        return enclaveB64Value.toArrayUnsafe();
     }
 
     public RlpString asRlp() {
