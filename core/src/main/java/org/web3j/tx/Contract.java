@@ -49,6 +49,7 @@ import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractEIP1559GasProvider;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
+import org.web3j.tx.response.EmptyTransactionReceipt;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
@@ -403,7 +404,9 @@ public abstract class Contract extends ManagedTransaction {
             throw new TransactionException(error.getData().toString());
         }
 
-        if (receipt != null && !receipt.isStatusOK()) {
+        if (!(receipt instanceof EmptyTransactionReceipt)
+                && receipt != null
+                && !receipt.isStatusOK()) {
             throw new TransactionException(
                     String.format(
                             "Transaction %s has failed with status: %s. "
