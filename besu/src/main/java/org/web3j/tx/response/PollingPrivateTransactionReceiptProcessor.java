@@ -40,18 +40,21 @@ public class PollingPrivateTransactionReceiptProcessor extends PrivateTransactio
             String transactionHash, long sleepDuration, int attempts)
             throws IOException, TransactionException {
 
-        Optional<PrivateTransactionReceipt> receiptOptional =
-                sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
-            if (!receiptOptional.isPresent()) {
+            Optional<PrivateTransactionReceipt> receiptOptional =
+                    sendTransactionReceiptRequest(transactionHash);
+
+            if (receiptOptional.isPresent()) {
+                return receiptOptional.get();
+            }
+
+            // Sleep unless it is the last attempt.
+            if (i < attempts - 1) {
                 try {
                     Thread.sleep(sleepDuration);
                 } catch (InterruptedException e) {
                     throw new TransactionException(e);
                 }
-                receiptOptional = sendTransactionReceiptRequest(transactionHash);
-            } else {
-                return receiptOptional.get();
             }
         }
 
