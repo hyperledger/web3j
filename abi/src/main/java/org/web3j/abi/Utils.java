@@ -49,7 +49,7 @@ public class Utils {
                 type = (Class<?>) ((ParameterizedType) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
             } else {
-                type = Class.forName(reflectedType.getTypeName());
+                type = Class.forName(getTypeName(reflectedType));
                 return getSimpleTypeName(type);
             }
         } catch (ClassNotFoundException e) {
@@ -107,7 +107,7 @@ public class Utils {
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();
 
-        String parameterizedTypeName = typeArguments[0].getTypeName();
+        String parameterizedTypeName = getTypeName(typeArguments[0]);
         return (Class<T>) Class.forName(parameterizedTypeName);
     }
 
@@ -199,5 +199,38 @@ public class Utils {
                         .collect(Collectors.toList());
         return Stream.concat(canonicalFields.stream(), nestedFields.stream())
                 .collect(Collectors.toList());
+    }
+
+    /** Ports {@link java.lang.reflect.Type#getTypeName()}. */
+    public static String getTypeName(java.lang.reflect.Type type) {
+        try {
+            return type.getTypeName();
+        } catch (NoSuchMethodError e) {
+            return getClassName((Class) type);
+        }
+    }
+
+    /** Support java version < 8 Copied from {@link Class#getTypeName()}. */
+    private static String getClassName(Class type) {
+        if (type.isArray()) {
+            try {
+                Class<?> cl = type;
+                int dimensions = 0;
+                while (cl.isArray()) {
+                    dimensions++;
+                    cl = cl.getComponentType();
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.append(cl.getName());
+                for (int i = 0; i < dimensions; i++) {
+                    sb.append("[]");
+                }
+                return sb.toString();
+            } catch (Throwable e) {
+                /*FALLTHRU*/
+            }
+        }
+
+        return type.getName();
     }
 }
