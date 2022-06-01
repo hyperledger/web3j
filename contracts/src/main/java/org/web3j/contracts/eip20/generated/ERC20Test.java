@@ -7,7 +7,7 @@ public class ERC20Test {
     private ERC20 erc20;
 
     @Test
-    public void testFunctionBalanceOf(){
-        assertEquals(1, erc20.balanceOf(0x23971521AB578f4bf58e1C6E35fEb289AcB66bcf));
+    public void testTypeOfSymbol(){
+        assertEquals('String', erc20.symbol());
     }
 }
