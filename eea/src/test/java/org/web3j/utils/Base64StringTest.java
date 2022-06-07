@@ -41,7 +41,6 @@ public class Base64StringTest {
                 15, 32, 14, -120, 95, -14, -98, -105, 62, 37, 118, -74, 96, 1, -127, -47, -80, -94,
                 -75, 41, 78, 48, -39, -66, 74, 25, -127, -1, -77, 58, 11, -116
             };
-
     private static final String BASE64_4 =
             "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+NYbGgkOxL7LWJh/68eCsHMOvxydvNO4gck/0KFsoCtkyCS3O7TuYfWwk9tr/2WKAsd3/v1a+XGffwnahB1PEw==";
     private static final byte[] BASE64_BYTES_4 =
@@ -54,19 +53,26 @@ public class Base64StringTest {
             };
 
     private static final List<String> BASE64_LIST = Arrays.asList(BASE64_1, BASE64_1);
+    private static final List<String> BASE64_4_LIST = Arrays.asList(BASE64_4, BASE64_4);
     private static final Base64String BASE64_WRAPPED =
             Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+    private static final Base64String BASE64_4_WRAPPED = Base64String.wrap(BASE64_4);
     private static final List<Base64String> BASE64_WRAPPED_LIST =
             Arrays.asList(BASE64_WRAPPED, BASE64_WRAPPED);
+    private static final List<Base64String> BASE64_4_WRAPPED_LIST =
+            Arrays.asList(BASE64_4_WRAPPED, BASE64_4_WRAPPED);
 
     @Test
     public void testWrapList() {
         assertEquals(BASE64_WRAPPED_LIST, Base64String.wrapList(BASE64_LIST));
+        assertEquals(BASE64_4_WRAPPED_LIST, Base64String.wrapList(BASE64_4_LIST));
+        assertEquals(BASE64_4_WRAPPED_LIST, Base64String.wrapList(BASE64_4, BASE64_4));
     }
 
     @Test
     public void testUnwrapList() {
         assertEquals(BASE64_LIST, Base64String.unwrapList(BASE64_WRAPPED_LIST));
+        assertEquals(BASE64_4_LIST, Base64String.unwrapList(BASE64_4_WRAPPED_LIST));
     }
 
     @Test
@@ -106,8 +112,28 @@ public class Base64StringTest {
     }
 
     @Test
+    public void testEmptyStringThrows() {
+
+        assertThrows(RuntimeException.class, () -> Base64String.wrap(""));
+    }
+
+    @Test
     public void testTooLongStringThrows() {
 
         assertThrows(RuntimeException.class, () -> Base64String.wrap(BASE64_1 + "m"));
+    }
+
+    @Test
+    public void testNonValidBase64StringThrows() {
+
+        assertThrows(
+                RuntimeException.class,
+                () -> Base64String.wrap("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr"));
+    }
+
+    @Test
+    public void testEmptyByteArrayThrows() {
+
+        assertThrows(RuntimeException.class, () -> Base64String.wrap(new byte[] {}));
     }
 }

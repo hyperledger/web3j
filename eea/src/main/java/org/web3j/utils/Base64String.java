@@ -14,6 +14,7 @@ package org.web3j.utils;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,6 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.tuweni.bytes.Bytes;
 
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -51,22 +51,17 @@ public class Base64String {
         }
     }
 
-    private final Bytes enclaveB64Value;
+    private static final Base64.Decoder DECODER = Base64.getDecoder();
+    private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
-    private Base64String(final String base64String) {
-        this.enclaveB64Value = Bytes.fromBase64String(base64String);
-    }
-
-    private Base64String(final byte[] base64ByteArray) {
-        this.enclaveB64Value = Bytes.wrap(base64ByteArray);
-    }
+    private final byte[] enclaveB64Value;
 
     public static Base64String wrap(final String base64String) {
         return new Base64String(base64String);
     }
 
     public static Base64String wrap(final byte[] base64Array) {
-        return new Base64String(base64Array);
+        return new Base64String(ENCODER.encodeToString(base64Array));
     }
 
     public static List<Base64String> wrapList(final List<String> base64Strings) {
@@ -86,12 +81,19 @@ public class Base64String {
                 base64Strings.stream().map(Base64String::asRlp).collect(Collectors.toList()));
     }
 
+    private Base64String(final String base64String) {
+        if (!isValid(base64String)) {
+            throw new IllegalArgumentException(base64String + " is not a valid base 64 value");
+        }
+        this.enclaveB64Value = DECODER.decode(base64String);
+    }
+
     public String toString() {
-        return enclaveB64Value.toBase64String();
+        return ENCODER.encodeToString(enclaveB64Value);
     }
 
     public byte[] raw() {
-        return enclaveB64Value.toArrayUnsafe();
+        return enclaveB64Value;
     }
 
     public RlpString asRlp() {
@@ -103,11 +105,20 @@ public class Base64String {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Base64String that = (Base64String) o;
-        return enclaveB64Value.equals(that.enclaveB64Value);
+        return Arrays.equals(enclaveB64Value, that.enclaveB64Value);
     }
 
     @Override
     public int hashCode() {
-        return enclaveB64Value.hashCode();
+        return Arrays.hashCode(enclaveB64Value);
+    }
+
+    private boolean isValid(final String b64String) {
+        //   ([0-9a-zA-Z+/]{4})*      # Groups of 4 valid characters decode
+        //                            # to 24 bits of data for each group
+        //   (                        # ending with either:
+        //   ([A-Za-z0-9+/]{2}==)     # two valid characters followed by ==
+        //   ([0-9a-zA-Z+/]{3}=)      # OR three valid characters followed by =
+        return b64String.matches("(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)");
     }
 }

@@ -2,7 +2,6 @@
 description 'EEA JSON-RPC API'
 
 dependencies {
-    compile project(':core'),
-            "org.apache.tuweni:tuweni-bytes:$tuweniVersion"
+    compile project(':core')
     testCompile project(path: ':core', configuration: 'testArtifacts')
 }
