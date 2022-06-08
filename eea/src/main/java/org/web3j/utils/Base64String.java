@@ -54,7 +54,7 @@ public class Base64String {
     private static final Base64.Decoder DECODER = Base64.getDecoder();
     private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
-    private final byte[] enclaveB64Value = new byte[32];
+    private final byte[] enclaveB64Value;
 
     public static Base64String wrap(final String base64String) {
         return new Base64String(base64String);
@@ -82,11 +82,10 @@ public class Base64String {
     }
 
     private Base64String(final String base64String) {
-        if (!isValid(base64String) || base64String.length() != 44) {
-            throw new IllegalArgumentException(base64String + " is not a 32 byte base 64 value");
+        if (!isValid(base64String)) {
+            throw new IllegalArgumentException(base64String + " is not a valid base 64 value");
         }
-
-        System.arraycopy(DECODER.decode(base64String), 0, enclaveB64Value, 0, 32);
+        this.enclaveB64Value = DECODER.decode(base64String);
     }
 
     public String toString() {
@@ -117,8 +116,9 @@ public class Base64String {
     private boolean isValid(final String b64String) {
         //   ([0-9a-zA-Z+/]{4})*      # Groups of 4 valid characters decode
         //                            # to 24 bits of data for each group
-        //   (                        # ending with:
-        //   ([0-9a-zA-Z+/]{3}=)      # three valid characters followed by =
-        return b64String.matches("(?:[A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=)");
+        //   (                        # ending with either:
+        //   ([A-Za-z0-9+/]{2}==)     # two valid characters followed by ==
+        //   ([0-9a-zA-Z+/]{3}=)      # OR three valid characters followed by =
+        return b64String.matches("(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)");
     }
 }
