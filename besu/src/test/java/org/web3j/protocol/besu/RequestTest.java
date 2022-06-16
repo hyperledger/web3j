@@ -132,7 +132,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
- add-qbft    public void testIbftDiscardValidatorVote() throws Exception {
+    public void testIbftDiscardValidatorVote() throws Exception {
         final String accountId = "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
         web3j.ibftDiscardValidatorVote(accountId).send();
 
