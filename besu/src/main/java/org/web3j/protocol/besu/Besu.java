@@ -101,6 +101,19 @@ public interface Besu extends Eea, BesuRx {
 
     Request<?, BooleanResponse> ibftProposeValidatorVote(String address, Boolean validatorAddition);
 
+    Request<?, BooleanResponse> qbftDiscardValidatorVote(String address);
+
+    Request<?, BesuEthAccountsMapResponse> qbftGetPendingVotes();
+
+    Request<?, BesuSignerMetrics> qbftGetSignerMetrics();
+
+    Request<?, EthAccounts> qbftGetValidatorsByBlockNumber(
+            DefaultBlockParameter defaultBlockParameter);
+
+    Request<?, EthAccounts> qbftGetValidatorsByBlockHash(String blockHash);
+
+    Request<?, BooleanResponse> qbftProposeValidatorVote(String address, Boolean validatorAddition);
+
     Request<?, EthGetTransactionCount> privGetTransactionCount(
             final String address, final Base64String privacyGroupId);
 

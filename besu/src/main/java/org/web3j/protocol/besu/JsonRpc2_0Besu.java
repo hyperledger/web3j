@@ -210,6 +210,56 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 BooleanResponse.class);
     }
 
+    public Request<?, BooleanResponse> qbftDiscardValidatorVote(String address) {
+        return new Request<>(
+                "qbft_discardValidatorVote",
+                Arrays.asList(address),
+                web3jService,
+                BooleanResponse.class);
+    }
+
+    public Request<?, BesuEthAccountsMapResponse> qbftGetPendingVotes() {
+        return new Request<>(
+                "qbft_getPendingVotes",
+                Collections.<String>emptyList(),
+                web3jService,
+                BesuEthAccountsMapResponse.class);
+    }
+
+    public Request<?, BesuSignerMetrics> qbftGetSignerMetrics() {
+        return new Request<>(
+                "qbft_getSignerMetrics",
+                Collections.<String>emptyList(),
+                web3jService,
+                BesuSignerMetrics.class);
+    }
+
+    public Request<?, EthAccounts> qbftGetValidatorsByBlockNumber(
+            DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>(
+                "qbft_getValidatorsByBlockNumber",
+                Arrays.asList(defaultBlockParameter.getValue()),
+                web3jService,
+                EthAccounts.class);
+    }
+
+    public Request<?, EthAccounts> qbftGetValidatorsByBlockHash(String blockHash) {
+        return new Request<>(
+                "qbft_getValidatorsByBlockHash",
+                Arrays.asList(blockHash),
+                web3jService,
+                EthAccounts.class);
+    }
+
+    public Request<?, BooleanResponse> qbftProposeValidatorVote(
+            String address, Boolean validatorAddition) {
+        return new Request<>(
+                "qbft_proposeValidatorVote",
+                Arrays.asList(address, validatorAddition),
+                web3jService,
+                BooleanResponse.class);
+    }
+
     @Override
     public Request<?, EthGetTransactionCount> privGetTransactionCount(
             final String address, final Base64String privacyGroupId) {

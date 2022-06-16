@@ -132,7 +132,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testibftDiscardValidatorVote() throws Exception {
+    public void testIbftDiscardValidatorVote() throws Exception {
         final String accountId = "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
         web3j.ibftDiscardValidatorVote(accountId).send();
 
@@ -179,6 +179,57 @@ public class RequestTest extends RequestTester {
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_proposeValidatorVote\","
+                        + "\"params\":[\"0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73\",true],\"id\":1}");
+    }
+
+    @Test
+    public void testQbftDiscardValidatorVote() throws Exception {
+        final String accountId = "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
+        web3j.qbftDiscardValidatorVote(accountId).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"qbft_discardValidatorVote\","
+                        + "\"params\":[\"0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73\"],\"id\":1}");
+    }
+
+    @Test
+    public void testQbftGetPendingVotes() throws Exception {
+        web3j.qbftGetPendingVotes().send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"qbft_getPendingVotes\","
+                        + "\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testQbftGetValidatorsByBlockNumber() throws Exception {
+        final DefaultBlockParameter blockParameter = DefaultBlockParameter.valueOf("latest");
+        web3j.qbftGetValidatorsByBlockNumber(blockParameter).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"qbft_getValidatorsByBlockNumber\","
+                        + "\"params\":[\"latest\"],\"id\":1}");
+    }
+
+    @Test
+    public void testQbftGetValidatorsByBlockHash() throws Exception {
+        final String blockHash =
+                "0x98b2ddb5106b03649d2d337d42154702796438b3c74fd25a5782940e84237a48";
+        web3j.qbftGetValidatorsByBlockHash(blockHash).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"qbft_getValidatorsByBlockHash\",\"params\":"
+                        + "[\"0x98b2ddb5106b03649d2d337d42154702796438b3c74fd25a5782940e84237a48\"]"
+                        + ",\"id\":1}");
+    }
+
+    @Test
+    public void testQbftProposeValidatorVote() throws Exception {
+        final String validatorAddress = "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
+        web3j.qbftProposeValidatorVote(validatorAddress, true).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"qbft_proposeValidatorVote\","
                         + "\"params\":[\"0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73\",true],\"id\":1}");
     }
 
