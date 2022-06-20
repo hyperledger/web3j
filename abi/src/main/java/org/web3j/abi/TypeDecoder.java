@@ -413,7 +413,8 @@ public class TypeDecoder {
             return consumer.apply(elements, typeName);
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type "
+                            + Utils.getTypeName(typeReference.getType()),
                     e);
         }
     }
@@ -562,7 +563,8 @@ public class TypeDecoder {
             return consumer.apply(elements, typeName);
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type "
+                            + Utils.getTypeName(typeReference.getType()),
                     e);
         }
     }
@@ -706,7 +708,8 @@ public class TypeDecoder {
             }
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type "
+                            + Utils.getTypeName(typeReference.getType()),
                     e);
         }
     }
