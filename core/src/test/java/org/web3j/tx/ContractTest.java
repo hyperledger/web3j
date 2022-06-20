@@ -51,6 +51,7 @@ import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticEIP1559GasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
+import org.web3j.tx.response.EmptyTransactionReceipt;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -577,6 +578,19 @@ public class ContractTest extends ManagedTransactionTester {
 
         assertEquals(eventValuesWithLogs2.size(), 1);
         assertEquals(eventValuesWithLogs2.get(0).getLog(), logs.get(1));
+    }
+
+    @Test
+    public void testEmptyTransactionReceipt() throws Exception {
+        TransactionReceipt transactionReceipt = new EmptyTransactionReceipt(TRANSACTION_HASH);
+
+        prepareTransaction(transactionReceipt);
+
+        assertEquals(
+                transactionReceipt,
+                contract.performTransaction(
+                                new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
+                        .send());
     }
 
     void testErrorScenario() throws Throwable {
