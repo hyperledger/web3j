@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2022 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -18,34 +18,30 @@ import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 
-/** An ECDSA Signature. */
-public class ECDSASignature {
+public class NistECDSASignature extends ECDSASignature {
 
-    public static final X9ECParameters K1_CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
-    static final ECDomainParameters K1_CURVE =
+    public static final X9ECParameters R1_CURVE_PARAMS = CustomNamedCurves.getByName("secp256r1");
+    static final ECDomainParameters R1_CURVE =
             new ECDomainParameters(
-                    K1_CURVE_PARAMS.getCurve(),
-                    K1_CURVE_PARAMS.getG(),
-                    K1_CURVE_PARAMS.getN(),
-                    K1_CURVE_PARAMS.getH());
-    static final BigInteger K1_HALF_CURVE_ORDER = K1_CURVE_PARAMS.getN().shiftRight(1);
+                    R1_CURVE_PARAMS.getCurve(),
+                    R1_CURVE_PARAMS.getG(),
+                    R1_CURVE_PARAMS.getN(),
+                    R1_CURVE_PARAMS.getH());
+    static final BigInteger R1_HALF_CURVE_ORDER = R1_CURVE_PARAMS.getN().shiftRight(1);
 
-    public final BigInteger r;
-    public final BigInteger s;
-
-    public ECDSASignature(BigInteger r, BigInteger s) {
-        this.r = r;
-        this.s = s;
+    public NistECDSASignature(BigInteger r, BigInteger s) {
+        super(r, s);
     }
 
     /**
      * @return true if the S component is "low", that means it is below {@link
-     *     ECDSASignature#K1_HALF_CURVE_ORDER}. See <a
+     *     NistECDSASignature#R1_HALF_CURVE_ORDER}. See <a
      *     href="https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures">
      *     BIP62</a>.
      */
+    @Override
     public boolean isCanonical() {
-        return s.compareTo(K1_HALF_CURVE_ORDER) <= 0;
+        return s.compareTo(R1_HALF_CURVE_ORDER) <= 0;
     }
 
     /**
@@ -58,7 +54,8 @@ public class ECDSASignature {
      *
      * @return the signature in a canonicalised form.
      */
-    public ECDSASignature toCanonicalised() {
+    @Override
+    public NistECDSASignature toCanonicalised() {
         if (!isCanonical()) {
             // The order of the curve is the number of valid points that exist on that curve.
             // If S is in the upper half of the number of valid points, then bring it back to
@@ -66,13 +63,14 @@ public class ECDSASignature {
             //    N = 10
             //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
             //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            return new ECDSASignature(r, ECDSASignature.K1_CURVE.getN().subtract(s));
+            return new NistECDSASignature(r, R1_CURVE.getN().subtract(s));
         } else {
             return this;
         }
     }
 
+    @Override
     public ECDomainParameters getCurve() {
-        return K1_CURVE;
+        return R1_CURVE;
     }
 }

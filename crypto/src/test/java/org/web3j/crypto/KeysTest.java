@@ -53,8 +53,42 @@ public class KeysTest {
     }
 
     @Test
+    public void testCreateSecp256r1KeyPair() throws Exception {
+        KeyPair keyPair = Keys.createSecp256r1KeyPair();
+        PrivateKey privateKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
+
+        assertNotNull(privateKey);
+        assertNotNull(publicKey);
+
+        assertEquals(privateKey.getEncoded().length, (150));
+        assertEquals(publicKey.getEncoded().length, (91));
+    }
+
+    @Test
+    public void testCreateSecp256r1KeyPairRandomNull() throws Exception {
+        KeyPair keyPair = Keys.createSecp256r1KeyPair(null);
+        PrivateKey privateKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
+
+        assertNotNull(privateKey);
+        assertNotNull(publicKey);
+
+        assertEquals(privateKey.getEncoded().length, (150));
+        assertEquals(publicKey.getEncoded().length, (91));
+    }
+
+    @Test
     public void testCreateEcKeyPair() throws Exception {
         ECKeyPair ecKeyPair = Keys.createEcKeyPair();
+        assertEquals(ecKeyPair.getPublicKey().signum(), (1));
+        assertEquals(ecKeyPair.getPrivateKey().signum(), (1));
+    }
+
+    @Test
+    public void testCreateEcKeyPairR1() throws Exception {
+        KeyPair keyPair = Keys.createSecp256r1KeyPair();
+        ECKeyPair ecKeyPair = Keys.createEcKeyPair(keyPair);
         assertEquals(ecKeyPair.getPublicKey().signum(), (1));
         assertEquals(ecKeyPair.getPrivateKey().signum(), (1));
     }

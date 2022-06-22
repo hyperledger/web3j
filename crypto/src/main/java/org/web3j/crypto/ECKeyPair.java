@@ -17,22 +17,34 @@ import java.security.KeyPair;
 import java.util.Arrays;
 
 import org.bouncycastle.crypto.digests.SHA256Digest;
+import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
+import org.bouncycastle.math.ec.ECCurve;
 
 import org.web3j.utils.Numeric;
 
-/** Elliptic Curve SECP-256k1 generated key pair. */
+/** Elliptic Curve SECP-256k1 or SECP-256r1 generated key pair. */
 public class ECKeyPair {
     private final BigInteger privateKey;
     private final BigInteger publicKey;
+    private final ECCurve ecCurve;
 
     public ECKeyPair(BigInteger privateKey, BigInteger publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
+        this.ecCurve =
+                ECDSASignature.K1_CURVE
+                        .getCurve(); // usage of this constructor by default uses SECP-256k1
+    }
+
+    public ECKeyPair(BigInteger privateKey, BigInteger publicKey, ECCurve ecCurve) {
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+        this.ecCurve = ecCurve; // supply either SECP-256k1 or SECP-256r1
     }
 
     public BigInteger getPrivateKey() {
@@ -43,20 +55,29 @@ public class ECKeyPair {
         return publicKey;
     }
 
+    public ECCurve getEcCurve() {
+        return ecCurve;
+    }
+
     /**
      * Sign a hash with the private key of this key pair.
      *
      * @param transactionHash the hash to sign
+     * @param curve secp256r1 or secp256k1 can be used to create ECDSA signature
      * @return An {@link ECDSASignature} of the hash
      */
-    public ECDSASignature sign(byte[] transactionHash) {
+    public ECDSASignature sign(byte[] transactionHash, ECDomainParameters curve) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
-        ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(privateKey, Sign.CURVE);
+        ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(privateKey, curve);
         signer.init(true, privKey);
         BigInteger[] components = signer.generateSignature(transactionHash);
 
-        return new ECDSASignature(components[0], components[1]).toCanonicalised();
+        if (curve == NistECDSASignature.R1_CURVE) {
+            return new NistECDSASignature(components[0], components[1]).toCanonicalised();
+        } else {
+            return new ECDSASignature(components[0], components[1]).toCanonicalised();
+        }
     }
 
     public static ECKeyPair create(KeyPair keyPair) {
@@ -72,11 +93,16 @@ public class ECKeyPair {
         BigInteger publicKeyValue =
                 new BigInteger(1, Arrays.copyOfRange(publicKeyBytes, 1, publicKeyBytes.length));
 
-        return new ECKeyPair(privateKeyValue, publicKeyValue);
+        return new ECKeyPair(
+                privateKeyValue, publicKeyValue, privateKey.getParameters().getCurve());
     }
 
     public static ECKeyPair create(BigInteger privateKey) {
         return new ECKeyPair(privateKey, Sign.publicKeyFromPrivate(privateKey));
+    }
+
+    public static ECKeyPair create(BigInteger privateKey, ECDomainParameters curve) {
+        return new ECKeyPair(privateKey, Sign.publicKeyFromPrivate(privateKey, curve));
     }
 
     public static ECKeyPair create(byte[] privateKey) {

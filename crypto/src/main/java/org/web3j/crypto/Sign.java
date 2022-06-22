@@ -16,14 +16,13 @@ import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
 
-import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
-import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.math.ec.ECAlgorithms;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
+import org.bouncycastle.math.ec.custom.sec.SecP256R1Curve;
 
 import org.web3j.utils.Numeric;
 
@@ -39,21 +38,12 @@ import static org.web3j.utils.Assertions.verifyPrecondition;
  */
 public class Sign {
 
-    public static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
     public static final int CHAIN_ID_INC = 35;
     public static final int LOWER_REAL_V = 27;
     // The v signature parameter starts at 37 because 1 is the first valid chainId so:
     // chainId >= 1 implies that 2 * chainId + CHAIN_ID_INC >= 37.
     // https://eips.ethereum.org/EIPS/eip-155
     public static final int REPLAY_PROTECTED_V_MIN = 37;
-    static final ECDomainParameters CURVE =
-            new ECDomainParameters(
-                    CURVE_PARAMS.getCurve(),
-                    CURVE_PARAMS.getG(),
-                    CURVE_PARAMS.getN(),
-                    CURVE_PARAMS.getH());
-    static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
-
     static final String MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
     static byte[] getEthereumMessagePrefix(int messageLength) {
@@ -87,7 +77,12 @@ public class Sign {
             messageHash = message;
         }
 
-        ECDSASignature sig = keyPair.sign(messageHash);
+        ECDSASignature sig;
+        if (keyPair.getEcCurve() == NistECDSASignature.R1_CURVE.getCurve()) {
+            sig = keyPair.sign(messageHash, NistECDSASignature.R1_CURVE);
+        } else {
+            sig = keyPair.sign(messageHash, ECDSASignature.K1_CURVE);
+        }
 
         return createSignatureData(sig, publicKey, messageHash);
     }
@@ -150,6 +145,7 @@ public class Sign {
         verifyPrecondition(sig.s.signum() >= 0, "s must be positive");
         verifyPrecondition(message != null, "message cannot be null");
 
+        ECDomainParameters CURVE = sig.getCurve();
         // 1.0 For j from 0 to h   (h == recId here and the loop is outside this function)
         //   1.1 Let x = r + jn
         BigInteger n = CURVE.getN(); // Curve order.
@@ -162,14 +158,19 @@ public class Sign {
         //        routine outputs "invalid", then do another iteration of Step 1.
         //
         // More concisely, what these points mean is to use X as a compressed public key.
-        BigInteger prime = SecP256K1Curve.q;
+        BigInteger prime;
+        if (sig.getCurve() == NistECDSASignature.R1_CURVE) {
+            prime = SecP256R1Curve.q;
+        } else {
+            prime = SecP256K1Curve.q;
+        }
         if (x.compareTo(prime) >= 0) {
             // Cannot have point co-ordinates larger than this as everything takes place modulo Q.
             return null;
         }
         // Compressed keys require you to know an extra bit of data about the y-coord as there are
         // two possibilities. So it's encoded in the recId.
-        ECPoint R = decompressKey(x, (recId & 1) == 1);
+        ECPoint R = decompressKey(x, (recId & 1) == 1, CURVE);
         //   1.4. If nR != point at infinity, then do another iteration of Step 1 (callers
         //        responsibility).
         if (!R.multiply(n).isInfinity()) {
@@ -203,7 +204,7 @@ public class Sign {
     }
 
     /** Decompress a compressed public key (x co-ord and low-bit of y-coord). */
-    private static ECPoint decompressKey(BigInteger xBN, boolean yBit) {
+    private static ECPoint decompressKey(BigInteger xBN, boolean yBit, ECDomainParameters CURVE) {
         X9IntegerConverter x9 = new X9IntegerConverter();
         byte[] compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE.getCurve()));
         compEnc[0] = (byte) (yBit ? 0x03 : 0x02);
@@ -242,6 +243,11 @@ public class Sign {
         return signedMessageHashToKey(getEthereumMessageHash(message), signatureData);
     }
 
+    public static BigInteger signedPrefixedMessageToR1Key(
+            byte[] message, SignatureData signatureData) throws SignatureException {
+        return signedMessageHashToR1Key(getEthereumMessageHash(message), signatureData);
+    }
+
     /**
      * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns
      * the public key that was used to sign it. This can then be compared to the expected public key
@@ -270,6 +276,45 @@ public class Sign {
 
         ECDSASignature sig =
                 new ECDSASignature(
+                        new BigInteger(1, signatureData.getR()),
+                        new BigInteger(1, signatureData.getS()));
+
+        int recId = header - 27;
+        BigInteger key = recoverFromSignature(recId, sig, messageHash);
+        if (key == null) {
+            throw new SignatureException("Could not recover public key from signature");
+        }
+        return key;
+    }
+
+    /**
+     * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns
+     * the public key that was used to sign it. This can then be compared to the expected public key
+     * to determine if the signature was correct.
+     *
+     * @param messageHash The message hash.
+     * @param signatureData The message signature components
+     * @return the public key used to sign the message
+     * @throws SignatureException If the public key could not be recovered or if there was a
+     *     signature format error.
+     */
+    public static BigInteger signedMessageHashToR1Key(
+            byte[] messageHash, SignatureData signatureData) throws SignatureException {
+
+        byte[] r = signatureData.getR();
+        byte[] s = signatureData.getS();
+        verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
+        verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
+
+        int header = signatureData.getV()[0] & 0xFF;
+        // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
+        //                  0x1D = second key with even y, 0x1E = second key with odd y
+        if (header < 27 || header > 34) {
+            throw new SignatureException("Header byte out of range: " + header);
+        }
+
+        ECDSASignature sig =
+                new NistECDSASignature(
                         new BigInteger(1, signatureData.getR()),
                         new BigInteger(1, signatureData.getS()));
 
@@ -329,7 +374,21 @@ public class Sign {
     }
 
     /**
-     * Returns public key point from the given private key.
+     * Returns public key from the given private key.
+     *
+     * @param privKey the private key to derive the public key from
+     * @param curve Can supply either ECDSASignature.K1_CURVE or NistECDSASignature.R1_CURVE
+     * @return BigInteger encoded public key
+     */
+    public static BigInteger publicKeyFromPrivate(BigInteger privKey, ECDomainParameters curve) {
+        ECPoint point = publicPointFromPrivate(privKey, curve);
+
+        byte[] encoded = point.getEncoded(false);
+        return new BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.length)); // remove prefix
+    }
+
+    /**
+     * Returns public key point from the given private key using ECDSASignature.K1_CURVE
      *
      * @param privKey the private key to derive the public key from
      * @return ECPoint public key
@@ -339,10 +398,24 @@ public class Sign {
          * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
          * order, but that could change in future versions.
          */
-        if (privKey.bitLength() > CURVE.getN().bitLength()) {
-            privKey = privKey.mod(CURVE.getN());
+        if (privKey.bitLength() > ECDSASignature.K1_CURVE.getN().bitLength()) {
+            privKey = privKey.mod(ECDSASignature.K1_CURVE.getN());
         }
-        return new FixedPointCombMultiplier().multiply(CURVE.getG(), privKey);
+        return new FixedPointCombMultiplier().multiply(ECDSASignature.K1_CURVE.getG(), privKey);
+    }
+
+    /**
+     * Returns public key point from the given private key.
+     *
+     * @param privKey the private key to derive the public key from
+     * @param curve Can supply either ECDSASignature.K1_CURVE or NistECDSASignature.R1_CURVE
+     * @return ECPoint public key
+     */
+    public static ECPoint publicPointFromPrivate(BigInteger privKey, ECDomainParameters curve) {
+        if (privKey.bitLength() > curve.getN().bitLength()) {
+            privKey = privKey.mod(curve.getN());
+        }
+        return new FixedPointCombMultiplier().multiply(curve.getG(), privKey);
     }
 
     /**
