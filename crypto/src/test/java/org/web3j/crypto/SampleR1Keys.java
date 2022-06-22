@@ -12,9 +12,9 @@
  */
 package org.web3j.crypto;
 
-import org.web3j.utils.Numeric;
-
 import java.math.BigInteger;
+
+import org.web3j.utils.Numeric;
 
 /** Keys generated for unit testing purposes. */
 public class SampleR1Keys {

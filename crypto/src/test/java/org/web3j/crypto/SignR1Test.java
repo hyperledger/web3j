@@ -12,18 +12,19 @@
  */
 package org.web3j.crypto;
 
-import org.bouncycastle.math.ec.ECPoint;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.web3j.utils.Numeric;
-
 import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.bouncycastle.math.ec.ECPoint;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

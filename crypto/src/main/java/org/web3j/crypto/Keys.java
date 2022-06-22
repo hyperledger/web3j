@@ -58,19 +58,19 @@ public class Keys {
      */
     static KeyPair createSecp256k1KeyPair()
             throws NoSuchProviderException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException {
+                    InvalidAlgorithmParameterException {
         return createSecp256k1KeyPair(secureRandom());
     }
 
     static KeyPair createSecp256r1KeyPair()
             throws NoSuchProviderException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException {
+                    InvalidAlgorithmParameterException {
         return createSecp256r1KeyPair(secureRandom());
     }
 
     static KeyPair createSecp256k1KeyPair(SecureRandom random)
             throws NoSuchProviderException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException {
+                    InvalidAlgorithmParameterException {
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
@@ -84,7 +84,7 @@ public class Keys {
 
     static KeyPair createSecp256r1KeyPair(SecureRandom random)
             throws NoSuchProviderException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException {
+                    InvalidAlgorithmParameterException {
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256r1");
@@ -102,13 +102,13 @@ public class Keys {
 
     public static ECKeyPair createEcKeyPair()
             throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
-            NoSuchProviderException {
+                    NoSuchProviderException {
         return createEcKeyPair(secureRandom());
     }
 
     public static ECKeyPair createEcKeyPair(SecureRandom random)
             throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
-            NoSuchProviderException {
+                    NoSuchProviderException {
         KeyPair keyPair = createSecp256k1KeyPair(random);
         return ECKeyPair.create(keyPair);
     }
