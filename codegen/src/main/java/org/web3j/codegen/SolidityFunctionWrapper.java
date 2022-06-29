@@ -478,20 +478,22 @@ public class SolidityFunctionWrapper extends Generator {
                                             + ")");
 
             for (AbiDefinition.NamedType component : namedType.getComponents()) {
-                if (component.getType().equals("tuple")) {
-                    final ClassName typeName = structClassNameMap.get(component.structIdentifier());
-                    builder.addField(typeName, component.getName(), Modifier.PUBLIC);
-                    constructorBuilder.addParameter(typeName, component.getName());
-                    nativeConstructorBuilder.addParameter(typeName, component.getName());
-
+                String type = component.getType();
+                TypeName typeName, nativeTypeName;
+                if (type.equals("tuple")) {
+                    nativeTypeName =
+                            typeName = structClassNameMap.get(component.structIdentifier());
+                } else if (type.startsWith("tuple") && type.contains("[")) {
+                    nativeTypeName = buildStructArrayTypeName(component, false);
+                    typeName = buildStructArrayTypeName(component, useNativeJavaTypes);
                 } else {
-                    final TypeName nativeTypeName =
-                            buildTypeName(component.getType(), useJavaPrimitiveTypes);
-                    final TypeName wrappedTypeName = getWrapperType(nativeTypeName);
-                    builder.addField(wrappedTypeName, component.getName(), Modifier.PUBLIC);
-                    constructorBuilder.addParameter(wrappedTypeName, component.getName());
-                    nativeConstructorBuilder.addParameter(nativeTypeName, component.getName());
+                    nativeTypeName = buildTypeName(type, useJavaPrimitiveTypes);
+                    typeName = getWrapperType(nativeTypeName);
                 }
+                builder.addField(typeName, component.getName(), Modifier.PUBLIC);
+                constructorBuilder.addParameter(typeName, component.getName());
+                nativeConstructorBuilder.addParameter(nativeTypeName, component.getName());
+
                 constructorBuilder.addStatement(
                         "this." + component.getName() + " = " + component.getName());
                 nativeConstructorBuilder.addStatement(
@@ -499,33 +501,19 @@ public class SolidityFunctionWrapper extends Generator {
                                 + component.getName()
                                 + " = "
                                 + component.getName()
-                                + (useNativeJavaTypes
-                                                && structClassNameMap.keySet().stream()
-                                                        .noneMatch(
-                                                                i ->
-                                                                        i
-                                                                                == component
-                                                                                        .structIdentifier())
-                                        ? ARRAY_SUFFIX.matcher(component.getType()).find()
-                                                ? ".getValue().stream().map(v -> v.getValue()).collect($T.toList())"
-                                                : ".getValue()"
-                                        : ""),
+                                + adjustToNativeTypeIfNecessary(component),
                         Collectors.class);
             }
 
             builder.superclass(namedType.isDynamic() ? DynamicStruct.class : StaticStruct.class);
             builder.addMethod(constructorBuilder.build());
             if (useNativeJavaTypes
-                    && !namedType.getComponents().isEmpty()
                     && namedType.getComponents().stream()
+                            .map(this::normalizeNamedType)
                             .anyMatch(
                                     component ->
-                                            structClassNameMap.keySet().stream()
-                                                    .noneMatch(
-                                                            i ->
-                                                                    i
-                                                                            == component
-                                                                                    .structIdentifier()))) {
+                                            structClassNameMap.get(component.structIdentifier())
+                                                    == null)) {
                 builder.addMethod(nativeConstructorBuilder.build());
             }
             structClassNameMap.put(namedType.structIdentifier(), ClassName.get("", structName));
@@ -533,6 +521,20 @@ public class SolidityFunctionWrapper extends Generator {
             structCounter++;
         }
         return structs;
+    }
+
+    private String adjustToNativeTypeIfNecessary(NamedType component) {
+        if (useNativeJavaTypes && structClassNameMap.get(component.structIdentifier()) == null) {
+            if (ARRAY_SUFFIX.matcher(component.getType()).find()
+                    && structClassNameMap.get(normalizeNamedType(component).structIdentifier())
+                            == null) {
+                return ".getValue().stream().map(v -> v.getValue()).collect($T.toList())";
+            } else {
+                return ".getValue()";
+            }
+        } else {
+            return "";
+        }
     }
 
     private NamedType normalizeNamedType(NamedType namedType) {
@@ -568,6 +570,7 @@ public class SolidityFunctionWrapper extends Generator {
                         namedType -> {
                             structMap.put(namedType.structIdentifier(), namedType);
                             extractNested(namedType).stream()
+                                    .map(this::normalizeNamedType)
                                     .filter(
                                             nestedNamedStruct ->
                                                     nestedNamedStruct.getType().equals("tuple"))
@@ -1288,12 +1291,13 @@ public class SolidityFunctionWrapper extends Generator {
                             .simpleName();
 
         } else {
-            structName =
+            String structArray =
                     namedType
                             .getInternalType()
-                            .substring(
-                                    namedType.getInternalType().lastIndexOf(".") + 1,
-                                    namedType.getInternalType().indexOf("["));
+                            .substring(namedType.getInternalType().lastIndexOf(" ") + 1);
+            structName =
+                    structArray.substring(
+                            structArray.lastIndexOf(".") + 1, structArray.indexOf("["));
         }
 
         if (useNativeJavaTypes)
@@ -1806,7 +1810,7 @@ public class SolidityFunctionWrapper extends Generator {
                 typeName = structClassNameMap.get(namedType.structIdentifier());
             } else if (namedType.getType().startsWith("tuple")
                     && namedType.getType().contains("[")) {
-                typeName = buildStructArrayTypeName(namedType, true);
+                typeName = buildStructArrayTypeName(namedType, false);
             } else {
                 typeName = buildTypeName(namedType.getType(), useJavaPrimitiveTypes);
             }

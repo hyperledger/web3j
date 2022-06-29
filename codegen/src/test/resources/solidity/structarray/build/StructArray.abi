@@ -1,0 +1,1 @@
+[{"inputs":[{"components":[{"internalType":"uint256","name":"baz","type":"uint256"}],"internalType":"struct Bar[]","name":"bars","type":"tuple[]"}],"name":"getBar","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
