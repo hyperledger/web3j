@@ -686,20 +686,31 @@ public class AbiV2TestFixture {
         }
     }
 
+    public static class Nazzy extends DynamicStruct {
+        public List<Foo> foo;
+
+        public Nazzy(List<Foo> foo) {
+            super(new org.web3j.abi.datatypes.DynamicArray<>(Foo.class, foo));
+            this.foo = foo;
+        }
+    }
+
     public static class Nazz extends DynamicStruct {
-        public Naz naz;
+        public List<Nazzy> nazzy;
 
         public BigInteger data;
 
-        public Nazz(Naz naz, BigInteger data) {
-            super(naz, new org.web3j.abi.datatypes.generated.Uint256(data));
-            this.naz = naz;
+        public Nazz(List<Nazzy> nazzy, BigInteger data) {
+            super(
+                    new org.web3j.abi.datatypes.DynamicArray<>(Nazzy.class, nazzy),
+                    new org.web3j.abi.datatypes.generated.Uint256(data));
+            this.nazzy = nazzy;
             this.data = data;
         }
 
-        public Nazz(Naz naz, Uint256 data) {
-            super(naz, data);
-            this.naz = naz;
+        public Nazz(DynamicArray<Nazzy> nazzy, Uint256 data) {
+            super(nazzy, data);
+            this.nazzy = nazzy.getValue();
             this.data = data.getValue();
         }
     }
