@@ -12,12 +12,7 @@
  */
 package org.web3j.abi;
 
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigInteger;
-import java.util.*;
-
 import org.junit.jupiter.api.Test;
-
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicArray;
@@ -31,6 +26,12 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes10;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
+
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -795,5 +796,29 @@ public class DefaultFunctionEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000000";
 
         assertEquals(expected, FunctionEncoder.encode(AbiV2TestFixture.setBarDynamicArrayFunction));
+    }
+
+    @Test
+    void testArrayInStruct() {
+        String expected =
+                "0x9ca411e8"
+                        + "0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000060"
+                        + "00000000000000000000000000000000000000000000000000000000000000c0"
+                        + "00000000000000000000000000000000000000000000000000000000000001a0"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "000000000000000000000000000000000000000000000000000000000000007b"
+                        + "0000000000000000000000000000000000000000000000000000000000000237"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "0000000000000000000000000000000000000000000000000000000000000080"
+                        + "0000000000000000000000000000000000000000000000000000000000000003"
+                        + "666f6f0000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000003"
+                        + "6261720000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "3078313233343536373839303132333435363738393031323334353637383930"
+                        + "3078313233343536373839303132333435363738393031323334353637383931";
+        assertEquals(expected, FunctionEncoder.encode(AbiV2TestFixture.setArrayInStructFunction));
     }
 }
