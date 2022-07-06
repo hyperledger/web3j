@@ -66,6 +66,7 @@ import org.web3j.abi.datatypes.primitive.Float;
 import org.web3j.abi.datatypes.primitive.Int;
 import org.web3j.abi.datatypes.primitive.Long;
 import org.web3j.abi.datatypes.primitive.Short;
+import org.web3j.abi.datatypes.reflection.Parameterized;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -480,19 +481,34 @@ public class SolidityFunctionWrapper extends Generator {
             for (AbiDefinition.NamedType component : namedType.getComponents()) {
                 String type = component.getType();
                 TypeName typeName, nativeTypeName;
+                AnnotationSpec annotationSpec = null;
                 if (type.equals("tuple")) {
                     nativeTypeName =
                             typeName = structClassNameMap.get(component.structIdentifier());
                 } else if (type.startsWith("tuple") && type.contains("[")) {
                     nativeTypeName = buildStructArrayTypeName(component, false);
                     typeName = buildStructArrayTypeName(component, useNativeJavaTypes);
+
+                    // adding extra annotation for dynamic types
+                    annotationSpec =
+                            AnnotationSpec.builder(Parameterized.class)
+                                    .addMember(
+                                            "type",
+                                            "$T.class",
+                                            ClassName.get("", resolveStructName(component)))
+                                    .build();
                 } else {
                     nativeTypeName = buildTypeName(type, useJavaPrimitiveTypes);
                     typeName = getWrapperType(nativeTypeName);
                 }
                 builder.addField(typeName, component.getName(), Modifier.PUBLIC);
                 constructorBuilder.addParameter(typeName, component.getName());
-                nativeConstructorBuilder.addParameter(nativeTypeName, component.getName());
+                ParameterSpec.Builder nativeParameterBuilder =
+                        ParameterSpec.builder(nativeTypeName, component.getName());
+                if (annotationSpec != null) {
+                    nativeParameterBuilder.addAnnotation(annotationSpec);
+                }
+                nativeConstructorBuilder.addParameter(nativeParameterBuilder.build());
 
                 constructorBuilder.addStatement(
                         "this." + component.getName() + " = " + component.getName());
@@ -509,7 +525,6 @@ public class SolidityFunctionWrapper extends Generator {
             builder.addMethod(constructorBuilder.build());
             if (useNativeJavaTypes
                     && namedType.getComponents().stream()
-                            .map(this::normalizeNamedType)
                             .anyMatch(
                                     component ->
                                             structClassNameMap.get(component.structIdentifier())
@@ -1278,6 +1293,29 @@ public class SolidityFunctionWrapper extends Generator {
      *     </code>
      */
     private TypeName buildStructArrayTypeName(NamedType namedType, Boolean useNativeJavaTypes) {
+        String structName = resolveStructName(namedType);
+
+        if (useNativeJavaTypes)
+            return ParameterizedTypeName.get(
+                    ClassName.get(List.class), ClassName.get("", structName));
+
+        String arrayLength =
+                namedType
+                        .getType()
+                        .substring(
+                                namedType.getType().indexOf('[') + 1,
+                                namedType.getType().indexOf(']'));
+        if (!arrayLength.isEmpty() && Integer.parseInt(arrayLength) > 0) {
+            return ParameterizedTypeName.get(
+                    ClassName.get("org.web3j.abi.datatypes.generated", "StaticArray" + arrayLength),
+                    ClassName.get("", structName));
+        } else {
+            return ParameterizedTypeName.get(
+                    ClassName.get(DynamicArray.class), ClassName.get("", structName));
+        }
+    }
+
+    private String resolveStructName(NamedType namedType) {
         String structName;
         if (namedType.getInternalType().isEmpty()) {
             structName =
@@ -1299,25 +1337,7 @@ public class SolidityFunctionWrapper extends Generator {
                     structArray.substring(
                             structArray.lastIndexOf(".") + 1, structArray.indexOf("["));
         }
-
-        if (useNativeJavaTypes)
-            return ParameterizedTypeName.get(
-                    ClassName.get(List.class), ClassName.get("", structName));
-
-        String arrayLength =
-                namedType
-                        .getType()
-                        .substring(
-                                namedType.getType().indexOf('[') + 1,
-                                namedType.getType().indexOf(']'));
-        if (!arrayLength.isEmpty() && Integer.parseInt(arrayLength) > 0) {
-            return ParameterizedTypeName.get(
-                    ClassName.get("org.web3j.abi.datatypes.generated", "StaticArray" + arrayLength),
-                    ClassName.get("", structName));
-        } else {
-            return ParameterizedTypeName.get(
-                    ClassName.get(DynamicArray.class), ClassName.get("", structName));
-        }
+        return structName;
     }
 
     MethodSpec buildFunction(AbiDefinition functionDefinition) throws ClassNotFoundException {
@@ -1861,7 +1881,8 @@ public class SolidityFunctionWrapper extends Generator {
                             .map(ClassName::simpleName)
                             .noneMatch(
                                     name -> name.equals(namedTypeName.getTypeName().toString()))) {
-                if (namedTypeName.typeName instanceof ParameterizedTypeName) {
+                if (namedTypeName.typeName instanceof ParameterizedTypeName
+                        && isNotArrayOfStructs(namedTypeName)) {
                     nativeConversion = ".getNativeValueCopy()";
                     needsArrayCast = true;
                 } else {
@@ -1907,7 +1928,8 @@ public class SolidityFunctionWrapper extends Generator {
                             .map(ClassName::simpleName)
                             .noneMatch(
                                     name -> name.equals(namedTypeName.getTypeName().toString()))) {
-                if (namedTypeName.typeName instanceof ParameterizedTypeName) {
+                if (namedTypeName.typeName instanceof ParameterizedTypeName
+                        && isNotArrayOfStructs(namedTypeName)) {
                     nativeConversion = ".getNativeValueCopy()";
                     needsArrayCast = true;
                 } else {
@@ -1947,6 +1969,19 @@ public class SolidityFunctionWrapper extends Generator {
             }
         }
         return builder.build();
+    }
+
+    private boolean isNotArrayOfStructs(NamedTypeName namedTypeName) {
+        return structClassNameMap.values().stream()
+                .map(ClassName::simpleName)
+                .noneMatch(
+                        name ->
+                                name.equals(
+                                        ((ClassName)
+                                                        ((ParameterizedTypeName)
+                                                                        namedTypeName.typeName)
+                                                                .typeArguments.get(0))
+                                                .simpleName()));
     }
 
     static TypeName buildTypeName(String typeDeclaration) throws ClassNotFoundException {

@@ -12,6 +12,7 @@
  */
 package org.web3j.abi;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -24,17 +25,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.Fixed;
-import org.web3j.abi.datatypes.Int;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.StaticStruct;
-import org.web3j.abi.datatypes.StructType;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.reflection.Parameterized;
 
 /** Utility functions. */
 public class Utils {
@@ -48,13 +40,73 @@ public class Utils {
             if (reflectedType instanceof ParameterizedType) {
                 type = (Class<?>) ((ParameterizedType) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
+            } else if (typeReference.getSubTypeReference() != null) {
+                return getParameterizedTypeName(typeReference, typeReference.getClassType());
             } else {
                 type = Class.forName(getTypeName(reflectedType));
+                if (StructType.class.isAssignableFrom(type)) {
+                    return getStructType(type);
+                }
                 return getSimpleTypeName(type);
             }
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid class reference provided", e);
         }
+    }
+
+    static String getStructType(Class type) {
+        final StringBuilder sb = new StringBuilder("(");
+        Constructor constructor = findStructConstructor(type);
+        Class[] itemTypes = constructor.getParameterTypes();
+        for (int i = 0; i < itemTypes.length; ++i) {
+            final Class cls = itemTypes[i];
+            if (StructType.class.isAssignableFrom(cls)) {
+                sb.append(getStructType(cls));
+            } else {
+                Class parameterAnnotation =
+                        extractParameterFromAnnotation(constructor.getParameterAnnotations()[i]);
+                if (parameterAnnotation != null) {
+                    sb.append(
+                            getTypeName(
+                                    new TypeReference<DynamicArray>() {
+                                        @Override
+                                        TypeReference getSubTypeReference() {
+                                            return TypeReference.create(parameterAnnotation);
+                                        }
+                                    }));
+                } else {
+                    sb.append(getTypeName(TypeReference.create(cls)));
+                }
+            }
+            if (i < itemTypes.length - 1) {
+                sb.append(",");
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+    public static <T extends Type> Class<T> extractParameterFromAnnotation(
+            Annotation[] parameterAnnotation) {
+        for (Annotation a : parameterAnnotation) {
+            if (Parameterized.class.isInstance(a)) {
+                return (Class<T>) ((Parameterized) a).type();
+            }
+        }
+        return null;
+    }
+
+    public static Constructor findStructConstructor(Class classType) {
+        return Arrays.stream(classType.getDeclaredConstructors())
+                .filter(
+                        declaredConstructor ->
+                                Arrays.stream(declaredConstructor.getParameterTypes())
+                                        .allMatch(Type.class::isAssignableFrom))
+                .findAny()
+                .orElseThrow(
+                        () ->
+                                new RuntimeException(
+                                        "TypeReferenced struct must contain a constructor with types that extend Type"));
     }
 
     static String getSimpleTypeName(Class<?> type) {
@@ -82,11 +134,11 @@ public class Utils {
         try {
             if (type.equals(DynamicArray.class)) {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
-                String parameterizedTypeName = getSimpleTypeName(parameterizedType);
+                String parameterizedTypeName = simpleNameOrStruct(parameterizedType);
                 return parameterizedTypeName + "[]";
             } else if (type.equals(StaticArray.class)) {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
-                String parameterizedTypeName = getSimpleTypeName(parameterizedType);
+                String parameterizedTypeName = simpleNameOrStruct(parameterizedType);
                 return parameterizedTypeName
                         + "["
                         + ((TypeReference.StaticArrayTypeReference) typeReference).getSize()
@@ -99,9 +151,20 @@ public class Utils {
         }
     }
 
+    private static <U extends Type> String simpleNameOrStruct(Class<U> parameterizedType) {
+        if (StructType.class.isAssignableFrom(parameterizedType)) {
+            return getStructType(parameterizedType);
+        }
+        return getSimpleTypeName(parameterizedType);
+    }
+
     @SuppressWarnings("unchecked")
     static <T extends Type> Class<T> getParameterizedTypeFromArray(TypeReference typeReference)
             throws ClassNotFoundException {
+
+        if (typeReference.getSubTypeReference() != null) {
+            return typeReference.getSubTypeReference().getClassType();
+        }
 
         java.lang.reflect.Type type = typeReference.getType();
         java.lang.reflect.Type[] typeArguments =

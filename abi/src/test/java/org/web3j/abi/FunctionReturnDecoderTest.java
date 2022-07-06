@@ -20,19 +20,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.Bytes16;
-import org.web3j.abi.datatypes.generated.Bytes32;
-import org.web3j.abi.datatypes.generated.StaticArray2;
-import org.web3j.abi.datatypes.generated.StaticArray3;
-import org.web3j.abi.datatypes.generated.StaticArray4;
-import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.generated.*;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
@@ -279,6 +268,24 @@ public class FunctionReturnDecoderTest {
                 FunctionReturnDecoder.decode(
                         rawInput, AbiV2TestFixture.getFooFunction.getOutputParameters()),
                 Collections.singletonList(new AbiV2TestFixture.Foo("id", "name")));
+    }
+
+    @Test
+    public void testDecodeDynamicStruct3() {
+        AbiV2TestFixture.Nazz nazz =
+                new AbiV2TestFixture.Nazz(
+                        Collections.singletonList(
+                                new AbiV2TestFixture.Nazzy(
+                                        Arrays.asList(
+                                                new AbiV2TestFixture.Foo("a", "b"),
+                                                new AbiV2TestFixture.Foo("c", "d")))),
+                        new BigInteger("100"));
+        String rawInput = FunctionEncoder.encodeConstructor(Collections.singletonList(nazz));
+
+        List<Type> decoded =
+                FunctionReturnDecoder.decode(
+                        rawInput, AbiV2TestFixture.getNazzFunction.getOutputParameters());
+        assertEquals(Collections.singletonList(nazz).get(0).toString(), decoded.get(0).toString());
     }
 
     @Test
