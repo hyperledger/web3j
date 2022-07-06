@@ -26,7 +26,7 @@ dependencies {
     testImplementation "ch.qos.logback:logback-core:$logbackVersion"
     testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
     testImplementation "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion"
-    testImplementation('org.web3j:web3j-unit:4.9.0') {
+    testImplementation('org.web3j:web3j-unit:4.9.2') {
         // We dont want to pull the web3j version from unit
         exclude group: 'org.web3j'
     }
