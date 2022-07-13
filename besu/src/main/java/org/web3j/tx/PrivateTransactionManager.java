@@ -24,9 +24,9 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.eea.crypto.PrivateTxSignServiceImpl;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.service.TxSignService;
-import org.web3j.service.TxSignServiceImpl;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
@@ -63,7 +63,7 @@ public class PrivateTransactionManager extends TransactionManager {
                 privateFrom,
                 privacyGroupId,
                 restriction,
-                new TxSignServiceImpl(credentials));
+                new PrivateTxSignServiceImpl(credentials));
     }
 
     public PrivateTransactionManager(
@@ -101,7 +101,7 @@ public class PrivateTransactionManager extends TransactionManager {
                 privateFrom,
                 privateFor,
                 restriction,
-                new TxSignServiceImpl(credentials));
+                new PrivateTxSignServiceImpl(credentials));
     }
 
     public PrivateTransactionManager(
