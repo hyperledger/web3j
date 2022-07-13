@@ -16,7 +16,9 @@ import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
 
+import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
+import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.math.ec.ECAlgorithms;
 import org.bouncycastle.math.ec.ECPoint;
@@ -38,12 +40,32 @@ import static org.web3j.utils.Assertions.verifyPrecondition;
  */
 public class Sign {
 
+    public static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
+    public static final X9ECParameters NIST_CURVE_PARAMS = CustomNamedCurves.getByName("secp256r1");
+
     public static final int CHAIN_ID_INC = 35;
     public static final int LOWER_REAL_V = 27;
     // The v signature parameter starts at 37 because 1 is the first valid chainId so:
     // chainId >= 1 implies that 2 * chainId + CHAIN_ID_INC >= 37.
     // https://eips.ethereum.org/EIPS/eip-155
     public static final int REPLAY_PROTECTED_V_MIN = 37;
+
+    static final ECDomainParameters CURVE =
+            new ECDomainParameters(
+                    CURVE_PARAMS.getCurve(),
+                    CURVE_PARAMS.getG(),
+                    CURVE_PARAMS.getN(),
+                    CURVE_PARAMS.getH());
+    static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
+
+    static final ECDomainParameters NIST_CURVE =
+            new ECDomainParameters(
+                    NIST_CURVE_PARAMS.getCurve(),
+                    NIST_CURVE_PARAMS.getG(),
+                    NIST_CURVE_PARAMS.getN(),
+                    NIST_CURVE_PARAMS.getH());
+    static final BigInteger NIST_HALF_CURVE_ORDER = NIST_CURVE_PARAMS.getN().shiftRight(1);
+
     static final String MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
     static byte[] getEthereumMessagePrefix(int messageLength) {
@@ -77,12 +99,10 @@ public class Sign {
             messageHash = message;
         }
 
-        ECDSASignature sig;
-        if (keyPair.getEcCurve() == NistECDSASignature.R1_CURVE.getCurve()) {
-            sig = keyPair.sign(messageHash, NistECDSASignature.R1_CURVE);
-        } else {
-            sig = keyPair.sign(messageHash, ECDSASignature.K1_CURVE);
-        }
+        ECDSASignature sig =
+                keyPair.getEcCurve() == NIST_CURVE.getCurve()
+                        ? keyPair.sign(messageHash, NIST_CURVE)
+                        : keyPair.sign(messageHash, CURVE);
 
         return createSignatureData(sig, publicKey, messageHash);
     }
@@ -158,12 +178,8 @@ public class Sign {
         //        routine outputs "invalid", then do another iteration of Step 1.
         //
         // More concisely, what these points mean is to use X as a compressed public key.
-        BigInteger prime;
-        if (sig.getCurve() == NistECDSASignature.R1_CURVE) {
-            prime = SecP256R1Curve.q;
-        } else {
-            prime = SecP256K1Curve.q;
-        }
+        BigInteger prime = sig.getCurve() == NIST_CURVE ? SecP256R1Curve.q : SecP256K1Curve.q;
+
         if (x.compareTo(prime) >= 0) {
             // Cannot have point co-ordinates larger than this as everything takes place modulo Q.
             return null;
@@ -398,10 +414,10 @@ public class Sign {
          * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
          * order, but that could change in future versions.
          */
-        if (privKey.bitLength() > ECDSASignature.K1_CURVE.getN().bitLength()) {
-            privKey = privKey.mod(ECDSASignature.K1_CURVE.getN());
+        if (privKey.bitLength() > CURVE.getN().bitLength()) {
+            privKey = privKey.mod(CURVE.getN());
         }
-        return new FixedPointCombMultiplier().multiply(ECDSASignature.K1_CURVE.getG(), privKey);
+        return new FixedPointCombMultiplier().multiply(CURVE.getG(), privKey);
     }
 
     /**

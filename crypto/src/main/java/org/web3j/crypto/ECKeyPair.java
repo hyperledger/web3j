@@ -27,6 +27,8 @@ import org.bouncycastle.math.ec.ECCurve;
 
 import org.web3j.utils.Numeric;
 
+import static org.web3j.crypto.Sign.CURVE;
+
 /** Elliptic Curve SECP-256k1 or SECP-256r1 generated key pair. */
 public class ECKeyPair {
     private final BigInteger privateKey;
@@ -36,9 +38,7 @@ public class ECKeyPair {
     public ECKeyPair(BigInteger privateKey, BigInteger publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
-        this.ecCurve =
-                ECDSASignature.K1_CURVE
-                        .getCurve(); // usage of this constructor by default uses SECP-256k1
+        this.ecCurve = CURVE.getCurve(); // usage of this constructor by default uses SECP-256k1
     }
 
     public ECKeyPair(BigInteger privateKey, BigInteger publicKey, ECCurve ecCurve) {
@@ -73,7 +73,7 @@ public class ECKeyPair {
         signer.init(true, privKey);
         BigInteger[] components = signer.generateSignature(transactionHash);
 
-        if (curve == NistECDSASignature.R1_CURVE) {
+        if (curve == Sign.NIST_CURVE) {
             return new NistECDSASignature(components[0], components[1]).toCanonicalised();
         } else {
             return new ECDSASignature(components[0], components[1]).toCanonicalised();

@@ -14,22 +14,12 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 
-import org.bouncycastle.asn1.x9.X9ECParameters;
-import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
+
+import static org.web3j.crypto.Sign.CURVE;
 
 /** An ECDSA Signature. */
 public class ECDSASignature {
-
-    public static final X9ECParameters K1_CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
-    static final ECDomainParameters K1_CURVE =
-            new ECDomainParameters(
-                    K1_CURVE_PARAMS.getCurve(),
-                    K1_CURVE_PARAMS.getG(),
-                    K1_CURVE_PARAMS.getN(),
-                    K1_CURVE_PARAMS.getH());
-    static final BigInteger K1_HALF_CURVE_ORDER = K1_CURVE_PARAMS.getN().shiftRight(1);
-
     public final BigInteger r;
     public final BigInteger s;
 
@@ -40,12 +30,12 @@ public class ECDSASignature {
 
     /**
      * @return true if the S component is "low", that means it is below {@link
-     *     ECDSASignature#K1_HALF_CURVE_ORDER}. See <a
+     *     Sign#HALF_CURVE_ORDER}. See <a
      *     href="https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures">
      *     BIP62</a>.
      */
     public boolean isCanonical() {
-        return s.compareTo(K1_HALF_CURVE_ORDER) <= 0;
+        return s.compareTo(Sign.HALF_CURVE_ORDER) <= 0;
     }
 
     /**
@@ -66,13 +56,13 @@ public class ECDSASignature {
             //    N = 10
             //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
             //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            return new ECDSASignature(r, ECDSASignature.K1_CURVE.getN().subtract(s));
+            return new ECDSASignature(r, CURVE.getN().subtract(s));
         } else {
             return this;
         }
     }
 
     public ECDomainParameters getCurve() {
-        return K1_CURVE;
+        return CURVE;
     }
 }

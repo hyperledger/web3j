@@ -63,7 +63,7 @@ public class SignR1Test {
     @Test
     public void testPublicKeyFromPrivateKey() {
         assertEquals(
-                Sign.publicKeyFromPrivate(SampleR1Keys.PRIVATE_KEY, NistECDSASignature.R1_CURVE),
+                Sign.publicKeyFromPrivate(SampleR1Keys.PRIVATE_KEY, Sign.NIST_CURVE),
                 (SampleR1Keys.PUBLIC_KEY));
     }
 
@@ -80,8 +80,7 @@ public class SignR1Test {
 
     @Test
     public void testPublicKeyFromPrivatePoint() {
-        ECPoint point =
-                Sign.publicPointFromPrivate(SampleR1Keys.PRIVATE_KEY, NistECDSASignature.R1_CURVE);
+        ECPoint point = Sign.publicPointFromPrivate(SampleR1Keys.PRIVATE_KEY, Sign.NIST_CURVE);
         assertEquals(Sign.publicFromPoint(point.getEncoded(false)), (SampleR1Keys.PUBLIC_KEY));
     }
 

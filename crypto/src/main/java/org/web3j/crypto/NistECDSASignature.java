@@ -14,20 +14,12 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 
-import org.bouncycastle.asn1.x9.X9ECParameters;
-import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 
-public class NistECDSASignature extends ECDSASignature {
+import static org.web3j.crypto.Sign.NIST_CURVE;
+import static org.web3j.crypto.Sign.NIST_HALF_CURVE_ORDER;
 
-    public static final X9ECParameters R1_CURVE_PARAMS = CustomNamedCurves.getByName("secp256r1");
-    static final ECDomainParameters R1_CURVE =
-            new ECDomainParameters(
-                    R1_CURVE_PARAMS.getCurve(),
-                    R1_CURVE_PARAMS.getG(),
-                    R1_CURVE_PARAMS.getN(),
-                    R1_CURVE_PARAMS.getH());
-    static final BigInteger R1_HALF_CURVE_ORDER = R1_CURVE_PARAMS.getN().shiftRight(1);
+public class NistECDSASignature extends ECDSASignature {
 
     public NistECDSASignature(BigInteger r, BigInteger s) {
         super(r, s);
@@ -35,13 +27,13 @@ public class NistECDSASignature extends ECDSASignature {
 
     /**
      * @return true if the S component is "low", that means it is below {@link
-     *     NistECDSASignature#R1_HALF_CURVE_ORDER}. See <a
+     *     Sign#NIST_HALF_CURVE_ORDER}. See <a
      *     href="https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures">
      *     BIP62</a>.
      */
     @Override
     public boolean isCanonical() {
-        return s.compareTo(R1_HALF_CURVE_ORDER) <= 0;
+        return s.compareTo(NIST_HALF_CURVE_ORDER) <= 0;
     }
 
     /**
@@ -63,7 +55,7 @@ public class NistECDSASignature extends ECDSASignature {
             //    N = 10
             //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
             //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            return new NistECDSASignature(r, R1_CURVE.getN().subtract(s));
+            return new NistECDSASignature(r, NIST_CURVE.getN().subtract(s));
         } else {
             return this;
         }
@@ -71,6 +63,6 @@ public class NistECDSASignature extends ECDSASignature {
 
     @Override
     public ECDomainParameters getCurve() {
-        return R1_CURVE;
+        return NIST_CURVE;
     }
 }

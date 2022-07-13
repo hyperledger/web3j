@@ -29,7 +29,7 @@ public class SampleR1Keys {
     static final BigInteger PUBLIC_KEY = Numeric.toBigInt(PUBLIC_KEY_STRING);
 
     static final ECKeyPair KEY_PAIR =
-            new ECKeyPair(PRIVATE_KEY, PUBLIC_KEY, NistECDSASignature.R1_CURVE.getCurve());
+            new ECKeyPair(PRIVATE_KEY, PUBLIC_KEY, Sign.NIST_CURVE.getCurve());
 
     private SampleR1Keys() {}
 }

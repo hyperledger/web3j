@@ -117,7 +117,7 @@ public class Bip32ECKeyPair extends ECKeyPair {
             Arrays.fill(i, (byte) 0);
             BigInteger ilInt = new BigInteger(1, il);
             Arrays.fill(il, (byte) 0);
-            BigInteger privateKey = getPrivateKey().add(ilInt).mod(ECDSASignature.K1_CURVE.getN());
+            BigInteger privateKey = getPrivateKey().add(ilInt).mod(Sign.CURVE.getN());
 
             return new Bip32ECKeyPair(
                     privateKey,
