@@ -16,9 +16,6 @@ import java.math.BigInteger;
 
 import org.bouncycastle.crypto.params.ECDomainParameters;
 
-import static org.web3j.crypto.Sign.NIST_CURVE;
-import static org.web3j.crypto.Sign.NIST_HALF_CURVE_ORDER;
-
 public class NistECDSASignature extends ECDSASignature {
 
     public NistECDSASignature(BigInteger r, BigInteger s) {
@@ -33,7 +30,7 @@ public class NistECDSASignature extends ECDSASignature {
      */
     @Override
     public boolean isCanonical() {
-        return s.compareTo(NIST_HALF_CURVE_ORDER) <= 0;
+        return s.compareTo(Sign.NIST_HALF_CURVE_ORDER) <= 0;
     }
 
     /**
@@ -55,7 +52,7 @@ public class NistECDSASignature extends ECDSASignature {
             //    N = 10
             //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
             //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            return new NistECDSASignature(r, NIST_CURVE.getN().subtract(s));
+            return new NistECDSASignature(r, Sign.NIST_CURVE.getN().subtract(s));
         } else {
             return this;
         }
@@ -63,6 +60,6 @@ public class NistECDSASignature extends ECDSASignature {
 
     @Override
     public ECDomainParameters getCurve() {
-        return NIST_CURVE;
+        return Sign.NIST_CURVE;
     }
 }

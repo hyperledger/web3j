@@ -16,8 +16,6 @@ import java.math.BigInteger;
 
 import org.bouncycastle.crypto.params.ECDomainParameters;
 
-import static org.web3j.crypto.Sign.CURVE;
-
 /** An ECDSA Signature. */
 public class ECDSASignature {
     public final BigInteger r;
@@ -56,13 +54,13 @@ public class ECDSASignature {
             //    N = 10
             //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
             //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            return new ECDSASignature(r, CURVE.getN().subtract(s));
+            return new ECDSASignature(r, Sign.CURVE.getN().subtract(s));
         } else {
             return this;
         }
     }
 
     public ECDomainParameters getCurve() {
-        return CURVE;
+        return Sign.CURVE;
     }
 }
