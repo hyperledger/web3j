@@ -714,6 +714,26 @@ public class AbiV2TestFixture {
         }
     }
 
+    public static class Barr extends DynamicStruct {
+        public List<Bar> bars;
+
+        public BigInteger data;
+
+        public Barr(List<Bar> bars, BigInteger data) {
+            super(
+                    new org.web3j.abi.datatypes.DynamicArray<>(Bar.class, bars),
+                    new org.web3j.abi.datatypes.generated.Uint256(data));
+            this.bars = bars;
+            this.data = data;
+        }
+
+        public Barr(@Parameterized(type = Bar.class) DynamicArray<Bar> bars, Uint256 data) {
+            super(bars, data);
+            this.bars = bars.getValue();
+            this.data = data.getValue();
+        }
+    }
+
     public static class Nazz extends DynamicStruct {
         public List<Nazzy> nazzy;
 

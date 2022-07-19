@@ -54,7 +54,7 @@ public class Utils {
         }
     }
 
-    static String getStructType(Class type) {
+    public static String getStructType(Class type) {
         final StringBuilder sb = new StringBuilder("(");
         Constructor constructor = findStructConstructor(type);
         Class[] itemTypes = constructor.getParameterTypes();

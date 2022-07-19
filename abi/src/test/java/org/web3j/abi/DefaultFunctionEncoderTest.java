@@ -87,6 +87,22 @@ public class DefaultFunctionEncoderTest {
         assertEquals(
                 "someFunc((((string,string)[])[],uint256))",
                 FunctionEncoder.buildMethodSignature("someFunc", Arrays.asList(nazz)));
+
+        // correct handling of empty list of dynamic struct
+        AbiV2TestFixture.Nazz nazz2 =
+                new AbiV2TestFixture.Nazz(Collections.emptyList(), BigInteger.ZERO);
+
+        assertEquals(
+                "someFunc((((string,string)[])[],uint256))",
+                FunctionEncoder.buildMethodSignature("someFunc", Arrays.asList(nazz)));
+
+        // correct handling of empty list of static struct
+        AbiV2TestFixture.Barr barr =
+                new AbiV2TestFixture.Barr(Collections.emptyList(), BigInteger.ZERO);
+
+        assertEquals(
+                "someFunc(((uint256,uint256)[],uint256))",
+                FunctionEncoder.buildMethodSignature("someFunc", Arrays.asList(barr)));
     }
 
     @Test
