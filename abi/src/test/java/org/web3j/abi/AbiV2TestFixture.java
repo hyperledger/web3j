@@ -12,6 +12,12 @@
  */
 package org.web3j.abi;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.DynamicStruct;
@@ -25,12 +31,6 @@ import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
-
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class AbiV2TestFixture {
 
@@ -775,34 +775,54 @@ public class AbiV2TestFixture {
                                     "dynamic".getBytes(), BigInteger.ZERO, "Bytes".getBytes())),
                     Collections.<TypeReference<?>>emptyList());
 
-
     public static class FooArrayInStruct extends DynamicStruct {
         public List<BigInteger> fooIntArray;
         public List<String> fooStringArray;
         public List<byte[]> fooBytesArray;
 
-        public FooArrayInStruct(List<BigInteger> fooIntArray, List<String> fooStringArray, List<byte[]> fooBytesArray) {
+        public FooArrayInStruct(
+                List<BigInteger> fooIntArray,
+                List<String> fooStringArray,
+                List<byte[]> fooBytesArray) {
             super(
-                    new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint256>(
+                    new org.web3j.abi.datatypes.DynamicArray<
+                            org.web3j.abi.datatypes.generated.Uint256>(
                             org.web3j.abi.datatypes.generated.Uint256.class,
-                            org.web3j.abi.Utils.typeMap(fooIntArray, org.web3j.abi.datatypes.generated.Uint256.class)),
+                            org.web3j.abi.Utils.typeMap(
+                                    fooIntArray, org.web3j.abi.datatypes.generated.Uint256.class)),
                     new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Utf8String>(
                             org.web3j.abi.datatypes.Utf8String.class,
-                            org.web3j.abi.Utils.typeMap(fooStringArray, org.web3j.abi.datatypes.Utf8String.class)),
-                    new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Bytes32>(
+                            org.web3j.abi.Utils.typeMap(
+                                    fooStringArray, org.web3j.abi.datatypes.Utf8String.class)),
+                    new org.web3j.abi.datatypes.DynamicArray<
+                            org.web3j.abi.datatypes.generated.Bytes32>(
                             org.web3j.abi.datatypes.generated.Bytes32.class,
-                            org.web3j.abi.Utils.typeMap(fooBytesArray, org.web3j.abi.datatypes.generated.Bytes32.class)));
+                            org.web3j.abi.Utils.typeMap(
+                                    fooBytesArray,
+                                    org.web3j.abi.datatypes.generated.Bytes32.class)));
 
             this.fooIntArray = fooIntArray;
             this.fooStringArray = fooStringArray;
             this.fooBytesArray = fooBytesArray;
         }
 
-        public FooArrayInStruct(DynamicArray<Uint256> fooIntArray, DynamicArray<Utf8String> fooStringArray, DynamicArray<Bytes32> fooBytesArray) {
+        public FooArrayInStruct(
+                DynamicArray<Uint256> fooIntArray,
+                DynamicArray<Utf8String> fooStringArray,
+                DynamicArray<Bytes32> fooBytesArray) {
             super(fooIntArray, fooStringArray, fooBytesArray);
-            this.fooIntArray = fooIntArray.getValue().stream().map(v -> v.getValue()).collect(Collectors.toList());
-            this.fooStringArray = fooStringArray.getValue().stream().map(v -> v.getValue()).collect(Collectors.toList());
-            this.fooBytesArray = fooBytesArray.getValue().stream().map(v -> v.getValue()).collect(Collectors.toList());
+            this.fooIntArray =
+                    fooIntArray.getValue().stream()
+                            .map(v -> v.getValue())
+                            .collect(Collectors.toList());
+            this.fooStringArray =
+                    fooStringArray.getValue().stream()
+                            .map(v -> v.getValue())
+                            .collect(Collectors.toList());
+            this.fooBytesArray =
+                    fooBytesArray.getValue().stream()
+                            .map(v -> v.getValue())
+                            .collect(Collectors.toList());
         }
     }
 
@@ -813,8 +833,8 @@ public class AbiV2TestFixture {
                             new FooArrayInStruct(
                                     Arrays.asList(BigInteger.valueOf(123), BigInteger.valueOf(567)),
                                     Arrays.asList("foo", "bar"),
-                                    Arrays.asList("0x123456789012345678901234567890".getBytes(), "0x123456789012345678901234567891".getBytes())
-                            )),
+                                    Arrays.asList(
+                                            "0x123456789012345678901234567890".getBytes(),
+                                            "0x123456789012345678901234567891".getBytes()))),
                     Collections.<TypeReference<?>>emptyList());
-
 }

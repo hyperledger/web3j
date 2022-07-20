@@ -12,7 +12,14 @@
  */
 package org.web3j.abi;
 
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Test;
+
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicArray;
@@ -26,12 +33,6 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes10;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
-
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
