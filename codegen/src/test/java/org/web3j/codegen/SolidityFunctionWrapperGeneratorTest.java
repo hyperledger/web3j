@@ -103,13 +103,13 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testStructArray() throws Exception {
-        testCodeGenerationJvmTypes("StructArray", "StructArray");
+        testCodeGenerationJvmTypes("structarray", "StructArray");
     }
 
     @Test
     public void testStructArray2() throws Exception {
-        testCodeGenerationJvmTypes("StructArray2", "StructArray2");
-        testCodeGenerationSolidityTypes("StructArray2", "StructArray2");
+        testCodeGenerationJvmTypes("structarray2", "StructArray2");
+        testCodeGenerationSolidityTypes("structarray2", "StructArray2");
     }
 
     @Test
