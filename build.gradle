@@ -10,7 +10,6 @@ plugins {
 }
 
 
-
 ext {
     bouncycastleVersion = '1.68'
     jacksonVersion = '2.13.3'
