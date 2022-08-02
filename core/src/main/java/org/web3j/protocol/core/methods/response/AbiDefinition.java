@@ -88,8 +88,8 @@ public class AbiDefinition {
         return StateMutability.isPure(stateMutability);
     }
 
-    public void setConstant(boolean constant) {
-        this.stateMutability = StateMutability.PURE.getName();
+    public void setConstant(boolean isConstant) {
+        if (isConstant) this.stateMutability = StateMutability.PURE.getName();
     }
 
     public boolean isPureOrView() {
@@ -284,7 +284,7 @@ public class AbiDefinition {
         }
 
         public int nestedness() {
-            if (getComponents().size() == 0) {
+            if (getComponents().isEmpty()) {
                 return 0;
             }
             return 1 + getComponents().stream().mapToInt(NamedType::nestedness).max().getAsInt();
@@ -296,10 +296,7 @@ public class AbiDefinition {
                     || getType().contains("[]")) {
                 return true;
             }
-            if (components.stream().anyMatch(NamedType::isDynamic)) {
-                return true;
-            }
-            return false;
+            return components.stream().anyMatch(NamedType::isDynamic);
         }
 
         @Override

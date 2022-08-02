@@ -24,9 +24,9 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.eea.crypto.PrivateTxSignServiceImpl;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.service.TxSignService;
-import org.web3j.service.TxSignServiceImpl;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
@@ -55,6 +55,26 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final Base64String privacyGroupId,
             final Restriction restriction) {
+        this(
+                besu,
+                credentials,
+                transactionReceiptProcessor,
+                chainId,
+                privateFrom,
+                privacyGroupId,
+                restriction,
+                new PrivateTxSignServiceImpl(credentials));
+    }
+
+    public PrivateTransactionManager(
+            final Besu besu,
+            final Credentials credentials,
+            final TransactionReceiptProcessor transactionReceiptProcessor,
+            final long chainId,
+            final Base64String privateFrom,
+            final Base64String privacyGroupId,
+            final Restriction restriction,
+            final TxSignService txSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -62,7 +82,7 @@ public class PrivateTransactionManager extends TransactionManager {
         this.privateFor = null;
         this.privacyGroupId = privacyGroupId;
         this.restriction = restriction;
-        this.txSignService = new TxSignServiceImpl(credentials);
+        this.txSignService = txSignService;
     }
 
     public PrivateTransactionManager(
@@ -73,6 +93,26 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final List<Base64String> privateFor,
             final Restriction restriction) {
+        this(
+                besu,
+                credentials,
+                transactionReceiptProcessor,
+                chainId,
+                privateFrom,
+                privateFor,
+                restriction,
+                new PrivateTxSignServiceImpl(credentials));
+    }
+
+    public PrivateTransactionManager(
+            final Besu besu,
+            final Credentials credentials,
+            final TransactionReceiptProcessor transactionReceiptProcessor,
+            final long chainId,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Restriction restriction,
+            final TxSignService txSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -80,7 +120,7 @@ public class PrivateTransactionManager extends TransactionManager {
         this.privateFor = privateFor;
         this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
         this.restriction = restriction;
-        this.txSignService = new TxSignServiceImpl(credentials);
+        this.txSignService = txSignService;
     }
 
     @Override
