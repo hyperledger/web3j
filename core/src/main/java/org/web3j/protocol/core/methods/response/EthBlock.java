@@ -538,6 +538,10 @@ public class EthBlock extends Response<EthBlock.Block> {
         public String get() {
             return value;
         }
+        
+        public String getValue() {
+            return value;
+        }
 
         public void setValue(String value) {
             this.value = value;
