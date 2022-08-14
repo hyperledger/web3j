@@ -63,7 +63,7 @@ public final class Numeric {
         }
     }
 
-    private static boolean isValidHexQuantity(String value) {
+    protected static boolean isValidHexQuantity(String value) {
         if (value == null) {
             return false;
         }
@@ -80,7 +80,7 @@ public final class Numeric {
             return false;
         }
 
-        return true;
+        return value.matches("0[xX][0-9a-fA-F]+");
     }
 
     public static String cleanHexPrefix(String input) {
