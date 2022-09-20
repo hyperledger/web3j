@@ -15,7 +15,10 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.DynamicStruct;
@@ -108,6 +111,9 @@ public class AbiV2TestFixture {
     public static final String FUNC_SETWIZ = "setWiz";
 
     public static final String FUNC_addDynamicBytesArray = "addDynamicBytesArray";
+
+    public static final String FUNC_setArrayOfStructWithArraysFunction =
+            "setArrayOfStructWithArraysFunction";
 
     public static class Foo extends DynamicStruct {
         public String id;
@@ -768,5 +774,50 @@ public class AbiV2TestFixture {
                     Arrays.<Type>asList(
                             new BytesStruct(
                                     "dynamic".getBytes(), BigInteger.ZERO, "Bytes".getBytes())),
+                    Collections.<TypeReference<?>>emptyList());
+
+    public static class ArrayStruct extends DynamicStruct {
+        public BigInteger id;
+
+        public List<String> addresses;
+
+        public ArrayStruct(BigInteger id, List<String> addresses) {
+            super(
+                    new org.web3j.abi.datatypes.generated.Uint256(id),
+                    new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
+                            org.web3j.abi.datatypes.Address.class,
+                            org.web3j.abi.Utils.typeMap(
+                                    addresses, org.web3j.abi.datatypes.Address.class)));
+            this.id = id;
+            this.addresses = addresses;
+        }
+
+        public ArrayStruct(Uint256 id, DynamicArray<Address> addresses) {
+            super(id, addresses);
+            this.id = id.getValue();
+            this.addresses =
+                    addresses.getValue().stream()
+                            .map(v -> v.getValue())
+                            .collect(Collectors.toList());
+        }
+    }
+
+    public static final Function setArrayOfStructWithArraysFunction =
+            new Function(
+                    FUNC_setArrayOfStructWithArraysFunction,
+                    Arrays.<Type>asList(
+                            new org.web3j.abi.datatypes.DynamicArray<ArrayStruct>(
+                                    ArrayStruct.class,
+                                    Arrays.asList(
+                                            new ArrayStruct(
+                                                    BigInteger.ONE,
+                                                    Arrays.asList(
+                                                            "0x0000000000000000000000000000000000000000",
+                                                            "0x1111111111111111111111111111111111111111")),
+                                            new ArrayStruct(
+                                                    BigInteger.TEN,
+                                                    Arrays.asList(
+                                                            "0x2222222222222222222222222222222222222222",
+                                                            "0x3333333333333333333333333333333333333333"))))),
                     Collections.<TypeReference<?>>emptyList());
 }
