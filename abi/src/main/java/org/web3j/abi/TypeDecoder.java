@@ -97,7 +97,7 @@ public class TypeDecoder {
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Type> T decode(String input, int offset, Class<T> type) {
+    public static <T extends Type> T decode(String input, int offset, Class<T> type) {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
         } else if (Address.class.isAssignableFrom(type)) {
