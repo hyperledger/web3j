@@ -20,8 +20,19 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.abi.datatypes.*;
-import org.web3j.abi.datatypes.generated.*;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Bytes16;
+import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.generated.StaticArray2;
+import org.web3j.abi.datatypes.generated.StaticArray3;
+import org.web3j.abi.datatypes.generated.StaticArray4;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 

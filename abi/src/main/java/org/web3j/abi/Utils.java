@@ -25,7 +25,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Fixed;
+import org.web3j.abi.datatypes.Int;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.StaticStruct;
+import org.web3j.abi.datatypes.StructType;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.reflection.Parameterized;
 
 /** Utility functions. */
@@ -66,14 +76,7 @@ public class Utils {
                 Class parameterAnnotation =
                         extractParameterFromAnnotation(constructor.getParameterAnnotations()[i]);
                 if (parameterAnnotation != null) {
-                    sb.append(
-                            getTypeName(
-                                    new TypeReference<DynamicArray>() {
-                                        @Override
-                                        TypeReference getSubTypeReference() {
-                                            return TypeReference.create(parameterAnnotation);
-                                        }
-                                    }));
+                    sb.append(getTypeName(getDynamicArrayTypeReference(parameterAnnotation)));
                 } else {
                     sb.append(getTypeName(TypeReference.create(cls)));
                 }
@@ -84,6 +87,15 @@ public class Utils {
         }
         sb.append(")");
         return sb.toString();
+    }
+
+    public static TypeReference<DynamicArray> getDynamicArrayTypeReference(Class parameter) {
+        return new TypeReference<DynamicArray>() {
+            @Override
+            TypeReference getSubTypeReference() {
+                return TypeReference.create(parameter);
+            }
+        };
     }
 
     public static <T extends Type> Class<T> extractParameterFromAnnotation(

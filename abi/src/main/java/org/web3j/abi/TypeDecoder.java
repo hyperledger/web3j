@@ -565,12 +565,7 @@ public class TypeDecoder {
                             decodeDynamicArray(
                                     dynamicElementData,
                                     0,
-                                    new TypeReference<DynamicArray>() {
-                                        @Override
-                                        TypeReference getSubTypeReference() {
-                                            return TypeReference.create(parameter);
-                                        }
-                                    });
+                                    Utils.getDynamicArrayTypeReference(parameter));
         } else {
             value = decode(dynamicElementData, declaredField);
         }
