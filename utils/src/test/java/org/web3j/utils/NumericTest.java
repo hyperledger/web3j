@@ -279,6 +279,7 @@ public class NumericTest {
         assertEquals(" ", Numeric.removeDoubleQuotes(" "));
         assertEquals(text, Numeric.removeDoubleQuotes(text));
     }
+
     @Test
     void testIsValidHexQuantity() {
 
@@ -295,5 +296,4 @@ public class NumericTest {
         assertEquals(false, Numeric.isValidHexQuantity("0x419Erf"));
         assertEquals(false, Numeric.isValidHexQuantity("0x419fg"));
     }
-
 }
