@@ -57,6 +57,17 @@ public class DefaultFunctionEncoderTest {
     }
 
     @Test
+    public void testBuildMethodSignatureWithStructWithArray() {
+        assertEquals(
+                "structWithArray((uint256,address[]))",
+                DefaultFunctionEncoder.buildMethodSignature(
+                        "structWithArray",
+                        Arrays.asList(
+                                new AbiV2TestFixture.ArrayStruct(
+                                        BigInteger.ONE, Collections.emptyList()))));
+    }
+
+    @Test
     public void testEncodeConstructorEmpty() {
         assertEquals("", FunctionEncoder.encodeConstructor(Collections.emptyList()));
     }
@@ -795,5 +806,29 @@ public class DefaultFunctionEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000000";
 
         assertEquals(expected, FunctionEncoder.encode(AbiV2TestFixture.setBarDynamicArrayFunction));
+    }
+
+    @Test
+    public void testEncodeArrayOfStructWithArrays() {
+        String expected =
+                "0xfc3fdffb"
+                        + "0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "00000000000000000000000000000000000000000000000000000000000000e0"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000001111111111111111111111111111111111111111"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000002222222222222222222222222222222222222222"
+                        + "0000000000000000000000003333333333333333333333333333333333333333";
+
+        assertEquals(
+                expected,
+                FunctionEncoder.encode(AbiV2TestFixture.setArrayOfStructWithArraysFunction));
     }
 }

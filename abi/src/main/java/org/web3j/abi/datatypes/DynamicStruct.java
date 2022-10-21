@@ -53,6 +53,8 @@ public class DynamicStruct extends DynamicArray<Type> implements StructType {
             final Class<Type> cls = itemTypes.get(i);
             if (StructType.class.isAssignableFrom(cls)) {
                 type.append(getValue().get(i).getTypeAsString());
+            } else if (Array.class.isAssignableFrom(cls)) {
+                type.append(getValue().get(i).getTypeAsString());
             } else {
                 type.append(AbiTypes.getTypeAString(cls));
             }
