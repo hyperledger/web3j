@@ -21,7 +21,6 @@ import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.core.Response;
-import org.web3j.utils.EnsUtils;
 
 /** eth_call. */
 public class EthCall extends Response<String> {
@@ -40,7 +39,7 @@ public class EthCall extends Response<String> {
 
     public boolean isReverted() {
         if (hasError() && getError().getCode() == 3 && getError().getData() != null) {
-            return !EnsUtils.isEIP3668(getError().getData());
+            return false;
         }
 
         return hasError() || isErrorInResult();
