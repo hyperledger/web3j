@@ -54,7 +54,7 @@ public class FastRawTransactionManagerIT extends Scenario {
         Scenario.web3j = web3j;
     }
 
-    //@Test broken test
+    // @Test broken test
     public void testTransactionPolling() throws Exception {
 
         List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
