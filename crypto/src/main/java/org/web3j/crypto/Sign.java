@@ -12,6 +12,7 @@
  */
 package org.web3j.crypto;
 
+import java.nio.charset.StandardCharsets;
 import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
@@ -57,7 +58,7 @@ public class Sign {
     static final String MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
     static byte[] getEthereumMessagePrefix(int messageLength) {
-        return MESSAGE_PREFIX.concat(String.valueOf(messageLength)).getBytes();
+        return MESSAGE_PREFIX.concat(String.valueOf(messageLength)).getBytes(StandardCharsets.UTF_8);
     }
 
     public static byte[] getEthereumMessageHash(byte[] message) {
