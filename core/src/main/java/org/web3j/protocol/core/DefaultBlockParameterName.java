@@ -20,7 +20,8 @@ public enum DefaultBlockParameterName implements DefaultBlockParameter {
     LATEST("latest"),
     PENDING("pending"),
     FINALIZED("finalized"),
-    SAFE("safe");
+    SAFE("safe"),
+    ACCEPTED("accepted");
 
     private String name;
 
