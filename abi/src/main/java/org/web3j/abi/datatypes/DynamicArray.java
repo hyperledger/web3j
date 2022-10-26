@@ -14,6 +14,8 @@ package org.web3j.abi.datatypes;
 
 import java.util.List;
 
+import org.web3j.abi.Utils;
+
 /** Dynamic array type. */
 public class DynamicArray<T extends Type> extends Array<T> {
 
@@ -69,7 +71,11 @@ public class DynamicArray<T extends Type> extends Array<T> {
         // Handle dynamic array of zero length. This will fail if the dynamic array
         // is an array of structs.
         if (value.isEmpty()) {
-            type = AbiTypes.getTypeAString(getComponentType());
+            if (StructType.class.isAssignableFrom(getComponentType())) {
+                type = Utils.getStructType(getComponentType());
+            } else {
+                type = AbiTypes.getTypeAString(getComponentType());
+            }
         } else {
             if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
                 type = value.get(0).getTypeAsString();

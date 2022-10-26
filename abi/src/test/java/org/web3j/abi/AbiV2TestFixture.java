@@ -22,6 +22,7 @@ import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.DynamicStruct;
+import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticStruct;
 import org.web3j.abi.datatypes.Type;
@@ -31,6 +32,7 @@ import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
+import org.web3j.abi.datatypes.reflection.Parameterized;
 
 public class AbiV2TestFixture {
 
@@ -132,6 +134,11 @@ public class AbiV2TestFixture {
             super(id, name);
             this.id = id.getValue();
             this.name = name.getValue();
+        }
+
+        @Override
+        public String toString() {
+            return "Foo{" + "id='" + id + '\'' + ", name='" + name + '\'' + '}';
         }
     }
 
@@ -686,21 +693,67 @@ public class AbiV2TestFixture {
         }
     }
 
-    public static class Nazz extends DynamicStruct {
-        public Naz naz;
+    public static class Nazzy extends DynamicStruct {
+        public List<Foo> foo;
+
+        public Nazzy(List<Foo> foo) {
+            super(new org.web3j.abi.datatypes.DynamicArray<>(Foo.class, foo));
+            this.foo = foo;
+        }
+
+        public Nazzy(@Parameterized(type = Foo.class) DynamicArray<Foo> foo) {
+            super(foo);
+            this.foo = foo.getValue();
+        }
+
+        @Override
+        public String toString() {
+            return "Nazzy{" + "foo=" + foo + '}';
+        }
+    }
+
+    public static class Barr extends DynamicStruct {
+        public List<Bar> bars;
 
         public BigInteger data;
 
-        public Nazz(Naz naz, BigInteger data) {
-            super(naz, new org.web3j.abi.datatypes.generated.Uint256(data));
-            this.naz = naz;
+        public Barr(List<Bar> bars, BigInteger data) {
+            super(
+                    new org.web3j.abi.datatypes.DynamicArray<>(Bar.class, bars),
+                    new org.web3j.abi.datatypes.generated.Uint256(data));
+            this.bars = bars;
             this.data = data;
         }
 
-        public Nazz(Naz naz, Uint256 data) {
-            super(naz, data);
-            this.naz = naz;
+        public Barr(@Parameterized(type = Bar.class) DynamicArray<Bar> bars, Uint256 data) {
+            super(bars, data);
+            this.bars = bars.getValue();
             this.data = data.getValue();
+        }
+    }
+
+    public static class Nazz extends DynamicStruct {
+        public List<Nazzy> nazzy;
+
+        public BigInteger data;
+
+        public Nazz(List<Nazzy> nazzy, BigInteger data) {
+            super(
+                    new org.web3j.abi.datatypes.DynamicArray<>(Nazzy.class, nazzy),
+                    new org.web3j.abi.datatypes.generated.Uint256(data));
+            this.nazzy = nazzy;
+            this.data = data;
+        }
+
+        public Nazz(@Parameterized(type = Nazzy.class) DynamicArray<Nazzy> nazzy, Uint256 data) {
+            super(nazzy, data);
+            this.nazzy = nazzy.getValue();
+            this.data = data.getValue();
+        }
+
+        @Override
+        public String toString() {
+            return "Nazz{" + "nazzy=" + nazzy + ", data=" + data + '}';
         }
     }
 
@@ -711,9 +764,19 @@ public class AbiV2TestFixture {
                             new Naz(new Nar(new Nuu(new Foo("id", "name"))), BigInteger.ONE)),
                     Collections.emptyList());
 
-    public static final org.web3j.abi.datatypes.Function getNazFunction =
+    public static final org.web3j.abi.datatypes.Function getNazzFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETNAZ, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Naz>() {}));
+                    FUNC_GETNAZ,
+                    Arrays.<Type>asList(),
+                    Arrays.asList(new TypeReference<Nazz>() {}));
+
+    public static final Event nazzEvent =
+            new Event(
+                    "nazzEvent",
+                    Arrays.asList(new TypeReference<Nazz>() {}, new TypeReference<Foo>() {}));
+
+    public static final Event nazzEvent2 =
+            new Event("nazzEvent2", Arrays.asList(new TypeReference<DynamicArray<Nazz>>() {}));
 
     public static final org.web3j.abi.datatypes.Function getNarFunction =
             new org.web3j.abi.datatypes.Function(

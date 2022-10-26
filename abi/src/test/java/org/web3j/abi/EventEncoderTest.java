@@ -59,4 +59,22 @@ public class EventEncoderTest {
                 EventEncoder.buildMethodSignature("Notify", convert(parameters)),
                 "Notify(uint256,uint256)");
     }
+
+    @Test
+    void testBuildMethodSignatureWithDynamicStructs() {
+        assertEquals(
+                "nazzEvent((((string,string)[])[],uint256),(string,string))",
+                EventEncoder.buildMethodSignature(
+                        AbiV2TestFixture.nazzEvent.getName(),
+                        AbiV2TestFixture.nazzEvent.getParameters()));
+    }
+
+    @Test
+    void testBuildMethodSignatureWithDynamicArrays() {
+        assertEquals(
+                "nazzEvent2((((string,string)[])[],uint256)[])",
+                EventEncoder.buildMethodSignature(
+                        AbiV2TestFixture.nazzEvent2.getName(),
+                        AbiV2TestFixture.nazzEvent2.getParameters()));
+    }
 }

@@ -14,7 +14,9 @@ package org.web3j.abi;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +67,42 @@ public class DefaultFunctionEncoderTest {
                         Arrays.asList(
                                 new AbiV2TestFixture.ArrayStruct(
                                         BigInteger.ONE, Collections.emptyList()))));
+    }
+
+    @Test
+    public void testBuildMessageSignatureWithComplexTuple() {
+        AbiV2TestFixture.Nazz nazz =
+                new AbiV2TestFixture.Nazz(
+                        Arrays.asList(
+                                new AbiV2TestFixture.Nazzy(
+                                        Arrays.asList(
+                                                new AbiV2TestFixture.Foo("a", "b"),
+                                                new AbiV2TestFixture.Foo("c", "d"))),
+                                new AbiV2TestFixture.Nazzy(
+                                        Arrays.asList(
+                                                new AbiV2TestFixture.Foo("e", "f"),
+                                                new AbiV2TestFixture.Foo("g", "key")))),
+                        BigInteger.valueOf(100L));
+
+        assertEquals(
+                "someFunc((((string,string)[])[],uint256))",
+                FunctionEncoder.buildMethodSignature("someFunc", Arrays.asList(nazz)));
+
+        // correct handling of empty list of dynamic struct
+        AbiV2TestFixture.Nazz nazz2 =
+                new AbiV2TestFixture.Nazz(Collections.emptyList(), BigInteger.ZERO);
+
+        assertEquals(
+                "someFunc((((string,string)[])[],uint256))",
+                FunctionEncoder.buildMethodSignature("someFunc", Arrays.asList(nazz)));
+
+        // correct handling of empty list of static struct
+        AbiV2TestFixture.Barr barr =
+                new AbiV2TestFixture.Barr(Collections.emptyList(), BigInteger.ZERO);
+
+        assertEquals(
+                "someFunc(((uint256,uint256)[],uint256))",
+                FunctionEncoder.buildMethodSignature("someFunc", Arrays.asList(barr)));
     }
 
     @Test
