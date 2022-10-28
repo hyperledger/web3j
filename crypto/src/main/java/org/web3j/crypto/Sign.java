@@ -12,8 +12,8 @@
  */
 package org.web3j.crypto;
 
-import java.nio.charset.StandardCharsets;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.SignatureException;
 import java.util.Arrays;
 
