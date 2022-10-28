@@ -14,6 +14,7 @@ package org.web3j.crypto.transaction.type;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.web3j.crypto.AccessListObject;
@@ -106,7 +107,8 @@ public class Transaction2930 extends LegacyTransaction {
             BigInteger gasLimit,
             String to,
             BigInteger value) {
-        return new Transaction2930(chainId, nonce, gasPrice, gasLimit, to, value, "", List.of());
+        return new Transaction2930(
+                chainId, nonce, gasPrice, gasLimit, to, value, "", Collections.emptyList());
     }
 
     public static Transaction2930 createTransaction(

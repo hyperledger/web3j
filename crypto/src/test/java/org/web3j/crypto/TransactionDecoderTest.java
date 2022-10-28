@@ -14,7 +14,10 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.security.SignatureException;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -262,14 +265,17 @@ public class TransactionDecoderTest {
 
     private static RawTransaction createEip2930RawTransaction() {
         List<AccessListObject> accessList =
-                List.of(
-                        new AccessListObject(
-                                "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-                                List.of(
-                                        "0x0000000000000000000000000000000000000000000000000000000000000003",
-                                        "0x0000000000000000000000000000000000000000000000000000000000000007")),
-                        new AccessListObject(
-                                "0xbb9bc244d798123fde783fcc1c72d3bb8c189413", List.of()));
+                Stream.of(
+                                new AccessListObject(
+                                        "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+                                        Stream.of(
+                                                        "0x0000000000000000000000000000000000000000000000000000000000000003",
+                                                        "0x0000000000000000000000000000000000000000000000000000000000000007")
+                                                .collect(Collectors.toList())),
+                                new AccessListObject(
+                                        "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
+                                        Collections.emptyList()))
+                        .collect(Collectors.toList());
 
         return RawTransaction.createTransaction(
                 3L,
