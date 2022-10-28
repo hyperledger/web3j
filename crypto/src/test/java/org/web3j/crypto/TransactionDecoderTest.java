@@ -16,7 +16,6 @@ import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.crypto.transaction.type.Transaction2930;
 import org.web3j.utils.Numeric;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -271,11 +271,11 @@ public class TransactionDecoderTest {
                                         Stream.of(
                                                         "0x0000000000000000000000000000000000000000000000000000000000000003",
                                                         "0x0000000000000000000000000000000000000000000000000000000000000007")
-                                                .collect(Collectors.toList())),
+                                                .collect(toList())),
                                 new AccessListObject(
                                         "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
                                         Collections.emptyList()))
-                        .collect(Collectors.toList());
+                        .collect(toList());
 
         return RawTransaction.createTransaction(
                 3L,

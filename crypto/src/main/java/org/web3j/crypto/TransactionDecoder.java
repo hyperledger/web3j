@@ -13,7 +13,6 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +22,8 @@ import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
+
+import static java.util.stream.Collectors.toList;
 
 public class TransactionDecoder {
     private static final int UNSIGNED_EIP1559TX_RLP_LIST_SIZE = 9;
@@ -169,23 +170,17 @@ public class TransactionDecoder {
     }
 
     private static List<AccessListObject> decodeAccessList(List<RlpType> rlp) {
-        final List<AccessListObject> res = new ArrayList<AccessListObject>();
-        rlp.forEach(
-                rawEntry -> {
-                    AccessListObject entry = new AccessListObject();
-                    List<RlpType> values = ((RlpList) rawEntry).getValues();
-
-                    entry.setAddress(((RlpString) values.get(0)).asString());
-                    List<RlpType> keyList = ((RlpList) values.get(1)).getValues();
-
-                    List<String> keys = new ArrayList<>();
-                    keyList.forEach(
-                            rawKey -> {
-                                keys.add(((RlpString) rawKey).asString());
-                            });
-                    entry.setStorageKeys(keys);
-                    res.add(entry);
-                });
-        return res;
+        return rlp.stream()
+                .map(rawEntry -> ((RlpList) rawEntry).getValues())
+                .map(
+                        values -> {
+                            return new AccessListObject(
+                                    ((RlpString) values.get(0)).asString(),
+                                    ((RlpList) values.get(1))
+                                            .getValues().stream()
+                                                    .map(rawKey -> ((RlpString) rawKey).asString())
+                                                    .collect(toList()));
+                        })
+                .collect(toList());
     }
 }
