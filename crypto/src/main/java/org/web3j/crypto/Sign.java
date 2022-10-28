@@ -58,7 +58,9 @@ public class Sign {
     static final String MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
     static byte[] getEthereumMessagePrefix(int messageLength) {
-        return MESSAGE_PREFIX.concat(String.valueOf(messageLength)).getBytes(StandardCharsets.UTF_8);
+        return MESSAGE_PREFIX
+                .concat(String.valueOf(messageLength))
+                .getBytes(StandardCharsets.UTF_8);
     }
 
     public static byte[] getEthereumMessageHash(byte[] message) {
