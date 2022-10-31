@@ -28,10 +28,7 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.Int64;
-import org.web3j.abi.datatypes.generated.StaticArray2;
-import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.abi.datatypes.generated.Uint64;
+import org.web3j.abi.datatypes.generated.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.abi.Utils.typeMap;
@@ -50,6 +47,8 @@ public class UtilsTest {
         assertEquals(Utils.getTypeName(new TypeReference<Bool>() {}), ("bool"));
         assertEquals(Utils.getTypeName(new TypeReference<Utf8String>() {}), ("string"));
         assertEquals(Utils.getTypeName(new TypeReference<DynamicBytes>() {}), ("bytes"));
+        assertEquals(
+                Utils.getTypeName(new TypeReference<StaticArray3<Uint256>>() {}), ("uint256[3]"));
 
         assertEquals(
                 Utils.getTypeName(

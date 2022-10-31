@@ -148,13 +148,18 @@ public class Utils {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
                 String parameterizedTypeName = simpleNameOrStruct(parameterizedType);
                 return parameterizedTypeName + "[]";
-            } else if (type.equals(StaticArray.class)) {
+            } else if (StaticArray.class.isAssignableFrom(type)) {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
                 String parameterizedTypeName = simpleNameOrStruct(parameterizedType);
-                return parameterizedTypeName
-                        + "["
-                        + ((TypeReference.StaticArrayTypeReference) typeReference).getSize()
-                        + "]";
+                final int length;
+                if (TypeReference.StaticArrayTypeReference.class.isAssignableFrom(
+                        typeReference.getClass())) {
+                    length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
+                } else {
+                    length = Integer.parseInt(type.getSimpleName().substring(11));
+                }
+
+                return parameterizedTypeName + "[" + length + "]";
             } else {
                 throw new UnsupportedOperationException("Invalid type provided " + type.getName());
             }
