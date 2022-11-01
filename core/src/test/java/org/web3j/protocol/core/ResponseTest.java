@@ -23,9 +23,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.crypto.transaction.type.AccessListObject;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.protocol.core.methods.response.AccessListObject;
 import org.web3j.protocol.core.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;

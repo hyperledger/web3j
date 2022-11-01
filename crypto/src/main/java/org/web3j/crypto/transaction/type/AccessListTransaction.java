@@ -35,7 +35,7 @@ public class AccessListTransaction implements ITransaction {
     private final String to;
     private final BigInteger value;
     private final String data;
-    private final List<AddressAccessList> accessList;
+    private final List<AccessListObject> accessList;
 
     public AccessListTransaction(
             long chainId,
@@ -45,7 +45,7 @@ public class AccessListTransaction implements ITransaction {
             String to,
             BigInteger value,
             String data,
-            List<AddressAccessList> accessList) {
+            List<AccessListObject> accessList) {
         this.chainId = chainId;
         this.nonce = nonce;
         this.gasPrice = gasPrice;
@@ -84,7 +84,7 @@ public class AccessListTransaction implements ITransaction {
         if (accessList == null) {
             result.add(new RlpList());
         } else {
-            result.add(AddressAccessList.getRlpEncodedList(accessList));
+            result.add(AccessListObject.getRlpEncodedList(accessList));
         }
 
         if (signatureData != null) {
@@ -104,7 +104,7 @@ public class AccessListTransaction implements ITransaction {
             String to,
             BigInteger value,
             String data,
-            List<AddressAccessList> accessList) {
+            List<AccessListObject> accessList) {
 
         return new AccessListTransaction(
                 chainId, nonce, gasPrice, gasLimit, to, value, data, accessList);
@@ -144,7 +144,7 @@ public class AccessListTransaction implements ITransaction {
         return data;
     }
 
-    public List<AddressAccessList> getAccessList() {
+    public List<AccessListObject> getAccessList() {
         return accessList;
     }
 

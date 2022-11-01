@@ -100,7 +100,7 @@ public class RawTransaction {
             String to,
             BigInteger value,
             String data,
-            List<AddressAccessList> accessList) {
+            List<AccessListObject> accessList) {
         return new RawTransaction(
                 AccessListTransaction.createTransaction(
                         chainId, nonce, gasPrice, gasLimit, to, value, data, accessList));
@@ -137,7 +137,7 @@ public class RawTransaction {
             String data,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
-            List<AddressAccessList> accessList) {
+            List<AccessListObject> accessList) {
 
         return new RawTransaction(
                 Transaction1559.createTransaction(

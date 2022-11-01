@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.web3j.crypto.TransactionUtils;
+import org.web3j.crypto.transaction.type.AccessListObject;
 import org.web3j.utils.Numeric;
 
 /** Transaction object used by both {@link EthTransaction} and {@link EthBlock}. */

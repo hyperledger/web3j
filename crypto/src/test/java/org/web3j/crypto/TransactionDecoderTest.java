@@ -19,8 +19,8 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.crypto.transaction.type.AccessListObject;
 import org.web3j.crypto.transaction.type.AccessListTransaction;
-import org.web3j.crypto.transaction.type.AddressAccessList;
 import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.utils.Numeric;
 
@@ -268,11 +268,17 @@ public class TransactionDecoderTest {
                 BigInteger.valueOf(123),
                 "0x0123456789",
                 Arrays.asList(
-                        new AddressAccessList(
+                        new AccessListObject(
                                 "0x627306090abab3a6e1400e9345bc60c78a8bef57",
-                                Collections.singletonList(BigInteger.valueOf(2))),
-                        new AddressAccessList(
+                                Collections.singletonList(
+                                        Numeric.toHexStringWithPrefixZeroPadded(
+                                                BigInteger.valueOf(2), 64))),
+                        new AccessListObject(
                                 "0x000306090abab3a6e1400e9345bc60c78a8bef57",
-                                Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(14)))));
+                                Arrays.asList(
+                                        Numeric.toHexStringWithPrefixZeroPadded(
+                                                BigInteger.valueOf(3), 64),
+                                        Numeric.toHexStringWithPrefixZeroPadded(
+                                                BigInteger.valueOf(14), 64)))));
     }
 }

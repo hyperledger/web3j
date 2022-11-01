@@ -16,10 +16,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.web3j.crypto.transaction.type.AccessListTransaction;
-import org.web3j.crypto.transaction.type.AddressAccessList;
-import org.web3j.crypto.transaction.type.Transaction1559;
-import org.web3j.crypto.transaction.type.TransactionType;
+import org.web3j.crypto.transaction.type.*;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -64,8 +61,8 @@ public class TransactionDecoder {
         final String to = ((RlpString) values.getValue(4)).asString();
         final BigInteger value = ((RlpString) values.getValue(5)).asPositiveBigInteger();
         final String data = ((RlpString) values.getValue(6)).asString();
-        final List<AddressAccessList> accessList =
-                AddressAccessList.getRlpDecodedList((RlpList) values.getValue(7));
+        final List<AccessListObject> accessList =
+                AccessListObject.getRlpDecodedList((RlpList) values.getValue(7));
 
         AccessListTransaction rawTx =
                 AccessListTransaction.createTransaction(
@@ -104,8 +101,8 @@ public class TransactionDecoder {
 
         final BigInteger value = ((RlpString) values.getValues().get(6)).asPositiveBigInteger();
         final String data = ((RlpString) values.getValues().get(7)).asString();
-        final List<AddressAccessList> accessList =
-                AddressAccessList.getRlpDecodedList((RlpList) values.getValues().get(8));
+        final List<AccessListObject> accessList =
+                AccessListObject.getRlpDecodedList((RlpList) values.getValues().get(8));
 
         final Transaction1559 rawTx =
                 Transaction1559.createTransaction(

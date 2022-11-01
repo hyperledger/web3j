@@ -20,7 +20,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.commons.ChainId;
-import org.web3j.crypto.transaction.type.AddressAccessList;
+import org.web3j.crypto.transaction.type.AccessListObject;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
@@ -174,11 +174,17 @@ public class TransactionEncoderTest {
                 BigInteger.valueOf(123),
                 "0x0123456789",
                 Arrays.asList(
-                        new AddressAccessList(
+                        new AccessListObject(
                                 "0x627306090abab3a6e1400e9345bc60c78a8bef57",
-                                Collections.singletonList(BigInteger.valueOf(2))),
-                        new AddressAccessList(
+                                Collections.singletonList(
+                                        Numeric.toHexStringWithPrefixZeroPadded(
+                                                BigInteger.valueOf(2), 64))),
+                        new AccessListObject(
                                 "0x000306090abab3a6e1400e9345bc60c78a8bef57",
-                                Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(14)))));
+                                Arrays.asList(
+                                        Numeric.toHexStringWithPrefixZeroPadded(
+                                                BigInteger.valueOf(3), 64),
+                                        Numeric.toHexStringWithPrefixZeroPadded(
+                                                BigInteger.valueOf(14), 64)))));
     }
 }

@@ -34,7 +34,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
     private final long chainId;
     private final BigInteger maxPriorityFeePerGas;
     private final BigInteger maxFeePerGas;
-    private final List<AddressAccessList> accessList;
+    private final List<AccessListObject> accessList;
 
     public Transaction1559(
             long chainId,
@@ -45,7 +45,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             String data,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
-            List<AddressAccessList> accessList) {
+            List<AccessListObject> accessList) {
         super(EIP1559, nonce, null, gasLimit, to, value, data);
         this.chainId = chainId;
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
@@ -100,7 +100,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
         if (accessList == null) {
             result.add(new RlpList());
         } else {
-            result.add(AddressAccessList.getRlpEncodedList(accessList));
+            result.add(AccessListObject.getRlpEncodedList(accessList));
         }
 
         if (signatureData != null) {
@@ -147,7 +147,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             String data,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
-            List<AddressAccessList> accessList) {
+            List<AccessListObject> accessList) {
 
         return new Transaction1559(
                 chainId,
@@ -178,7 +178,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
         return maxFeePerGas;
     }
 
-    public List<AddressAccessList> getAccessList() {
+    public List<AccessListObject> getAccessList() {
         return accessList;
     }
 }
