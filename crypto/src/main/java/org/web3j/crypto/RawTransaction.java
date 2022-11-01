@@ -26,7 +26,7 @@ public class RawTransaction {
 
     private final ITransaction transaction;
 
-    public RawTransaction(final ITransaction transaction) {
+    protected RawTransaction(final ITransaction transaction) {
         this.transaction = transaction;
     }
 
