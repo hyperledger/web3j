@@ -30,4 +30,12 @@ public class RlpList implements RlpType {
     public List<RlpType> getValues() {
         return values;
     }
+
+    public RlpType getValue(int index) {
+        return values.get(index);
+    }
+
+    public int size() {
+        return values.size();
+    }
 }

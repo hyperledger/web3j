@@ -14,9 +14,13 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.security.SignatureException;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.crypto.transaction.type.AccessListTransaction;
+import org.web3j.crypto.transaction.type.AddressAccessList;
 import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.utils.Numeric;
 
@@ -26,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionDecoderTest {
-
     @Test
     public void testDecoding() throws Exception {
         BigInteger nonce = BigInteger.ZERO;
@@ -185,6 +188,65 @@ public class TransactionDecoderTest {
         assertNull(signedResult.getChainId());
     }
 
+    @Test
+    public void testDecodingAccessListTx() {
+        final RawTransaction rawTransaction = createAccessListRawTransaction();
+        final AccessListTransaction tx = (AccessListTransaction) rawTransaction.getTransaction();
+
+        final byte[] encodedMessage = TransactionEncoder.encode(rawTransaction);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(hexMessage);
+        assertTrue(result.getTransaction() instanceof AccessListTransaction);
+        final AccessListTransaction txDecoded = (AccessListTransaction) result.getTransaction();
+
+        assertNotNull(result);
+        assertEquals(tx.getChainId(), txDecoded.getChainId());
+        assertEquals(tx.getNonce(), txDecoded.getNonce());
+        assertEquals(tx.getGasPrice(), txDecoded.getGasPrice());
+        assertEquals(tx.getGasLimit(), txDecoded.getGasLimit());
+        assertEquals(tx.getTo(), txDecoded.getTo());
+        assertEquals(tx.getValue(), txDecoded.getValue());
+        assertEquals(tx.getData(), txDecoded.getData());
+        assertEquals(tx.getAccessList(), txDecoded.getAccessList());
+    }
+
+    @Test
+    public void testDecodingSignedAccessListTx() throws SignatureException {
+        final RawTransaction rawTransaction = createAccessListRawTransaction();
+        final AccessListTransaction tx = (AccessListTransaction) rawTransaction.getTransaction();
+
+        final byte[] signedMessage =
+                TransactionEncoder.signMessage(rawTransaction, SampleKeys.CREDENTIALS);
+        final String signedHexMessage = Numeric.toHexString(signedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(signedHexMessage);
+        assertTrue(result.getTransaction() instanceof AccessListTransaction);
+        final AccessListTransaction txDecoded = (AccessListTransaction) result.getTransaction();
+
+        assertNotNull(result);
+        assertEquals(tx.getChainId(), txDecoded.getChainId());
+        assertEquals(tx.getNonce(), txDecoded.getNonce());
+        assertEquals(tx.getGasPrice(), txDecoded.getGasPrice());
+        assertEquals(tx.getGasLimit(), txDecoded.getGasLimit());
+        assertEquals(tx.getTo(), txDecoded.getTo());
+        assertEquals(tx.getValue(), txDecoded.getValue());
+        assertEquals(tx.getData(), txDecoded.getData());
+        assertEquals(tx.getAccessList(), txDecoded.getAccessList());
+
+        assertTrue(result instanceof SignedRawTransaction);
+        final SignedRawTransaction signedResult = (SignedRawTransaction) result;
+        assertNotNull(signedResult.getSignatureData());
+
+        final Sign.SignatureData signatureData = signedResult.getSignatureData();
+        final byte[] encodedTransaction = TransactionEncoder.encode(rawTransaction);
+        final BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
+        assertEquals(key, SampleKeys.PUBLIC_KEY);
+        assertEquals(SampleKeys.ADDRESS, signedResult.getFrom());
+        signedResult.verify(SampleKeys.ADDRESS);
+        assertNull(signedResult.getChainId());
+    }
+
     private static RawTransaction createEip1559RawTransaction() {
         return RawTransaction.createEtherTransaction(
                 3L,
@@ -194,5 +256,23 @@ public class TransactionDecoderTest {
                 BigInteger.valueOf(123),
                 BigInteger.valueOf(5678),
                 BigInteger.valueOf(1100000));
+    }
+
+    private static RawTransaction createAccessListRawTransaction() {
+        return RawTransaction.createTransaction(
+                3L,
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(1100000),
+                BigInteger.valueOf(30000),
+                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                BigInteger.valueOf(123),
+                "0x0123456789",
+                Arrays.asList(
+                        new AddressAccessList(
+                                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                                Collections.singletonList(BigInteger.valueOf(2))),
+                        new AddressAccessList(
+                                "0x000306090abab3a6e1400e9345bc60c78a8bef57",
+                                Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(14)))));
     }
 }

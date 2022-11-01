@@ -13,11 +13,14 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import org.web3j.commons.ChainId;
+import org.web3j.crypto.transaction.type.AddressAccessList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
@@ -111,6 +114,18 @@ public class TransactionEncoderTest {
                         "02f8698206178082162e8310c8e082753094627306090abab3a6e1400e9345bc60c78a8bef577b80c001a0d1f9ee3bdde4d4e0792c7089b84059fb28e17f494556d8a775450b1dd6c318a1a038bd3e2fb9e018528e0a41f57c7a32a8d23b2693e0451aa6ef4519b234466e7f")));
     }
 
+    @Test
+    public void testEncodingAccessListTx() {
+        final RawTransaction rawTransaction = createAccessListRawTransaction();
+        final byte[] encodedMessage =
+                TransactionEncoder.signMessage(rawTransaction, SampleKeys.CREDENTIALS_ETH_EXAMPLE);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+        final String expectedMessage =
+                "0x01f8fd03808310c8e082753094627306090abab3a6e1400e9345bc60c78a8bef577b850123456789f893f794627306090abab3a6e1400e9345bc60c78a8bef57e1a00000000000000000000000000000000000000000000000000000000000000002f85994000306090abab3a6e1400e9345bc60c78a8bef57f842a00000000000000000000000000000000000000000000000000000000000000003a0000000000000000000000000000000000000000000000000000000000000000e1ba0ecd334868d5e2c29c3a85eeb14a2df1dd2275f03666cb215f414a8941dab74f6a049e008296d7ee9a94ddd3bbc249733af12ae236911d1fb1342bbe402c793f380";
+
+        assertEquals(expectedMessage, hexMessage);
+    }
+
     private static RawTransaction createEtherTransaction() {
         return RawTransaction.createEtherTransaction(
                 BigInteger.ZERO,
@@ -147,5 +162,23 @@ public class TransactionEncoderTest {
                 BigInteger.valueOf(123),
                 BigInteger.valueOf(5678),
                 BigInteger.valueOf(1100000));
+    }
+
+    private static RawTransaction createAccessListRawTransaction() {
+        return RawTransaction.createTransaction(
+                3L,
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(1100000),
+                BigInteger.valueOf(30000),
+                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                BigInteger.valueOf(123),
+                "0x0123456789",
+                Arrays.asList(
+                        new AddressAccessList(
+                                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                                Collections.singletonList(BigInteger.valueOf(2))),
+                        new AddressAccessList(
+                                "0x000306090abab3a6e1400e9345bc60c78a8bef57",
+                                Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(14)))));
     }
 }

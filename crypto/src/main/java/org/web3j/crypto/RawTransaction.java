@@ -13,11 +13,9 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.util.List;
 
-import org.web3j.crypto.transaction.type.ITransaction;
-import org.web3j.crypto.transaction.type.LegacyTransaction;
-import org.web3j.crypto.transaction.type.Transaction1559;
-import org.web3j.crypto.transaction.type.TransactionType;
+import org.web3j.crypto.transaction.type.*;
 
 /**
  * Transaction class used for signing transactions locally.<br>
@@ -28,7 +26,7 @@ public class RawTransaction {
 
     private final ITransaction transaction;
 
-    protected RawTransaction(final ITransaction transaction) {
+    public RawTransaction(final ITransaction transaction) {
         this.transaction = transaction;
     }
 
@@ -97,6 +95,20 @@ public class RawTransaction {
     public static RawTransaction createTransaction(
             long chainId,
             BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            List<AddressAccessList> accessList) {
+        return new RawTransaction(
+                AccessListTransaction.createTransaction(
+                        chainId, nonce, gasPrice, gasLimit, to, value, data, accessList));
+    }
+
+    public static RawTransaction createTransaction(
+            long chainId,
+            BigInteger nonce,
             BigInteger gasLimit,
             String to,
             BigInteger value,
@@ -114,6 +126,30 @@ public class RawTransaction {
                         data,
                         maxPriorityFeePerGas,
                         maxFeePerGas));
+    }
+
+    public static RawTransaction createTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            List<AddressAccessList> accessList) {
+
+        return new RawTransaction(
+                Transaction1559.createTransaction(
+                        chainId,
+                        nonce,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        accessList));
     }
 
     public BigInteger getNonce() {

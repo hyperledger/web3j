@@ -14,7 +14,11 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 
+import org.web3j.crypto.transaction.type.AccessListTransaction;
+import org.web3j.crypto.transaction.type.AddressAccessList;
+import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
@@ -22,10 +26,14 @@ import org.web3j.rlp.RlpString;
 import org.web3j.utils.Numeric;
 
 public class TransactionDecoder {
+    private static final int UNSIGNED_ACCESS_LIST_TX_RLP_LIST_SIZE = 8;
     private static final int UNSIGNED_EIP1559TX_RLP_LIST_SIZE = 9;
 
     public static RawTransaction decode(final String hexTransaction) {
         final byte[] transaction = Numeric.hexStringToByteArray(hexTransaction);
+        if (getTransactionType(transaction) == TransactionType.ACCESS_LIST) {
+            return decodeAccessListTransaction(transaction);
+        }
         if (getTransactionType(transaction) == TransactionType.EIP1559) {
             return decodeEIP1559Transaction(transaction);
         }
@@ -35,8 +43,48 @@ public class TransactionDecoder {
     private static TransactionType getTransactionType(final byte[] transaction) {
         // The first byte indicates a transaction type.
         byte firstByte = transaction[0];
-        if (firstByte == TransactionType.EIP1559.getRlpType()) return TransactionType.EIP1559;
+        if (firstByte == TransactionType.ACCESS_LIST.getRlpType()) {
+            return TransactionType.ACCESS_LIST;
+        }
+        if (firstByte == TransactionType.EIP1559.getRlpType()) {
+            return TransactionType.EIP1559;
+        }
         return TransactionType.LEGACY;
+    }
+
+    private static RawTransaction decodeAccessListTransaction(final byte[] transaction) {
+        final byte[] encodedTx = Arrays.copyOfRange(transaction, 1, transaction.length);
+        final RlpList rlpList = RlpDecoder.decode(encodedTx);
+        final RlpList values = (RlpList) rlpList.getValue(0);
+
+        final long chainId = ((RlpString) values.getValue(0)).asPositiveBigInteger().longValue();
+        final BigInteger nonce = ((RlpString) values.getValue(1)).asPositiveBigInteger();
+        final BigInteger gasPrice = ((RlpString) values.getValue(2)).asPositiveBigInteger();
+        final BigInteger gasLimit = ((RlpString) values.getValue(3)).asPositiveBigInteger();
+        final String to = ((RlpString) values.getValue(4)).asString();
+        final BigInteger value = ((RlpString) values.getValue(5)).asPositiveBigInteger();
+        final String data = ((RlpString) values.getValue(6)).asString();
+        final List<AddressAccessList> accessList =
+                AddressAccessList.getRlpDecodedList((RlpList) values.getValue(7));
+
+        AccessListTransaction rawTx =
+                AccessListTransaction.createTransaction(
+                        chainId, nonce, gasPrice, gasLimit, to, value, data, accessList);
+
+        if (values.size() == UNSIGNED_ACCESS_LIST_TX_RLP_LIST_SIZE) {
+            return new RawTransaction(rawTx);
+        }
+
+        final byte[] v = ((RlpString) values.getValue(8)).getBytes();
+        final byte[] r =
+                Numeric.toBytesPadded(
+                        Numeric.toBigInt(((RlpString) values.getValue(9)).getBytes()), 32);
+        final byte[] s =
+                Numeric.toBytesPadded(
+                        Numeric.toBigInt(((RlpString) values.getValue(10)).getBytes()), 32);
+        final Sign.SignatureData signature = new Sign.SignatureData(v, r, s);
+
+        return new SignedRawTransaction(rawTx, signature);
     }
 
     private static RawTransaction decodeEIP1559Transaction(final byte[] transaction) {
@@ -56,9 +104,11 @@ public class TransactionDecoder {
 
         final BigInteger value = ((RlpString) values.getValues().get(6)).asPositiveBigInteger();
         final String data = ((RlpString) values.getValues().get(7)).asString();
+        final List<AddressAccessList> accessList =
+                AddressAccessList.getRlpDecodedList((RlpList) values.getValues().get(8));
 
-        final RawTransaction rawTransaction =
-                RawTransaction.createTransaction(
+        final Transaction1559 rawTx =
+                Transaction1559.createTransaction(
                         chainId,
                         nonce,
                         gasLimit,
@@ -66,10 +116,11 @@ public class TransactionDecoder {
                         value,
                         data,
                         maxPriorityFeePerGas,
-                        maxFeePerGas);
+                        maxFeePerGas,
+                        accessList);
 
         if (values.getValues().size() == UNSIGNED_EIP1559TX_RLP_LIST_SIZE) {
-            return rawTransaction;
+            return new RawTransaction(rawTx);
         } else {
             final byte[] v =
                     Sign.getVFromRecId(
@@ -84,7 +135,7 @@ public class TransactionDecoder {
                             Numeric.toBigInt(((RlpString) values.getValues().get(11)).getBytes()),
                             32);
             final Sign.SignatureData signatureData = new Sign.SignatureData(v, r, s);
-            return new SignedRawTransaction(rawTransaction.getTransaction(), signatureData);
+            return new SignedRawTransaction(rawTx, signatureData);
         }
     }
 

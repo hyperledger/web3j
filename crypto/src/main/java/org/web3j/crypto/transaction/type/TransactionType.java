@@ -14,9 +14,10 @@ package org.web3j.crypto.transaction.type;
 
 public enum TransactionType {
     LEGACY(null),
+    ACCESS_LIST((byte) 0x01),
     EIP1559(((byte) 0x02));
 
-    Byte type;
+    final Byte type;
 
     TransactionType(final Byte type) {
         this.type = type;
@@ -27,10 +28,14 @@ public enum TransactionType {
     }
 
     public boolean isLegacy() {
-        return this.equals(TransactionType.LEGACY);
+        return this == TransactionType.LEGACY;
+    }
+
+    public boolean isAccessList() {
+        return this == ACCESS_LIST;
     }
 
     public boolean isEip1559() {
-        return this.equals(TransactionType.EIP1559);
+        return this == TransactionType.EIP1559;
     }
 }

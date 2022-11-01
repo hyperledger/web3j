@@ -31,10 +31,27 @@ import static org.web3j.crypto.transaction.type.TransactionType.EIP1559;
  * paper</a>.
  */
 public class Transaction1559 extends LegacyTransaction implements ITransaction {
+    private final long chainId;
+    private final BigInteger maxPriorityFeePerGas;
+    private final BigInteger maxFeePerGas;
+    private final List<AddressAccessList> accessList;
 
-    private long chainId;
-    private BigInteger maxPriorityFeePerGas;
-    private BigInteger maxFeePerGas;
+    public Transaction1559(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            List<AddressAccessList> accessList) {
+        super(EIP1559, nonce, null, gasLimit, to, value, data);
+        this.chainId = chainId;
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        this.maxFeePerGas = maxFeePerGas;
+        this.accessList = accessList;
+    }
 
     public Transaction1559(
             long chainId,
@@ -45,10 +62,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             String data,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas) {
-        super(EIP1559, nonce, null, gasLimit, to, value, data);
-        this.chainId = chainId;
-        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
-        this.maxFeePerGas = maxFeePerGas;
+        this(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas, null);
     }
 
     @Override
@@ -83,7 +97,11 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
         result.add(RlpString.create(data));
 
         // access list
-        result.add(new RlpList());
+        if (accessList == null) {
+            result.add(new RlpList());
+        } else {
+            result.add(AddressAccessList.getRlpEncodedList(accessList));
+        }
 
         if (signatureData != null) {
             result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
@@ -120,6 +138,29 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
                 chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
     }
 
+    public static Transaction1559 createTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            List<AddressAccessList> accessList) {
+
+        return new Transaction1559(
+                chainId,
+                nonce,
+                gasLimit,
+                to,
+                value,
+                data,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                accessList);
+    }
+
     @Override
     public BigInteger getGasPrice() {
         throw new UnsupportedOperationException("not available for 1559 transaction");
@@ -135,5 +176,9 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
 
     public BigInteger getMaxFeePerGas() {
         return maxFeePerGas;
+    }
+
+    public List<AddressAccessList> getAccessList() {
+        return accessList;
     }
 }
