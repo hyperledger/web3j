@@ -60,6 +60,9 @@ import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
  * Ethereum Contract Application Binary Interface (ABI) decoding for types. Decoding is not
  * documented, but is the reverse of the encoding details located <a
  * href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
+ *
+ * The public API is composed of "decode*" methods and provides backward-compatbility.
+ * See https://github.com/web3j/web3j/issues/1591 for a discussion about decoding and possible improvements.
  */
 public class TypeDecoder {
 
