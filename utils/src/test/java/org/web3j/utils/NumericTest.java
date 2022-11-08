@@ -77,12 +77,6 @@ public class NumericTest {
     }
 
     @Test
-    public void testQuantityDecodeLeadingZeroException() {
-
-        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x0400"));
-    }
-
-    @Test
     public void testQuantityDecodeMissingPrefix() {
 
         assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("ff"));
