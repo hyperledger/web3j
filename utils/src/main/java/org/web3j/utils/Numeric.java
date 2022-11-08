@@ -47,11 +47,17 @@ public final class Numeric {
         if (!isValidHexQuantity(value)) {
             throw new MessageDecodingException("Value must be in format 0x[1-9]+[0-9]* or 0x0");
         }
+
         try {
-            return new BigInteger(value.substring(2), 16);
+            return parsePaddedNumberHex(value);
         } catch (NumberFormatException e) {
             throw new MessageDecodingException("Negative ", e);
         }
+    }
+
+    public static BigInteger parsePaddedNumberHex(String value) {
+        String numWithoutLeadingZeros = cleanHexPrefix(value).replaceFirst("^0+(?!$)", "");
+        return new BigInteger(numWithoutLeadingZeros, 16);
     }
 
     private static boolean isLongValue(String value) {
@@ -73,10 +79,6 @@ public final class Numeric {
         }
 
         if (!value.startsWith(HEX_PREFIX)) {
-            return false;
-        }
-
-        if (value.length() > 3 && value.charAt(2) == '0') {
             return false;
         }
 
