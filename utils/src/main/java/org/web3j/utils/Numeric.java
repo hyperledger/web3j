@@ -63,7 +63,7 @@ public final class Numeric {
                 }
             }
         }
-        return value;
+        return value.substring(2);
     }
 
     private static boolean isLongValue(String value) {
