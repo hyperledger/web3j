@@ -72,8 +72,8 @@ public class NumericTest {
 
     @Test
     public void testQuantityDecodeLeadingZero() {
-        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x0400"));
-        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x001"));
+        assertEquals(Numeric.decodeQuantity("0x0400"), (BigInteger.valueOf(1024L)));
+        assertEquals(Numeric.decodeQuantity("0x001"), (BigInteger.valueOf(1L)));
     }
 
     @Test
