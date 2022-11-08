@@ -49,21 +49,15 @@ public final class Numeric {
         }
 
         try {
-            return new BigInteger(parsePaddedHexQuantity(value), 16);
+            return parsePaddedNumberHex(value);
         } catch (NumberFormatException e) {
             throw new MessageDecodingException("Negative ", e);
         }
     }
 
-    private static String parsePaddedHexQuantity(String value) {
-        if (value.length() > 3 && value.charAt(2) == '0') {
-            for (int i = 2; i < value.length(); i++) {
-                if (value.charAt(i) != '0') {
-                    return value.substring(i);
-                }
-            }
-        }
-        return value.substring(2);
+    public static BigInteger parsePaddedNumberHex(String value) {
+        String numWithoutLeadingZeros = cleanHexPrefix(value).replaceFirst("^0+(?!$)", "");
+        return new BigInteger(numWithoutLeadingZeros, 16);
     }
 
     private static boolean isLongValue(String value) {
