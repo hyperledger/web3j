@@ -239,7 +239,8 @@ public final class Numeric {
 
     private static char[] toHexCharArray(byte[] input, int offset, int length, boolean withPrefix) {
         final char[] output = new char[length << 1];
-        for (int i = offset, j = 0; i < length; i++, j++) {
+        int end = length + offset;
+        for (int i = offset, j = 0; i < end; i++, j++) {
             final int v = input[i] & 0xFF;
             output[j++] = HEX_CHAR_MAP[v >>> 4];
             output[j] = HEX_CHAR_MAP[v & 0x0F];
