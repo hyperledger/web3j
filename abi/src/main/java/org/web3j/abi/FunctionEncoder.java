@@ -37,26 +37,31 @@ import static org.web3j.abi.TypeReference.makeTypeReference;
  */
 public abstract class FunctionEncoder {
 
-    private static FunctionEncoder DEFAULT_ENCODER;
+    private static final FunctionEncoder encoder;
 
-    private static final ServiceLoader<FunctionEncoderProvider> loader =
-            ServiceLoader.load(FunctionEncoderProvider.class);
+    static {
+        ServiceLoader<FunctionEncoderProvider> loader =
+                ServiceLoader.load(FunctionEncoderProvider.class);
+        final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
+
+        encoder = iterator.hasNext() ? iterator.next().get() : new DefaultFunctionEncoder();
+    }
 
     public static String encode(final Function function) {
-        return encoder().encodeFunction(function);
+        return encoder.encodeFunction(function);
     }
 
     /** Encode function when we know function method Id / Selector. */
     public static String encode(final String methodId, final List<Type> parameters) {
-        return encoder().encodeWithSelector(methodId, parameters);
+        return encoder.encodeWithSelector(methodId, parameters);
     }
 
     public static String encodeConstructor(final List<Type> parameters) {
-        return encoder().encodeParameters(parameters);
+        return encoder.encodeParameters(parameters);
     }
 
     public static String encodeConstructorPacked(final List<Type> parameters) {
-        return encoder().encodePackedParameters(parameters);
+        return encoder.encodePackedParameters(parameters);
     }
 
     public static Function makeFunction(
@@ -105,17 +110,5 @@ public abstract class FunctionEncoder {
         final byte[] input = methodSignature.getBytes();
         final byte[] hash = Hash.sha3(input);
         return Numeric.toHexString(hash).substring(0, 10);
-    }
-
-    private static FunctionEncoder encoder() {
-        final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
-        return iterator.hasNext() ? iterator.next().get() : defaultEncoder();
-    }
-
-    private static FunctionEncoder defaultEncoder() {
-        if (DEFAULT_ENCODER == null) {
-            DEFAULT_ENCODER = new DefaultFunctionEncoder();
-        }
-        return DEFAULT_ENCODER;
     }
 }
