@@ -23,7 +23,7 @@ import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.generated.Uint256;
 
 public class StructuredData {
-    static class Entry {
+    public static class Entry {
         private final String name;
         private final String type;
 
@@ -44,11 +44,11 @@ public class StructuredData {
         }
     }
 
-    static class EIP712Domain {
+    public static class EIP712Domain {
         private final String name;
         private final String version;
-        private final Uint256 chainId;
-        private final Address verifyingContract;
+        private final String chainId;
+        private final String verifyingContract;
         private final String salt;
 
         @JsonCreator
@@ -56,13 +56,19 @@ public class StructuredData {
                 @JsonProperty(value = "name") String name,
                 @JsonProperty(value = "version") String version,
                 @JsonProperty(value = "chainId") String chainId,
-                @JsonProperty(value = "verifyingContract") Address verifyingContract,
+                @JsonProperty(value = "verifyingContract") String verifyingContract,
                 @JsonProperty(value = "salt") String salt) {
             this.name = name;
             this.version = version;
-            this.chainId = chainId != null ? new Uint256(new BigInteger(chainId)) : null;
+            this.chainId = chainId;
             this.verifyingContract = verifyingContract;
             this.salt = salt;
+
+            // validation checks
+            if (chainId != null) {
+                new Uint256(new BigInteger(chainId));
+            }
+            new Address(verifyingContract);
         }
 
         public String getName() {
@@ -73,11 +79,11 @@ public class StructuredData {
             return version;
         }
 
-        public Uint256 getChainId() {
+        public String getChainId() {
             return chainId;
         }
 
-        public Address getVerifyingContract() {
+        public String getVerifyingContract() {
             return verifyingContract;
         }
 
@@ -86,7 +92,7 @@ public class StructuredData {
         }
     }
 
-    static class EIP712Message {
+    public static class EIP712Message {
         private final HashMap<String, List<Entry>> types;
         private final String primaryType;
         private final Object message;

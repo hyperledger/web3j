@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,14 +48,29 @@ public class StructuredDataTest {
                 Files.readAllBytes(Paths.get(jsonFile).toAbsolutePath()), StandardCharsets.UTF_8);
     }
 
+    private StructuredData.EIP712Message getResourceAsMessage(String jsonFile) throws IOException {
+        return new ObjectMapper()
+                .readValue(
+                        new String(
+                                Files.readAllBytes(Paths.get(jsonFile).toAbsolutePath()),
+                                StandardCharsets.UTF_8),
+                        StructuredData.EIP712Message.class);
+    }
+
     @Test
     public void testInvalidIdentifierMessageCaughtByRegex() throws RuntimeException {
         String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidIdentifierStructuredData.json";
+
         assertThrows(
                 RuntimeException.class,
                 () -> new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath)));
+        assertThrows(
+                RuntimeException.class,
+                () ->
+                        new StructuredDataEncoder(
+                                getResourceAsMessage(invalidStructuredDataJSONFilePath)));
     }
 
     @Test
@@ -65,6 +81,11 @@ public class StructuredDataTest {
         assertThrows(
                 RuntimeException.class,
                 () -> new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath)));
+        assertThrows(
+                RuntimeException.class,
+                () ->
+                        new StructuredDataEncoder(
+                                getResourceAsMessage(invalidStructuredDataJSONFilePath)));
     }
 
     @Test
@@ -179,6 +200,18 @@ public class StructuredDataTest {
     }
 
     @Test
+    public void test0xProtocolControlSampleAsMessage() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResourceAsMessage(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/0xProtocolControlSample.json"));
+        assertEquals(
+                "0xccb29124860915763e8cd9257da1260abc7df668fde282272587d84b594f37f6",
+                Numeric.toHexString(dataEncoder.hashStructuredData()));
+    }
+
+    @Test
     public void testInvalidMessageValueTypeMismatch() throws RuntimeException, IOException {
         String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
@@ -186,6 +219,10 @@ public class StructuredDataTest {
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(ClassCastException.class, dataEncoder::hashStructuredData);
+
+        StructuredDataEncoder dataEncoderFromMessage =
+                new StructuredDataEncoder(getResourceAsMessage(invalidStructuredDataJSONFilePath));
+        assertThrows(ClassCastException.class, dataEncoderFromMessage::hashStructuredData);
     }
 
     @Test
@@ -214,6 +251,19 @@ public class StructuredDataTest {
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(
                         getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/ValidStructuredDataWithValues.json"));
+
+        assertEquals(
+                "0x9a321bee2df12b3b43bc4caf71d19839f05d82264b780b48f1f529bf916b5d30",
+                Numeric.toHexString(dataEncoder.hashStructuredData()));
+    }
+
+    @Test
+    public void testValidStructureWithValuesAsMessage() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResourceAsMessage(
                                 "build/resources/test/"
                                         + "structured_data_json_files/ValidStructuredDataWithValues.json"));
 
