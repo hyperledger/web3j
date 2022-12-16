@@ -1298,4 +1298,25 @@ public class FunctionReturnDecoderTest {
                                 new Uint256(0),
                                 new Uint256(0))));
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testDecodeDynamicStructWithStaticStruct() {
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "0000000000000000000000000000000000000000000000000000000000000060"
+                        + "0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6461746100000000000000000000000000000000000000000000000000000000";
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput,
+                        AbiV2TestFixture.getQuxFunction.getOutputParameters()),
+                Arrays.asList(
+                        new AbiV2TestFixture.Qux(
+                                new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN),
+                                "data")));
+    }
+
 }
