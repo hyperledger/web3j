@@ -46,7 +46,7 @@ import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HA
 @BenchmarkOptions(concurrency = 1, warmupRounds = 0, benchmarkRounds = 1)
 public class FastRawTransactionManagerIT extends Scenario {
 
-    private static final int COUNT = 10; // don't set too high if using a real Ethereum network
+    private static final int COUNT = 5; // don't set too high if using a real Ethereum network
     private static final long POLLING_FREQUENCY = 15000;
 
     @BeforeAll
@@ -54,7 +54,7 @@ public class FastRawTransactionManagerIT extends Scenario {
         Scenario.web3j = web3j;
     }
 
-    // @Test broken test
+    @Test
     public void testTransactionPolling() throws Exception {
 
         List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
