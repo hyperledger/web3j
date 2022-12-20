@@ -10,8 +10,8 @@ repositories {
     maven { url "https://dl.cloudsmith.io/public/consensys/quorum-mainnet-launcher/maven/" }
 }
 ext {
-    besuPluginVersion = '21.7.2'
-    besuInternalVersion = '21.7.2'
+    besuPluginVersion = '21.10.3'
+    besuInternalVersion = '21.10.3'
     besuCryptoDepVersion = '0.3.0'
 }
 
@@ -30,7 +30,6 @@ dependencies {
         // We dont want to pull the web3j version from unit
         exclude group: 'org.web3j'
     }
-    testImplementation "org.web3j:web3j-evm:4.9.4"
     testImplementation "org.hyperledger.besu:plugin-api:$besuPluginVersion",withoutAbi
     testImplementation "org.hyperledger.besu.internal:besu:$besuInternalVersion",withoutAbi
     testImplementation "org.hyperledger.besu.internal:api:$besuInternalVersion",withoutAbi
