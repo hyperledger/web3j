@@ -234,7 +234,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthFeeHistory> ethFeeHistory(
-            int blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles) {
+            String blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles) {
         return new Request<>(
                 "eth_feeHistory",
                 Arrays.asList(blockCount, newestBlock.getValue(), rewardPercentiles),

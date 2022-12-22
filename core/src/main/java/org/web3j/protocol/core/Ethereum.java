@@ -112,7 +112,7 @@ public interface Ethereum {
     Request<?, EthMaxPriorityFeePerGas> ethMaxPriorityFeePerGas();
 
     Request<?, EthFeeHistory> ethFeeHistory(
-            int blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles);
+            String blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles);
 
     Request<?, EthAccounts> ethAccounts();
 
