@@ -881,9 +881,6 @@ public class DefaultFunctionEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000004"
                         + "6461746100000000000000000000000000000000000000000000000000000000";
 
-        assertEquals(
-                expected,
-                FunctionEncoder.encode(AbiV2TestFixture.setQuxFunction));
-
+        assertEquals(expected, FunctionEncoder.encode(AbiV2TestFixture.setQuxFunction));
     }
 }

@@ -827,6 +827,7 @@ public class AbiV2TestFixture {
             this.data = data.getValue();
         }
     }
+
     public static final org.web3j.abi.datatypes.Function setQuxFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETQUX,
@@ -835,9 +836,7 @@ public class AbiV2TestFixture {
 
     public static final org.web3j.abi.datatypes.Function getQuxFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETQUX,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<Qux>() {}));
+                    FUNC_GETQUX, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Qux>() {}));
 
     public static class BytesStruct extends DynamicStruct {
         public byte[] pubkey;

@@ -1311,12 +1311,9 @@ public class FunctionReturnDecoderTest {
                         + "6461746100000000000000000000000000000000000000000000000000000000";
         assertEquals(
                 FunctionReturnDecoder.decode(
-                        rawInput,
-                        AbiV2TestFixture.getQuxFunction.getOutputParameters()),
+                        rawInput, AbiV2TestFixture.getQuxFunction.getOutputParameters()),
                 Arrays.asList(
                         new AbiV2TestFixture.Qux(
-                                new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN),
-                                "data")));
+                                new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN), "data")));
     }
-
 }
