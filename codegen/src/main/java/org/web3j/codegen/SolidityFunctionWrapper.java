@@ -876,8 +876,8 @@ public class SolidityFunctionWrapper extends Generator {
             String className,
             String authName,
             boolean isPayable,
-            boolean withGasPRovider) {
-        if (isPayable && !withGasPRovider) {
+            boolean withGasProvider) {
+        if (isPayable && !withGasProvider) {
             methodBuilder.addStatement(
                     "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\", $L)",
                     className,
@@ -888,7 +888,7 @@ public class SolidityFunctionWrapper extends Generator {
                     BINARY,
                     INITIAL_VALUE);
             methodBuilder.addAnnotation(Deprecated.class);
-        } else if (isPayable && withGasPRovider) {
+        } else if (isPayable && withGasProvider) {
             methodBuilder.addStatement(
                     "return deployRemoteCall($L.class, $L, $L, $L, $L, \"\", $L)",
                     className,
@@ -897,7 +897,7 @@ public class SolidityFunctionWrapper extends Generator {
                     CONTRACT_GAS_PROVIDER,
                     BINARY,
                     INITIAL_VALUE);
-        } else if (!isPayable && !withGasPRovider) {
+        } else if (!isPayable && !withGasProvider) {
             methodBuilder.addStatement(
                     "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\")",
                     className,
