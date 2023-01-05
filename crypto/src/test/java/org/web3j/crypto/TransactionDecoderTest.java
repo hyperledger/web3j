@@ -264,7 +264,7 @@ public class TransactionDecoderTest {
     }
 
     private static RawTransaction createEip2930RawTransaction() {
-// Test example from https://eips.ethereum.org/EIPS/eip-2930
+        // Test example from https://eips.ethereum.org/EIPS/eip-2930
         List<AccessListObject> accessList =
                 Stream.of(
                                 new AccessListObject(
