@@ -14,13 +14,19 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.security.SignatureException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.transaction.type.Transaction1559;
+import org.web3j.crypto.transaction.type.Transaction2930;
 import org.web3j.utils.Numeric;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -194,5 +200,92 @@ public class TransactionDecoderTest {
                 BigInteger.valueOf(123),
                 BigInteger.valueOf(5678),
                 BigInteger.valueOf(1100000));
+    }
+
+    @Test
+    public void testDecoding2930() {
+        final RawTransaction rawTransaction = createEip2930RawTransaction();
+        final Transaction2930 transaction2930 = (Transaction2930) rawTransaction.getTransaction();
+
+        final byte[] encodedMessage = TransactionEncoder.encode(rawTransaction);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(hexMessage);
+        assertTrue(result.getTransaction() instanceof Transaction2930);
+        final Transaction2930 resultTransaction2930 = (Transaction2930) result.getTransaction();
+
+        assertNotNull(result);
+        assertEquals(transaction2930.getChainId(), resultTransaction2930.getChainId());
+        assertEquals(transaction2930.getNonce(), resultTransaction2930.getNonce());
+        assertEquals(transaction2930.getGasPrice(), resultTransaction2930.getGasPrice());
+        assertEquals(transaction2930.getGasLimit(), resultTransaction2930.getGasLimit());
+        assertEquals(transaction2930.getTo(), resultTransaction2930.getTo());
+        assertEquals(transaction2930.getValue(), resultTransaction2930.getValue());
+        assertEquals(transaction2930.getData(), resultTransaction2930.getData());
+        assertIterableEquals(
+                transaction2930.getAccessList(), resultTransaction2930.getAccessList());
+    }
+
+    @Test
+    public void testDecodingSigned2930() throws SignatureException {
+        final RawTransaction rawTransaction = createEip2930RawTransaction();
+        final Transaction2930 transaction2930 = (Transaction2930) rawTransaction.getTransaction();
+
+        final byte[] signedMessage =
+                TransactionEncoder.signMessage(rawTransaction, SampleKeys.CREDENTIALS);
+        final String signedHexMessage = Numeric.toHexString(signedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(signedHexMessage);
+        assertTrue(result.getTransaction() instanceof Transaction2930);
+        final Transaction2930 resultTransaction2930 = (Transaction2930) result.getTransaction();
+
+        assertNotNull(result);
+        assertEquals(transaction2930.getChainId(), resultTransaction2930.getChainId());
+        assertEquals(transaction2930.getNonce(), resultTransaction2930.getNonce());
+        assertEquals(transaction2930.getGasPrice(), resultTransaction2930.getGasPrice());
+        assertEquals(transaction2930.getGasLimit(), resultTransaction2930.getGasLimit());
+        assertEquals(transaction2930.getTo(), resultTransaction2930.getTo());
+        assertEquals(transaction2930.getValue(), resultTransaction2930.getValue());
+        assertEquals(transaction2930.getData(), resultTransaction2930.getData());
+        assertIterableEquals(
+                transaction2930.getAccessList(), resultTransaction2930.getAccessList());
+
+        assertTrue(result instanceof SignedRawTransaction);
+        final SignedRawTransaction signedResult = (SignedRawTransaction) result;
+        assertNotNull(signedResult.getSignatureData());
+
+        final Sign.SignatureData signatureData = signedResult.getSignatureData();
+        final byte[] encodedTransaction = TransactionEncoder.encode(rawTransaction);
+        final BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
+        assertEquals(key, SampleKeys.PUBLIC_KEY);
+        assertEquals(SampleKeys.ADDRESS, signedResult.getFrom());
+        signedResult.verify(SampleKeys.ADDRESS);
+        assertNull(signedResult.getChainId());
+    }
+
+    private static RawTransaction createEip2930RawTransaction() {
+        // Test example from https://eips.ethereum.org/EIPS/eip-2930
+        List<AccessListObject> accessList =
+                Stream.of(
+                                new AccessListObject(
+                                        "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+                                        Stream.of(
+                                                        "0x0000000000000000000000000000000000000000000000000000000000000003",
+                                                        "0x0000000000000000000000000000000000000000000000000000000000000007")
+                                                .collect(toList())),
+                                new AccessListObject(
+                                        "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
+                                        Collections.emptyList()))
+                        .collect(toList());
+
+        return RawTransaction.createTransaction(
+                3L,
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(30000),
+                BigInteger.valueOf(500000),
+                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                BigInteger.valueOf(1000000),
+                "0x1000001111100000",
+                accessList);
     }
 }
