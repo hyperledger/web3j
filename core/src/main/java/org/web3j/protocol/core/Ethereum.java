@@ -111,21 +111,8 @@ public interface Ethereum {
 
     Request<?, EthMaxPriorityFeePerGas> ethMaxPriorityFeePerGas();
 
-    @Deprecated
-    /**
-     * Method receives wrong type parameter int for blockCount, according to documentation the type
-     * should be String which is the encoded hex of the blocks number. This is kept for backward
-     * compatibility
-     *
-     * @param blockCount Requested range of blocks
-     * @param newestBlock Highest block of the requested range.
-     * @param rewardPercentiles A monotonically increasing list of percentile values.
-     */
     Request<?, EthFeeHistory> ethFeeHistory(
             int blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles);
-
-    Request<?, EthFeeHistory> ethFeeHistory(
-            String blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles);
 
     Request<?, EthAccounts> ethAccounts();
 

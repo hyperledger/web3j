@@ -156,11 +156,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEthFeeHistory() throws Exception {
-        web3j.ethFeeHistory(
-                        Numeric.toHexStringWithPrefixZeroPadded(BigInteger.valueOf(1), 1),
-                        DefaultBlockParameterName.LATEST,
-                        null)
-                .send();
+        web3j.ethFeeHistory(1, DefaultBlockParameterName.LATEST, null).send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_feeHistory\",\"params\":[\"0x1\",\"latest\",null],\"id\":1}");
