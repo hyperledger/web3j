@@ -48,6 +48,7 @@ import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractEIP1559GasProvider;
 import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.gas.EIP1559GasFeeData;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.tx.response.EmptyTransactionReceipt;
 import org.web3j.utils.Numeric;
@@ -377,15 +378,27 @@ public abstract class Contract extends ManagedTransaction {
                 ContractEIP1559GasProvider eip1559GasProvider =
                         (ContractEIP1559GasProvider) gasProvider;
                 if (eip1559GasProvider.isEIP1559Enabled()) {
+                    EIP1559GasFeeData feeData =
+                            eip1559GasProvider.getGasFeeData(
+                                    transactionManager.getFromAddress(),
+                                    contractAddress,
+                                    data,
+                                    weiValue,
+                                    funcName);
                     receipt =
                             sendEIP1559(
                                     eip1559GasProvider.getChainId(),
                                     contractAddress,
                                     data,
                                     weiValue,
-                                    eip1559GasProvider.getGasLimit(funcName),
-                                    eip1559GasProvider.getMaxPriorityFeePerGas(funcName),
-                                    eip1559GasProvider.getMaxFeePerGas(funcName),
+                                    eip1559GasProvider.getGasLimit(
+                                            transactionManager.getFromAddress(),
+                                            contractAddress,
+                                            data,
+                                            weiValue,
+                                            funcName),
+                                    feeData.getMaxPriorityFeePerGas(),
+                                    feeData.getMaxFeePerGas(),
                                     constructor);
                 }
             }
@@ -396,8 +409,18 @@ public abstract class Contract extends ManagedTransaction {
                                 contractAddress,
                                 data,
                                 weiValue,
-                                gasProvider.getGasPrice(funcName),
-                                gasProvider.getGasLimit(funcName),
+                                gasProvider.getGasPrice(
+                                        transactionManager.getFromAddress(),
+                                        contractAddress,
+                                        data,
+                                        weiValue,
+                                        funcName),
+                                gasProvider.getGasLimit(
+                                        transactionManager.getFromAddress(),
+                                        contractAddress,
+                                        data,
+                                        weiValue,
+                                        funcName),
                                 constructor);
             }
         } catch (JsonRpcError error) {

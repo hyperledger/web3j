@@ -32,6 +32,16 @@ public class StaticEIP1559GasProvider implements ContractEIP1559GasProvider {
     }
 
     @Override
+    public BigInteger getGasPrice(
+            String fromAddress,
+            String contractAddress,
+            String data,
+            BigInteger weiValue,
+            String contractFunc) {
+        return maxFeePerGas;
+    }
+
+    @Override
     public BigInteger getGasPrice(String contractFunc) {
         return maxFeePerGas;
     }
@@ -39,6 +49,16 @@ public class StaticEIP1559GasProvider implements ContractEIP1559GasProvider {
     @Override
     public BigInteger getGasPrice() {
         return maxFeePerGas;
+    }
+
+    @Override
+    public BigInteger getGasLimit(
+            String fromAddress,
+            String contractAddress,
+            String data,
+            BigInteger weiValue,
+            String contractFunc) {
+        return gasLimit;
     }
 
     @Override
@@ -59,6 +79,16 @@ public class StaticEIP1559GasProvider implements ContractEIP1559GasProvider {
     @Override
     public long getChainId() {
         return chainId;
+    }
+
+    @Override
+    public EIP1559GasFeeData getGasFeeData(
+            String fromAddress,
+            String contractAddress,
+            String data,
+            BigInteger weiValue,
+            String contractFunc) {
+        return new EIP1559GasFeeData(maxFeePerGas, maxPriorityFeePerGas);
     }
 
     @Override

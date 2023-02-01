@@ -25,6 +25,16 @@ public class StaticGasProvider implements ContractGasProvider {
     }
 
     @Override
+    public BigInteger getGasPrice(
+            String fromAddress,
+            String contractAddress,
+            String data,
+            BigInteger weiValue,
+            String contractFunc) {
+        return gasPrice;
+    }
+
+    @Override
     public BigInteger getGasPrice(String contractFunc) {
         return gasPrice;
     }
@@ -32,6 +42,16 @@ public class StaticGasProvider implements ContractGasProvider {
     @Override
     public BigInteger getGasPrice() {
         return gasPrice;
+    }
+
+    @Override
+    public BigInteger getGasLimit(
+            String fromAddress,
+            String contractAddress,
+            String data,
+            BigInteger weiValue,
+            String contractFunc) {
+        return gasLimit;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Web3 Labs Ltd.
+ * Copyright 2023 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -14,21 +14,21 @@ package org.web3j.tx.gas;
 
 import java.math.BigInteger;
 
-public interface ContractEIP1559GasProvider extends ContractGasProvider {
-    boolean isEIP1559Enabled();
+public class EIP1559GasFeeData {
 
-    long getChainId();
+    private BigInteger maxFeePerGas;
+    private BigInteger maxPriorityFeePerGas;
 
-    EIP1559GasFeeData getGasFeeData(
-            String fromAddress,
-            String contractAddress,
-            String data,
-            BigInteger weiValue,
-            String contractFunc);
+    public EIP1559GasFeeData(BigInteger maxFeePerGas, BigInteger maxPriorityFeePerGas) {
+        this.maxFeePerGas = maxFeePerGas;
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    }
 
-    @Deprecated
-    BigInteger getMaxFeePerGas(String contractFunc);
+    public BigInteger getMaxFeePerGas() {
+        return maxFeePerGas;
+    }
 
-    @Deprecated
-    BigInteger getMaxPriorityFeePerGas(String contractFunc);
+    public BigInteger getMaxPriorityFeePerGas() {
+        return maxPriorityFeePerGas;
+    }
 }

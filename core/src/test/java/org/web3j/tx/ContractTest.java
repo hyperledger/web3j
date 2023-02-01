@@ -38,9 +38,13 @@ import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.*;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthEstimateGas;
+import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.EthMaxPriorityFeePerGas;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -49,6 +53,8 @@ import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.DynamicEIP1559GasProvider;
+import org.web3j.tx.gas.DynamicGasProvider;
 import org.web3j.tx.gas.StaticEIP1559GasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.tx.response.EmptyTransactionReceipt;
@@ -515,6 +521,110 @@ public class ContractTest extends ManagedTransactionTester {
                         eq(BigInteger.ZERO),
                         eq(BigInteger.TEN),
                         eq(BigInteger.ONE),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean());
+    }
+
+    @Test
+    public void testDynamicGasProvider() throws IOException, TransactionException {
+        DynamicGasProvider gasProvider =
+                new DynamicGasProvider(BigInteger.ZERO, BigInteger.ZERO, web3j);
+        TransactionManager txManager = mock(TransactionManager.class);
+
+        EthGasPrice gasPriceResponse = new EthGasPrice();
+        gasPriceResponse.setResult("0x1");
+        Request<?, EthGasPrice> gasPriceRequest = mock(Request.class);
+        when(gasPriceRequest.send()).thenReturn(gasPriceResponse);
+        when(web3j.ethGasPrice()).thenReturn((Request) gasPriceRequest);
+
+        EthEstimateGas estimateGasResponse = new EthEstimateGas();
+        estimateGasResponse.setResult("0x10");
+        Request<?, EthEstimateGas> estimateGasRequest = mock(Request.class);
+        when(estimateGasRequest.send()).thenReturn(estimateGasResponse);
+        when(web3j.ethEstimateGas(any(Transaction.class))).thenReturn((Request) estimateGasRequest);
+
+        when(txManager.executeTransaction(
+                        any(BigInteger.class),
+                        any(BigInteger.class),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean()))
+                .thenReturn(new TransactionReceipt());
+
+        contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
+
+        Function func =
+                new Function(
+                        "test",
+                        Collections.<Type>emptyList(),
+                        Collections.<TypeReference<?>>emptyList());
+        contract.executeTransaction(func);
+
+        verify(txManager)
+                .executeTransaction(
+                        eq(BigInteger.ONE),
+                        eq(BigInteger.valueOf(16)),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean());
+    }
+
+    @Test
+    public void testDynamicEIP1559GasProvider() throws IOException, TransactionException {
+        DynamicEIP1559GasProvider gasProvider =
+                new DynamicEIP1559GasProvider(
+                        1L, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, web3j);
+        TransactionManager txManager = mock(TransactionManager.class);
+
+        EthBlock.Block block = new EthBlock.Block();
+        block.setBaseFeePerGas("0x5");
+        EthBlock getBlockByNumberResponse = new EthBlock();
+        getBlockByNumberResponse.setResult(block);
+        Request<?, EthBlock> getBlockByNumberRequest = mock(Request.class);
+        when(getBlockByNumberRequest.send()).thenReturn(getBlockByNumberResponse);
+        when(web3j.ethGetBlockByNumber(any(DefaultBlockParameterName.class), anyBoolean()))
+                .thenReturn((Request) getBlockByNumberRequest);
+
+        EthMaxPriorityFeePerGas maxPriorityFeePerGasResponse = new EthMaxPriorityFeePerGas();
+        maxPriorityFeePerGasResponse.setResult("0x1");
+        Request<?, EthMaxPriorityFeePerGas> maxPriorityFeePerGasRequest = mock(Request.class);
+        when(maxPriorityFeePerGasRequest.send()).thenReturn(maxPriorityFeePerGasResponse);
+        when(web3j.ethMaxPriorityFeePerGas()).thenReturn((Request) maxPriorityFeePerGasRequest);
+
+        EthEstimateGas estimateGasResponse = new EthEstimateGas();
+        estimateGasResponse.setResult("0x10");
+        Request<?, EthEstimateGas> estimateGasRequest = mock(Request.class);
+        when(estimateGasRequest.send()).thenReturn(estimateGasResponse);
+        when(web3j.ethEstimateGas(any(Transaction.class))).thenReturn((Request) estimateGasRequest);
+
+        when(txManager.executeTransaction(
+                        any(BigInteger.class),
+                        any(BigInteger.class),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean()))
+                .thenReturn(new TransactionReceipt());
+
+        contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
+
+        Function func =
+                new Function(
+                        "test",
+                        Collections.<Type>emptyList(),
+                        Collections.<TypeReference<?>>emptyList());
+        contract.executeTransaction(func);
+
+        verify(txManager)
+                .executeTransactionEIP1559(
+                        eq(1L),
+                        eq(BigInteger.ONE),
+                        eq(BigInteger.valueOf(11)),
+                        eq(BigInteger.valueOf(16)),
                         anyString(),
                         anyString(),
                         any(BigInteger.class),
