@@ -26,6 +26,7 @@ public class DynamicEIP1559GasProvider extends StaticEIP1559GasProvider {
     private BigInteger extraGas;
     private BigInteger maxFeePerGasCap;
     private BigInteger gasLimitCap;
+    private boolean throwErrorOnFailingTransactions;
     private Web3j web3j;
 
     public DynamicEIP1559GasProvider(
@@ -36,11 +37,13 @@ public class DynamicEIP1559GasProvider extends StaticEIP1559GasProvider {
             BigInteger extraGas,
             BigInteger maxFeePerGasCap,
             BigInteger gasLimitCap,
+            boolean throwErrorOnFailingTransactions,
             Web3j web3j) {
         super(chainId, fallbackMaxFeePerGas, fallbackMaxPriorityFeePerGas, fallbackGasLimit);
         this.extraGas = extraGas;
         this.maxFeePerGasCap = maxFeePerGasCap;
         this.gasLimitCap = gasLimitCap;
+        this.throwErrorOnFailingTransactions = throwErrorOnFailingTransactions;
         this.web3j = web3j;
     }
 
@@ -58,6 +61,7 @@ public class DynamicEIP1559GasProvider extends StaticEIP1559GasProvider {
                 BigInteger.ZERO,
                 BigInteger.ZERO,
                 BigInteger.ZERO,
+                true,
                 web3j);
     }
 
@@ -73,7 +77,9 @@ public class DynamicEIP1559GasProvider extends StaticEIP1559GasProvider {
         try {
             EthEstimateGas estimateGasResponse = web3j.ethEstimateGas(tx).send();
             if (estimateGasResponse.hasError()) {
-                throw new ContractCallException(estimateGasResponse.getError().getMessage());
+                if (throwErrorOnFailingTransactions) {
+                    throw new ContractCallException(estimateGasResponse.getError().getMessage());
+                }
             } else {
                 BigInteger gasUsed = estimateGasResponse.getAmountUsed().add(extraGas);
                 return gasLimitCap.compareTo(BigInteger.ZERO) > 0
@@ -81,8 +87,8 @@ public class DynamicEIP1559GasProvider extends StaticEIP1559GasProvider {
                         : gasUsed;
             }
         } catch (IOException e) {
-            return getGasLimit(contractFunc);
         }
+        return getGasLimit(contractFunc);
     }
 
     @Override

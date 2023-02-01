@@ -24,6 +24,7 @@ public class DynamicGasProvider extends StaticGasProvider {
 
     private BigInteger extraGas;
     private BigInteger gasLimitCap;
+    private boolean throwErrorOnFailingTransactions;
     private Web3j web3j;
 
     public DynamicGasProvider(
@@ -31,16 +32,18 @@ public class DynamicGasProvider extends StaticGasProvider {
             BigInteger fallbackGasLimit,
             BigInteger extraGas,
             BigInteger gasLimitCap,
+            boolean throwErrorOnFailingTransactions,
             Web3j web3j) {
         super(fallbackGasPrice, fallbackGasLimit);
         this.extraGas = extraGas;
         this.gasLimitCap = gasLimitCap;
+        this.throwErrorOnFailingTransactions = throwErrorOnFailingTransactions;
         this.web3j = web3j;
     }
 
     public DynamicGasProvider(
             BigInteger fallbackGasPrice, BigInteger fallbackGasLimit, Web3j web3j) {
-        this(fallbackGasPrice, fallbackGasLimit, BigInteger.ZERO, BigInteger.ZERO, web3j);
+        this(fallbackGasPrice, fallbackGasLimit, BigInteger.ZERO, BigInteger.ZERO, true, web3j);
     }
 
     @Override
@@ -55,7 +58,9 @@ public class DynamicGasProvider extends StaticGasProvider {
         try {
             EthEstimateGas estimateGasResponse = web3j.ethEstimateGas(tx).send();
             if (estimateGasResponse.hasError()) {
-                throw new ContractCallException(estimateGasResponse.getError().getMessage());
+                if (throwErrorOnFailingTransactions) {
+                    throw new ContractCallException(estimateGasResponse.getError().getMessage());
+                }
             } else {
                 BigInteger gasUsed = estimateGasResponse.getAmountUsed().add(extraGas);
                 return gasLimitCap.compareTo(BigInteger.ZERO) > 0
@@ -63,8 +68,8 @@ public class DynamicGasProvider extends StaticGasProvider {
                         : gasUsed;
             }
         } catch (IOException e) {
-            return getGasLimit(contractFunc);
         }
+        return getGasLimit(contractFunc);
     }
 
     @Override
