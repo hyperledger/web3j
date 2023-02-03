@@ -45,7 +45,7 @@ public final class Numeric {
         }
 
         if (!isValidHexQuantity(value)) {
-            throw new MessageDecodingException("Value must be in format 0x[1-9]+[0-9]* or 0x0");
+            throw new MessageDecodingException("Value must be in format 0x[0-9a-fA-F]+");
         }
 
         try {
