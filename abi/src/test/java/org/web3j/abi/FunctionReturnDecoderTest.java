@@ -1308,7 +1308,7 @@ public class FunctionReturnDecoderTest {
     public void testDecodeDynamicArrayOfMatches() {
         String rawInput =
                 "0x"
-                        + "0000000000000000000000000000000000000000000000000000000000000020"  // not sure about this parameter - dynamic array identifier?
+                        + "0000000000000000000000000000000000000000000000000000000000000020"  // the offset of the start of the dynamic type
                         + "0000000000000000000000000000000000000000000000000000000000000001"  // dynamic array size
                         + "00000000000000000000000062f8dc8a5c80db6e8fcc042f0cc54a298f8f2ffd"  // firstUserAddress
                         + "0000000000000000000000000000000000000000000000000000000000000000"  // firstUserValue

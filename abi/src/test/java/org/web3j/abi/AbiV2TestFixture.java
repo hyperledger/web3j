@@ -120,8 +120,6 @@ public class AbiV2TestFixture {
 
     // TODO Shall we reconsider const naming convention and unified constants here?
     // TODO I follow initial code convention, but would suggest FUNC_SET_MATCH naming style
-    public static final String FUNC_SETMATCH = "setArrayOfMatchStructFunction";
-
     public static final String FUNC_GETMATCH = "getArrayOfMatchStructFunction";
 
     public static class Foo extends DynamicStruct {
@@ -944,37 +942,7 @@ public class AbiV2TestFixture {
             this.approvedBySecondUser = approvedBySecondUser.getValue();
         }
 
-        @Override
-        public String toString() {
-            return "{ " +
-                    "\"userFirst\": \"${userFirst}\", " +
-                    "\"valueOfFirstUser\": \"${valueOfFirstUser}\", " +
-                    "\"userSecond\": \"${userSecond}\", " +
-                    "\"valueOfSecondUser\" : \"${valueOfSecondUser}\", " +
-                    "\"approvedByFirstUser\" : \"${approvedByFirstUser}\", " +
-                    "\"approvedBySecondUser\" : \"${approvedBySecondUser}\" " +
-                    "}";
-        }
     }
-
-    public static final Function setArrayOfMatchStructFunction =
-            new Function(
-                    FUNC_SETMATCH,
-                    Arrays.<Type>asList(
-                            new org.web3j.abi.datatypes.DynamicArray<Match>(
-                                    Match.class,
-                                    Collections.singletonList(
-                                            new Match(
-                                                    "0x62F8DC8a5c80db6e8FCc042f0cC54a298F8F2FFd",
-                                                    BigInteger.valueOf(0),
-                                                    "0x52E7400Ba1B956B11394a5045F8BC3682792E1AC",
-                                                    BigInteger.valueOf(1),
-                                                    false,
-                                                    false)
-                                    )
-                            )
-                    ),
-                    Collections.<TypeReference<?>>emptyList());
 
     public static final Function getArrayOfMatchStructFunction =
             new Function(
