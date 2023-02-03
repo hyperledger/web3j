@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.DynamicStruct;
@@ -116,6 +117,12 @@ public class AbiV2TestFixture {
 
     public static final String FUNC_setArrayOfStructWithArraysFunction =
             "setArrayOfStructWithArraysFunction";
+
+    // TODO Shall we reconsider const naming convention and unified constants here?
+    // TODO I follow initial code convention, but would suggest FUNC_SET_MATCH naming style
+    public static final String FUNC_SETMATCH = "setArrayOfMatchStructFunction";
+
+    public static final String FUNC_GETMATCH = "getArrayOfMatchStructFunction";
 
     public static class Foo extends DynamicStruct {
         public String id;
@@ -883,4 +890,101 @@ public class AbiV2TestFixture {
                                                             "0x2222222222222222222222222222222222222222",
                                                             "0x3333333333333333333333333333333333333333"))))),
                     Collections.<TypeReference<?>>emptyList());
+
+    /**
+     * Add extra struct to cover discovered edge-case issue
+     *
+     * Ref: https://github.com/web3j/web3j/issues/1858
+     * */
+    public static class Match extends DynamicStruct {
+        public String userFirst = "";
+        public BigInteger valueOfFirstUser = BigInteger.valueOf(0); // token id
+        public String userSecond = "";
+        public BigInteger valueOfSecondUser = BigInteger.valueOf(0); // token id
+        public Boolean approvedByFirstUser = false;
+        public Boolean approvedBySecondUser = false;
+
+        public Match(
+                String userFirst,
+                BigInteger valueOfFirstUser,
+                String userSecond,
+                BigInteger valueOfSecondUser,
+                Boolean approvedByFirstUser,
+                Boolean approvedBySecondUser) {
+            super(
+                    new Utf8String(userFirst),
+                    new Uint256(valueOfFirstUser),
+                    new Utf8String(userSecond),
+                    new Uint256(valueOfSecondUser),
+                    new Bool(approvedByFirstUser),
+                    new Bool(approvedBySecondUser)
+            );
+
+            this.userFirst = userFirst;
+            this.valueOfFirstUser = valueOfFirstUser;
+            this.userSecond = userSecond;
+            this.valueOfSecondUser = valueOfSecondUser;
+            this.approvedByFirstUser = approvedByFirstUser;
+            this.approvedBySecondUser = approvedBySecondUser;
+        }
+
+        public Match(
+                Utf8String userFirst,
+                Uint256 valueOfFirstUser,
+                Utf8String userSecond,
+                Uint256 valueOfSecondUser,
+                Bool approvedByFirstUser,
+                Bool approvedBySecondUser) {
+            super(userFirst, valueOfFirstUser, userSecond, valueOfSecondUser, approvedByFirstUser, approvedBySecondUser);
+            this.userFirst = userFirst.getValue();
+            this.valueOfFirstUser = valueOfFirstUser.getValue();
+            this.userSecond = userSecond.getValue();
+            this.valueOfSecondUser = valueOfSecondUser.getValue();
+            this.approvedByFirstUser = approvedByFirstUser.getValue();
+            this.approvedBySecondUser = approvedBySecondUser.getValue();
+        }
+
+        @Override
+        public String toString() {
+            return "{ " +
+                    "\"userFirst\": \"${userFirst}\", " +
+                    "\"valueOfFirstUser\": \"${valueOfFirstUser}\", " +
+                    "\"userSecond\": \"${userSecond}\", " +
+                    "\"valueOfSecondUser\" : \"${valueOfSecondUser}\", " +
+                    "\"approvedByFirstUser\" : \"${approvedByFirstUser}\", " +
+                    "\"approvedBySecondUser\" : \"${approvedBySecondUser}\" " +
+                    "}";
+        }
+    }
+
+    public static final Function setArrayOfMatchStructFunction =
+            new Function(
+                    FUNC_SETMATCH,
+                    Arrays.<Type>asList(
+                            new org.web3j.abi.datatypes.DynamicArray<Match>(
+                                    Match.class,
+                                    Collections.singletonList(
+                                            new Match(
+                                                    "0x62F8DC8a5c80db6e8FCc042f0cC54a298F8F2FFd",
+                                                    BigInteger.valueOf(0),
+                                                    "0x52E7400Ba1B956B11394a5045F8BC3682792E1AC",
+                                                    BigInteger.valueOf(1),
+                                                    false,
+                                                    false)
+                                    )
+                            )
+                    ),
+                    Collections.<TypeReference<?>>emptyList());
+
+    public static final Function getArrayOfMatchStructFunction =
+            new Function(
+                    FUNC_GETMATCH,
+                    Arrays.asList(
+                            new Address("0x62F8DC8a5c80db6e8FCc042f0cC54a298F8F2FFd"),
+                            new Address("0x52E7400Ba1B956B11394a5045F8BC3682792E1AC")
+                    ),
+                    Arrays.asList(
+                            new TypeReference<DynamicArray<Match>>() {}
+                    )
+            );
 }

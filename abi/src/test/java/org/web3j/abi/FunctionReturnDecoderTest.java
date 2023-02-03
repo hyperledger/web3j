@@ -1298,4 +1298,40 @@ public class FunctionReturnDecoderTest {
                                 new Uint256(0),
                                 new Uint256(0))));
     }
+
+    /**
+     * Add extra test case to cover discovered edge-case issue
+     *
+     * Ref: https://github.com/web3j/web3j/issues/1858
+     * */
+    @Test
+    public void testDecodeDynamicArrayOfMatches() {
+        String rawInput =
+                "0x"
+                        + "0000000000000000000000000000000000000000000000000000000000000020"  // not sure about this parameter - dynamic array identifier?
+                        + "0000000000000000000000000000000000000000000000000000000000000001"  // dynamic array size
+                        + "00000000000000000000000062f8dc8a5c80db6e8fcc042f0cc54a298f8f2ffd"  // firstUserAddress
+                        + "0000000000000000000000000000000000000000000000000000000000000000"  // firstUserValue
+                        + "00000000000000000000000052e7400ba1b956b11394a5045f8bc3682792e1ac"  // secondUserAddress
+                        + "0000000000000000000000000000000000000000000000000000000000000001"  // secondUserValue
+                        + "0000000000000000000000000000000000000000000000000000000000000000"  // approveByFirstUser
+                        + "0000000000000000000000000000000000000000000000000000000000000001"; // approveBySecondUser
+
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput,
+                        AbiV2TestFixture.getArrayOfMatchStructFunction.getOutputParameters()
+                ),
+                Collections.singletonList(
+                        new AbiV2TestFixture.Match(
+                                "0x62F8DC8a5c80db6e8FCc042f0cC54a298F8F2FFd",
+                                BigInteger.valueOf(0),
+                                "0x52E7400Ba1B956B11394a5045F8BC3682792E1AC",
+                                BigInteger.valueOf(1),
+                                false,
+                                false
+                        )
+                )
+        );
+    }
 }
