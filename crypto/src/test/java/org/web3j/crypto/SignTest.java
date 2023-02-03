@@ -12,6 +12,7 @@
  */
 package org.web3j.crypto;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.ArrayList;
@@ -80,6 +81,26 @@ public class SignTest {
     public void testPublicKeyFromPrivatePoint() {
         ECPoint point = Sign.publicPointFromPrivate(SampleKeys.PRIVATE_KEY);
         assertEquals(Sign.publicFromPoint(point.getEncoded(false)), (SampleKeys.PUBLIC_KEY));
+    }
+
+    @Test
+    public void testSignTypedData() {
+        try {
+            String TEST_JSON_TYPED_DATA =
+                    "{\"types\": {    \"EIP712Domain\": [      {\"name\": \"name\", \"type\": \"string\"},      {\"name\": \"version\", \"type\": \"string\"},      {\"name\": \"chainId\", \"type\": \"uint256\"},      {\"name\": \"verifyingContract\", \"type\": \"address\"}    ],    \"Person\": [      {\"name\": \"name\", \"type\": \"string\"},      {\"name\": \"wallet\", \"type\": \"address\"}    ]  },  \"domain\": {    \"name\": \"My Dapp\",    \"version\": \"1.0\",    \"chainId\": 1,    \"verifyingContract\": \"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC\"  },  \"primaryType\": \"Person\",  \"message\": {    \"name\": \"John Doe\",    \"wallet\": \"0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B\"  }}";
+            Sign.SignatureData signature =
+                    Sign.signTypedData(TEST_JSON_TYPED_DATA, SampleKeys.KEY_PAIR);
+            byte[] retval = new byte[65];
+            System.arraycopy(signature.getR(), 0, retval, 0, 32);
+            System.arraycopy(signature.getS(), 0, retval, 32, 32);
+            System.arraycopy(signature.getV(), 0, retval, 64, 1);
+            String signedMessage = Numeric.toHexString(retval);
+            assertEquals(
+                    signedMessage,
+                    "0x80361fd6c275c7492d00d976a48d0db4a663fb76da49a3c7d69c252f1c8cbea61438264a755d464e19bcd7c976b06640b40bd34de5f5c1456c0efe3b6626143a1c");
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @ParameterizedTest(name = "testGetRecId(chainId={0}, recId={1}, isEip155={2})")

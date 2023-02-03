@@ -12,6 +12,7 @@
  */
 package org.web3j.crypto;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.SignatureException;
@@ -79,6 +80,14 @@ public class Sign {
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
         return signMessage(message, keyPair, true);
+    }
+
+    public static SignatureData signTypedData(String jsonData, ECKeyPair keyPair)
+            throws IOException {
+        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonData);
+        byte[] hashStructuredData = dataEncoder.hashStructuredData();
+
+        return signMessage(hashStructuredData, keyPair, false);
     }
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean needToHash) {
