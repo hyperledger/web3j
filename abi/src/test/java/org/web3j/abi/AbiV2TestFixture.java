@@ -118,8 +118,6 @@ public class AbiV2TestFixture {
     public static final String FUNC_setArrayOfStructWithArraysFunction =
             "setArrayOfStructWithArraysFunction";
 
-    // TODO Shall we reconsider const naming convention and unified constants here?
-    // TODO I follow initial code convention, but would suggest FUNC_SET_MATCH naming style
     public static final String FUNC_GETMATCH = "getArrayOfMatchStructFunction";
 
     public static class Foo extends DynamicStruct {
