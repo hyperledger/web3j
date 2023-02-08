@@ -12,17 +12,7 @@
  */
 package org.web3j.protocol.core;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
-
 import io.reactivex.Flowable;
-
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.methods.request.ShhFilter;
@@ -46,6 +36,7 @@ import org.web3j.protocol.core.methods.response.EthFeeHistory;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockReceipts;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
@@ -91,6 +82,15 @@ import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 /** JSON-RPC 2.0 factory implementation. */
 public class JsonRpc2_0Web3j implements Web3j {
@@ -452,6 +452,15 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(transactionHash),
                 web3jService,
                 EthGetTransactionReceipt.class);
+    }
+
+    @Override
+    public Request<?, EthGetBlockReceipts> ethGetBlockReceipts(DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>(
+                "eth_getBlockReceipts",
+                Arrays.asList(defaultBlockParameter.getValue()),
+                web3jService,
+                EthGetBlockReceipts.class);
     }
 
     @Override

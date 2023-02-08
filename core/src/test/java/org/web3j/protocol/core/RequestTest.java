@@ -12,11 +12,7 @@
  */
 package org.web3j.protocol.core;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
-
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.EthFilter;
@@ -25,6 +21,9 @@ import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
+
+import java.math.BigInteger;
+import java.util.Arrays;
 
 public class RequestTest extends RequestTester {
 
@@ -430,6 +429,17 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionReceipt\",\"params\":["
                         + "\"0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238\"],"
+                        + "\"id\":1}");
+    }
+
+    @Test
+    public void testEthGetBlockReceipts() throws Exception {
+        web3j.ethGetBlockReceipts(DefaultBlockParameter.valueOf(BigInteger.valueOf(15455945)))
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockReceipts\",\"params\":["
+                        + "\"0xebd6c9\"],"
                         + "\"id\":1}");
     }
 
