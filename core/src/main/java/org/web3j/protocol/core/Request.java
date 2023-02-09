@@ -46,6 +46,14 @@ public class Request<S, T extends Response> {
         this.responseType = type;
     }
 
+    public Request(String method, long id, List<S> params, Web3jService web3jService, Class<T> type) {
+        this.method = method;
+        this.params = params;
+        this.id = id;
+        this.web3jService = web3jService;
+        this.responseType = type;
+    }
+
     public String getJsonrpc() {
         return jsonrpc;
     }

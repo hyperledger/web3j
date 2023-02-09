@@ -23,6 +23,7 @@ import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthTokenMeta;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 
@@ -375,6 +376,14 @@ public class RequestTest extends RequestTester {
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockByHash\",\"params\":["
                         + "\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\""
                         + ",true],\"id\":1}");
+    }
+
+    @Test
+    public void testEthGetTokenMeta() throws Exception{
+        web3j.ethGetTokenMeta("0x694733ab1618a275d7e4b20d05faaf450d56efc6")
+            .send();
+        verifyResult(
+            "{\"jsonrpc\":\"2.0\",\"method\":\"nr_getTokenMeta\",\"params\":[\"0x694733ab1618a275d7e4b20d05faaf450d56efc6\"],\"id\":0}");
     }
 
     @Test

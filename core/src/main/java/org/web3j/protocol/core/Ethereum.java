@@ -53,6 +53,7 @@ import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
 import org.web3j.protocol.core.methods.response.EthSubmitWork;
 import org.web3j.protocol.core.methods.response.EthSyncing;
+import org.web3j.protocol.core.methods.response.EthTokenMeta;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 import org.web3j.protocol.core.methods.response.NetListening;
@@ -172,6 +173,8 @@ public interface Ethereum {
 
     Request<?, EthBlock> ethGetBlockByNumber(
             DefaultBlockParameter defaultBlockParameter, boolean returnFullTransactionObjects);
+
+    Request<?, EthTokenMeta> ethGetTokenMeta(String token);
 
     Request<?, EthTransaction> ethGetTransactionByHash(String transactionHash);
 
