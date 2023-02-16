@@ -22,13 +22,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NotificationParams<T> {
     private T result;
-    private String subsciption;
+    private String subscription;
 
     public T getResult() {
         return result;
     }
 
-    public String getSubsciption() {
-        return subsciption;
+    public String getSubscription() {
+        return subscription;
     }
 }
