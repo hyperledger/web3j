@@ -394,6 +394,9 @@ public class WebSocketServiceTest {
         assertEquals(
                 "0xd9263f42a87",
                 actualNotificationRef.get().getParams().getResult().getDifficulty());
+        assertEquals(
+                "0xcd0c3e8af590364c09d0fa6a1210faf5",
+                actualNotificationRef.get().getParams().getSubscription());
     }
 
     @Test

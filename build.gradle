@@ -13,7 +13,7 @@ plugins {
 
 ext {
     bouncycastleVersion = '1.70'
-    jacksonVersion = '2.14.1'
+    jacksonVersion = '2.14.2'
     javaPoetVersion = '1.7.0'
     kotlinVersion = '1.3.72'
     kotlinPoetVersion = '1.5.0'
@@ -23,7 +23,6 @@ ext {
     slf4jVersion = '1.7.30'
     javaWebSocketVersion = '1.5.3'
     picocliVersion = '3.0.0'
-    web3jUnitVersion = version
     // test dependencies
     equalsverifierVersion = '3.5.5'
     junitVersion = '5.5.2'
