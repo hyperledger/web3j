@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,12 +137,15 @@ public abstract class Filter<T> {
         }
         if (ethLog.hasError()) {
             Error error = ethLog.getError();
+            String message = error.getMessage();
             switch (error.getCode()) {
                 case RpcErrors.FILTER_NOT_FOUND:
                     reinstallFilter();
                     break;
                 default:
-                    throwException(error);
+                    if (Pattern.compile("(?i)\\bfilter\\s+not\\s+found\\b").matcher(message).find())
+                        reinstallFilter();
+                    else throwException(error);
                     break;
             }
         } else {
