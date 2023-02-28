@@ -76,6 +76,13 @@ public abstract class Contract extends ManagedTransaction {
     protected TransactionReceipt transactionReceipt;
     protected Map<String, String> deployedAddresses;
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
+    protected String[] MetadataHashStringIndicators =
+            new String[] {
+                "a165627a7a72305820" /*Swarm legacy (bzzr0)*/,
+                "a265627a7a72315820" /*Swarm (bzzr1)*/,
+                "a2646970667358221220" /*IPFS*/,
+                "a164736f6c634300080a000a" /*solc (None)*/
+            };
 
     protected Contract(
             String contractBinary,
@@ -254,7 +261,14 @@ public abstract class Contract extends ManagedTransaction {
         }
 
         String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
-        int metadataIndex = code.indexOf("a165627a7a72305820");
+
+        int metadataIndex = -1;
+        for (String metadataIndicator : MetadataHashStringIndicators) {
+            metadataIndex = code.indexOf(metadataIndicator);
+
+            if (metadataIndex != -1) break;
+        }
+
         if (metadataIndex != -1) {
             code = code.substring(0, metadataIndex);
         }
