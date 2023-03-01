@@ -76,13 +76,13 @@ public abstract class Contract extends ManagedTransaction {
     protected TransactionReceipt transactionReceipt;
     protected Map<String, String> deployedAddresses;
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
-    protected String[] MetadataHashStringIndicators =
-            new String[] {
+    private static final List<String> METADATA_HASH_INDICATORS =
+            Collections.unmodifiableList(Arrays.asList(
                 "a165627a7a72305820" /*Swarm legacy (bzzr0)*/,
                 "a265627a7a72315820" /*Swarm (bzzr1)*/,
                 "a2646970667358221220" /*IPFS*/,
                 "a164736f6c634300080a000a" /*solc (None)*/
-            };
+            ));
 
     protected Contract(
             String contractBinary,
