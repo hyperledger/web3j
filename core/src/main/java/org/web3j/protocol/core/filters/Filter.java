@@ -50,6 +50,8 @@ public abstract class Filter<T> {
 
     private long blockTime;
 
+    private static final String FILTER_NOT_FOUND_PATTERN = "(?i)\\bfilter\\s+not\\s+found\\b";
+
     public Filter(Web3j web3j, Callback<T> callback) {
         this.web3j = web3j;
         this.callback = callback;
@@ -143,8 +145,9 @@ public abstract class Filter<T> {
                     reinstallFilter();
                     break;
                 default:
-                    Pattern.compile("FILTER_NOT_FOUND_PATTERN").matcher(message).find())? 
-                    reinstallFilter():throwException(error);
+                    if (Pattern.compile(FILTER_NOT_FOUND_PATTERN).matcher(message).find())
+                        reinstallFilter();
+                    else throwException(error);
                     break;
             }
         } else {
