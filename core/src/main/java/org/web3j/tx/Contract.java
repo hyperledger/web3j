@@ -15,12 +15,7 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.web3j.abi.EventEncoder;
@@ -77,12 +72,12 @@ public abstract class Contract extends ManagedTransaction {
     protected Map<String, String> deployedAddresses;
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
     private static final List<String> METADATA_HASH_INDICATORS =
-            Collections.unmodifiableList(Arrays.asList(
-                "a165627a7a72305820" /*Swarm legacy (bzzr0)*/,
-                "a265627a7a72315820" /*Swarm (bzzr1)*/,
-                "a2646970667358221220" /*IPFS*/,
-                "a164736f6c634300080a000a" /*solc (None)*/
-            ));
+            Collections.unmodifiableList(
+                    Arrays.asList(
+                            "a165627a7a72305820" /*Swarm legacy (bzzr0)*/,
+                            "a265627a7a72315820" /*Swarm (bzzr1)*/,
+                            "a2646970667358221220" /*IPFS*/,
+                            "a164736f6c634300080a000a" /*solc (None)*/));
 
     protected Contract(
             String contractBinary,
@@ -267,8 +262,8 @@ public abstract class Contract extends ManagedTransaction {
             metadataIndex = code.indexOf(metadataIndicator);
 
             if (metadataIndex != -1) {
-                  code = code.substring(0, metadataIndex);
-                  break;
+                code = code.substring(0, metadataIndex);
+                break;
             }
         }
         // There may be multiple contracts in the Solidity bytecode, hence we only check for a
