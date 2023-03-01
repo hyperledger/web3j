@@ -263,14 +263,13 @@ public abstract class Contract extends ManagedTransaction {
         String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
 
         int metadataIndex = -1;
-        for (String metadataIndicator : MetadataHashStringIndicators) {
+        for (String metadataIndicator : METADATA_HASH_INDICATORS) {
             metadataIndex = code.indexOf(metadataIndicator);
 
-            if (metadataIndex != -1) break;
-        }
-
-        if (metadataIndex != -1) {
-            code = code.substring(0, metadataIndex);
+            if (metadataIndex != -1) {
+                  code = code.substring(0, metadataIndex);
+                  break;
+            }
         }
         // There may be multiple contracts in the Solidity bytecode, hence we only check for a
         // match with a subset
