@@ -143,9 +143,8 @@ public abstract class Filter<T> {
                     reinstallFilter();
                     break;
                 default:
-                    if (Pattern.compile("(?i)\\bfilter\\s+not\\s+found\\b").matcher(message).find())
-                        reinstallFilter();
-                    else throwException(error);
+                    Pattern.compile("FILTER_NOT_FOUND_PATTERN").matcher(message).find())? 
+                    reinstallFilter():throwException(error);
                     break;
             }
         } else {
