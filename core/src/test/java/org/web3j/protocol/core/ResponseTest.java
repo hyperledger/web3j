@@ -86,7 +86,10 @@ import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Core Protocol Response tests. */
 public class ResponseTest extends ResponseTester {
