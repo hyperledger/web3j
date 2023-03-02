@@ -12,7 +12,11 @@
  */
 package org.web3j.protocol.core;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
+
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.EthFilter;
@@ -21,9 +25,6 @@ import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
-
-import java.math.BigInteger;
-import java.util.Arrays;
 
 public class RequestTest extends RequestTester {
 

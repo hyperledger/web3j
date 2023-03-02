@@ -12,6 +12,9 @@
  */
 package org.web3j.protocol.core;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.DbGetHex;
@@ -70,9 +73,6 @@ import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 import org.web3j.protocol.core.methods.response.admin.AdminPeers;
-
-import java.math.BigInteger;
-import java.util.List;
 
 /** Core Ethereum JSON-RPC API. */
 public interface Ethereum {
@@ -183,7 +183,9 @@ public interface Ethereum {
             DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex);
 
     Request<?, EthGetTransactionReceipt> ethGetTransactionReceipt(String transactionHash);
-    Request<?, EthGetBlockReceipts> ethGetBlockReceipts(DefaultBlockParameter defaultBlockParameter);
+
+    Request<?, EthGetBlockReceipts> ethGetBlockReceipts(
+            DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthBlock> ethGetUncleByBlockHashAndIndex(
             String blockHash, BigInteger transactionIndex);
