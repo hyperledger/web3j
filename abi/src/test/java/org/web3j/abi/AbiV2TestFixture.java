@@ -112,6 +112,10 @@ public class AbiV2TestFixture {
 
     public static final String FUNC_SETWIZ = "setWiz";
 
+    public static final String FUNC_SETQUX = "setQux";
+
+    public static final String FUNC_GETQUX = "getQux";
+
     public static final String FUNC_addDynamicBytesArray = "addDynamicBytesArray";
 
     public static final String FUNC_setArrayOfStructWithArraysFunction =
@@ -805,6 +809,34 @@ public class AbiV2TestFixture {
                     FUNC_SETWIZ,
                     Arrays.<Type>asList(new Wiz(new Foo("id", "name"), "data")),
                     Collections.emptyList());
+
+    public static class Qux extends DynamicStruct {
+        public Bar bar;
+
+        public String data;
+
+        public Qux(Bar bar, String data) {
+            super(bar, new org.web3j.abi.datatypes.Utf8String(data));
+            this.bar = bar;
+            this.data = data;
+        }
+
+        public Qux(Bar bar, Utf8String data) {
+            super(bar, data);
+            this.bar = bar;
+            this.data = data.getValue();
+        }
+    }
+
+    public static final org.web3j.abi.datatypes.Function setQuxFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_SETQUX,
+                    Arrays.<Type>asList(new Qux(new Bar(BigInteger.ONE, BigInteger.TEN), "data")),
+                    Collections.emptyList());
+
+    public static final org.web3j.abi.datatypes.Function getQuxFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETQUX, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Qux>() {}));
 
     public static class BytesStruct extends DynamicStruct {
         public byte[] pubkey;
