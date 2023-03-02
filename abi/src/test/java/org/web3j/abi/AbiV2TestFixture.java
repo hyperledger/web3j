@@ -59,9 +59,11 @@ public class AbiV2TestFixture {
 
     public static final String FUNC_GET_FOO_DYNAMIC_ARRAY = "getFooDynamicArray";
 
-    public static final String FUNC_GET_NAR_BAR_FOO_NAR_FOO_DYNAMIC_ARRAY = "getNarBarFooNarFooArrays";
+    public static final String FUNC_GET_NAR_BAR_FOO_NAR_FOO_DYNAMIC_ARRAY =
+            "getNarBarFooNarFooArrays";
 
-    public static final String FUNC_ID_NAR_BAR_FOO_NAR_FOO_DYNAMIC_ARRAY = "idNarBarFooNarFooArrays";
+    public static final String FUNC_ID_NAR_BAR_FOO_NAR_FOO_DYNAMIC_ARRAY =
+            "idNarBarFooNarFooArrays";
 
     public static final String FUNC_GET_BAR_DYNAMIC_ARRAY = "getBarDynamicArray";
 
@@ -150,7 +152,9 @@ public class AbiV2TestFixture {
 
     public static final org.web3j.abi.datatypes.Function getFooFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GET_FOO, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Foo>() {}));
+                    FUNC_GET_FOO,
+                    Arrays.<Type>asList(),
+                    Arrays.asList(new TypeReference<Foo>() {}));
 
     public static final org.web3j.abi.datatypes.Function getFooUintFunction =
             new org.web3j.abi.datatypes.Function(
@@ -780,7 +784,9 @@ public class AbiV2TestFixture {
 
     public static final org.web3j.abi.datatypes.Function getNarFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GET_NAR, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Nar>() {}));
+                    FUNC_GET_NAR,
+                    Arrays.<Type>asList(),
+                    Arrays.asList(new TypeReference<Nar>() {}));
 
     public static class Wiz extends DynamicStruct {
         public Foo foo;
