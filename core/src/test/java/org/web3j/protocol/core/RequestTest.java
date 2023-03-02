@@ -434,6 +434,17 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthGetBlockReceipts() throws Exception {
+        web3j.ethGetBlockReceipts(DefaultBlockParameter.valueOf(BigInteger.valueOf(15455945)))
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockReceipts\",\"params\":["
+                        + "\"0xebd6c9\"],"
+                        + "\"id\":1}");
+    }
+
+    @Test
     public void testEthGetUncleByBlockHashAndIndex() throws Exception {
         web3j.ethGetUncleByBlockHashAndIndex(
                         "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
