@@ -156,9 +156,8 @@ public class Utils {
                         typeReference.getClass())) {
                     length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
                 } else {
-                    length = Integer.parseInt(type.getSimpleName().substring(11));
+                    length = Integer.parseInt(type.getSimpleName().replaceAll("\\D+", ""));
                 }
-
                 return parameterizedTypeName + "[" + length + "]";
             } else {
                 throw new UnsupportedOperationException("Invalid type provided " + type.getName());
