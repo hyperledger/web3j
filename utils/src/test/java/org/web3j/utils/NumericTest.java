@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.utils.Numeric.asByte;
-import static org.web3j.utils.Numeric.toHexString;
 
 public class NumericTest {
 
@@ -177,13 +176,13 @@ public class NumericTest {
 
     @Test
     public void testToHexString() {
-        assertEquals(toHexString(new byte[] {}), ("0x"));
-        assertEquals(toHexString(new byte[] {0x1}), ("0x01"));
-        assertEquals(toHexString(HEX_RANGE_ARRAY), (HEX_RANGE_STRING));
+        assertEquals(Numeric.toHexString(new byte[] {}), ("0x"));
+        assertEquals(Numeric.toHexString(new byte[] {0x1}), ("0x01"));
+        assertEquals(Numeric.toHexString(HEX_RANGE_ARRAY), (HEX_RANGE_STRING));
         byte[] input = {(byte) 0x12, (byte) 0x34, (byte) 0x56, (byte) 0x78};
-        assertEquals(toHexString(input, 0, input.length, false), ("12345678"));
-        assertEquals(toHexString(input, 0, 2, false), ("1234"));
-        assertEquals(toHexString(input, 2, 2, false), ("5678"));
+        assertEquals(Numeric.toHexString(input, 0, input.length, false), ("12345678"));
+        assertEquals(Numeric.toHexString(input, 0, 2, false), ("1234"));
+        assertEquals(Numeric.toHexString(input, 2, 2, false), ("5678"));
     }
 
     @Test
