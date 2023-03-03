@@ -416,14 +416,14 @@ public class SolidityFunctionWrapper extends Generator {
         return eventName.toUpperCase() + "_EVENT";
     }
 
-    private List<MethodSpec> buildFunctionDefinitions(
+    List<MethodSpec> buildFunctionDefinitions(
             String className,
             TypeSpec.Builder classBuilder,
             List<AbiDefinition> functionDefinitions)
             throws ClassNotFoundException {
 
         Set<String> duplicateFunctionNames = getDuplicateFunctionNames(functionDefinitions);
-        changeEventsName(functionDefinitions);
+        changeDuplicateEventsName(functionDefinitions);
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals(TYPE_FUNCTION)) {
@@ -437,23 +437,25 @@ public class SolidityFunctionWrapper extends Generator {
         return methodSpecs;
     }
 
-    private void changeEventsName(List<AbiDefinition> functionDefinitions) {
+    private void changeDuplicateEventsName(List<AbiDefinition> functionDefinitions) {
 
         Map<String, Integer> countMap = new HashMap<>();
 
-        for (AbiDefinition functionDefinition : functionDefinitions) {
-            if (TYPE_EVENT.equals(functionDefinition.getType())
-                    && functionDefinition.getName() != null) {
-                String s = functionDefinition.getName();
-                if (countMap.containsKey(s)) {
-                    int count = countMap.get(s);
-                    functionDefinition.setName(s + count);
-                    countMap.put(s, count + 1);
-                } else {
-                    countMap.put(s, 1);
-                }
-            }
-        }
+        functionDefinitions.stream()
+                .filter(
+                        function ->
+                                TYPE_EVENT.equals(function.getType()) && function.getName() != null)
+                .forEach(
+                        function -> {
+                            String functionName = function.getName();
+                            if (countMap.containsKey(functionName)) {
+                                int count = countMap.get(functionName);
+                                function.setName(functionName + count);
+                                countMap.put(functionName, count + 1);
+                            } else {
+                                countMap.put(functionName, 1);
+                            }
+                        });
     }
 
     private List<TypeSpec> buildStructTypes(final List<AbiDefinition> functionDefinitions)
@@ -743,7 +745,6 @@ public class SolidityFunctionWrapper extends Generator {
         Set<String> fieldNames = new HashSet<>();
         fieldNames.add(Contract.FUNC_DEPLOY);
         Set<String> duplicateFunctionNames = getDuplicateFunctionNames(functionDefinitions);
-        changeEventsName(functionDefinitions);
         if (!duplicateFunctionNames.isEmpty()) {
             System.out.println(
                     "\nWarning: Duplicate field(s) found: "
