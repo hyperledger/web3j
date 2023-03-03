@@ -233,14 +233,13 @@ public final class Numeric {
     }
 
     public static String toHexString(byte[] input, int offset, int length, boolean withPrefix) {
-        final String output = new String(toHexCharArray(input, offset, length, withPrefix));
+        final String output = new String(toHexCharArray(input, offset, length));
         return withPrefix ? new StringBuilder(HEX_PREFIX).append(output).toString() : output;
     }
 
-    private static char[] toHexCharArray(byte[] input, int offset, int length, boolean withPrefix) {
+    private static char[] toHexCharArray(byte[] input, int offset, int length) {
         final char[] output = new char[length << 1];
-        int end = length + offset;
-        for (int i = offset, j = 0; i < end; i++, j++) {
+        for (int i = offset, j = 0; i < length + offset; i++, j++) {
             final int v = input[i] & 0xFF;
             output[j++] = HEX_CHAR_MAP[v >>> 4];
             output[j] = HEX_CHAR_MAP[v & 0x0F];
