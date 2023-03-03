@@ -423,6 +423,7 @@ public class SolidityFunctionWrapper extends Generator {
             throws ClassNotFoundException {
 
         Set<String> duplicateFunctionNames = getDuplicateFunctionNames(functionDefinitions);
+        changeEventsName(functionDefinitions);
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals(TYPE_FUNCTION)) {
@@ -434,6 +435,25 @@ public class SolidityFunctionWrapper extends Generator {
             }
         }
         return methodSpecs;
+    }
+
+    private void changeEventsName(List<AbiDefinition> functionDefinitions) {
+
+        Map<String, Integer> countMap = new HashMap<>();
+
+        for (AbiDefinition functionDefinition : functionDefinitions) {
+            if (TYPE_EVENT.equals(functionDefinition.getType())
+                    && functionDefinition.getName() != null) {
+                String s = functionDefinition.getName();
+                if (countMap.containsKey(s)) {
+                    int count = countMap.get(s);
+                    functionDefinition.setName(s + count);
+                    countMap.put(s, count + 1);
+                } else {
+                    countMap.put(s, 1);
+                }
+            }
+        }
     }
 
     private List<TypeSpec> buildStructTypes(final List<AbiDefinition> functionDefinitions)
@@ -723,6 +743,7 @@ public class SolidityFunctionWrapper extends Generator {
         Set<String> fieldNames = new HashSet<>();
         fieldNames.add(Contract.FUNC_DEPLOY);
         Set<String> duplicateFunctionNames = getDuplicateFunctionNames(functionDefinitions);
+        changeEventsName(functionDefinitions);
         if (!duplicateFunctionNames.isEmpty()) {
             System.out.println(
                     "\nWarning: Duplicate field(s) found: "
