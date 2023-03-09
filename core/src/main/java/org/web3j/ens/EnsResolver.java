@@ -128,14 +128,22 @@ public class EnsResolver {
      */
     protected OffchainResolverContract obtainOffchainResolver(String ensName) {
         if (isValidEnsName(ensName, addressLength)) {
+            boolean isSynced;
+
             try {
-                if (!isSynced()) {
-                    throw new EnsResolutionException("Node is not currently synced");
-                } else {
-                    return lookupOffchainResolver(ensName);
-                }
+                isSynced = isSynced();
             } catch (Exception e) {
                 throw new EnsResolutionException("Unable to determine sync status of node", e);
+            }
+
+            if (!isSynced) {
+                throw new EnsResolutionException("Node is not currently synced");
+            }
+
+            try {
+                return lookupOffchainResolver(ensName);
+            } catch (Exception e) {
+                throw new EnsResolutionException("Unable to get resolver", e);
             }
         } else {
             throw new EnsResolutionException("EnsName is invalid: " + ensName);

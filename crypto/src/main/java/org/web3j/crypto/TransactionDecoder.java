@@ -14,20 +14,27 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 
 import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
+import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
+
+import static java.util.stream.Collectors.toList;
 
 public class TransactionDecoder {
     private static final int UNSIGNED_EIP1559TX_RLP_LIST_SIZE = 9;
+    private static final int UNSIGNED_EIP2930TX_RLP_LIST_SIZE = 8;
 
     public static RawTransaction decode(final String hexTransaction) {
         final byte[] transaction = Numeric.hexStringToByteArray(hexTransaction);
         if (getTransactionType(transaction) == TransactionType.EIP1559) {
             return decodeEIP1559Transaction(transaction);
+        } else if (getTransactionType(transaction) == TransactionType.EIP2930) {
+            return decodeEIP2930Transaction(transaction);
         }
         return decodeLegacyTransaction(transaction);
     }
@@ -36,7 +43,8 @@ public class TransactionDecoder {
         // The first byte indicates a transaction type.
         byte firstByte = transaction[0];
         if (firstByte == TransactionType.EIP1559.getRlpType()) return TransactionType.EIP1559;
-        return TransactionType.LEGACY;
+        else if (firstByte == TransactionType.EIP2930.getRlpType()) return TransactionType.EIP2930;
+        else return TransactionType.LEGACY;
     }
 
     private static RawTransaction decodeEIP1559Transaction(final byte[] transaction) {
@@ -119,5 +127,60 @@ public class TransactionDecoder {
             return new SignedRawTransaction(
                     nonce, gasPrice, gasLimit, to, value, data, signatureData);
         }
+    }
+
+    private static RawTransaction decodeEIP2930Transaction(final byte[] transaction) {
+        final byte[] encodedTx = Arrays.copyOfRange(transaction, 1, transaction.length);
+        final RlpList rlpList = RlpDecoder.decode(encodedTx);
+        final RlpList values = (RlpList) rlpList.getValues().get(0);
+
+        final long chainId =
+                ((RlpString) values.getValues().get(0)).asPositiveBigInteger().longValue();
+        final BigInteger nonce = ((RlpString) values.getValues().get(1)).asPositiveBigInteger();
+        final BigInteger gasPrice = ((RlpString) values.getValues().get(2)).asPositiveBigInteger();
+        final BigInteger gasLimit = ((RlpString) values.getValues().get(3)).asPositiveBigInteger();
+        final String to = ((RlpString) values.getValues().get(4)).asString();
+        final BigInteger value = ((RlpString) values.getValues().get(5)).asPositiveBigInteger();
+        final String data = ((RlpString) values.getValues().get(6)).asString();
+        List<AccessListObject> accessList =
+                decodeAccessList(((RlpList) values.getValues().get(7)).getValues());
+
+        final RawTransaction rawTransaction =
+                RawTransaction.createTransaction(
+                        chainId, nonce, gasPrice, gasLimit, to, value, data, accessList);
+
+        if (values.getValues().size() == UNSIGNED_EIP2930TX_RLP_LIST_SIZE) {
+            return rawTransaction;
+        } else {
+            final byte[] v =
+                    Sign.getVFromRecId(
+                            Numeric.toBigInt(((RlpString) values.getValues().get(8)).getBytes())
+                                    .intValue());
+            final byte[] r =
+                    Numeric.toBytesPadded(
+                            Numeric.toBigInt(((RlpString) values.getValues().get(9)).getBytes()),
+                            32);
+            final byte[] s =
+                    Numeric.toBytesPadded(
+                            Numeric.toBigInt(((RlpString) values.getValues().get(10)).getBytes()),
+                            32);
+            final Sign.SignatureData signatureData = new Sign.SignatureData(v, r, s);
+            return new SignedRawTransaction(rawTransaction.getTransaction(), signatureData);
+        }
+    }
+
+    private static List<AccessListObject> decodeAccessList(List<RlpType> rlp) {
+        return rlp.stream()
+                .map(rawEntry -> ((RlpList) rawEntry).getValues())
+                .map(
+                        values -> {
+                            return new AccessListObject(
+                                    ((RlpString) values.get(0)).asString(),
+                                    ((RlpList) values.get(1))
+                                            .getValues().stream()
+                                                    .map(rawKey -> ((RlpString) rawKey).asString())
+                                                    .collect(toList()));
+                        })
+                .collect(toList());
     }
 }

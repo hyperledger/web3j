@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,8 @@ public abstract class Filter<T> {
     private ScheduledExecutorService scheduledExecutorService;
 
     private long blockTime;
+
+    private static final String FILTER_NOT_FOUND_PATTERN = "(?i)\\bfilter\\s+not\\s+found\\b";
 
     public Filter(Web3j web3j, Callback<T> callback) {
         this.web3j = web3j;
@@ -136,12 +139,15 @@ public abstract class Filter<T> {
         }
         if (ethLog.hasError()) {
             Error error = ethLog.getError();
+            String message = error.getMessage();
             switch (error.getCode()) {
                 case RpcErrors.FILTER_NOT_FOUND:
                     reinstallFilter();
                     break;
                 default:
-                    throwException(error);
+                    if (Pattern.compile(FILTER_NOT_FOUND_PATTERN).matcher(message).find())
+                        reinstallFilter();
+                    else throwException(error);
                     break;
             }
         } else {

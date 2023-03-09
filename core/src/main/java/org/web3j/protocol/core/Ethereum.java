@@ -34,6 +34,7 @@ import org.web3j.protocol.core.methods.response.EthFeeHistory;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockReceipts;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
@@ -169,6 +170,9 @@ public interface Ethereum {
             DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex);
 
     Request<?, EthGetTransactionReceipt> ethGetTransactionReceipt(String transactionHash);
+
+    Request<?, EthGetBlockReceipts> ethGetBlockReceipts(
+            DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthBlock> ethGetUncleByBlockHashAndIndex(
             String blockHash, BigInteger transactionIndex);

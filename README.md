@@ -62,8 +62,7 @@ It has five runtime dependencies:
     for HTTP connections
 -   [Jackson Core](https://github.com/FasterXML/jackson-core) for fast
     JSON serialisation/deserialization
--   [Bouncy Castle](https://www.bouncycastle.org/) ([Spongy
-    Castle](https://rtyley.github.io/spongycastle/) on Android) for
+-   [Bouncy Castle](https://www.bouncycastle.org/) for
     crypto
 -   [Jnr-unixsocket](https://github.com/jnr/jnr-unixsocket) for \*nix
     IPC (not available on Android)

@@ -869,4 +869,18 @@ public class DefaultFunctionEncoderTest {
                 expected,
                 FunctionEncoder.encode(AbiV2TestFixture.setArrayOfStructWithArraysFunction));
     }
+
+    @Test
+    public void testDynamicStructWithStaticStruct() {
+        String expected =
+                "0x3db2b680"
+                        + "0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "0000000000000000000000000000000000000000000000000000000000000060"
+                        + "0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6461746100000000000000000000000000000000000000000000000000000000";
+
+        assertEquals(expected, FunctionEncoder.encode(AbiV2TestFixture.setQuxFunction));
+    }
 }

@@ -1,7 +1,6 @@
 package org.web3j.unittests.java;
 
 import io.reactivex.Flowable;
-import io.reactivex.functions.Function;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +10,7 @@ import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -82,20 +82,19 @@ public class EventParameters extends Contract {
         return responses;
     }
 
+    public static TestEventEventResponse getTestEventEventFromLog(Log log) {
+        Contract.EventValuesWithLog eventValues = staticExtractEventParametersWithLog(TESTEVENT_EVENT, log);
+        TestEventEventResponse typedResponse = new TestEventEventResponse();
+        typedResponse.log = log;
+        typedResponse._contractNumber = (BigInteger) eventValues.getIndexedValues().get(0).getValue();
+        typedResponse.param1 = (byte[]) eventValues.getIndexedValues().get(1).getValue();
+        typedResponse.param2 = (String) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.param3 = (String) eventValues.getNonIndexedValues().get(1).getValue();
+        return typedResponse;
+    }
+
     public Flowable<TestEventEventResponse> testEventEventFlowable(EthFilter filter) {
-        return web3j.ethLogFlowable(filter).map(new Function<Log, TestEventEventResponse>() {
-            @Override
-            public TestEventEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TESTEVENT_EVENT, log);
-                TestEventEventResponse typedResponse = new TestEventEventResponse();
-                typedResponse.log = log;
-                typedResponse._contractNumber = (BigInteger) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse.param1 = (byte[]) eventValues.getIndexedValues().get(1).getValue();
-                typedResponse.param2 = (String) eventValues.getNonIndexedValues().get(0).getValue();
-                typedResponse.param3 = (String) eventValues.getNonIndexedValues().get(1).getValue();
-                return typedResponse;
-            }
-        });
+        return web3j.ethLogFlowable(filter).map(log -> getTestEventEventFromLog(log));
     }
 
     public Flowable<TestEventEventResponse> testEventEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
@@ -105,21 +104,21 @@ public class EventParameters extends Contract {
     }
 
     public RemoteFunctionCall<BigInteger> _contractNumber() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC__CONTRACTNUMBER, 
+        final Function function = new Function(FUNC__CONTRACTNUMBER, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<String> _testAddress() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC__TESTADDRESS, 
+        final Function function = new Function(FUNC__TESTADDRESS, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteFunctionCall<TransactionReceipt> testEvent() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+        final Function function = new Function(
                 FUNC_TESTEVENT, 
                 Arrays.<Type>asList(), 
                 Collections.<TypeReference<?>>emptyList());

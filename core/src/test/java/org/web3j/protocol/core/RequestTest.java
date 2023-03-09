@@ -159,7 +159,7 @@ public class RequestTest extends RequestTester {
         web3j.ethFeeHistory(1, DefaultBlockParameterName.LATEST, null).send();
 
         verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_feeHistory\",\"params\":[1,\"latest\",null],\"id\":1}");
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_feeHistory\",\"params\":[\"0x1\",\"latest\",null],\"id\":1}");
     }
 
     @Test
@@ -426,6 +426,17 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionReceipt\",\"params\":["
                         + "\"0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238\"],"
+                        + "\"id\":1}");
+    }
+
+    @Test
+    public void testEthGetBlockReceipts() throws Exception {
+        web3j.ethGetBlockReceipts(DefaultBlockParameter.valueOf(BigInteger.valueOf(15455945)))
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockReceipts\",\"params\":["
+                        + "\"0xebd6c9\"],"
                         + "\"id\":1}");
     }
 

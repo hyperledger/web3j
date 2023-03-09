@@ -46,6 +46,7 @@ import org.web3j.protocol.core.methods.response.EthFeeHistory;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockReceipts;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
@@ -237,7 +238,10 @@ public class JsonRpc2_0Web3j implements Web3j {
             int blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles) {
         return new Request<>(
                 "eth_feeHistory",
-                Arrays.asList(blockCount, newestBlock.getValue(), rewardPercentiles),
+                Arrays.asList(
+                        Numeric.encodeQuantity(BigInteger.valueOf(blockCount)),
+                        newestBlock.getValue(),
+                        rewardPercentiles),
                 web3jService,
                 EthFeeHistory.class);
     }
@@ -441,6 +445,16 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(transactionHash),
                 web3jService,
                 EthGetTransactionReceipt.class);
+    }
+
+    @Override
+    public Request<?, EthGetBlockReceipts> ethGetBlockReceipts(
+            DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>(
+                "eth_getBlockReceipts",
+                Arrays.asList(defaultBlockParameter.getValue()),
+                web3jService,
+                EthGetBlockReceipts.class);
     }
 
     @Override

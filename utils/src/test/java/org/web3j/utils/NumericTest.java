@@ -179,6 +179,10 @@ public class NumericTest {
         assertEquals(Numeric.toHexString(new byte[] {}), ("0x"));
         assertEquals(Numeric.toHexString(new byte[] {0x1}), ("0x01"));
         assertEquals(Numeric.toHexString(HEX_RANGE_ARRAY), (HEX_RANGE_STRING));
+        byte[] input = {(byte) 0x12, (byte) 0x34, (byte) 0x56, (byte) 0x78};
+        assertEquals(Numeric.toHexString(input, 0, input.length, false), ("12345678"));
+        assertEquals(Numeric.toHexString(input, 0, 2, false), ("1234"));
+        assertEquals(Numeric.toHexString(input, 2, 2, false), ("5678"));
     }
 
     @Test

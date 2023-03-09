@@ -156,10 +156,43 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
-    public void testIsValidSkipMetadata() throws Exception {
+    public void testIsValidSkipMetadataBzzr0() throws Exception {
         prepareEthGetCode(
                 TEST_CONTRACT_BINARY
                         + "a165627a7a72305820"
+                        + "a9bc86938894dc250f6ea25dd823d4472fad6087edcda429a3504e3713a9fc880029");
+
+        Contract contract = deployContract(createTransactionReceipt());
+        assertTrue(contract.isValid());
+    }
+
+    @Test
+    public void testIsValidSkipMetadataBzzr1() throws Exception {
+        prepareEthGetCode(
+                TEST_CONTRACT_BINARY
+                        + "a265627a7a72315820"
+                        + "a9bc86938894dc250f6ea25dd823d4472fad6087edcda429a3504e3713a9fc880029");
+
+        Contract contract = deployContract(createTransactionReceipt());
+        assertTrue(contract.isValid());
+    }
+
+    @Test
+    public void testIsValidSkipMetadataIpfs() throws Exception {
+        prepareEthGetCode(
+                TEST_CONTRACT_BINARY
+                        + "a2646970667358221220"
+                        + "a9bc86938894dc250f6ea25dd823d4472fad6087edcda429a3504e3713a9fc880029");
+
+        Contract contract = deployContract(createTransactionReceipt());
+        assertTrue(contract.isValid());
+    }
+
+    @Test
+    public void testIsValidSkipMetadataNone() throws Exception {
+        prepareEthGetCode(
+                TEST_CONTRACT_BINARY
+                        + "a164736f6c634300080a000a"
                         + "a9bc86938894dc250f6ea25dd823d4472fad6087edcda429a3504e3713a9fc880029");
 
         Contract contract = deployContract(createTransactionReceipt());
