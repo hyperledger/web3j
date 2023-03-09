@@ -37,30 +37,36 @@ import static org.web3j.abi.TypeReference.makeTypeReference;
  */
 public abstract class FunctionEncoder {
 
-    private static FunctionEncoder DEFAULT_ENCODER;
+    private static final FunctionEncoder FUNCTION_ENCODER;
 
-    private static final ServiceLoader<FunctionEncoderProvider> loader =
-            ServiceLoader.load(FunctionEncoderProvider.class);
+    static {
+        ServiceLoader<FunctionEncoderProvider> loader =
+                ServiceLoader.load(FunctionEncoderProvider.class);
+        final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
+
+        FUNCTION_ENCODER =
+                iterator.hasNext() ? iterator.next().get() : new DefaultFunctionEncoder();
+    }
 
     public static String encode(final Function function) {
-        return encoder().encodeFunction(function);
+        return FUNCTION_ENCODER.encodeFunction(function);
     }
 
     /** Encode function when we know function method Id / Selector. */
     public static String encode(final String methodId, final List<Type> parameters) {
-        return encoder().encodeWithSelector(methodId, parameters);
+        return FUNCTION_ENCODER.encodeWithSelector(methodId, parameters);
     }
 
     public static String encodeConstructor(final List<Type> parameters) {
-        return encoder().encodeParameters(parameters);
+        return FUNCTION_ENCODER.encodeParameters(parameters);
     }
 
     public static String encodeConstructorPacked(final List<Type> parameters) {
-        return encoder().encodePackedParameters(parameters);
+        return FUNCTION_ENCODER.encodePackedParameters(parameters);
     }
 
     public static Function makeFunction(
-            String fnname,
+            String fnName,
             List<String> solidityInputTypes,
             List<Object> arguments,
             List<String> solidityOutputTypes)
@@ -75,7 +81,7 @@ public abstract class FunctionEncoder {
         for (String st : solidityOutputTypes) {
             encodedOutput.add(makeTypeReference(st));
         }
-        return new Function(fnname, encodedInput, encodedOutput);
+        return new Function(fnName, encodedInput, encodedOutput);
     }
 
     protected abstract String encodeFunction(Function function);
@@ -105,17 +111,5 @@ public abstract class FunctionEncoder {
         final byte[] input = methodSignature.getBytes();
         final byte[] hash = Hash.sha3(input);
         return Numeric.toHexString(hash).substring(0, 10);
-    }
-
-    private static FunctionEncoder encoder() {
-        final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
-        return iterator.hasNext() ? iterator.next().get() : defaultEncoder();
-    }
-
-    private static FunctionEncoder defaultEncoder() {
-        if (DEFAULT_ENCODER == null) {
-            DEFAULT_ENCODER = new DefaultFunctionEncoder();
-        }
-        return DEFAULT_ENCODER;
     }
 }
