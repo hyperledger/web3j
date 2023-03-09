@@ -37,35 +37,36 @@ import static org.web3j.abi.TypeReference.makeTypeReference;
  */
 public abstract class FunctionEncoder {
 
-    private static final FunctionEncoder encoder;
+    private static final FunctionEncoder FUNCTION_ENCODER;
 
     static {
         ServiceLoader<FunctionEncoderProvider> loader =
                 ServiceLoader.load(FunctionEncoderProvider.class);
         final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
 
-        encoder = iterator.hasNext() ? iterator.next().get() : new DefaultFunctionEncoder();
+        FUNCTION_ENCODER =
+                iterator.hasNext() ? iterator.next().get() : new DefaultFunctionEncoder();
     }
 
     public static String encode(final Function function) {
-        return encoder.encodeFunction(function);
+        return FUNCTION_ENCODER.encodeFunction(function);
     }
 
     /** Encode function when we know function method Id / Selector. */
     public static String encode(final String methodId, final List<Type> parameters) {
-        return encoder.encodeWithSelector(methodId, parameters);
+        return FUNCTION_ENCODER.encodeWithSelector(methodId, parameters);
     }
 
     public static String encodeConstructor(final List<Type> parameters) {
-        return encoder.encodeParameters(parameters);
+        return FUNCTION_ENCODER.encodeParameters(parameters);
     }
 
     public static String encodeConstructorPacked(final List<Type> parameters) {
-        return encoder.encodePackedParameters(parameters);
+        return FUNCTION_ENCODER.encodePackedParameters(parameters);
     }
 
     public static Function makeFunction(
-            String fnname,
+            String fnName,
             List<String> solidityInputTypes,
             List<Object> arguments,
             List<String> solidityOutputTypes)
@@ -80,7 +81,7 @@ public abstract class FunctionEncoder {
         for (String st : solidityOutputTypes) {
             encodedOutput.add(makeTypeReference(st));
         }
-        return new Function(fnname, encodedInput, encodedOutput);
+        return new Function(fnName, encodedInput, encodedOutput);
     }
 
     protected abstract String encodeFunction(Function function);
