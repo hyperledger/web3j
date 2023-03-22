@@ -673,7 +673,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addMethods(
-                solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
+                solidityFunctionWrapper.buildEventFunctions(
+                        functionDefinition,
+                        builder,
+                        solidityFunctionWrapper.getDuplicatedEventNames(
+                                Collections.singletonList(functionDefinition))));
 
         String expected =
                 "class testClass {\n"
@@ -757,7 +761,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addMethods(
-                solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
+                solidityFunctionWrapper.buildEventFunctions(
+                        functionDefinition,
+                        builder,
+                        solidityFunctionWrapper.getDuplicatedEventNames(
+                                Collections.singletonList(functionDefinition))));
 
         String expected =
                 "class testClass {\n"
@@ -833,7 +841,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addMethods(
-                solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
+                solidityFunctionWrapper.buildEventFunctions(
+                        functionDefinition,
+                        builder,
+                        solidityFunctionWrapper.getDuplicatedEventNames(
+                                Collections.singletonList(functionDefinition))));
 
         String expected =
                 "class testClass {\n"
@@ -935,13 +947,46 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         String expected =
                 "class testClass {\n"
-                        + "  public static final org.web3j.abi.datatypes.Event EVENTNAME_EVENT = new org.web3j.abi.datatypes.Event(\"eventName\", \n"
+                        + "  public static final org.web3j.abi.datatypes.Event EVENTNAME1_EVENT = new org.web3j.abi.datatypes.Event(\"eventName\", \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Bool>() {}));\n"
                         + "  ;\n"
                         + "\n"
-                        + "  public static final org.web3j.abi.datatypes.Event EVENTNAME1_EVENT = new org.web3j.abi.datatypes.Event(\"eventName1\", \n"
+                        + "  public static final org.web3j.abi.datatypes.Event EVENTNAME_EVENT = new org.web3j.abi.datatypes.Event(\"eventName\", \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Bool>() {}));\n"
                         + "  ;\n"
+                        + "\n"
+                        + "  public static java.util.List<EventNameEventResponse> getEventName1Events(org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n"
+                        + "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = staticExtractEventParametersWithLog(EVENTNAME1_EVENT, transactionReceipt);\n"
+                        + "    java.util.ArrayList<EventNameEventResponse> responses = new java.util.ArrayList<EventNameEventResponse>(valueList.size());\n"
+                        + "    for (org.web3j.tx.Contract.EventValuesWithLog eventValues : valueList) {\n"
+                        + "      EventNameEventResponse typedResponse = new EventNameEventResponse();\n"
+                        + "      typedResponse.log = eventValues.getLog();\n"
+                        + "      typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
+                        + "      typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "      responses.add(typedResponse);\n"
+                        + "    }\n"
+                        + "    return responses;\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  public io.reactivex.Flowable<EventNameEventResponse> eventName1EventFlowable(org.web3j.protocol.core.methods.request.EthFilter filter) {\n"
+                        + "    return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<org.web3j.protocol.core.methods.response.Log, EventNameEventResponse>() {\n"
+                        + "      @java.lang.Override\n"
+                        + "      public EventNameEventResponse apply(org.web3j.protocol.core.methods.response.Log log) {\n"
+                        + "        org.web3j.tx.Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(EVENTNAME1_EVENT, log);\n"
+                        + "        EventNameEventResponse typedResponse = new EventNameEventResponse();\n"
+                        + "        typedResponse.log = log;\n"
+                        + "        typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
+                        + "        typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "        return typedResponse;\n"
+                        + "      }\n"
+                        + "    });\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  public io.reactivex.Flowable<EventNameEventResponse> eventName1EventFlowable(org.web3j.protocol.core.DefaultBlockParameter startBlock, org.web3j.protocol.core.DefaultBlockParameter endBlock) {\n"
+                        + "    org.web3j.protocol.core.methods.request.EthFilter filter = new org.web3j.protocol.core.methods.request.EthFilter(startBlock, endBlock, getContractAddress());\n"
+                        + "    filter.addSingleTopic(org.web3j.abi.EventEncoder.encode(EVENTNAME1_EVENT));\n"
+                        + "    return eventName1EventFlowable(filter);\n"
+                        + "  }\n"
                         + "\n"
                         + "  public static java.util.List<EventNameEventResponse> getEventNameEvents(org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n"
                         + "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = staticExtractEventParametersWithLog(EVENTNAME_EVENT, transactionReceipt);\n"
@@ -949,8 +994,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "    for (org.web3j.tx.Contract.EventValuesWithLog eventValues : valueList) {\n"
                         + "      EventNameEventResponse typedResponse = new EventNameEventResponse();\n"
                         + "      typedResponse.log = eventValues.getLog();\n"
-                        + "      typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
-                        + "      typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "      typedResponse.cToken = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
+                        + "      typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "      typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(2).getValue();\n"
                         + "      responses.add(typedResponse);\n"
                         + "    }\n"
                         + "    return responses;\n"
@@ -963,8 +1009,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "        org.web3j.tx.Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(EVENTNAME_EVENT, log);\n"
                         + "        EventNameEventResponse typedResponse = new EventNameEventResponse();\n"
                         + "        typedResponse.log = log;\n"
-                        + "        typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
-                        + "        typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "        typedResponse.cToken = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
+                        + "        typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "        typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(2).getValue();\n"
                         + "        return typedResponse;\n"
                         + "      }\n"
                         + "    });\n"
@@ -976,48 +1023,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "    return eventNameEventFlowable(filter);\n"
                         + "  }\n"
                         + "\n"
-                        + "  public static java.util.List<EventName1EventResponse> getEventName1Events(org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n"
-                        + "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = staticExtractEventParametersWithLog(EVENTNAME1_EVENT, transactionReceipt);\n"
-                        + "    java.util.ArrayList<EventName1EventResponse> responses = new java.util.ArrayList<EventName1EventResponse>(valueList.size());\n"
-                        + "    for (org.web3j.tx.Contract.EventValuesWithLog eventValues : valueList) {\n"
-                        + "      EventName1EventResponse typedResponse = new EventName1EventResponse();\n"
-                        + "      typedResponse.log = eventValues.getLog();\n"
-                        + "      typedResponse.cToken = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
-                        + "      typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(1).getValue();\n"
-                        + "      typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(2).getValue();\n"
-                        + "      responses.add(typedResponse);\n"
-                        + "    }\n"
-                        + "    return responses;\n"
-                        + "  }\n"
-                        + "\n"
-                        + "  public io.reactivex.Flowable<EventName1EventResponse> eventName1EventFlowable(org.web3j.protocol.core.methods.request.EthFilter filter) {\n"
-                        + "    return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<org.web3j.protocol.core.methods.response.Log, EventName1EventResponse>() {\n"
-                        + "      @java.lang.Override\n"
-                        + "      public EventName1EventResponse apply(org.web3j.protocol.core.methods.response.Log log) {\n"
-                        + "        org.web3j.tx.Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(EVENTNAME1_EVENT, log);\n"
-                        + "        EventName1EventResponse typedResponse = new EventName1EventResponse();\n"
-                        + "        typedResponse.log = log;\n"
-                        + "        typedResponse.cToken = (java.lang.String) eventValues.getNonIndexedValues().get(0).getValue();\n"
-                        + "        typedResponse.action = (java.lang.String) eventValues.getNonIndexedValues().get(1).getValue();\n"
-                        + "        typedResponse.pauseState = (java.lang.Boolean) eventValues.getNonIndexedValues().get(2).getValue();\n"
-                        + "        return typedResponse;\n"
-                        + "      }\n"
-                        + "    });\n"
-                        + "  }\n"
-                        + "\n"
-                        + "  public io.reactivex.Flowable<EventName1EventResponse> eventName1EventFlowable(org.web3j.protocol.core.DefaultBlockParameter startBlock, org.web3j.protocol.core.DefaultBlockParameter endBlock) {\n"
-                        + "    org.web3j.protocol.core.methods.request.EthFilter filter = new org.web3j.protocol.core.methods.request.EthFilter(startBlock, endBlock, getContractAddress());\n"
-                        + "    filter.addSingleTopic(org.web3j.abi.EventEncoder.encode(EVENTNAME1_EVENT));\n"
-                        + "    return eventName1EventFlowable(filter);\n"
-                        + "  }\n"
-                        + "\n"
                         + "  public static class EventNameEventResponse extends org.web3j.protocol.core.methods.response.BaseEventResponse {\n"
                         + "    public java.lang.String action;\n"
                         + "\n"
                         + "    public java.lang.Boolean pauseState;\n"
                         + "  }\n"
                         + "\n"
-                        + "  public static class EventName1EventResponse extends org.web3j.protocol.core.methods.response.BaseEventResponse {\n"
+                        + "  public static class EventNameEventResponse extends org.web3j.protocol.core.methods.response.BaseEventResponse {\n"
                         + "    public java.lang.String cToken;\n"
                         + "\n"
                         + "    public java.lang.String action;\n"
