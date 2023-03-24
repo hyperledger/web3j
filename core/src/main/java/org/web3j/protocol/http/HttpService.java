@@ -189,10 +189,12 @@ public class HttpService extends Service {
         if (includeRawResponse) {
             // we have to buffer the entire input payload, so that after processing
             // it can be re-read and used to populate the rawResponse field.
-
             BufferedSource source = responseBody.source();
+
             source.request(Long.MAX_VALUE); // Buffer the entire body
-            Buffer buffer = source.getBuffer();
+            // Clone buffer from the original resource to avoid losing the information if Response
+            // is closed
+            Buffer buffer = source.getBuffer().clone();
 
             long size = buffer.size();
             if (size > Integer.MAX_VALUE) {
@@ -201,7 +203,7 @@ public class HttpService extends Service {
             }
 
             int bufferSize = (int) size;
-            InputStream inputStream = responseBody.byteStream();
+            InputStream inputStream = buffer.inputStream();
 
             BufferedInputStream bufferedinputStream =
                     new BufferedInputStream(inputStream, bufferSize);
