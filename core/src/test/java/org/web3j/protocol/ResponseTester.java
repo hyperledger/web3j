@@ -37,7 +37,6 @@ public abstract class ResponseTester {
     @BeforeEach
     public void setUp() {
         responseInterceptor = new ResponseInterceptor();
-//        okHttpClient = new OkHttpClient.Builder().addInterceptor(responseInterceptor).build();
         okHttpClient = new OkHttpClient.Builder().addInterceptor(responseInterceptor).build();
         configureWeb3Service(false);
     }
