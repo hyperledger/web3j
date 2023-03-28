@@ -153,14 +153,6 @@ public class HttpService extends Service {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Web3jService service =
-                new HttpService(
-                        "https://goerli.infura.io/v3/02d2b45aa8354ea1b4252533a2a1cca3", true);
-        Web3j web3j = Web3j.build(service);
-        String clientVersion = web3j.web3ClientVersion().send().getWeb3ClientVersion();
-    }
-
     @Override
     protected InputStream performIO(String request) throws IOException {
 
