@@ -12,7 +12,6 @@
  */
 package org.web3j.protocol.http;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +28,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import okio.Buffer;
-import okio.BufferedSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +108,7 @@ public class HttpService extends Service {
     }
 
     public HttpService(String url, OkHttpClient httpClient) {
-        this(url, httpClient, false);
+        this(url, httpClient, true);
     }
 
     public HttpService(String url) {
@@ -187,32 +184,9 @@ public class HttpService extends Service {
 
     private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
         if (includeRawResponse) {
-            // we have to buffer the entire input payload, so that after processing
-            // it can be re-read and used to populate the rawResponse field.
-            BufferedSource source = responseBody.source();
-
-            source.request(Long.MAX_VALUE); // Buffer the entire body
-            // Clone buffer from the original resource to avoid losing the information if Response
-            // is closed
-            Buffer buffer = source.getBuffer().clone();
-
-            long size = buffer.size();
-            if (size > Integer.MAX_VALUE) {
-                throw new UnsupportedOperationException(
-                        "Non-integer input buffer size specified: " + size);
-            }
-
-            int bufferSize = (int) size;
-            InputStream inputStream = buffer.inputStream();
-
-            BufferedInputStream bufferedinputStream =
-                    new BufferedInputStream(inputStream, bufferSize);
-
-            bufferedinputStream.mark(inputStream.available());
-            return bufferedinputStream;
-
-        } else {
             return new ByteArrayInputStream(responseBody.bytes());
+        } else {
+            return responseBody.byteStream();
         }
     }
 
