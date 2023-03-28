@@ -28,10 +28,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.BufferedSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.web3j.protocol.Service;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.exceptions.ClientConnectionException;
 
 import static okhttp3.ConnectionSpec.CLEARTEXT;
@@ -108,7 +111,7 @@ public class HttpService extends Service {
     }
 
     public HttpService(String url, OkHttpClient httpClient) {
-        this(url, httpClient, true);
+        this(url, httpClient, false);
     }
 
     public HttpService(String url) {
@@ -150,6 +153,14 @@ public class HttpService extends Service {
         }
     }
 
+    public static void main(String[] args) throws IOException {
+        Web3jService service =
+                new HttpService(
+                        "https://goerli.infura.io/v3/02d2b45aa8354ea1b4252533a2a1cca3", true);
+        Web3j web3j = Web3j.build(service);
+        String clientVersion = web3j.web3ClientVersion().send().getWeb3ClientVersion();
+    }
+
     @Override
     protected InputStream performIO(String request) throws IOException {
 
@@ -185,9 +196,13 @@ public class HttpService extends Service {
     private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
         if (includeRawResponse) {
             return new ByteArrayInputStream(responseBody.bytes());
-        } else {
-            return responseBody.byteStream();
         }
+
+        BufferedSource source = responseBody.source();
+
+        source.request(Long.MAX_VALUE); // Buffer the body
+
+        return new ByteArrayInputStream(source.getBuffer().snapshot().toByteArray());
     }
 
     private Headers buildHeaders() {

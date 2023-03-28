@@ -17,7 +17,8 @@ import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
-import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.RealBufferedSource;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.web3j.protocol.core.Request;
@@ -74,13 +75,20 @@ public abstract class ResponseTester {
                 throw new UnsupportedOperationException("Response has not been configured");
             }
 
+            Buffer buffer = new Buffer();
+            buffer.write(jsonResponse.getBytes());
+            okio.RealBufferedSource realBufferedSource = new RealBufferedSource(buffer);
+
             okhttp3.Response response =
                     new okhttp3.Response.Builder()
-                            .body(ResponseBody.create(jsonResponse, JSON_MEDIA_TYPE))
+                            .body(
+                                    okhttp3.ResponseBody.create(
+                                            buffer, JSON_MEDIA_TYPE, jsonResponse.length()))
                             .request(chain.request())
                             .protocol(Protocol.HTTP_2)
                             .code(200)
                             .message("")
+                            .header("Content-Length", String.valueOf(jsonResponse.length()))
                             .build();
 
             return response;
