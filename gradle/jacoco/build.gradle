@@ -6,7 +6,7 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
     getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
     getClassDirectories().from(subprojects.sourceSets.main.output)
-    reports { xml.enabled = true }
+    reports { xml.enabled true }
 
     doFirst {
         getExecutionData().from(executionData.findAll { it.exists() })
