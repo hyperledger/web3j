@@ -1,0 +1,20 @@
+version: 2.1
+orbs:
+  codecov: codecov/codecov@3
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:11.0.18
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies, run tests, and collect coverage
+          command: ./gradlew build
+      - codecov/upload
+
+workflow:
+  version: 2.1
+  build-test:
+    jobs:
+      - build
