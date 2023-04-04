@@ -47,6 +47,5 @@ jobs:
         run: chmod +x gradlew
       - name: Build
         run: ./gradlew check jacocoTestReport
-      - name: After success
-        run: bash <(curl -s https://codecov.io/bash)
-        if: ${{ success() }}
+      - name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v3
