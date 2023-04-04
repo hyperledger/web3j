@@ -1,5 +1,6 @@
 codecov:
   require_ci_to_pass: true
+  disable_default_path_fixes: true
 comment:
   behavior: default
   layout: reach,diff,flags,tree,reach
@@ -18,5 +19,4 @@ coverage:
     project: true
 github_checks:
   annotations: true
-fixes:
-  - "/home/runner/work/web3j/web3j/::"
+
