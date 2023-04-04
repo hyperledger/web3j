@@ -2,7 +2,7 @@ Web3j: Web3 Java Ethereum Ðapp API
 ==================================
 
 [![Documentation Status](https://readthedocs.org/projects/web3j-docs/badge/?version=latest)](https://docs.web3j.io)
-[![build status](https://github.com/web3j/web3j/actions/workflows/build.yml/badge.svg)
+[![build status](https://github.com/web3j/web3j/actions/workflows/build.yml/badge.svg)](https://github.com/web3j/web3j/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/web3j/web3j)
 [![Discord](https://img.shields.io/discord/779382027614158919?label=discord)](https://discord.gg/A9UXfPF2tS)
 
@@ -110,7 +110,7 @@ Java:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.8.7</version>
+  <version>4.9.7</version>
 </dependency>
 ```
 
@@ -130,7 +130,7 @@ Gradle
 Java:
 
 ```groovy
-implementation ('org.web3j:core:4.8.7')
+implementation ('org.web3j:core:4.9.7')
 ```
 
 Android:
