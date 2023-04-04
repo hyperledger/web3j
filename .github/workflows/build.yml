@@ -31,6 +31,10 @@ jobs:
         run: ./gradlew integration-tests:test -Pintegration-tests=true
   build:
     runs-on: ubuntu-latest
+    before-script:
+      - apk add --update curl && rm -rf /var/cache/apk/*
+    script:
+      - curl -Os https://uploader.codecov.io/latest/linux/codecov
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -48,6 +52,7 @@ jobs:
       - name: Build
         run: ./gradlew check jacocoRootTestReport
       - name: add codecove
-        run: curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov
+        run: chmod +x codecov
       - name: Upload coverage reports to Codecov with GitHub Action
+        run: ./codecov
         uses: codecov/codecov-action@v3
