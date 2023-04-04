@@ -51,8 +51,8 @@ jobs:
         run: chmod +x gradlew
       - name: Build
         run: ./gradlew check jacocoRootTestReport
-      - name: add codecove
+      - name: add codecov
         run: chmod +x codecov
+      - name execute codecov
       - name: Upload coverage reports to Codecov with GitHub Action
-        run: ./codecov
         uses: codecov/codecov-action@v3
