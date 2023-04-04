@@ -47,5 +47,7 @@ jobs:
         run: chmod +x gradlew
       - name: Build
         run: ./gradlew check jacocoRootTestReport
+      - name: add codecove
+        run: curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov
       - name: Upload coverage reports to Codecov with GitHub Action
         uses: codecov/codecov-action@v3

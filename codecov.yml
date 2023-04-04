@@ -19,4 +19,4 @@ coverage:
 github_checks:
   annotations: true
 fixes:
-  - "::/home/runner/work/web3j/web3j/"
+  - "/home/runner/work/web3j/web3j/::"
