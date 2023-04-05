@@ -30,6 +30,7 @@ public class TxHSMSignService<T extends HSMPass> implements TxSignService {
 
     public TxHSMSignService(HSMRequestProcessor<T> hsmRequestProcessor, T hsmPass) {
         this.hsmPass = hsmPass;
+        
         this.hsmRequestProcessor = hsmRequestProcessor;
     }
 
