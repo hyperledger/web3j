@@ -51,6 +51,6 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           files:
-            abi/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
-            besu/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
+            /home/runner/work/web3j/web3j/abi/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
+            /home/runner/work/web3j/web3j/besu/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
           flags: modules
