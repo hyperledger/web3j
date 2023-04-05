@@ -51,8 +51,3 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: b17a626f-f501-4c48-91d2-efb551d95b09
-          directory: ./coverage/reports/
-          files:
-            /home/runner/work/web3j/web3j/abi/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
-            /home/runner/work/web3j/web3j/besu/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
-
