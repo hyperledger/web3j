@@ -15,22 +15,7 @@ coverage:
     default_rules:
       flag_coverage_not_uploaded_behavior: include
     patch: true
-    project:
-      default:
-        target: auto
-      abi:
-        flags:
-          - abi
-      besu:
-        flags:
-          - besu
-flags:
-  abi:
-    paths:
-      - abi/
-  besu:
-    paths:
-      - besu/
+    project: true
 github_checks:
   annotations: true
 
