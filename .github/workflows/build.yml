@@ -48,7 +48,10 @@ jobs:
       - name: Build
         run: ./gradlew check jacocoRootTestReport
       - name: Upload coverage reports to Codecov with GitHub Action
-        run:
-          bash <(curl -s https://codecov.io/bash) -f abi/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml -F abi
-          bash <(curl -s https://codecov.io/bash) -f besu/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml -F besu
+        uses: codecov/codecov-action@v3
+        with:
+          token: b17a626f-f501-4c48-91d2-efb551d95b09
+          files:
+            abi/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
+            besu/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml
 

@@ -1,5 +1,6 @@
 codecov:
   require_ci_to_pass: true
+  disable_default_path_fixes: true
 comment:
   behavior: default
   layout: reach,diff,flags,tree,reach
@@ -15,7 +16,15 @@ coverage:
     default_rules:
       flag_coverage_not_uploaded_behavior: include
     patch: true
-    project: true
+    project:
+      default:
+        target: auto
+      abi:
+        flags:
+          - abi
+      besu:
+        flags:
+          - besu
 flags:
   abi:
     paths:
