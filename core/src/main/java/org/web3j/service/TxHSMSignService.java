@@ -56,7 +56,6 @@ public class TxHSMSignService<T extends HSMPass> implements TxSignService {
         if (isLegacy) {
             signatureData = createEip155SignatureData(signatureData, chainId);
         }
-        // test comment
         finalBytes = encode(rawTransaction, signatureData);
 
         return finalBytes;
