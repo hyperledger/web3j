@@ -16,6 +16,13 @@ coverage:
       flag_coverage_not_uploaded_behavior: include
     patch: true
     project: true
+flags:
+  abi:
+    paths:
+      - abi/
+  besu:
+    paths:
+      - besu/
 github_checks:
   annotations: true
 
