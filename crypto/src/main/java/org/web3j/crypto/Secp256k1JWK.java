@@ -18,7 +18,6 @@ import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
 
 import net.jcip.annotations.Immutable;
-import org.web3j.utils.Strings;
 
 @Immutable
 public final class Secp256k1JWK {
@@ -115,7 +114,6 @@ public final class Secp256k1JWK {
                 return encodeEcToBase64(unsignedBytes);
             }
             return encodeEcToBase64(bytes);
-
         }
 
         private String encodeEcToBase64(byte[] bytes) {
@@ -141,7 +139,8 @@ public final class Secp256k1JWK {
     }
 
     /**
-     * Returns true if the string is empty or contains only white space codepoints, otherwise false. This is specific only for secp256k1 curve encoded coordinates.
+     * Returns true if the string is empty or contains only white space codepoints, otherwise false.
+     * This is specific only for secp256k1 curve encoded coordinates.
      *
      * @param s String value
      * @return is given string is Blank or not

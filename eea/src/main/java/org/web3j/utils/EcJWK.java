@@ -20,7 +20,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
-import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +29,6 @@ import com.nimbusds.jose.jwk.ECKey;
 
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.Secp256k1JWK;
-import org.web3j.protocol.ObjectMapperFactory;
 
 public class EcJWK {
 
@@ -42,7 +40,7 @@ public class EcJWK {
 
     public static void main(String[] args)
             throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
-            NoSuchProviderException, JsonProcessingException {
+                    NoSuchProviderException, JsonProcessingException {
         KeyPair keyPair = Keys.createSecp256k1KeyPair();
         firstKeys(keyPair);
         secondKeys(keyPair);
@@ -67,6 +65,5 @@ public class EcJWK {
         String jwkJson = ecJWK.toJSONString();
 
         System.out.println(jwkJson);
-
     }
 }
