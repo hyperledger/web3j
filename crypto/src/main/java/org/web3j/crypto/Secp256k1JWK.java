@@ -13,11 +13,11 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
 
 import net.jcip.annotations.Immutable;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
 @Immutable
 public final class Secp256k1JWK {
@@ -64,7 +64,7 @@ public final class Secp256k1JWK {
         private String y;
         private String d;
 
-        public Builder(ECPublicKey key) {
+        public Builder(BCECPublicKey key) {
             setPublicKey(key);
         }
 
@@ -92,12 +92,12 @@ public final class Secp256k1JWK {
             return this;
         }
 
-        public Builder setPrivateKey(final ECPrivateKey pk) {
+        public Builder setPrivateKey(final BCECPrivateKey pk) {
             this.d = encodeCoordinate(pk.getS());
             return this;
         }
 
-        public Builder setPublicKey(final ECPublicKey pk) {
+        public Builder setPublicKey(final BCECPublicKey pk) {
             this.x = encodeCoordinate(pk.getW().getAffineX());
             this.y = encodeCoordinate(pk.getW().getAffineY());
             return this;
