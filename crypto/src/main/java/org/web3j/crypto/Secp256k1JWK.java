@@ -15,11 +15,17 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.util.Base64;
 
-import net.jcip.annotations.Immutable;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
-@Immutable
+/**
+ * This class consists in java representation of JWK file. It use Builder pater in order to generate
+ * the JWK content from the BCEC asymetric keys receive as parameters. This class supports
+ * generation of JWK only for ECDSA type keys that have secp256k1 curve.
+ */
+@JsonDeserialize(builder = Secp256k1JWK.Builder.class)
 public final class Secp256k1JWK {
 
     private static final String kty = "EC";
@@ -29,12 +35,12 @@ public final class Secp256k1JWK {
     private String y;
     private String d;
 
-    public Secp256k1JWK(String xCoordinate, String yCoordinate) {
+    private Secp256k1JWK(String xCoordinate, String yCoordinate) {
         x = xCoordinate;
         y = yCoordinate;
     }
 
-    public Secp256k1JWK(String xCoordinate, String yCoordinate, String dCoordinate) {
+    private Secp256k1JWK(String xCoordinate, String yCoordinate, String dCoordinate) {
         this(xCoordinate, yCoordinate);
         d = dCoordinate;
     }
@@ -59,16 +65,37 @@ public final class Secp256k1JWK {
         return d;
     }
 
+    @JsonPOJOBuilder
     public static class Builder {
+
+        private String kty;
+        private String crv;
+
         private String x;
         private String y;
         private String d;
 
         public Builder(BCECPublicKey key) {
-            setPublicKey(key);
+            withPublicKey(key);
         }
 
-        public Builder d(final String d) {
+        public Builder() {}
+
+        public Builder withKty(final String kty) {
+            if (!kty.equals(Secp256k1JWK.kty)) {
+                throw new IllegalArgumentException("Invalid key type: " + kty);
+            }
+            return this;
+        }
+
+        public Builder withCrv(final String crv) {
+            if (!crv.equals(Secp256k1JWK.crv)) {
+                throw new IllegalArgumentException("Invalid curve type: " + crv);
+            }
+            return this;
+        }
+
+        public Builder withD(final String d) {
             if (!isEcCoordBase64Valid(d)) {
                 throw new IllegalArgumentException("Specified d jwk is not a valid base 64 value");
             }
@@ -76,7 +103,7 @@ public final class Secp256k1JWK {
             return this;
         }
 
-        public Builder x(final String x) {
+        public Builder withX(final String x) {
             if (!isEcCoordBase64Valid(x)) {
                 throw new IllegalArgumentException("Specified x jwk is not a valid base 64 value");
             }
@@ -84,7 +111,7 @@ public final class Secp256k1JWK {
             return this;
         }
 
-        public Builder y(final String y) {
+        public Builder withY(final String y) {
             if (!isEcCoordBase64Valid(y)) {
                 throw new IllegalArgumentException("Specified y jwk is not a valid base 64 value");
             }
@@ -92,12 +119,12 @@ public final class Secp256k1JWK {
             return this;
         }
 
-        public Builder setPrivateKey(final BCECPrivateKey pk) {
+        public Builder withPrivateKey(final BCECPrivateKey pk) {
             this.d = encodeCoordinate(pk.getS());
             return this;
         }
 
-        public Builder setPublicKey(final BCECPublicKey pk) {
+        public Builder withPublicKey(final BCECPublicKey pk) {
             this.x = encodeCoordinate(pk.getW().getAffineX());
             this.y = encodeCoordinate(pk.getW().getAffineY());
             return this;
