@@ -21,7 +21,7 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
 /**
- * This class consists in java representation of JWK file. It use Builder pater in order to generate
+ * This class consists in java representation of JWK file. It uses Builder pattern in order to generate
  * the JWK content from the BCEC asymetric keys receive as parameters. This class supports
  * generation of JWK only for ECDSA type keys that have secp256k1 curve.
  */
