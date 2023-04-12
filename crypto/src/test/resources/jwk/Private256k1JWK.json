@@ -1,0 +1,7 @@
+{
+  "kty": "EC",
+  "crv": "secp256k1",
+  "x": "BtyVdOysIaW7kS5S7bSs9GWPNf8nkdYW4fa9iGPjTgw",
+  "y": "S7J0WuWdbJuAZ5yTvj-HNcRwMnaFCIUKLRZ58kvBUFY",
+  "d": "3HDxRsb5t8ol5-74_S3oqhmFLc1lL3xFV0CGRocs3Cw"
+}
