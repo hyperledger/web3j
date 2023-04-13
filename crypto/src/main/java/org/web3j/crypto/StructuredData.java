@@ -12,15 +12,11 @@
  */
 package org.web3j.crypto;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.generated.Uint256;
 
 public class StructuredData {
     public static class Entry {
@@ -63,12 +59,6 @@ public class StructuredData {
             this.chainId = chainId;
             this.verifyingContract = verifyingContract;
             this.salt = salt;
-
-            // validation checks
-            if (chainId != null) {
-                new Uint256(new BigInteger(chainId));
-            }
-            new Address(verifyingContract);
         }
 
         public String getName() {
