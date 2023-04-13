@@ -29,6 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.abi.TypeEncoder;
@@ -41,6 +42,8 @@ import static org.web3j.crypto.Hash.sha3;
 import static org.web3j.crypto.Hash.sha3String;
 
 public class StructuredDataEncoder {
+    public static ObjectMapper mapper =
+            new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
     public final StructuredData.EIP712Message jsonMessageObject;
 
     // Matches array declarations like arr[5][10], arr[][], arr[][34][], etc.
@@ -65,6 +68,11 @@ public class StructuredDataEncoder {
     // Identifier Regex matches to a valid name, but can't be an array declaration.
     final String identifierRegex = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
     final Pattern identifierPattern = Pattern.compile(identifierRegex);
+
+    public StructuredDataEncoder(StructuredData.EIP712Message jsonMessageObject) {
+        validateStructuredData(jsonMessageObject);
+        this.jsonMessageObject = jsonMessageObject;
+    }
 
     public StructuredDataEncoder(String jsonMessageInString) throws IOException, RuntimeException {
         // Parse String Message into object and validate
@@ -431,27 +439,8 @@ public class StructuredDataEncoder {
 
     @SuppressWarnings("unchecked")
     public byte[] hashDomain() throws RuntimeException {
-        ObjectMapper oMapper = new ObjectMapper();
         HashMap<String, Object> data =
-                oMapper.convertValue(jsonMessageObject.getDomain(), HashMap.class);
-
-        if (data.get("chainId") != null) {
-            data.put("chainId", ((HashMap<String, Object>) data.get("chainId")).get("value"));
-        } else {
-            data.remove("chainId");
-        }
-
-        if (data.get("verifyingContract") != null) {
-            data.put(
-                    "verifyingContract",
-                    ((HashMap<String, Object>) data.get("verifyingContract")).get("value"));
-        } else {
-            data.remove("verifyingContract");
-        }
-
-        if (data.get("salt") == null) {
-            data.remove("salt");
-        }
+                mapper.convertValue(jsonMessageObject.getDomain(), HashMap.class);
         return sha3(encodeData("EIP712Domain", data));
     }
 
@@ -477,8 +466,6 @@ public class StructuredDataEncoder {
 
     public StructuredData.EIP712Message parseJSONMessage(String jsonMessageInString)
             throws IOException, RuntimeException {
-        ObjectMapper mapper = new ObjectMapper();
-
         // convert JSON string to EIP712Message object
         StructuredData.EIP712Message tempJSONMessageObject =
                 mapper.readValue(jsonMessageInString, StructuredData.EIP712Message.class);
