@@ -19,15 +19,15 @@ coverage:
       default:
         base: auto
         branches:
-          - ^master$
+          - master
         flags:
-          - abi
+          - unit
         if_ci_failed: error
         if_not_found: success
         informational: false
         only_pulls: false
         paths:
-          - ^src.*
+          - src
 fixes:
   - '/home/runner/work/web3j/web3j/::'
 github_checks:
