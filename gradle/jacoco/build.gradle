@@ -43,6 +43,7 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 
     reports {
         xml.enabled true
+        html.enabled true
     }
     additionalSourceDirs.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
     sourceDirectories.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
