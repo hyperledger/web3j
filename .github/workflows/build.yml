@@ -51,3 +51,7 @@ jobs:
         run: pwd
       - name: Upload coverage reports to Codecov with GitHub Action
         uses: codecov/codecov-action@v3
+        run: |
+          bash <(curl -s https://codecov.io/bash) -f "abi/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml"
+        with:
+          fail_ci_if_error: true
