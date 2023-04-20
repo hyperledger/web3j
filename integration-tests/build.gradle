@@ -9,6 +9,7 @@ repositories {
     maven { url "https://splunk.jfrog.io/splunk/ext-releases-local" }
     maven { url "https://dl.cloudsmith.io/public/consensys/quorum-mainnet-launcher/maven/" }
 }
+
 ext {
     besuPluginVersion = '21.10.3'
     besuInternalVersion = '21.10.3'
