@@ -52,5 +52,3 @@ jobs:
       - name: Upload coverage reports to Codecov with GitHub Action
         run: |
           bash <(curl -s https://codecov.io/bash) -f "abi/build/reports/jacoco/jacocoRootTestReport/jacocoRootTestReport.xml"
-        with:
-          fail_ci_if_error: true
