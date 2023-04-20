@@ -25,11 +25,11 @@ ext {
     picocliVersion = '3.0.0'
     // test dependencies
     equalsverifierVersion = '3.5.5'
-    junitVersion = '5.9.2'
+    junitVersion = '5.5.2'
     web3jUnitVersion = '4.9.7'
     junitBenchmarkVersion = '0.7.2'
     logbackVersion = '1.2.3'
-    mockitoJunitVersion = '5.2.0'
+    mockitoJunitVersion = '3.1.0'
     junitPlatformLauncherVersion = '1.5.2'
 }
 
@@ -95,8 +95,4 @@ allprojects {
 }
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply from: "$rootDir/gradle/jacoco/build.gradle"
-}
-
-repositories {
-    mavenCentral()
 }
