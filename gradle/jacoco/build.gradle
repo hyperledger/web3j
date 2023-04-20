@@ -24,36 +24,48 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 //        }))
 //    }
 
-
-    def executions = subprojects.findAll { subproject ->
-        if (!subproject.path.contains(":docs")) {
-            subproject.tasks.withType(Test).each{ task ->
-                dependsOn(task)
-                mustRunAfter(task)
-            }
-        }
-        def execFile = subproject.layout.buildDirectory.file('jacoco/test.exec').get().asFile
-        logger.info "${subproject.name} with execution file ${execFile}"
-        true
-    }.collect {subproject ->
-        subproject.layout.buildDirectory.file('jacoco/test.exec').get().asFile
-    }
-    logger.info "Coverage execution data files: ${executions}"
-    executionData.from(executions)
-
+    dependsOn test
     reports {
         xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
         html.enabled true
+        csv.enabled true
     }
-    additionalSourceDirs.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
-    sourceDirectories.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
-    classDirectories.setFrom(
-            files(subprojects.sourceSets.main.output).collect {
-                fileTree(dir: it,
-                        include: ['**/*.*'],
-                        exclude: rootProject.excludedFilesFromTestCoverage
-                )
-            })
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+//    def executions = subprojects.findAll { subproject ->
+//        if (!subproject.path.contains(":docs")) {
+//            subproject.tasks.withType(Test).each{ task ->
+//                dependsOn(task)
+//                mustRunAfter(task)
+//            }
+//        }
+//        def execFile = subproject.layout.buildDirectory.file('jacoco/test.exec').get().asFile
+//        logger.info "${subproject.name} with execution file ${execFile}"
+//        true
+//    }.collect {subproject ->
+//        subproject.layout.buildDirectory.file('jacoco/test.exec').get().asFile
+//    }
+//    logger.info "Coverage execution data files: ${executions}"
+//    executionData.from(executions)
+//
+//    reports {
+//        xml.enabled true
+//        html.enabled true
+//    }
+//    additionalSourceDirs.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
+//    sourceDirectories.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
+//    classDirectories.setFrom(
+//            files(subprojects.sourceSets.main.output).collect {
+//                fileTree(dir: it,
+//                        include: ['**/*.*'],
+//                        exclude: rootProject.excludedFilesFromTestCoverage
+//                )
+//            })
 }
 
 jacoco {
