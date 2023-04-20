@@ -15,20 +15,6 @@ coverage:
     default_rules:
       flag_coverage_not_uploaded_behavior: include
     patch: true
-    project:
-      default:
-        base: auto
-        branches:
-          - master
-        flags:
-          - unit
-        if_ci_failed: error
-        if_not_found: success
-        informational: false
-        only_pulls: false
-        paths:
-          - src
-fixes:
-  - '/home/runner/work/web3j/web3j/::'
+    project: true
 github_checks:
   annotations: true
