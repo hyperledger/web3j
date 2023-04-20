@@ -42,9 +42,7 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     executionData.from(executions)
 
     reports {
-        html.required.set(true)
-        xml.required.set(true)
-        csv.required.set(true)
+        xml.enabled true
     }
     additionalSourceDirs.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
     sourceDirectories.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
