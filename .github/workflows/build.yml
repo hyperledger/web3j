@@ -25,6 +25,8 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Clear cache
+        run: rm -rf ~/.gradle/caches
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Run integration tests
