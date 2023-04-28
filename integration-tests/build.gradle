@@ -7,12 +7,11 @@ repositories {
     maven { url "https://hyperledger.jfrog.io/artifactory/besu-maven/" }
     maven { url "https://artifacts.consensys.net/public/maven/maven/" }
     maven { url "https://splunk.jfrog.io/splunk/ext-releases-local" }
-    maven { url "https://dl.cloudsmith.io/public/consensys/quorum-mainnet-launcher/maven/" }
 }
 ext {
-    besuPluginVersion = '21.10.3'
-    besuInternalVersion = '21.10.3'
-    besuCryptoDepVersion = '0.3.0'
+    besuPluginVersion = '23.1.3-SNAPSHOT'
+    besuInternalVersion = '23.4.0-RC1'
+    besuCryptoDepVersion = '0.7.1'
 }
 
 def withoutAbi = { exclude group: 'org.web3j', module: 'abi' }
@@ -35,7 +34,7 @@ dependencies {
     testImplementation "org.hyperledger.besu.internal:api:$besuInternalVersion",withoutAbi
     testImplementation "org.hyperledger.besu.internal:config:$besuInternalVersion",withoutAbi
     testImplementation "org.hyperledger.besu.internal:core:$besuInternalVersion",withoutAbi
-    testImplementation "org.hyperledger.besu.internal:crypto:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:crypto:$besuPluginVersion",withoutAbi
     testImplementation "org.hyperledger.besu.internal:rlp:$besuInternalVersion",withoutAbi
     testImplementation "org.hyperledger.besu.internal:kvstore:$besuInternalVersion",withoutAbi
     testImplementation "org.hyperledger.besu.internal:metrics-core:$besuInternalVersion",withoutAbi
