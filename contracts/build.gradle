@@ -2,6 +2,8 @@
 description 'web3j support for Ethereum Improvement Proposals (EIP\'s)'
 
 dependencies {
-    compile project(':core')
-    testCompile project(path: ':core', configuration: 'testArtifacts')
+    implementation project(':core')
+    testImplementation project(path: ':core', configuration: 'testArtifacts')
 }
+tasks.named("spotlessJava").configure { dependsOn("compileJava","javadoc","processResources","spotlessGroovyGradle") }
+tasks.named("spotlessKotlin").configure { dependsOn("compileJava","javadoc","processResources","spotlessJava","spotlessGroovyGradle") }

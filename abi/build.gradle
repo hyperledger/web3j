@@ -1,6 +1,12 @@
+plugins {
+    id 'java-library'
+}
 
 description 'Ethereum Application Binary Interface (ABI) for working with smart contracts'
 
 dependencies {
-    compile project(':utils')
+    api project(':utils')
 }
+
+tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc") }
+tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc") }

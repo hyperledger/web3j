@@ -2,6 +2,9 @@
 description 'Geth JSON-RPC API'
 
 dependencies {
-    compile project(':core')
-    testCompile project(path: ':core', configuration: 'testArtifacts')
+    implementation project(':core')
+    testImplementation project(path: ':core', configuration: 'testArtifacts')
 }
+
+tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc") }
+tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc") }

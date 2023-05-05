@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 17
+targetCompatibility = 17
 
 compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"

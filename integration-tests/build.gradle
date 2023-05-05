@@ -17,7 +17,7 @@ ext {
 def withoutAbi = { exclude group: 'org.web3j', module: 'abi' }
 
 dependencies {
-    testCompile project(':core'),
+    testImplementation project(':core'),
             project(':besu'),
             project(':parity'),
             project(':geth'),
@@ -70,3 +70,6 @@ test {
 compileTestJava {
     dependsOn project(':codegen').getTasksByName("testClasses", false)
 }
+
+tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle") }
+tasks.named("spotlessKotlin").configure { dependsOn("spotlessJava", "spotlessGroovyGradle") }

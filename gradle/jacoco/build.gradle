@@ -26,6 +26,6 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 }
 
 jacoco {
-    toolVersion = "0.8.4"
+    toolVersion = "0.8.10"
 }
 

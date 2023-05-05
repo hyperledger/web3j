@@ -1,4 +1,10 @@
+plugins {
+    id 'java-library'
+}
 
 description 'Ethereum Recursive Length Prefix (RLP) encoding for serializing objects'
 
-dependencies { compile project(':utils') }
+dependencies { api project(':utils') }
+
+tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc") }
+tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc") }
