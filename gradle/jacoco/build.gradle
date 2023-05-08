@@ -1,9 +1,7 @@
 apply plugin: 'jacoco'
 
 task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-    jacocoTestReport {
-        executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-    }
+
 
     dependsOn = subprojects.test
     getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
@@ -11,9 +9,13 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     getClassDirectories().from(subprojects.sourceSets.main.output)
     reports { xml.enabled true }
 
-    doFirst {
-        getExecutionData().from(executionData.findAll { it.exists() })
+    jacocoTestReport {
+        executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+        doFirst {
+            getExecutionData().from(executionData.findAll { it.exists() })
+        }
     }
+
 
     afterEvaluate {
         getClassDirectories().from(files(classDirectories.files.collect {
