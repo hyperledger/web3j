@@ -8,8 +8,8 @@ dependencies {
     api project(':utils')
 }
 
-tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc") }
-tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc") }
+tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc","test") }
+tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc","test") }
 tasks.named("jacocoRootTestReport").configure { dependsOn("compileJava","compileTestJava","javadoc","test", "spotlessGroovyGradle", "spotlessKotlin","spotlessJava") }
 tasks.named("jacocoRootTestReport").configure { dependsOn(":besu:compileJava",":besu:compileTestJava",":besu:javadoc",":besu:test", ":besu:spotlessGroovyGradle", ":besu:spotlessJava",":besu:spotlessKotlin") }
 tasks.named("jacocoRootTestReport").configure { dependsOn(":test",":spotlessGroovyGradle",":spotlessJava",":spotlessKotlin") }
