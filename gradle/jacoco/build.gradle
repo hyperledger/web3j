@@ -2,8 +2,9 @@ apply plugin: 'jacoco'
 
 task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     jacocoTestReport {
-        executionData { tasks.withType(Test).findAll { it.state.executed }*.jacoco.destinationFile }
+        executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
     }
+
     dependsOn = subprojects.test
     getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
     getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
