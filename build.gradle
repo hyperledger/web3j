@@ -12,7 +12,7 @@ plugins {
 
 
 ext {
-    bouncycastleVersion = '1.70'
+    bouncycastleVersion = '1.73'
     jacksonVersion = '2.14.2'
     javaPoetVersion = '1.7.0'
     kotlinVersion = '1.3.72'
@@ -24,9 +24,9 @@ ext {
     javaWebSocketVersion = '1.5.3'
     picocliVersion = '3.0.0'
     // test dependencies
-    equalsverifierVersion = '3.5.5'
+    equalsverifierVersion = '3.14.1'
     junitVersion = '5.5.2'
-    web3jUnitVersion = '4.9.7'
+    web3jUnitVersion = '4.9.8'
     junitBenchmarkVersion = '0.7.2'
     logbackVersion = '1.2.3'
     mockitoJunitVersion = '3.1.0'
@@ -71,8 +71,8 @@ allprojects {
     }
 
     dependencies {
-        testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
-        testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
+        testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
+        testImplementation "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
 
         configurations.all {
             resolutionStrategy {
@@ -96,3 +96,6 @@ allprojects {
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply from: "$rootDir/gradle/jacoco/build.gradle"
 }
+
+tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle") }
+tasks.named("spotlessKotlin").configure { dependsOn("spotlessJava", "spotlessGroovyGradle") }

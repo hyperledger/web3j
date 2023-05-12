@@ -1,11 +1,11 @@
 description 'web3j project code generators'
 
 dependencies {
-    compile project(':core'),
+    implementation project(':core'),
             "com.squareup:kotlinpoet:$kotlinPoetVersion",
             "com.squareup:javapoet:$javaPoetVersion",
             "info.picocli:picocli:$picocliVersion"
-    testCompile project(':core').sourceSets.test.output,
+    testImplementation project(':core').sourceSets.test.output,
             "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion"
     implementation("org.junit.platform:junit-platform-launcher:$junitPlatformLauncherVersion")
@@ -37,3 +37,6 @@ file("src/test/resources/solidity").listFiles().each { File file ->
         test.dependsOn generateTask
     }
 }
+
+tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","processTestResources","javadoc","test") }
+tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc","test") }
