@@ -130,7 +130,7 @@ Gradle
 Java:
 
 ```groovy
-implementation ('org.web3j:core:4.9.8')
+implementation ('org.web3j:core:4.10.0')
 ```
 
 Android:
