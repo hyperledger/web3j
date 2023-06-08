@@ -82,10 +82,10 @@ nexusStaging {
 }
 
 
-signing {
-    sign publishing.publications.maven
-    def signingKey = new File("$rootDir/web3j.asc")
-    if (signingKey.exists()) {
-        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
-    }
-}
+//signing {
+//    sign publishing.publications.maven
+//    def signingKey = new File("$rootDir/web3j.asc")
+//    if (signingKey.exists()) {
+//        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
+//    }
+//}
