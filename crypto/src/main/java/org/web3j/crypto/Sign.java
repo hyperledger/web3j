@@ -136,6 +136,42 @@ public class Sign {
     }
 
     /**
+     * Returns SignatureData from hex signature.
+     *
+     * @param hexSignature hex representation of signature
+     * @return SignatureData
+     * @throws RuntimeException if signature has invalid format
+     */
+    public static SignatureData signatureDataFromHex(String hexSignature) throws SignatureException {
+        byte[] sigBytes = Numeric.hexStringToByteArray(hexSignature);
+        byte v;
+        byte[] r, s;
+        if (sigBytes.length == 64) {
+            // EIP-2098; pull the v from the top bit of s and clear it
+            v = (byte) (27 + (sigBytes[32] >> 7));
+            sigBytes[32] &= 0x7f;
+            r = Arrays.copyOfRange(sigBytes, 0, 32);
+            s = Arrays.copyOfRange(sigBytes, 32, 64);
+
+        } else if (sigBytes.length == 65) {
+            r = Arrays.copyOfRange(sigBytes, 0, 32);
+            s = Arrays.copyOfRange(sigBytes, 32, 64);
+            v = sigBytes[64];
+        } else {
+            throw new SignatureException("invalid signature string");
+        }
+        // Allow a recid to be used as the v
+        if (v < 27) {
+            if (v == 0 || v == 1) {
+                v += 27;
+            } else {
+                throw new SignatureException("signature invalid v byte");
+            }
+        }
+        return new Sign.SignatureData(v, r, s);
+    }
+
+    /**
      * Given the components of a signature and a selector value, recover and return the public key
      * that generated the signature according to the algorithm in SEC1v2 section 4.1.6.
      *
