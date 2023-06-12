@@ -1697,47 +1697,15 @@ public class SolidityFunctionWrapper extends Generator {
                 ParameterizedTypeName.get(
                         ClassName.get(Flowable.class), ClassName.get("", responseClassName));
 
-        MethodSpec.Builder flowableMethodBuilder =
-                MethodSpec.methodBuilder(generatedFunctionName)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addParameter(EthFilter.class, FILTER)
-                        .returns(parameterizedTypeName);
-
-        TypeSpec converter =
-                TypeSpec.anonymousClassBuilder("")
-                        .addSuperinterface(
-                                ParameterizedTypeName.get(
-                                        ClassName.get(io.reactivex.functions.Function.class),
-                                        ClassName.get(Log.class),
-                                        ClassName.get("", responseClassName)))
-                        .addMethod(
-                                MethodSpec.methodBuilder("apply")
-                                        .addAnnotation(Override.class)
-                                        .addModifiers(Modifier.PUBLIC)
-                                        .addParameter(Log.class, "log")
-                                        .returns(ClassName.get("", responseClassName))
-                                        .addStatement(
-                                                "$T eventValues = extractEventParametersWithLog("
-                                                        + buildEventDefinitionName(functionName)
-                                                        + ", log)",
-                                                Contract.EventValuesWithLog.class)
-                                        .addStatement(
-                                                "$1T typedResponse = new $1T()",
-                                                ClassName.get("", responseClassName))
-                                        .addCode(
-                                                buildTypedResponse(
-                                                        "typedResponse",
-                                                        indexedParameters,
-                                                        nonIndexedParameters,
-                                                        true))
-                                        .addStatement("return typedResponse")
-                                        .build())
-                        .build();
-
-        flowableMethodBuilder.addStatement(
-                "return web3j.ethLogFlowable(filter).map($L)", converter);
-
-        return flowableMethodBuilder.build();
+        return MethodSpec.methodBuilder(generatedFunctionName)
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(EthFilter.class, FILTER)
+                .returns(parameterizedTypeName)
+                .addStatement(
+                        "return web3j.ethLogFlowable(filter).map(log -> "
+                                + getEventFromLogFunctionName(functionName)
+                                + "(log))")
+                .build();
     }
 
     MethodSpec buildDefaultEventFlowableFunction(String responseClassName, String functionName) {
@@ -1813,6 +1781,34 @@ public class SolidityFunctionWrapper extends Generator {
         return transactionMethodBuilder.build();
     }
 
+    MethodSpec buildEventLogFunction(
+            String responseClassName,
+            String functionName,
+            List<NamedTypeName> indexedParameters,
+            List<NamedTypeName> nonIndexedParameters) {
+
+        String generatedFunctionName = getEventFromLogFunctionName(functionName);
+        return MethodSpec.methodBuilder(generatedFunctionName)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addParameter(Log.class, "log")
+                .returns(ClassName.get("", responseClassName))
+                .addStatement(
+                        "$T eventValues = staticExtractEventParametersWithLog("
+                                + buildEventDefinitionName(functionName)
+                                + ", log)",
+                        Contract.EventValuesWithLog.class)
+                .addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName))
+                .addCode(
+                        buildTypedResponse(
+                                "typedResponse", indexedParameters, nonIndexedParameters, true))
+                .addStatement("return typedResponse")
+                .build();
+    }
+
+    private static String getEventFromLogFunctionName(String functionName) {
+        return "get" + Strings.capitaliseFirstLetter(functionName) + "EventFromLog";
+    }
+
     List<MethodSpec> buildEventFunctions(
             AbiDefinition functionDefinition, TypeSpec.Builder classBuilder)
             throws ClassNotFoundException {
@@ -1853,7 +1849,9 @@ public class SolidityFunctionWrapper extends Generator {
         methods.add(
                 buildEventTransactionReceiptFunction(
                         responseClassName, functionName, indexedParameters, nonIndexedParameters));
-
+        methods.add(
+                buildEventLogFunction(
+                        responseClassName, functionName, indexedParameters, nonIndexedParameters));
         methods.add(
                 buildEventFlowableFunction(
                         responseClassName, functionName, indexedParameters, nonIndexedParameters));
