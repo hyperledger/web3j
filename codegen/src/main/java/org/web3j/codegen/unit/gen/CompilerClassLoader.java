@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -45,15 +46,51 @@ public class CompilerClassLoader extends ClassLoader {
         this.urls = urls;
     }
 
+    public void loadCompiledClasses(final List<String> loadedClasses) throws IOException {
+        Files.walk(Paths.get(outputDir.getAbsoluteFile().toURI()))
+                .filter(Files::isRegularFile)
+                .filter(
+                        filePath -> {
+                            String path = filePath.toString();
+                            String fileName =
+                                    path.substring(
+                                            path.lastIndexOf("/") + 1, path.lastIndexOf("."));
+                            return !loadedClasses.contains(fileName);
+                        })
+                .forEach(
+                        filePath -> {
+                            String path = filePath.toString();
+                            String fileName =
+                                    path.substring(
+                                                    outputDir.toString().length() + 1,
+                                                    path.lastIndexOf("."))
+                                            .replaceAll("/", ".");
+                            Optional<byte[]> bytes = readBytes(filePath.toFile());
+                            defineClass(fileName, bytes.get(), 0, bytes.get().length);
+                        });
+    }
+
     @Override
     protected Class<?> findClass(final String name) throws ClassNotFoundException {
-        return compileClass(name)
-                .flatMap(this::readBytes)
-                .map(bytes -> defineClass(name, bytes, 0, bytes.length))
+        List<Class<?>> loadedClasses =
+                compileClass(name).stream()
+                        .map(
+                                classFile -> {
+                                    Optional<byte[]> bytes = readBytes(classFile);
+                                    return defineClass(
+                                            extractClassName(classFile.toString()),
+                                            bytes.get(),
+                                            0,
+                                            bytes.get().length);
+                                })
+                        .collect(Collectors.toList());
+        return loadedClasses.stream()
+                .filter(c -> c.getName().equals(name))
+                .findFirst()
                 .orElseThrow(() -> new ClassNotFoundException(name));
     }
 
-    private Optional<File> compileClass(final String name) {
+    private List<File> compileClass(final String name) {
 
         final String path = name.replace(".", File.separator);
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -79,7 +116,7 @@ public class CompilerClassLoader extends ClassLoader {
         }
 
         if (!sourceFile.exists()) {
-            return Optional.empty();
+            return List.of();
         }
 
         final Iterable<? extends JavaFileObject> javaFileObjects =
@@ -93,8 +130,27 @@ public class CompilerClassLoader extends ClassLoader {
         final CompilationTask task =
                 compiler.getTask(null, null, System.err::println, options, null, javaFileObjects);
 
-        final File classFile = new File(outputDir, path + ".class");
-        return task.call() ? Optional.of(classFile) : Optional.empty();
+        if (task.call()) {
+            try {
+                return Files.walk(Paths.get(outputDir.getAbsoluteFile().toURI()))
+                        .filter(Files::isRegularFile)
+                        .filter(
+                                filePath -> {
+                                    String fileName = extractClassName(filePath.toString());
+                                    return fileName.startsWith(name);
+                                })
+                        .map(Path::toFile)
+                        .toList();
+            } catch (IOException e) {
+                throw new IllegalStateException("Unable to process compiled classes: ", e);
+            }
+        }
+        return List.of();
+    }
+
+    private String extractClassName(final String pathName) {
+        return pathName.substring(outputDir.toString().length() + 1, pathName.lastIndexOf("."))
+                .replaceAll("/", ".");
     }
 
     private String buildClassPath() {
