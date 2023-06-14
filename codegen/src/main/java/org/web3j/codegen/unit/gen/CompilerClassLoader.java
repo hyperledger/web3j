@@ -46,30 +46,6 @@ public class CompilerClassLoader extends ClassLoader {
         this.urls = urls;
     }
 
-    public void loadCompiledClasses(final List<String> loadedClasses) throws IOException {
-        Files.walk(Paths.get(outputDir.getAbsoluteFile().toURI()))
-                .filter(Files::isRegularFile)
-                .filter(
-                        filePath -> {
-                            String path = filePath.toString();
-                            String fileName =
-                                    path.substring(
-                                            path.lastIndexOf("/") + 1, path.lastIndexOf("."));
-                            return !loadedClasses.contains(fileName);
-                        })
-                .forEach(
-                        filePath -> {
-                            String path = filePath.toString();
-                            String fileName =
-                                    path.substring(
-                                                    outputDir.toString().length() + 1,
-                                                    path.lastIndexOf("."))
-                                            .replaceAll("/", ".");
-                            Optional<byte[]> bytes = readBytes(filePath.toFile());
-                            defineClass(fileName, bytes.get(), 0, bytes.get().length);
-                        });
-    }
-
     @Override
     protected Class<?> findClass(final String name) throws ClassNotFoundException {
         List<Class<?>> loadedClasses =

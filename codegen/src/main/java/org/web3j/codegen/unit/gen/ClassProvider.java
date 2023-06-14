@@ -44,13 +44,6 @@ public class ClassProvider {
                 .collect(Collectors.toList());
     }
 
-    public final void loadAdditionalClasses(List<Class<?>> loadedClasses)
-            throws IOException, ClassNotFoundException {
-        final List<String> loadedClassesNames =
-                loadedClasses.stream().map(Class::getSimpleName).toList();
-        ((CompilerClassLoader) classLoader).loadCompiledClasses(loadedClassesNames);
-    }
-
     private String toClassName(final String sourceFile) {
         try {
             return sourceFile
