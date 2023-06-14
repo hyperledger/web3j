@@ -160,7 +160,9 @@ public abstract class Filter<T> {
     protected abstract void process(List<EthLog.LogResult> logResults);
 
     private void reinstallFilter() {
-        log.warn("Previously installed filter has not been found, trying to reinstall. Filter id: {}", filterId);
+        log.warn(
+                "Previously installed filter has not been found, trying to reinstall. Filter id: {}",
+                filterId);
         schedule.cancel(false);
         this.run(scheduledExecutorService, blockTime);
     }
