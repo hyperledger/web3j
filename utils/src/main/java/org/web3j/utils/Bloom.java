@@ -12,11 +12,11 @@
  */
 package org.web3j.utils;
 
-import org.web3j.crypto.Hash;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+
+import org.web3j.crypto.Hash;
 
 /**
  * Ethereum Bloom filter. can be used to create a filter or test an item (topic) for a given filter.
@@ -24,7 +24,7 @@ import java.util.Arrays;
  * @author Mehrdad Salehi
  */
 public class Bloom {
-    //implemented as Ethereum yellow paper, section 4.3.1
+    // implemented as Ethereum yellow paper, section 4.3.1
     private static final int BYTES_LENGTH = 256;
     private final byte[] bytes = new byte[BYTES_LENGTH];
 
@@ -32,9 +32,10 @@ public class Bloom {
      * test topics against a bloom filter.
      *
      * @param bloomBytes the filter bytes.
-     * @param topics     topics to be tested
+     * @param topics topics to be tested
      * @return true if all topics is present in filter, otherwise returns false
-     * @throws IllegalArgumentException if bloomBytes length is not 256, or it is null, or topics is null.
+     * @throws IllegalArgumentException if bloomBytes length is not 256, or it is null, or topics is
+     *     null.
      */
     public static boolean test(byte[] bloomBytes, byte[]... topics) {
         Bloom bloom = new Bloom(bloomBytes);
@@ -53,9 +54,10 @@ public class Bloom {
      * test topics against a bloom filter.
      *
      * @param bloomBytes the filter bytes.
-     * @param topics     topics to be tested
+     * @param topics topics to be tested
      * @return true if all topics is present in filter, otherwise returns false
-     * @throws IllegalArgumentException if bloomBytes length is not 256, or it is null, or topics is null.
+     * @throws IllegalArgumentException if bloomBytes length is not 256, or it is null, or topics is
+     *     null.
      */
     public static boolean test(String bloomBytes, String... topics) {
         Bloom bloom = new Bloom(bloomBytes);
@@ -70,11 +72,8 @@ public class Bloom {
         return true;
     }
 
-    /**
-     * creates empty filter (all bits set to zero).
-     */
-    public Bloom() {
-    }
+    /** creates empty filter (all bits set to zero). */
+    public Bloom() {}
 
     /**
      * create filter from hex string.
@@ -132,8 +131,8 @@ public class Bloom {
      * test presents of a topic. for every topic added by add() this returns true.
      *
      * @param topic the topic hex string.
-     * @return true if topic is present (false-positive is possible),
-     * and false if topic is not present(false-negative is not possible).
+     * @return true if topic is present (false-positive is possible), and false if topic is not
+     *     present(false-negative is not possible).
      * @throws IllegalArgumentException if topic is null.
      */
     public boolean test(String topic) {
@@ -147,15 +146,15 @@ public class Bloom {
      * test presents of a topic. for every topic added by add() this returns true.
      *
      * @param topic the topic bytes.
-     * @return true if topic is present (false-positive is possible),
-     * and false if topic is not present(false-negative is not possible).
+     * @return true if topic is present (false-positive is possible), and false if topic is not
+     *     present(false-negative is not possible).
      * @throws IllegalArgumentException if topic is null.
      */
     public boolean test(byte[] topic) {
         BloomValues b = getBloomValues(topic);
-        return b.value[0] == (b.value[0] & this.bytes[b.index[0]]) &&
-                b.value[1] == (b.value[1] & this.bytes[b.index[1]]) &&
-                b.value[2] == (b.value[2] & this.bytes[b.index[2]]);
+        return b.value[0] == (b.value[0] & this.bytes[b.index[0]])
+                && b.value[1] == (b.value[1] & this.bytes[b.index[1]])
+                && b.value[2] == (b.value[2] & this.bytes[b.index[2]]);
     }
 
     @Override
@@ -163,16 +162,12 @@ public class Bloom {
         return getBytesHexString();
     }
 
-    /**
-     * @return Bloom filter bytes as hex string
-     */
+    /** @return Bloom filter bytes as hex string */
     public String getBytesHexString() {
         return Numeric.toHexString(this.bytes);
     }
 
-    /**
-     * @return Bloom filter bytes (returns a copy)
-     */
+    /** @return Bloom filter bytes (returns a copy) */
     public byte[] getBytes() {
         byte[] bytesCopy = new byte[BYTES_LENGTH];
         System.arraycopy(this.bytes, 0, bytesCopy, 0, BYTES_LENGTH);
@@ -211,9 +206,8 @@ public class Bloom {
         int i1 = BYTES_LENGTH - ((byteBuffer.getShort(0) & 0x7ff) >> 3) - 1;
         int i2 = BYTES_LENGTH - ((byteBuffer.getShort(2) & 0x7ff) >> 3) - 1;
         int i3 = BYTES_LENGTH - ((byteBuffer.getShort(4) & 0x7ff) >> 3) - 1;
-        return new BloomValues(new byte[]{v1, v2, v3}, new int[]{i1, i2, i3});
+        return new BloomValues(new byte[] {v1, v2, v3}, new int[] {i1, i2, i3});
     }
 
-    private record BloomValues(byte[] value, int[] index) {
-    }
+    private record BloomValues(byte[] value, int[] index) {}
 }
