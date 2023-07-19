@@ -36,6 +36,10 @@ public class NameHashTest {
         assertEquals(
                 nameHash("foo.eth"),
                 ("0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f"));
+
+        assertEquals(
+                nameHash("\uD83D\uDC8E.gmcafe.art"),
+                ("0xf7de5954cda078ee481b14cff677e8066fe805a89b5c87b4a9b866338049b04a"));
     }
 
     @Test
@@ -48,20 +52,22 @@ public class NameHashTest {
         assertEquals(normalise("Obb.at"), ("obb.at"));
         assertEquals(normalise("TESTER.eth"), ("tester.eth"));
         assertEquals(normalise("test\u200btest.com"), ("testtest.com"));
+        assertEquals(normalise("hyph-‐‑‒–—―⁃−⎯⏤﹘e⸺n⸻s.eth"), ("hyph------------e--n---s.eth"));
     }
 
     @Test
     public void testNormaliseInvalid() {
         testInvalidName("foo..bar");
         testInvalidName("ba\\u007Fr.eth");
-        testInvalidName("-baz.eth-");
         testInvalidName("foo_bar.eth");
+        testInvalidName("..a..eth");
+        testInvalidName("aα.ɑ");
+        testInvalidName("0x.0χ.0х");
     }
 
     @Test
     void testDnsEncode() throws IOException {
         String dnsEncoded = NameHash.dnsEncode("1.offchainexample.eth");
-
         assertEquals("0x01310f6f6666636861696e6578616d706c650365746800", dnsEncoded);
     }
 
