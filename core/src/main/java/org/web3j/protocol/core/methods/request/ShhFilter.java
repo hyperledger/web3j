@@ -12,6 +12,8 @@
  */
 package org.web3j.protocol.core.methods.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Filter implementation as per <a
  * href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
@@ -29,6 +31,7 @@ public class ShhFilter extends Filter<ShhFilter> {
     }
 
     @Override
+    @JsonIgnore
     ShhFilter getThis() {
         return this;
     }
