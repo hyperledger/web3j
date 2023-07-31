@@ -12,10 +12,10 @@
  */
 package org.web3j.protocol.core.methods.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Collections;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
 
