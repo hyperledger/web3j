@@ -540,6 +540,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                     31 * result
                             + (getWithdrawalsRoot() != null ? getWithdrawalsRoot().hashCode() : 0);
             result = 31 * result + (getWithdrawals() != null ? getWithdrawals().hashCode() : 0);
+            
             return result;
         }
 
