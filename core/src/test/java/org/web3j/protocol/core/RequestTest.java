@@ -155,6 +155,13 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthBaseFee() throws Exception {
+        web3j.ethBaseFee().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_baseFee\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
     public void testEthFeeHistory() throws Exception {
         web3j.ethFeeHistory(1, DefaultBlockParameterName.LATEST, null).send();
 

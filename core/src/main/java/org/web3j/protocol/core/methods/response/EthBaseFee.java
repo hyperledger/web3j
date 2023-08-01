@@ -19,6 +19,7 @@ import org.web3j.utils.Numeric;
 
 /** eth_baseFee. */
 public class EthBaseFee extends Response<String> {
+
     public BigInteger getBaseFee() {
         return Numeric.decodeQuantity(getResult());
     }
