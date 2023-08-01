@@ -161,7 +161,7 @@ public abstract class Filter<T> {
 
     private void reinstallFilter() {
         log.warn(
-                "Previously installed filter has not been found, trying to reinstall. Filter id: {}",
+                "Previously installed filter has not been found, trying to re-install. Filter id: {}",
                 filterId);
         schedule.cancel(false);
         this.run(scheduledExecutorService, blockTime);
