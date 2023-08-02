@@ -32,6 +32,7 @@ import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
 import org.web3j.protocol.core.methods.response.DbPutString;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthBaseFee;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthCall;
@@ -597,6 +598,19 @@ public class ResponseTest extends ResponseTester {
 
         EthEstimateGas ethEstimateGas = deserialiseResponse(EthEstimateGas.class);
         assertEquals(ethEstimateGas.getAmountUsed(), (BigInteger.valueOf(21000)));
+    }
+
+    @Test
+    public void testEthBaseFee() {
+        buildResponse(
+                "{\n"
+                        + "  \"id\":1,\n"
+                        + "  \"jsonrpc\": \"2.0\",\n"
+                        + "  \"result\": \"0x5d21dba00\"\n"
+                        + "}");
+
+        EthBaseFee ethBaseFee = deserialiseResponse(EthBaseFee.class);
+        assertEquals(ethBaseFee.getBaseFee(), (BigInteger.valueOf(25000000000L)));
     }
 
     @Test
