@@ -164,7 +164,7 @@ public class Sign {
         // Allow a recid to be used as the v
         if (v < 27) {
             if (v == 0 || v == 1) {
-                v += 27;
+                v += (byte) 27;
             } else {
                 throw new SignatureException("signature invalid v byte");
             }
