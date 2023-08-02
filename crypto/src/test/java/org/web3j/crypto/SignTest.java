@@ -101,7 +101,9 @@ public class SignTest {
 
     @Test
     public void testFromHex() throws SignatureException {
-        Sign.SignatureData signatureData =Sign.signatureDataFromHex("0x0464eee9e2fe1a10ffe48c78b80de1ed8dcf996f3f60955cb2e03cb21903d93006624da478b3f862582e85b31c6a21c6cae2eee2bd50f55c93c4faad9d9c8d7f1c");
+        Sign.SignatureData signatureData =
+                Sign.signatureDataFromHex(
+                        "0x0464eee9e2fe1a10ffe48c78b80de1ed8dcf996f3f60955cb2e03cb21903d93006624da478b3f862582e85b31c6a21c6cae2eee2bd50f55c93c4faad9d9c8d7f1c");
 
         Sign.SignatureData expected =
                 new Sign.SignatureData(

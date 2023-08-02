@@ -142,7 +142,8 @@ public class Sign {
      * @return SignatureData
      * @throws RuntimeException if signature has invalid format
      */
-    public static SignatureData signatureDataFromHex(String hexSignature) throws SignatureException {
+    public static SignatureData signatureDataFromHex(String hexSignature)
+            throws SignatureException {
         byte[] sigBytes = Numeric.hexStringToByteArray(hexSignature);
         byte v;
         byte[] r, s;
