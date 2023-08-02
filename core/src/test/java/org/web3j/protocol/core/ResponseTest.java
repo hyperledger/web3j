@@ -603,11 +603,11 @@ public class ResponseTest extends ResponseTester {
     @Test
     public void testEthBaseFee() {
         buildResponse(
-            "{\n"
-                + "  \"id\":1,\n"
-                + "  \"jsonrpc\": \"2.0\",\n"
-                + "  \"result\": \"0x5d21dba00\"\n"
-                + "}");
+                "{\n"
+                        + "  \"id\":1,\n"
+                        + "  \"jsonrpc\": \"2.0\",\n"
+                        + "  \"result\": \"0x5d21dba00\"\n"
+                        + "}");
 
         EthBaseFee ethBaseFee = deserialiseResponse(EthBaseFee.class);
         assertEquals(ethBaseFee.getBaseFee(), (BigInteger.valueOf(25000000000L)));
