@@ -99,6 +99,21 @@ public class SignTest {
                 "0x80361fd6c275c7492d00d976a48d0db4a663fb76da49a3c7d69c252f1c8cbea61438264a755d464e19bcd7c976b06640b40bd34de5f5c1456c0efe3b6626143a1c");
     }
 
+    @Test
+    public void testFromHex() throws SignatureException {
+        Sign.SignatureData signatureData =Sign.signatureDataFromHex("0x0464eee9e2fe1a10ffe48c78b80de1ed8dcf996f3f60955cb2e03cb21903d93006624da478b3f862582e85b31c6a21c6cae2eee2bd50f55c93c4faad9d9c8d7f1c");
+
+        Sign.SignatureData expected =
+                new Sign.SignatureData(
+                        (byte) 28,
+                        Numeric.hexStringToByteArray(
+                                "0x0464eee9e2fe1a10ffe48c78b80de1ed8dcf996f3f60955cb2e03cb21903d930"),
+                        Numeric.hexStringToByteArray(
+                                "0x06624da478b3f862582e85b31c6a21c6cae2eee2bd50f55c93c4faad9d9c8d7f"));
+
+        assertEquals(signatureData, (expected));
+    }
+
     @ParameterizedTest(name = "testGetRecId(chainId={0}, recId={1}, isEip155={2})")
     @MethodSource("recIdArguments")
     public void testGetRecId(final long chainId, final long recId, final boolean isEip155) {
