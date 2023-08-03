@@ -13,6 +13,7 @@
 package org.web3j.protocol.core;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -39,6 +40,7 @@ import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHas
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetProof;
 import org.web3j.protocol.core.methods.response.EthGetStorageAt;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
@@ -381,7 +383,6 @@ public class CoreIT {
 
     @Test
     public void testEthGetTransactionByBlockNumberAndIndex() throws Exception {
-
         EthTransaction ethTransaction =
                 web3j.ethGetTransactionByBlockNumberAndIndex(
                                 DefaultBlockParameter.valueOf(config.validBlockNumber()),
@@ -499,6 +500,18 @@ public class CoreIT {
         EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
         List<EthLog.LogResult> logs = ethLog.getLogs();
         assertFalse(logs.isEmpty());
+    }
+
+    @Test
+    public void testEthGetProof() throws Exception {
+        EthGetProof ethGetProof =
+                web3j.ethGetProof(
+                                "0x0000000000000000000000000000000000000000",
+                                Arrays.asList(
+                                        "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"),
+                                "latest")
+                        .send();
+        assertNotNull(ethGetProof.getResult());
     }
 
     @Disabled // Not available

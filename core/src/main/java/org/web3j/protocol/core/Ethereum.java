@@ -40,6 +40,7 @@ import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHas
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetProof;
 import org.web3j.protocol.core.methods.response.EthGetStorageAt;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
@@ -204,6 +205,8 @@ public interface Ethereum {
     Request<?, EthLog> ethGetFilterLogs(BigInteger filterId);
 
     Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter);
+
+    Request<?, EthGetProof> ethGetProof(String address, List<String> storageKeys, String quantity);
 
     Request<?, EthGetWork> ethGetWork();
 
