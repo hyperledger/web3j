@@ -110,7 +110,7 @@ Java:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.9.8</version>
+  <version>4.10.2</version>
 </dependency>
 ```
 
