@@ -654,7 +654,16 @@ public class ResponseTest extends ResponseTester {
                         + "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n"
                         + "       \"0x39a3eb432fbef1fc\"\n"
                         + "    ],\n"
-                        + "    \"baseFeePerGas\": \"0x7\"\n"
+                        + "    \"baseFeePerGas\": \"0x7\",\n"
+                        + "    \"withdrawalsRoot\": \"0x1b1f845cd61c375a89ef101fd1bd86355f372a6a3dfe1960f2355e70bd5cd8a2\",\n"
+                        + "    \"withdrawals\": [\n"
+                        + "      {\n"
+                        + "        \"index\": \"0x68ba80\",\n"
+                        + "        \"validatorIndex\": \"0x65285\",\n"
+                        + "        \"address\": \"0x1e09b4199780a45792f4ff195ef68410a091b047\",\n"
+                        + "        \"amount\": \"0xd1f129\"\n"
+                        + "      }\n"
+                        + "    ]\n"
                         + "  }\n"
                         + "}");
 
@@ -692,7 +701,14 @@ public class ResponseTest extends ResponseTester {
                         Arrays.asList(
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
                                 "0x39a3eb432fbef1fc"),
-                        "0x7");
+                        "0x7",
+                        "0x1b1f845cd61c375a89ef101fd1bd86355f372a6a3dfe1960f2355e70bd5cd8a2",
+                        Arrays.asList(
+                                new EthBlock.Withdrawal(
+                                        "0x68ba80",
+                                        "0x65285",
+                                        "0x1e09b4199780a45792f4ff195ef68410a091b047",
+                                        "0xd1f129")));
         assertEquals(ethBlock.getBlock(), (block));
     }
 
@@ -760,7 +776,16 @@ public class ResponseTest extends ResponseTester {
                         + "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n"
                         + "       \"0x39a3eb432fbef1fc\"\n"
                         + "    ],\n"
-                        + "    \"baseFeePerGas\": \"0x7\"\n"
+                        + "    \"baseFeePerGas\": \"0x7\",\n"
+                        + "    \"withdrawalsRoot\": \"0x1b1f845cd61c375a89ef101fd1bd86355f372a6a3dfe1960f2355e70bd5cd8a2\",\n"
+                        + "    \"withdrawals\": [\n"
+                        + "      {\n"
+                        + "        \"index\": \"0x68ba80\",\n"
+                        + "        \"validatorIndex\": \"0x65285\",\n"
+                        + "        \"address\": \"0x1e09b4199780a45792f4ff195ef68410a091b047\",\n"
+                        + "        \"amount\": \"0xd1f129\"\n"
+                        + "      }\n"
+                        + "    ]\n"
                         + "  }\n"
                         + "}");
 
@@ -820,7 +845,14 @@ public class ResponseTest extends ResponseTester {
                         Arrays.asList(
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
                                 "0x39a3eb432fbef1fc"),
-                        "0x7");
+                        "0x7",
+                        "0x1b1f845cd61c375a89ef101fd1bd86355f372a6a3dfe1960f2355e70bd5cd8a2",
+                        Arrays.asList(
+                                new EthBlock.Withdrawal(
+                                        "0x68ba80",
+                                        "0x65285",
+                                        "0x1e09b4199780a45792f4ff195ef68410a091b047",
+                                        "0xd1f129")));
 
         assertEquals(ethBlock.getBlock(), (block));
     }
@@ -890,7 +922,16 @@ public class ResponseTest extends ResponseTester {
                         + "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n"
                         + "       \"0x39a3eb432fbef1fc\"\n"
                         + "    ],\n"
-                        + "    \"baseFeePerGas\": \"0x7\"\n"
+                        + "    \"baseFeePerGas\": \"0x7\",\n"
+                        + "    \"withdrawalsRoot\": \"0x1b1f845cd61c375a89ef101fd1bd86355f372a6a3dfe1960f2355e70bd5cd8a2\",\n"
+                        + "    \"withdrawals\": [\n"
+                        + "      {\n"
+                        + "        \"index\": \"0x68ba80\",\n"
+                        + "        \"validatorIndex\": \"0x65285\",\n"
+                        + "        \"address\": \"0x1e09b4199780a45792f4ff195ef68410a091b047\",\n"
+                        + "        \"amount\": \"0xd1f129\"\n"
+                        + "      }\n"
+                        + "    ]\n"
                         + "  }\n"
                         + "}");
 
@@ -950,7 +991,14 @@ public class ResponseTest extends ResponseTester {
                         Arrays.asList(
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
                                 "0x39a3eb432fbef1fc"),
-                        "0x7");
+                        "0x7",
+                        "0x1b1f845cd61c375a89ef101fd1bd86355f372a6a3dfe1960f2355e70bd5cd8a2",
+                        Arrays.asList(
+                                new EthBlock.Withdrawal(
+                                        "0x68ba80",
+                                        "0x65285",
+                                        "0x1e09b4199780a45792f4ff195ef68410a091b047",
+                                        "0xd1f129")));
 
         assertEquals(ethBlock.getBlock(), (block));
     }
