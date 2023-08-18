@@ -31,24 +31,24 @@ apply plugin: 'jacoco'
 //    }
 //}
 
-//task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-//    additionalSourceDirs.from files(subprojects.sourceSets.main.allSource.srcDirs)
-//    sourceDirectories.from files(subprojects.sourceSets.main.allSource.srcDirs)
-//    classDirectories.from files(subprojects.sourceSets.main.output).asFileTree.matching {
-//        exclude 'org/web3j/abi/datatypes/generated/**',
-//                'org/web3j/tuples/generated/**',
-//                'org/web3j/ens/contracts/generated/**',
-//                'org/gradle/**'
-//    }
-//    executionData.from fileTree(dir: '.', includes: ['**/jacoco/*.exec'])
-//    reports {
-//        xml.required = true
-//        xml.enabled = true
-//        csv.required = true
-//        html.destination file("build/reports/jacocoHtml")
-//    }
-//    onlyIf = { true }
-//}
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    additionalSourceDirs.from files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.from files(subprojects.sourceSets.main.output).asFileTree.matching {
+        exclude 'org/web3j/abi/datatypes/generated/**',
+                'org/web3j/tuples/generated/**',
+                'org/web3j/ens/contracts/generated/**',
+                'org/gradle/**'
+    }
+    executionData.from fileTree(dir: '.', includes: ['**/jacoco/*.exec'])
+    reports {
+        xml.required = true
+        xml.enabled = true
+        csv.required = true
+        html.destination file("build/reports/jacocoHtml")
+    }
+    onlyIf = { true }
+}
 
 jacoco {
     toolVersion = "0.8.10"
