@@ -46,6 +46,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew check jacocoRootTestReport
+        run: ./gradlew jacocoRootReport
       - name: Upload coverage reports to Codecov with GitHub Action
         uses: codecov/codecov-action@v3

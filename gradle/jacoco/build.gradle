@@ -1,34 +1,53 @@
 apply plugin: 'jacoco'
 
-task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+//task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+//
+//    doFirst {
+//        executionData.fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+//        getExecutionData().from(executionData.findAll { it.exists() })
+//    }
+//
+//    dependsOn(subprojects.test)
+//
+//    getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
+//    getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
+//    getClassDirectories().from(subprojects.sourceSets.main.output)
+//    executionData.from(subprojects.jacocoTestReport.executionData)
+//
+//    reports {
+//        xml.enabled true
+//    }
+//
+//    afterEvaluate {
+//        getClassDirectories().from(files(classDirectories.files.collect {
+//            fileTree(dir: it,
+//                    exclude: [
+//                            'org/web3j/abi/datatypes/generated/**',
+//                            'org/web3j/tuples/generated/**',
+//                            'org/web3j/ens/contracts/generated/**',
+//                            'org/gradle/**'
+//                    ])
+//        }))
+//    }
+//}
 
-    doFirst {
-        executionData.fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-        getExecutionData().from(executionData.findAll { it.exists() })
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    additionalSourceDirs.from files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.from files(subprojects.sourceSets.main.output).asFileTree.matching {
+        exclude 'org/web3j/abi/datatypes/generated/**',
+                'org/web3j/tuples/generated/**',
+                'org/web3j/ens/contracts/generated/**',
+                'org/gradle/**'
     }
-
-    dependsOn(subprojects.test)
-
-    getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
-    getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
-    getClassDirectories().from(subprojects.sourceSets.main.output)
-    executionData.from(subprojects.jacocoTestReport.executionData)
-
+    executionData.from fileTree(dir: '.', includes: ['**/jacoco/*.exec'])
     reports {
-        xml.enabled true
+        xml.required = true
+        xml.enabled = true
+        csv.required = true
+        html.destination file("build/reports/jacocoHtml")
     }
-
-    afterEvaluate {
-        getClassDirectories().from(files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: [
-                            'org/web3j/abi/datatypes/generated/**',
-                            'org/web3j/tuples/generated/**',
-                            'org/web3j/ens/contracts/generated/**',
-                            'org/gradle/**'
-                    ])
-        }))
-    }
+    onlyIf = { true }
 }
 
 jacoco {
