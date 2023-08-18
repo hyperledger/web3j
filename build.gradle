@@ -109,5 +109,7 @@ jacoco {
     toolVersion = "0.8.10"
 }
 
+check.dependsOn jacocoTestReport
+
 tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle") }
 tasks.named("spotlessKotlin").configure { dependsOn("spotlessJava", "spotlessGroovyGradle") }
