@@ -98,5 +98,15 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply from: "$rootDir/gradle/jacoco/build.gradle"
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+jacoco {
+    toolVersion = "0.8.10"
+}
+
 tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle") }
 tasks.named("spotlessKotlin").configure { dependsOn("spotlessJava", "spotlessGroovyGradle") }
