@@ -15,6 +15,8 @@ package org.web3j.protocol.core.methods.request;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.web3j.protocol.core.DefaultBlockParameter;
 
 /**
@@ -71,6 +73,7 @@ public class EthFilter extends Filter<EthFilter> {
     }
 
     @Override
+    @JsonIgnore
     EthFilter getThis() {
         return this;
     }

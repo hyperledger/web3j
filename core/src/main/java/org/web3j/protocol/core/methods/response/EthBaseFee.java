@@ -10,29 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.core.methods.request;
+package org.web3j.protocol.core.methods.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.math.BigInteger;
 
-/**
- * Filter implementation as per <a
- * href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
- */
-public class ShhFilter extends Filter<ShhFilter> {
-    private String to;
+import org.web3j.protocol.core.Response;
+import org.web3j.utils.Numeric;
 
-    public ShhFilter(String to) {
-        super();
-        this.to = to;
-    }
+/** eth_baseFee. */
+public class EthBaseFee extends Response<String> {
 
-    public String getTo() {
-        return to;
-    }
-
-    @Override
-    @JsonIgnore
-    ShhFilter getThis() {
-        return this;
+    public BigInteger getBaseFee() {
+        return Numeric.decodeQuantity(getResult());
     }
 }

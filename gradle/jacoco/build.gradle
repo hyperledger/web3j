@@ -1,15 +1,21 @@
 apply plugin: 'jacoco'
 
 task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-    dependsOn = subprojects.test
+
+    doFirst {
+        executionData.fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+        getExecutionData().from(executionData.findAll { it.exists() })
+    }
+
+    dependsOn(subprojects.test)
+
     getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
     getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
     getClassDirectories().from(subprojects.sourceSets.main.output)
-    reports { xml.enabled true }
+    executionData.from(subprojects.jacocoTestReport.executionData)
 
-    doFirst {
-        getExecutionData().from(executionData.findAll { it.exists() })
+    reports {
+        xml.enabled true
     }
 
     afterEvaluate {
@@ -26,6 +32,6 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 }
 
 jacoco {
-    toolVersion = "0.8.4"
+    toolVersion = "0.8.10"
 }
 
