@@ -7,4 +7,3 @@ dependencies {
 }
 tasks.named("spotlessJava").configure { dependsOn("compileJava","javadoc","processResources","spotlessGroovyGradle") }
 tasks.named("spotlessKotlin").configure { dependsOn("compileJava","javadoc","processResources","spotlessJava","spotlessGroovyGradle") }
-//tasks.named("jacocoRootReport").configure { dependsOn("compileJava","compileTestJava","javadoc","test", "spotlessGroovyGradle", "spotlessKotlin","spotlessJava") }
