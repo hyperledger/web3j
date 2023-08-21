@@ -1,5 +1,3 @@
-apply plugin: 'jacoco'
-
 //task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 //
 //    doFirst {
@@ -31,26 +29,57 @@ apply plugin: 'jacoco'
 //    }
 //}
 
-task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-    additionalSourceDirs.from files(subprojects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories.from files(subprojects.sourceSets.main.allSource.srcDirs)
+//task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+//    additionalSourceDirs.from files(subprojects.sourceSets.main.allSource.srcDirs)
+//    sourceDirectories.from files(subprojects.sourceSets.main.allSource.srcDirs)
+//    classDirectories.from files(subprojects.sourceSets.main.output).asFileTree.matching {
+//        exclude 'org/web3j/abi/datatypes/generated/**',
+//                'org/web3j/tuples/generated/**',
+//                'org/web3j/ens/contracts/generated/**',
+//                'org/gradle/**'
+//    }
+//    executionData.from fileTree(dir: '.', includes: ['**/jacoco/*.exec'])
+//    reports {
+//        xml.required = true
+//        xml.enabled = true
+//        csv.required = true
+//        html.destination file("build/reports/jacocoHtml")
+//    }
+//    onlyIf = { true }
+//}
+
+
+apply(plugin: 'jacoco')
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
     classDirectories.from files(subprojects.sourceSets.main.output).asFileTree.matching {
         exclude 'org/web3j/abi/datatypes/generated/**',
                 'org/web3j/tuples/generated/**',
                 'org/web3j/ens/contracts/generated/**',
                 'org/gradle/**'
     }
-    executionData.from fileTree(dir: '.', includes: ['**/jacoco/*.exec'])
+    dependsOn test
     reports {
-        xml.required = true
-        xml.enabled = true
-        csv.required = true
-        html.destination file("build/reports/jacocoHtml")
+        xml.enabled true
+        html.enabled false
+        csv.enabled false
+        xml.destination file("${buildDir}/reports/jacoco.xml")
     }
-    onlyIf = { true }
+}
+
+sonarqube {
+    properties {
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco.xml"
+    }
 }
 
 jacoco {
-    toolVersion = "0.8.10"
+    toolVersion = "0.8.8"
 }
 
