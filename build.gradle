@@ -98,5 +98,13 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply from: "$rootDir/gradle/jacoco/build.gradle"
 }
 
+test {
+    // Enable JaCoCo agent for test coverage
+    jacoco {
+        // Set the destination file for the coverage report
+        destinationFile = file("$buildDir/jacoco/test.exec")
+    }
+}
+
 tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle") }
 tasks.named("spotlessKotlin").configure { dependsOn("spotlessJava", "spotlessGroovyGradle") }
