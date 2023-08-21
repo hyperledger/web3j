@@ -85,4 +85,3 @@ artifacts { testArtifacts testsJar }
 
 tasks.named("spotlessJava").configure { dependsOn("compileJava", "compileTestJava", "processResources", "processTestResources", "spotlessGroovyGradle","javadoc","test") }
 tasks.named("spotlessKotlin").configure { dependsOn("compileJava", "compileTestJava", "processResources", "processTestResources","spotlessJava","spotlessGroovyGradle","javadoc","test") }
-//tasks.named("jacocoRootReport").configure { dependsOn("compileJava","compileTestJava","javadoc","test", "spotlessGroovyGradle", "spotlessKotlin","spotlessJava") }
