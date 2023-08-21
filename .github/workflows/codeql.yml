@@ -49,7 +49,7 @@ jobs:
         # queries: security-extended,security-and-quality
 
     - name: Build
-      run: ./gradlew jacocoTestReport
+      run: ./gradlew test
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
