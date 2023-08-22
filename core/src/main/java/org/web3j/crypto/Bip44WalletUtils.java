@@ -14,6 +14,7 @@ package org.web3j.crypto;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.web3j.crypto.exception.CipherException;
 
 import static org.web3j.crypto.Bip32ECKeyPair.HARDENED_BIT;
