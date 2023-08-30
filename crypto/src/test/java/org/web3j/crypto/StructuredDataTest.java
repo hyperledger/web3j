@@ -308,12 +308,12 @@ public class StructuredDataTest {
                         (HashMap<String, Object>) dataEncoder.jsonMessageObject.getMessage());
 
         String expectedMessageStructHash =
-                "0xc1c7d7b7dab9a65b30a6e951923b2d54536778329712e2239ed8a3f2f5f2329f";
+                "0x14f510c172a64b76f1105338b2e0b09dccfa4aef922131716d58d7fd94e097e8";
 
         assertEquals(expectedMessageStructHash, Numeric.toHexString(dataHash));
 
         assertEquals(
-                "0x935426a6009a3798ee87cd16ebeb9cea26b29d2d3762ac0951166d032f55d522",
+                "0xa31e6ec120743db6e47cf44cd6b116cc4383ff4875cf823308938f8ba4566cc0",
                 Numeric.toHexString(dataEncoder.hashStructuredData()));
     }
 
