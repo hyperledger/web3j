@@ -10,20 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.crypto;
+package org.web3j.protocol.core.methods.response;
 
-/** Cipher exception wrapper. */
-public class CipherException extends Exception {
+import java.math.BigInteger;
 
-    public CipherException(String message) {
-        super(message);
-    }
+import org.web3j.protocol.core.Response;
+import org.web3j.utils.Numeric;
 
-    public CipherException(Throwable cause) {
-        super(cause);
-    }
+/** eth_baseFee. */
+public class EthBaseFee extends Response<String> {
 
-    public CipherException(String message, Throwable cause) {
-        super(message, cause);
+    public BigInteger getBaseFee() {
+        return Numeric.decodeQuantity(getResult());
     }
 }

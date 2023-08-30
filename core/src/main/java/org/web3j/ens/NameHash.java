@@ -14,9 +14,11 @@ package org.web3j.ens;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.IDN;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+
+import io.github.adraffy.ens.ENSNormalize;
+import io.github.adraffy.ens.InvalidLabelException;
 
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
@@ -58,7 +60,7 @@ public class NameHash {
 
     /**
      * Normalise ENS name as per the <a
-     * href="http://docs.ens.domains/en/latest/implementers.html#normalising-and-validating-names">specification</a>.
+     * href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">specification</a>.
      *
      * @param ensName our user input ENS name
      * @return normalised ens name
@@ -66,8 +68,8 @@ public class NameHash {
      */
     public static String normalise(String ensName) {
         try {
-            return IDN.toASCII(ensName, IDN.USE_STD3_ASCII_RULES).toLowerCase();
-        } catch (IllegalArgumentException e) {
+            return ENSNormalize.ENSIP15.normalize(ensName);
+        } catch (InvalidLabelException e) {
             throw new EnsResolutionException("Invalid ENS name provided: " + ensName);
         }
     }

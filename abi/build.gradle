@@ -10,18 +10,3 @@ dependencies {
 
 tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc","test") }
 tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc","test") }
-tasks.named("jacocoRootTestReport").configure { dependsOn("compileJava","compileTestJava","javadoc","test", "spotlessGroovyGradle", "spotlessKotlin","spotlessJava") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":besu:compileJava",":besu:compileTestJava",":besu:javadoc",":besu:test", ":besu:spotlessGroovyGradle", ":besu:spotlessJava",":besu:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":test",":spotlessGroovyGradle",":spotlessJava",":spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":codegen:compileJava",":codegen:compileTestJava",":codegen:javadoc",":codegen:test",":codegen:processTestResources",":codegen:spotlessGroovyGradle", ":codegen:spotlessJava",":codegen:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":contracts:compileJava",":contracts:javadoc",":contracts:test",":contracts:processResources",":contracts:spotlessGroovyGradle", ":contracts:spotlessJava",":contracts:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":core:javadoc",":core:test",":core:spotlessGroovyGradle", ":core:spotlessJava",":core:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":crypto:javadoc",":crypto:test",":crypto:spotlessGroovyGradle", ":crypto:spotlessJava",":crypto:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":eea:compileTestJava",":eea:javadoc",":eea:test",":eea:spotlessGroovyGradle", ":eea:spotlessJava",":eea:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":geth:compileJava",":geth:compileTestJava",":geth:javadoc",":geth:test",":geth:spotlessGroovyGradle", ":geth:spotlessJava",":geth:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":hosted-providers:compileJava",":hosted-providers:compileTestJava",":hosted-providers:javadoc",":hosted-providers:test",":hosted-providers:spotlessGroovyGradle", ":hosted-providers:spotlessJava",":hosted-providers:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":integration-tests:compileTestJava",":integration-tests:processTestResources",":integration-tests:spotlessGroovyGradle", ":integration-tests:spotlessJava",":integration-tests:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":parity:compileJava",":parity:compileTestJava",":parity:javadoc",":parity:test",":parity:spotlessGroovyGradle", ":parity:spotlessJava",":parity:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":rlp:compileTestJava",":rlp:javadoc",":rlp:test",":rlp:spotlessGroovyGradle", ":rlp:spotlessJava",":rlp:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":tuples:javadoc",":tuples:test",":tuples:spotlessGroovyGradle", ":tuples:spotlessJava",":tuples:spotlessKotlin") }
-tasks.named("jacocoRootTestReport").configure { dependsOn(":utils:javadoc",":utils:test",":utils:spotlessGroovyGradle", ":utils:spotlessJava",":utils:spotlessKotlin") }

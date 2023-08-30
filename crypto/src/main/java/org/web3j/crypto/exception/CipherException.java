@@ -10,29 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.core.methods.request;
+package org.web3j.crypto.exception;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+/** Cipher exception wrapper. */
+public class CipherException extends Exception {
 
-/**
- * Filter implementation as per <a
- * href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
- */
-public class ShhFilter extends Filter<ShhFilter> {
-    private String to;
-
-    public ShhFilter(String to) {
-        super();
-        this.to = to;
+    public CipherException(String message) {
+        super(message);
     }
 
-    public String getTo() {
-        return to;
+    public CipherException(Throwable cause) {
+        super(cause);
     }
 
-    @Override
-    @JsonIgnore
-    ShhFilter getThis() {
-        return this;
+    public CipherException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

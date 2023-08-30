@@ -34,6 +34,7 @@ import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
 import org.web3j.protocol.core.methods.response.DbPutString;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthBaseFee;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthChainId;
@@ -51,6 +52,7 @@ import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHas
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetProof;
 import org.web3j.protocol.core.methods.response.EthGetStorageAt;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
@@ -231,6 +233,12 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Collections.<String>emptyList(),
                 web3jService,
                 EthMaxPriorityFeePerGas.class);
+    }
+
+    @Override
+    public Request<?, EthBaseFee> ethBaseFee() {
+        return new Request<>(
+                "eth_baseFee", Collections.<String>emptyList(), web3jService, EthBaseFee.class);
     }
 
     @Override
@@ -566,6 +574,16 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetLogs(
             org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<>("eth_getLogs", Arrays.asList(ethFilter), web3jService, EthLog.class);
+    }
+
+    @Override
+    public Request<?, EthGetProof> ethGetProof(
+            String address, List<String> storageKeys, String quantity) {
+        return new Request<>(
+                "eth_getProof",
+                Arrays.asList(address, storageKeys, quantity),
+                web3jService,
+                EthGetProof.class);
     }
 
     @Override

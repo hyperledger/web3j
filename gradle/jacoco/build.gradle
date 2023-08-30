@@ -1,37 +1,34 @@
-apply plugin: 'jacoco'
+apply(plugin: 'jacoco')
 
-task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
 
-    doFirst {
-        executionData.fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-        getExecutionData().from(executionData.findAll { it.exists() })
+jacocoTestReport {
+    classDirectories.from files(subprojects.sourceSets.main.output).asFileTree.matching {
+        exclude 'org/web3j/abi/datatypes/generated/**',
+                'org/web3j/tuples/generated/**',
+                'org/web3j/ens/contracts/generated/**',
+                'org/gradle/**'
     }
-
-    dependsOn(subprojects.test)
-
-    getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
-    getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
-    getClassDirectories().from(subprojects.sourceSets.main.output)
-    executionData.from(subprojects.jacocoTestReport.executionData)
-
+    dependsOn test
     reports {
         xml.enabled true
+        html.enabled false
+        csv.enabled false
+        xml.destination file("${buildDir}/reports/jacoco.xml")
     }
+}
 
-    afterEvaluate {
-        getClassDirectories().from(files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: [
-                            'org/web3j/abi/datatypes/generated/**',
-                            'org/web3j/tuples/generated/**',
-                            'org/web3j/ens/contracts/generated/**',
-                            'org/gradle/**'
-                    ])
-        }))
+sonarqube {
+    properties {
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco.xml"
     }
 }
 
 jacoco {
-    toolVersion = "0.8.10"
+    toolVersion = "0.8.8"
 }
 
