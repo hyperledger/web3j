@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.web3j.crypto.exception.CipherException;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.crypto.Hash.sha256;
