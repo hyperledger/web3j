@@ -35,7 +35,7 @@ import org.web3j.tx.gas.ContractGasProvider;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@EVMTest(type = NodeType.OPEN_ETHEREUM)
+@EVMTest(type = NodeType.BESU)
 public class EthCallIT extends Scenario {
 
     private static Revert contract;
