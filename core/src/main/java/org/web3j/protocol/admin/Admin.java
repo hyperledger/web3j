@@ -25,7 +25,12 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 
-/** JSON-RPC Request object building factory for common Parity and Geth. */
+/**
+ * JSON-RPC Request object building factory for common Parity and Geth. Personal namespace has now
+ * been deprecated in favour of using Clef as an external signer and account manager. Read more -
+ * https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-personal
+ */
+@Deprecated()
 public interface Admin extends Web3j {
 
     static Admin build(Web3jService web3jService) {
