@@ -38,6 +38,7 @@ public class Transaction {
     private String r;
     private String s;
     private long v; // see https://github.com/web3j/web3j/issues/44
+    private String yParity;
     private String type;
     private String maxFeePerGas;
     private String maxPriorityFeePerGas;
@@ -111,6 +112,7 @@ public class Transaction {
             String r,
             String s,
             long v,
+            String yParity,
             String type,
             String maxFeePerGas,
             String maxPriorityFeePerGas,
@@ -133,6 +135,7 @@ public class Transaction {
         this.r = r;
         this.s = s;
         this.v = v;
+        this.yParity = yParity;
         this.type = type;
         this.maxFeePerGas = maxFeePerGas;
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
@@ -318,6 +321,14 @@ public class Transaction {
     //        this.v = v;
     //    }
 
+    public String getyParity() {
+        return yParity;
+    }
+
+    public void setyParity(String yParity) {
+        this.yParity = yParity;
+    }
+
     public Long getChainId() {
         if (chainId != null) {
             return Numeric.decodeQuantity(chainId).longValue();
@@ -455,6 +466,11 @@ public class Transaction {
         if (getR() != null ? !getR().equals(that.getR()) : that.getR() != null) {
             return false;
         }
+        if (getyParity() != null
+                ? !getyParity().equals(that.getyParity())
+                : that.getyParity() != null) {
+            return false;
+        }
         if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
             return false;
         }
@@ -500,6 +516,7 @@ public class Transaction {
         result = 31 * result + (getR() != null ? getR().hashCode() : 0);
         result = 31 * result + (getS() != null ? getS().hashCode() : 0);
         result = 31 * result + BigInteger.valueOf(getV()).hashCode();
+        result = 31 * result + (getyParity() != null ? getyParity().hashCode() : 0);
         result = 31 * result + (getType() != null ? getType().hashCode() : 0);
         result = 31 * result + (getMaxFeePerGasRaw() != null ? getMaxFeePerGasRaw().hashCode() : 0);
         result =
