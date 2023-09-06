@@ -1083,6 +1083,79 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
+    public void testEthTransactionResponseWithYParity() {
+        buildResponse(
+                "{\n"
+                        + "    \"id\":1,\n"
+                        + "    \"jsonrpc\":\"2.0\",\n"
+                        + "    \"result\": {\n"
+                        + "        \"hash\":\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n"
+                        + "        \"nonce\":\"0x\",\n"
+                        + "        \"blockHash\": \"0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b\",\n"
+                        + "        \"blockNumber\": \"0x15df\",\n"
+                        + "        \"chainId\": \"4\",\n"
+                        + "        \"transactionIndex\":  \"0x1\",\n"
+                        + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"value\":\"0x7f110\",\n"
+                        + "        \"gas\": \"0x7f110\",\n"
+                        + "        \"gasPrice\":\"0x09184e72a000\",\n"
+                        + "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\",\n"
+                        + "        \"creates\":null,\n"
+                        + "        \"publicKey\":\"0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b\",\n"
+                        + "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
+                        + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
+                        + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
+                        + "        \"v\":\"0\",\n"
+                        + "        \"yParity\":\"1\",\n"
+                        + "    \"accessList\": [{"
+                        + "        \"address\":\"0x408e41876cccdc0f92210600ef50372656052a38\",\n"
+                        + "    \"storageKeys\": ["
+                        + "        \"0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc\",\n"
+                        + "        \"0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129\"\n"
+                        + "    ] \n"
+                        + "    }], \n"
+                        + "        \"type\":\"0x0\",\n"
+                        + "        \"maxFeePerGas\": \"0x7f110\",\n"
+                        + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
+                        + "  }\n"
+                        + "}");
+        Transaction transaction =
+                new Transaction(
+                        "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+                        "0x",
+                        "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
+                        "0x15df",
+                        "4",
+                        "0x1",
+                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                        "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                        "0x7f110",
+                        "0x7f110",
+                        "0x09184e72a000",
+                        "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                        null,
+                        "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
+                        "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                        "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
+                        "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                        (byte) 0,
+                        "1",
+                        "0x0",
+                        "0x7f110",
+                        "0x7f110",
+                        Arrays.asList(
+                                new AccessListObject(
+                                        "0x408e41876cccdc0f92210600ef50372656052a38",
+                                        Arrays.asList(
+                                                "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
+                                                "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))));
+
+        EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
+        assertEquals(ethTransaction.getTransaction().get(), (transaction));
+    }
+
+    @Test
     public void testTransactionChainId() {
         Transaction transaction = new Transaction();
         transaction.setV(0x25);
