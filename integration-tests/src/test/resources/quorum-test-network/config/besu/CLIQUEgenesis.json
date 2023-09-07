@@ -1,0 +1,62 @@
+{
+  "config":{
+    "chainId":1337,
+    "londonBlock": 0,
+    "zeroBaseFee": true,
+    "clique":{
+      "blockperiodseconds":15,
+      "epochlength":30000
+    }
+  },
+  "coinbase":"0x0000000000000000000000000000000000000000",
+  "difficulty":"0x1",
+  "extraData":"0x000000000000000000000000000000000000000000000000000000000000000093917cadbace5dfce132b991732c6cda9bcc5b8a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "gasLimit":"0xa00000",
+  "mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000",
+  "nonce":"0x0",
+  "timestamp":"0x5c51a607",
+  "alloc": {
+    "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73": {
+      "privateKey": "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63",
+      "comment": "private key and this comment are ignored.  In a real chain, the private key should NOT be stored",
+      "balance": "0x130EE8E7179044400000"
+    },
+    "0x627306090abaB3A6e1400e9345bC60c78a8BEf57": {
+      "privateKey": "0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3",
+      "comment": "private key and this comment are ignored.  In a real chain, the private key should NOT be stored",
+      "balance": "90000000000000000000000"
+    },
+    "0xf17f52151EbEF6C7334FAD080c5704D77216b732": {
+      "privateKey": "0xae6ae8e5ccbfb04590405997ee2d52d2b330726137b875053c36d94e974d162f",
+      "comment": "private key and this comment are ignored.  In a real chain, the private key should NOT be stored",
+      "balance": "90000000000000000000000"
+    },
+    "0xf0e2db6c8dc6c681bb5d6ad121a107f300e9b2b5": {
+      "balance": "1000000000000000000000000000"
+    },
+    "0xca843569e3427144cead5e4d5999a3d0ccf92b8e": {
+      "balance": "1000000000000000000000000000"
+    },
+    "0x0fbdc686b912d7722dc86510934589e0aaf3b55a": {
+      "balance": "1000000000000000000000000000"
+    },
+    "0xc9c913c8c3c1cd416d80a0abf475db2062f161f6": {
+      "balance": "1000000000000000000000000000"
+    },
+    "0xed9d02e382b34818e88b88a309c7fe71e65f419d": {
+      "balance": "1000000000000000000000000000"
+    },
+    "0xb30f304642de3fee4365ed5cd06ea2e69d3fd0ca": {
+      "balance": "1000000000000000000000000000"
+    },
+    "0x0886328869e4e1f401e1052a5f4aae8b45f42610": {
+      "balance": "1000000000000000000000000000"
+    },
+    "0xf48de4a0c2939e62891f3c6aca68982975477e45": {
+      "balance": "1000000000000000000000000000"
+    }
+  },
+  "number":"0x0",
+  "gasUsed":"0x0",
+  "parentHash":"0x0000000000000000000000000000000000000000000000000000000000000000"
+}

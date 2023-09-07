@@ -1,0 +1,20 @@
+{
+  "name": "@consensys-software/smart_contracts",
+  "version": "1.0.0",
+  "description": "Example smart contracts for trying out Quorum",
+  "scripts": {
+    "compile": "node scripts/compile.js",
+    "deploy": "node scripts/deploy.js",
+    "public-transaction": "node scripts/public_tx.js",
+    "private-transaction": "node scripts/private_tx.js"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "async-promise-pool": "^1.0.3",
+    "fs-extra": "^10.0.0",
+    "solc": "0.7.6",
+    "web3": "1.5.2",
+    "ethers": "^5.6.1",
+    "web3js-quorum": "21.7.0-rc1"
+  }
+}
