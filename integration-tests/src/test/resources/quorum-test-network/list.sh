@@ -10,8 +10,10 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 # an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
-
+TERM=dumb
 NO_LOCK_REQUIRED=false
+
+cd src/test/resources/quorum-test-network/
 
 . ./.env
 . ./.common.sh
@@ -20,9 +22,9 @@ maxRetryCount=50
 HOST=${DOCKER_PORT_2375_TCP_ADDR:-"localhost"}
 
 # Displays links to exposed services
-echo "${bold}*************************************"
+echo "*************************************"
 echo "Quorum Dev Quickstart "
-echo "*************************************${normal}"
+echo "*************************************"
 
 elk_setup=true
 if [ -z `docker compose -f docker-compose.yml ps -q kibana 2>/dev/null` ] ; then
