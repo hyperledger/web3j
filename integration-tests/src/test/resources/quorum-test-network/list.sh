@@ -13,8 +13,6 @@
 TERM=dumb
 NO_LOCK_REQUIRED=false
 
-cd src/test/resources/quorum-test-network/
-
 . ./.env
 . ./.common.sh
 dots=""

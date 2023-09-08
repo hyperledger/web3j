@@ -86,11 +86,12 @@ public class BesuPrivacyQuickstartIntegrationTest {
         nodeCharlie = Besu.build(new HttpService("http://localhost:20004"));
         rpcNode = Besu.build(new HttpService("http://localhost:8545"));
 
-        int blockNumber = 0;
-        do {
-            TimeUnit.MINUTES.sleep(1);
-            blockNumber = rpcNode.ethBlockNumber().send().getBlockNumber().intValue();
-        } while (blockNumber <= 60);
+        TimeUnit.MINUTES.sleep(6);
+        //        int blockNumber = 0;
+        //        do {
+        //            TimeUnit.MINUTES.sleep(1);
+        //            blockNumber = rpcNode.ethBlockNumber().send().getBlockNumber().intValue();
+        //        } while (blockNumber <= 60);
     }
 
     @AfterAll
