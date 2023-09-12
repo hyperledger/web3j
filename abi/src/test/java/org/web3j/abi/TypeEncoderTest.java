@@ -13,6 +13,7 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -85,6 +86,7 @@ import org.web3j.abi.datatypes.generated.Uint232;
 import org.web3j.abi.datatypes.generated.Uint24;
 import org.web3j.abi.datatypes.generated.Uint240;
 import org.web3j.abi.datatypes.generated.Uint248;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
 import org.web3j.abi.datatypes.generated.Uint40;
 import org.web3j.abi.datatypes.generated.Uint48;
@@ -1214,6 +1216,35 @@ public class TypeEncoderTest {
                         + "6172726179730000000000000000000000000000000000000000000000000000"
                         + "0000000000000000000000000000000000000000000000000000000000000008"
                         + "656e636f64696e67000000000000000000000000000000000000000000000000"),
+                TypeEncoder.encodeDynamicArray(array));
+    }
+
+    @Test
+    public void testDynamicArrayOfDynamicArraysOfStaticStructs() {
+        DynamicArray<DynamicArray<Bar>> array =
+                new DynamicArray(
+                        DynamicArray.class,
+                        Arrays.asList(
+                                new DynamicArray(
+                                        Bar.class,
+                                        new Bar(
+                                                new Uint256(BigInteger.ZERO),
+                                                new Uint256(BigInteger.ZERO))),
+                                new DynamicArray(
+                                        Bar.class,
+                                        new Bar(
+                                                new Uint256(BigInteger.ONE),
+                                                new Uint256(BigInteger.ZERO)))));
+        assertEquals(
+                ("0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "00000000000000000000000000000000000000000000000000000000000000a0"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000000"),
                 TypeEncoder.encodeDynamicArray(array));
     }
 
