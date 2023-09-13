@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -81,6 +82,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         private List<String> uncles;
         private List<String> sealFields;
         private String baseFeePerGas;
+        private String withdrawalsRoot;
+        private List<Withdrawal> withdrawals;
 
         public Block() {}
 
@@ -107,7 +110,9 @@ public class EthBlock extends Response<EthBlock.Block> {
                 List<TransactionResult> transactions,
                 List<String> uncles,
                 List<String> sealFields,
-                String baseFeePerGas) {
+                String baseFeePerGas,
+                String withdrawalsRoot,
+                List<Withdrawal> withdrawals) {
             this.number = number;
             this.hash = hash;
             this.parentHash = parentHash;
@@ -131,6 +136,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.uncles = uncles;
             this.sealFields = sealFields;
             this.baseFeePerGas = baseFeePerGas;
+            this.withdrawalsRoot = withdrawalsRoot;
+            this.withdrawals = withdrawals;
         }
 
         public BigInteger getNumber() {
@@ -354,6 +361,22 @@ public class EthBlock extends Response<EthBlock.Block> {
             return baseFeePerGas;
         }
 
+        public String getWithdrawalsRoot() {
+            return withdrawalsRoot;
+        }
+
+        public void setWithdrawalsRoot(String withdrawalsRoot) {
+            this.withdrawalsRoot = withdrawalsRoot;
+        }
+
+        public List<Withdrawal> getWithdrawals() {
+            return withdrawals;
+        }
+
+        public void setWithdrawals(List<Withdrawal> withdrawals) {
+            this.withdrawals = withdrawals;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -475,9 +498,21 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             }
 
-            return getSealFields() != null
-                    ? getSealFields().equals(block.getSealFields())
-                    : block.getSealFields() == null;
+            if (getSealFields() != null
+                    ? !getSealFields().equals(block.getSealFields())
+                    : block.getSealFields() != null) {
+                return false;
+            }
+
+            if (getWithdrawalsRoot() != null
+                    ? !getWithdrawalsRoot().equals(block.getWithdrawalsRoot())
+                    : block.getWithdrawalsRoot() != null) {
+                return false;
+            }
+
+            return getWithdrawals() != null
+                    ? getWithdrawals().equals(block.getWithdrawals())
+                    : block.getWithdrawals() == null;
         }
 
         @Override
@@ -517,6 +552,10 @@ public class EthBlock extends Response<EthBlock.Block> {
                             + (getBaseFeePerGasRaw() != null
                                     ? getBaseFeePerGasRaw().hashCode()
                                     : 0);
+            result =
+                    31 * result
+                            + (getWithdrawalsRoot() != null ? getWithdrawalsRoot().hashCode() : 0);
+            result = 31 * result + (getWithdrawals() != null ? getWithdrawals().hashCode() : 0);
             return result;
         }
     }
@@ -634,6 +673,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 String r,
                 String s,
                 long v,
+                String yParity,
                 String type,
                 String maxFeePerGas,
                 String maxPriorityFeePerGas,
@@ -657,6 +697,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                     r,
                     s,
                     v,
+                    yParity,
                     type,
                     maxFeePerGas,
                     maxPriorityFeePerGas,
@@ -699,6 +740,70 @@ public class EthBlock extends Response<EthBlock.Block> {
             }
 
             return transactionResults;
+        }
+    }
+
+    public static class Withdrawal {
+        private String index;
+        private String validatorIndex;
+        private String address;
+        private String amount;
+
+        public Withdrawal() {}
+
+        public Withdrawal(String index, String validatorIndex, String address, String amount) {
+            this.index = index;
+            this.validatorIndex = validatorIndex;
+            this.address = address;
+            this.amount = amount;
+        }
+
+        public String getIndex() {
+            return index;
+        }
+
+        public void setIndex(String index) {
+            this.index = index;
+        }
+
+        public String getValidatorIndex() {
+            return validatorIndex;
+        }
+
+        public void setValidatorIndex(String validatorIndex) {
+            this.validatorIndex = validatorIndex;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public BigInteger getAmount() {
+            return Numeric.decodeQuantity(amount);
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Withdrawal that = (Withdrawal) o;
+            return Objects.equals(index, that.index)
+                    && Objects.equals(validatorIndex, that.validatorIndex)
+                    && Objects.equals(address, that.address)
+                    && Objects.equals(amount, that.amount);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(index, validatorIndex, address, amount);
         }
     }
 

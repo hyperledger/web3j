@@ -260,9 +260,9 @@ public class StructuredDataEncoder {
                             rawValue.length);
                 }
             } else if (baseType.equals("string")) {
-                hashBytes = ((String) data).getBytes();
+                hashBytes = Numeric.hexStringToByteArray(sha3String((String) data));
             } else if (baseType.equals("bytes")) {
-                hashBytes = Numeric.hexStringToByteArray((String) data);
+                hashBytes = sha3(Numeric.hexStringToByteArray((String) data));
             } else {
                 byte[] b = convertArgToBytes((String) data);
                 BigInteger bi = new BigInteger(1, b);

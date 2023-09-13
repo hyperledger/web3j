@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'org.sonarqube' version '3.4.0.2513'
     id 'jacoco'
     id 'com.diffplug.gradle.spotless' version '4.5.1'
     id 'io.codearte.nexus-staging' version '0.22.0'
@@ -23,10 +24,11 @@ ext {
     slf4jVersion = '1.7.30'
     javaWebSocketVersion = '1.5.3'
     picocliVersion = '3.0.0'
+    ensAdraffyVersion = '0.1.2'
     // test dependencies
     equalsverifierVersion = '3.14.1'
     junitVersion = '5.5.2'
-    web3jUnitVersion = '4.10.0'
+    web3jUnitVersion = '4.10.2'
     junitBenchmarkVersion = '0.7.2'
     logbackVersion = '1.2.3'
     mockitoJunitVersion = '3.1.0'
@@ -96,6 +98,7 @@ allprojects {
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply from: "$rootDir/gradle/jacoco/build.gradle"
 }
+
 
 tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle") }
 tasks.named("spotlessKotlin").configure { dependsOn("spotlessJava", "spotlessGroovyGradle") }
