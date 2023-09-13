@@ -142,7 +142,8 @@ public class Sign {
      * @return SignatureData
      * @throws RuntimeException if signature has invalid format
      */
-    public static SignatureData signatureDataFromHex(String hexSignature) throws SignatureException {
+    public static SignatureData signatureDataFromHex(String hexSignature)
+            throws SignatureException {
         byte[] sigBytes = Numeric.hexStringToByteArray(hexSignature);
         byte v;
         byte[] r, s;
@@ -163,7 +164,7 @@ public class Sign {
         // Allow a recid to be used as the v
         if (v < 27) {
             if (v == 0 || v == 1) {
-                v += 27;
+                v = (byte) (v + 27);
             } else {
                 throw new SignatureException("signature invalid v byte");
             }
