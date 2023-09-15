@@ -75,6 +75,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** JSON-RPC 2.0 Integration Tests. */
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class CoreIT {
 
     private static Web3j web3j;

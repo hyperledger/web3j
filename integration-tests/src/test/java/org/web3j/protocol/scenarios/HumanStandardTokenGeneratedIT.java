@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.Disposable;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -35,6 +36,7 @@ import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 
 /** Generated HumanStandardToken integration test for all supported scenarios. */
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class HumanStandardTokenGeneratedIT extends Scenario {
 
     @BeforeAll

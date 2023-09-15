@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -39,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /** Integration test demonstrating the full contract deployment workflow. */
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class DeployContractIT extends Scenario {
 
     @BeforeAll

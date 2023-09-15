@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -41,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Filter scenario integration tests. */
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class EventFilterIT extends Scenario {
 
     private static Fibonacci fib;

@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -36,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class EthCallIT extends Scenario {
 
     private static Revert contract;

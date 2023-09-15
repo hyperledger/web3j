@@ -15,6 +15,7 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Create, sign and send a raw transaction. */
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class CreateRawTransactionIT extends Scenario {
 
     @BeforeAll

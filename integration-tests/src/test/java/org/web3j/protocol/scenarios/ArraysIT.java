@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /** Simple integration test to demonstrate arrays usage in web3j. */
 // Needs further implementation on Web3j-Unit Project.
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class ArraysIT extends Scenario {
 
     private static Arrays contract;

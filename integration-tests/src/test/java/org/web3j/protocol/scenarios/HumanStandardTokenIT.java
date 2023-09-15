@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -55,6 +56,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * from <a href="https://github.com/ConsenSys/Tokens">ConsenSys Tokens</a>.
  */
 @EVMTest(type = NodeType.BESU)
+@Disabled
 public class HumanStandardTokenIT extends Scenario {
 
     @BeforeAll

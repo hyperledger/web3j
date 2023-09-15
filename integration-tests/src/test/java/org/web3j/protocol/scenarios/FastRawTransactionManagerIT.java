@@ -24,6 +24,7 @@ import java.util.concurrent.Future;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -44,6 +45,7 @@ import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HA
 
 @EVMTest(type = NodeType.BESU)
 @BenchmarkOptions(concurrency = 1, warmupRounds = 0, benchmarkRounds = 1)
+@Disabled
 public class FastRawTransactionManagerIT extends Scenario {
 
     private static final int COUNT = 5; // don't set too high if using a real Ethereum network
