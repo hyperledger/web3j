@@ -13,6 +13,8 @@
 TERM=dumb
 NO_LOCK_REQUIRED=true
 
+cd integration-tests/src/test/resources/quorum-test-network/
+
 . ./.env
 . ./.common.sh
 
