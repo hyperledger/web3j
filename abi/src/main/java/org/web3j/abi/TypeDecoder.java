@@ -636,8 +636,8 @@ public class TypeDecoder {
 
         try {
             Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
+            List<T> elements = new ArrayList<>(length);
             if (StructType.class.isAssignableFrom(cls)) {
-                List<T> elements = new ArrayList<>(length);
                 for (int i = 0, currOffset = offset;
                         i < length;
                         i++,
@@ -663,11 +663,36 @@ public class TypeDecoder {
 
                 return consumer.apply(elements, typeName);
             } else if (Array.class.isAssignableFrom(cls)) {
-                throw new UnsupportedOperationException(
-                        "Arrays of arrays are not currently supported for external functions, see"
-                                + "http://solidity.readthedocs.io/en/develop/types.html#members");
+                for (int i = 0, currOffset = offset;
+                        i < length;
+                        i++,
+                                currOffset +=
+                                        getSingleElementLength(input, currOffset, cls)
+                                                * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
+                    T value;
+                    if (DynamicArray.class.isAssignableFrom(cls)) {
+                        value =
+                                (T)
+                                        TypeDecoder.decodeDynamicArray(
+                                                input,
+                                                offset
+                                                        + getDataOffset(
+                                                                input, currOffset, typeReference),
+                                                Utils.getDynamicArrayTypeReference(
+                                                        Utils.getFullParameterizedTypeFromArray(
+                                                                typeReference)));
+
+                    } else {
+                        int staticLength =
+                                ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
+                        value =
+                                TypeDecoder.decodeStaticArray(
+                                        input, offset, TypeReference.create(cls), staticLength);
+                    }
+                    elements.add(value);
+                }
+                return consumer.apply(elements, cls.getName());
             } else {
-                List<T> elements = new ArrayList<>(length);
                 int currOffset = offset;
                 for (int i = 0; i < length; i++) {
                     T value;
