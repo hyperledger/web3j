@@ -39,7 +39,3 @@ fi
 echo "Starting network..."
 docker compose build --pull
 docker compose up --detach
-
-
-#list services and endpoints
-./list.sh
