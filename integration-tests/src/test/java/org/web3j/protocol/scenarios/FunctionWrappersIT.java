@@ -15,7 +15,6 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -36,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <em>project-home</em>/src/integration-test/java -p org.web3j.generated
  */
 @EVMTest(type = NodeType.BESU)
-@Disabled
 public class FunctionWrappersIT extends Scenario {
 
     private static Fibonacci fib;

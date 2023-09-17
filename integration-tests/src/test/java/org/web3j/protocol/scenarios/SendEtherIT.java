@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -35,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Simple integration test to demonstrate sending of Ether between parties. */
 @EVMTest(type = NodeType.BESU)
-@Disabled
 public class SendEtherIT extends Scenario {
 
     @BeforeAll

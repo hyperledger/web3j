@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Flowable callback tests. */
 @EVMTest(type = NodeType.BESU)
-@Disabled
 public class FlowableIT {
     private static final int EVENT_COUNT = 5;
     private static final int TIMEOUT_MINUTES = 1;

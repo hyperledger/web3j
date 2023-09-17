@@ -79,7 +79,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
 
     @BeforeAll
     public static void setUpOnce() throws InterruptedException, IOException {
-        //        runScript("src/test/resources/quorum-test-network/run.sh");
+        runScript("src/test/resources/quorum-test-network/run.sh");
 
         nodeAlice = Besu.build(new HttpService("http://localhost:20000"));
         nodeBob = Besu.build(new HttpService("http://localhost:20002"));
@@ -90,12 +90,12 @@ public class BesuPrivacyQuickstartIntegrationTest {
         do {
             TimeUnit.MINUTES.sleep(1);
             blockNumber = rpcNode.ethBlockNumber().send().getBlockNumber().intValue();
-        } while (blockNumber <= 60);
+        } while (blockNumber <= 100);
     }
 
     @AfterAll
     public static void stopNetwork() {
-        //        runScript("src/test/resources/quorum-test-network/remove.sh");
+        runScript("src/test/resources/quorum-test-network/remove.sh");
     }
 
     @Test

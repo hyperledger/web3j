@@ -13,7 +13,7 @@
 TERM=dumb
 NO_LOCK_REQUIRED=false
 
-cd src/test/resources/quorum-test-network/
+cd src/test/resources/quorum-test-network/ || exit
 
 . ./.env
 . ./.common.sh

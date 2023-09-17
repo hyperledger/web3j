@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EVMTest(type = NodeType.GETH)
-@Disabled
 public class GethIT {
 
     private Geth web3j;
