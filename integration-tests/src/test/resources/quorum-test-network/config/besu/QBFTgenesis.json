@@ -17,8 +17,8 @@
       "zeroBaseFee": true,
       "qbft": {
         "epochlength": 30000,
-        "blockperiodseconds": 5,
-        "requesttimeoutseconds": 10
+        "blockperiodseconds": 1,
+        "requesttimeoutseconds": 2
       }
     },
     "nonce" : "0x0",

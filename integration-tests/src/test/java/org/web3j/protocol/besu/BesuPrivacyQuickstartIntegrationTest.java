@@ -324,10 +324,11 @@ public class BesuPrivacyQuickstartIntegrationTest {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
             processBuilder.inheritIO(); // Redirect script output to the console
+            processBuilder.redirectErrorStream(true); // Redirect error stream to output stream
             networkProcess = processBuilder.start();
 
             // Wait for the script to finish
-            if (!networkProcess.waitFor(2, TimeUnit.MINUTES)) {
+            if (!networkProcess.waitFor(5, TimeUnit.MINUTES)) {
                 throw new RuntimeException("Script failed.");
             }
         } catch (IOException | InterruptedException e) {

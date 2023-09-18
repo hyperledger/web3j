@@ -33,18 +33,7 @@ x-tessera-def:
     - 9000
     - 9080
     - 9101
-  restart: "no"
-  healthcheck:
-    test: ["CMD", "wget", "--spider", "--proxy", "off", "http://localhost:9000/upcheck"]
-    interval: 3s
-    timeout: 3s
-    retries: 20
-    start_period: 5s
-
-
-
-
-
+  restart: "on-failure"
 
 
 

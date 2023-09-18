@@ -1,6 +1,6 @@
 ARG TESSERA_VERSION=latest
 
-FROM --platform=amd64 quorumengineering/tessera:${TESSERA_VERSION}
+FROM --platform=linux/amd64 quorumengineering/tessera:${TESSERA_VERSION}
 
 # develop uses a debain container, all releases use an alpine container - this allows both to be used for the quickstart
 # set the version in ../../.env

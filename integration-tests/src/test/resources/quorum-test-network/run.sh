@@ -39,3 +39,25 @@ fi
 echo "Starting network..."
 docker compose build --pull
 docker compose up --detach
+
+# Sleep for 2 minutes (120 seconds)
+sleep 120
+
+# Run the docker ps -a command and capture its output
+docker_ps_output=$(docker ps -a)
+echo "$docker_ps_output"
+
+# Define the JSON-RPC request as a variable
+json_rpc_request='{
+  "jsonrpc": "2.0",
+  "method": "web3_clientVersion",
+  "params": [],
+  "id": 1
+}'
+
+# Send the JSON-RPC request using curl and capture the response in a variable
+response=$(curl -X POST -H "Content-Type: application/json" --data "$json_rpc_request" http://127.0.0.1:8545)
+
+# Print the response
+echo "JSON-RPC Response:"
+echo "$response"
