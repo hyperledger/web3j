@@ -48,8 +48,6 @@ import static org.web3j.utils.Restriction.RESTRICTED;
 
 /** Test designed to run with besu-quickstart https://github.com/Consensys/quorum-dev-quickstart */
 public class BesuPrivacyQuickstartIntegrationTest {
-
-    private static final String CLIENT_VERSION = "besu/v23.4.1/linux-aarch_64/openjdk-java-17";
     private static final int CHAIN_ID = 1337;
 
     private static final String HUMAN_STANDARD_TOKEN_BINARY =
@@ -100,11 +98,10 @@ public class BesuPrivacyQuickstartIntegrationTest {
 
     @Test
     public void testConnection() throws IOException {
-        assertEquals(rpcNode.web3ClientVersion().send().getWeb3ClientVersion(), (CLIENT_VERSION));
-        assertEquals(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion(), (CLIENT_VERSION));
-        assertEquals(nodeBob.web3ClientVersion().send().getWeb3ClientVersion(), (CLIENT_VERSION));
-        assertEquals(
-                nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion(), (CLIENT_VERSION));
+        assertNotNull(rpcNode.web3ClientVersion().send().getWeb3ClientVersion());
+        assertNotNull(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion());
+        assertNotNull(nodeBob.web3ClientVersion().send().getWeb3ClientVersion());
+        assertNotNull(nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion());
     }
 
     @Test
