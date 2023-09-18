@@ -81,10 +81,10 @@ public class BesuPrivacyQuickstartIntegrationTest {
     public static void setUpOnce() throws InterruptedException, IOException {
         runScript("src/test/resources/quorum-test-network/run.sh");
 
-        nodeAlice = Besu.build(new HttpService("http://localhost:20000"));
-        nodeBob = Besu.build(new HttpService("http://localhost:20002"));
-        nodeCharlie = Besu.build(new HttpService("http://localhost:20004"));
-        rpcNode = Besu.build(new HttpService("http://localhost:8545"));
+        nodeAlice = Besu.build(new HttpService("http://127.0.0.1:20000"));
+        nodeBob = Besu.build(new HttpService("http://127.0.0.1:20002"));
+        nodeCharlie = Besu.build(new HttpService("http://127.0.0.1:20004"));
+        rpcNode = Besu.build(new HttpService("http://127.0.0.1:8545"));
 
         int blockNumber = 0;
         do {
