@@ -500,6 +500,18 @@ public class SolidityFunctionWrapper extends Generator {
                 } else {
                     nativeTypeName = buildTypeName(type, useJavaPrimitiveTypes);
                     typeName = getWrapperType(nativeTypeName);
+                    if (type.contains("[")) {
+                        annotationSpec =
+                                AnnotationSpec.builder(Parameterized.class)
+                                        .addMember(
+                                                "type",
+                                                "$T.class",
+                                                TypeReference.makeTypeReference(
+                                                                type.substring(
+                                                                        0, type.indexOf('[')))
+                                                        .getClassType())
+                                        .build();
+                    }
                 }
                 builder.addField(typeName, component.getName(), Modifier.PUBLIC);
                 constructorBuilder.addParameter(typeName, component.getName());
