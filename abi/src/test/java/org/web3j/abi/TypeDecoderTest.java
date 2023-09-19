@@ -13,6 +13,7 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +62,7 @@ import org.web3j.abi.datatypes.generated.Int8;
 import org.web3j.abi.datatypes.generated.Int80;
 import org.web3j.abi.datatypes.generated.Int88;
 import org.web3j.abi.datatypes.generated.Int96;
+import org.web3j.abi.datatypes.generated.StaticArray1;
 import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint104;
@@ -1139,6 +1141,62 @@ public class TypeDecoderTest {
         assertEquals(dynamicArray.getValue().get(0), (new Utf8String("Hello, world!")));
 
         assertEquals(dynamicArray.getValue().get(1), (new Utf8String("world! Hello,")));
+    }
+
+    @Test
+    public void testDynamicArrayOfDynamicArrays() throws Exception {
+        assertEquals(
+                TypeDecoder.decodeDynamicArray(
+                        "0000000000000000000000000000000000000000000000000000000000000002"
+                                + "0000000000000000000000000000000000000000000000000000000000000040"
+                                + "00000000000000000000000000000000000000000000000000000000000000a0"
+                                + "0000000000000000000000000000000000000000000000000000000000000001"
+                                + "0000000000000000000000000000000000000000000000000000000000000000"
+                                + "0000000000000000000000000000000000000000000000000000000000000000"
+                                + "0000000000000000000000000000000000000000000000000000000000000001"
+                                + "0000000000000000000000000000000000000000000000000000000000000001"
+                                + "0000000000000000000000000000000000000000000000000000000000000000",
+                        0,
+                        new TypeReference<DynamicArray<DynamicArray<AbiV2TestFixture.Bar>>>() {}),
+                new DynamicArray(
+                        DynamicArray.class,
+                        Arrays.asList(
+                                new DynamicArray(
+                                        AbiV2TestFixture.Bar.class,
+                                        new AbiV2TestFixture.Bar(
+                                                new Uint256(BigInteger.ZERO),
+                                                new Uint256(BigInteger.ZERO))),
+                                new DynamicArray(
+                                        AbiV2TestFixture.Bar.class,
+                                        new AbiV2TestFixture.Bar(
+                                                new Uint256(BigInteger.ONE),
+                                                new Uint256(BigInteger.ZERO))))));
+    }
+
+    @Test
+    public void testDynamicArrayOfStaticArrays() throws Exception {
+        assertEquals(
+                TypeDecoder.decodeDynamicArray(
+                        "0000000000000000000000000000000000000000000000000000000000000002"
+                                + "0000000000000000000000000000000000000000000000000000000000000000"
+                                + "0000000000000000000000000000000000000000000000000000000000000000"
+                                + "0000000000000000000000000000000000000000000000000000000000000001"
+                                + "0000000000000000000000000000000000000000000000000000000000000000",
+                        0,
+                        new TypeReference<DynamicArray<StaticArray1<AbiV2TestFixture.Bar>>>() {}),
+                new DynamicArray(
+                        StaticArray1.class,
+                        Arrays.asList(
+                                new StaticArray1(
+                                        AbiV2TestFixture.Bar.class,
+                                        new AbiV2TestFixture.Bar(
+                                                new Uint256(BigInteger.ZERO),
+                                                new Uint256(BigInteger.ZERO))),
+                                new StaticArray1(
+                                        AbiV2TestFixture.Bar.class,
+                                        new AbiV2TestFixture.Bar(
+                                                new Uint256(BigInteger.ONE),
+                                                new Uint256(BigInteger.ZERO))))));
     }
 
     @SuppressWarnings("unchecked")

@@ -636,8 +636,8 @@ public class TypeDecoder {
 
         try {
             Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
+            List<T> elements = new ArrayList<>(length);
             if (StructType.class.isAssignableFrom(cls)) {
-                List<T> elements = new ArrayList<>(length);
                 for (int i = 0, currOffset = offset;
                         i < length;
                         i++,
@@ -663,11 +663,81 @@ public class TypeDecoder {
 
                 return consumer.apply(elements, typeName);
             } else if (Array.class.isAssignableFrom(cls)) {
-                throw new UnsupportedOperationException(
-                        "Arrays of arrays are not currently supported for external functions, see"
-                                + "http://solidity.readthedocs.io/en/develop/types.html#members");
+                for (int i = 0, currOffset = offset; i < length; i++) {
+                    T value;
+                    if (DynamicArray.class.isAssignableFrom(cls)) {
+                        value =
+                                (T)
+                                        TypeDecoder.decodeDynamicArray(
+                                                input,
+                                                offset
+                                                        + getDataOffset(
+                                                                input, currOffset, typeReference),
+                                                Utils.getDynamicArrayTypeReference(
+                                                        Utils.getFullParameterizedTypeFromArray(
+                                                                typeReference)));
+                        currOffset +=
+                                getSingleElementLength(input, currOffset, cls)
+                                        * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                    } else {
+                        String typeName = cls.getSimpleName();
+                        String extractedLength =
+                                typeName.substring(typeName.replaceAll("[0-9]+$", "").length());
+                        int staticLength =
+                                extractedLength.isEmpty() ? 0 : Integer.parseInt(extractedLength);
+                        TypeReference innerType =
+                                TypeReference.create(
+                                        Utils.getFullParameterizedTypeFromArray(typeReference));
+
+                        TypeReference.StaticArrayTypeReference staticReference =
+                                new TypeReference.StaticArrayTypeReference<StaticArray>(
+                                        staticLength) {
+
+                                    @Override
+                                    TypeReference getSubTypeReference() {
+                                        return innerType;
+                                    }
+
+                                    @Override
+                                    public boolean isIndexed() {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public java.lang.reflect.Type getType() {
+                                        return new ParameterizedType() {
+                                            @Override
+                                            public java.lang.reflect.Type[]
+                                                    getActualTypeArguments() {
+                                                return new java.lang.reflect.Type[] {
+                                                    innerType.getType()
+                                                };
+                                            }
+
+                                            @Override
+                                            public java.lang.reflect.Type getRawType() {
+                                                return cls;
+                                            }
+
+                                            @Override
+                                            public java.lang.reflect.Type getOwnerType() {
+                                                return Class.class;
+                                            }
+                                        };
+                                    }
+                                };
+                        value =
+                                (T)
+                                        TypeDecoder.decodeStaticArray(
+                                                input, currOffset, staticReference, staticLength);
+                        currOffset +=
+                                ((decodeUintAsInt(input, currOffset) / Type.MAX_BYTE_LENGTH) + 2)
+                                        * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                    }
+                    elements.add(value);
+                }
+                return consumer.apply(elements, cls.getName());
             } else {
-                List<T> elements = new ArrayList<>(length);
                 int currOffset = offset;
                 for (int i = 0; i < length; i++) {
                     T value;

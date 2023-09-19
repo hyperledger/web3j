@@ -157,7 +157,7 @@ public class TypeEncoder {
      * @return
      */
     private static <T extends Type> String encodeStaticArrayWithDynamicStruct(Array<T> value) {
-        String valuesOffsets = encodeStructsArraysOffsets(value);
+        String valuesOffsets = encodeDynamicsTypesArraysOffsets(value);
         String encodedValues = encodeArrayValues(value);
 
         StringBuilder result = new StringBuilder();
@@ -334,6 +334,8 @@ public class TypeEncoder {
                 !value.getValue().isEmpty() && value.getValue().get(0) instanceof Utf8String;
         boolean arrayOfDynamicStructs =
                 !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicStruct;
+        boolean arrayOfDynamicArrays =
+                !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicArray;
         if (arrayOfBytes || arrayOfString) {
             long offset = 0;
             for (int i = 0; i < value.getValue().size(); i++) {
@@ -353,20 +355,20 @@ public class TypeEncoder {
                                 Numeric.toBytesPadded(
                                         new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
             }
-        } else if (arrayOfDynamicStructs) {
-            result.append(encodeStructsArraysOffsets(value));
+        } else if (arrayOfDynamicArrays || arrayOfDynamicStructs) {
+            result.append(encodeDynamicsTypesArraysOffsets(value));
         }
         return result.toString();
     }
 
     /**
-     * Encodes arrays of structs elements offsets. To be used when encoding a dynamic array or a
-     * static array containing dynamic structs,
+     * Encodes arrays of structs or dynamic arrays elements offsets. To be used when encoding a
+     * dynamic arrays or a static array containing dynamic structs,
      *
      * @param value DynamicArray or StaticArray containing dynamic structs
      * @return encoded array offset
      */
-    private static <T extends Type> String encodeStructsArraysOffsets(Array<T> value) {
+    private static <T extends Type> String encodeDynamicsTypesArraysOffsets(Array<T> value) {
         StringBuilder result = new StringBuilder();
         long offset = value.getValue().size();
         List<String> tailsEncoding =
