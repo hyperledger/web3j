@@ -663,12 +663,7 @@ public class TypeDecoder {
 
                 return consumer.apply(elements, typeName);
             } else if (Array.class.isAssignableFrom(cls)) {
-                for (int i = 0, currOffset = offset;
-                        i < length;
-                        i++,
-                                currOffset +=
-                                        getSingleElementLength(input, currOffset, cls)
-                                                * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
+                for (int i = 0, currOffset = offset; i < length; i++) {
                     T value;
                     if (DynamicArray.class.isAssignableFrom(cls)) {
                         value =
@@ -681,13 +676,63 @@ public class TypeDecoder {
                                                 Utils.getDynamicArrayTypeReference(
                                                         Utils.getFullParameterizedTypeFromArray(
                                                                 typeReference)));
-
+                        currOffset +=
+                                getSingleElementLength(input, currOffset, cls)
+                                        * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     } else {
+                        String typeName = cls.getSimpleName();
+                        String extractedLength =
+                                typeName.substring(typeName.replaceAll("[0-9]+$", "").length());
                         int staticLength =
-                                ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
+                                extractedLength.isEmpty() ? 0 : Integer.parseInt(extractedLength);
+                        TypeReference innerType =
+                                TypeReference.create(
+                                        Utils.getFullParameterizedTypeFromArray(typeReference));
+
+                        TypeReference.StaticArrayTypeReference staticReference =
+                                new TypeReference.StaticArrayTypeReference<StaticArray>(
+                                        staticLength) {
+
+                                    @Override
+                                    TypeReference getSubTypeReference() {
+                                        return innerType;
+                                    }
+
+                                    @Override
+                                    public boolean isIndexed() {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public java.lang.reflect.Type getType() {
+                                        return new ParameterizedType() {
+                                            @Override
+                                            public java.lang.reflect.Type[]
+                                                    getActualTypeArguments() {
+                                                return new java.lang.reflect.Type[] {
+                                                    innerType.getType()
+                                                };
+                                            }
+
+                                            @Override
+                                            public java.lang.reflect.Type getRawType() {
+                                                return cls;
+                                            }
+
+                                            @Override
+                                            public java.lang.reflect.Type getOwnerType() {
+                                                return Class.class;
+                                            }
+                                        };
+                                    }
+                                };
                         value =
-                                TypeDecoder.decodeStaticArray(
-                                        input, offset, TypeReference.create(cls), staticLength);
+                                (T)
+                                        TypeDecoder.decodeStaticArray(
+                                                input, currOffset, staticReference, staticLength);
+                        currOffset +=
+                                ((decodeUintAsInt(input, currOffset) / Type.MAX_BYTE_LENGTH) + 2)
+                                        * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     }
                     elements.add(value);
                 }
