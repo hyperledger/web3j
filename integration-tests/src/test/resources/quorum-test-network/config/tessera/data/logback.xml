@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="defaultLogLevel" value="INFO" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder> 
+        <pattern>{"timestamp":"%d{ISO8601}","container":"${hostName}","level":"%level","thread":"%thread","logger":"%logger{36}","message":"%replace(%replace(%msg){'[\r\n]',''}){'"','\\"'}","throwable":"%replace(%replace(%throwable){'[\r\n]',''}){'"','\\"'}"}%n</pattern>
+      </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+      <file>/var/log/tessera/tessera-${HOSTNAME}.log</file>
+      <append>true</append>
+      <immediateFlush>true</immediateFlush>
+      <encoder>
+        <pattern>{"timestamp":"%d{ISO8601}","container":"${hostName}","level":"%level","thread":"%thread","class":"%c{1}","logger":"%logger{36}","message":"%replace(%msg){'[\r\n]', ''}","throwable":"%replace(%replace(%throwable){'[\r\n]',''}){'"','\\"'}"}%n</pattern>
+      </encoder>
+    </appender>
+
+    <!-- silence hibernate messages that were being created from DefaultCliAdapter -->
+    <logger name="org.hibernate.validator.internal.util.Version" level="OFF"/>
+    <logger name="org.hibernate.validator.internal.engine.ConfigurationImpl" level="OFF"/>
+
+    <!-- silence noisy logging from regular /partyinfo messages -->
+    <logger name="com.quorum.tessera.p2p.PartyInfoResource" level="WARN"/>
+
+    <root level="${verbosity:-${defaultLogLevel}}">
+      <appender-ref ref="STDOUT"/>
+      <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

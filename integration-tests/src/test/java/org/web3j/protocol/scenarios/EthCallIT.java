@@ -67,7 +67,7 @@ public class EthCallIT extends Scenario {
     public void testRevertWithMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
         assertTrue(ethCall.isReverted());
-        assertFalse(ethCall.getRevertReason().isBlank());
+        assertTrue(ethCall.getRevertReason().contains("Execution reverted"));
     }
 
     private EthCall ethCall(BigInteger value) throws java.io.IOException {

@@ -1,0 +1,60 @@
+{
+  "algorithm": "qbft",
+  "nodes": [
+    {
+      "name": "rpcnode",
+      "client": "besu",
+      "rpcUrl": "http://rpcnode:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator1",
+      "client": "besu",
+      "rpcUrl": "http://validator1:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator2",
+      "client": "besu",
+      "rpcUrl": "http://validator2:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator3",
+      "client": "besu",
+      "rpcUrl": "http://validator3:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "validator4",
+      "client": "besu",
+      "rpcUrl": "http://validator4:8545",
+      "privateTxUrl": ""
+    },
+    {
+      "name": "member1",
+      "client": "besu",
+      "rpcUrl": "http://member1besu:8545",
+      "privateTxUrl": "http://member1tessera:9080",
+      "privateKey": "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63",
+      "accountAddress": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73"
+    },
+    {
+      "name": "member2",
+      "client": "besu",
+      "rpcUrl": "http://member2besu:8545",
+      "privateTxUrl": "http://member2tessera:9080",
+      "privateKey": "0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3",
+      "accountAddress": "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"
+    },
+    {
+      "name": "member3",
+      "client": "besu",
+      "rpcUrl": "http://member3besu:8545",
+      "privateTxUrl": "http://member3tessera:9080",
+      "privateKey": "0xae6ae8e5ccbfb04590405997ee2d52d2b330726137b875053c36d94e974d162f",
+      "accountAddress": "0xf17f52151EbEF6C7334FAD080c5704D77216b732"
+    }
+  ]
+}
+ 

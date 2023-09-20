@@ -1,0 +1,136 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+#  alertmanagers:
+#  - static_configs:
+#    - targets:
+# - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+# - "first_rules.yml"
+# - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+    - job_name: validator1
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ validator1:9545 ]
+
+    - job_name: validator2
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ validator2:9545 ]
+
+    - job_name: validator3
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ validator3:9545 ]
+
+    - job_name: validator4
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ validator4:9545 ]
+
+    - job_name: rpcnode
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ rpcnode:9545 ]
+
+    - job_name: newnode
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ newnode:9545 ]        
+
+    - job_name: member1besu
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ member1besu:9545 ]
+
+    - job_name: member2besu
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ member2besu:9545 ]
+
+    - job_name: member3besu
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ member3besu:9545 ]
+
+    - job_name: member1tessera
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ member1tessera:9545 ]
+
+    - job_name: member2tessera
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ member2tessera:9545 ]
+
+    - job_name: member3tessera
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      static_configs:
+        - targets: [ member3tessera:9545 ]
+
+    # all the nodes override themselves if given the same name
+    # so we use dns based lookup and, replace labels to
+    # alter the address from 192.168.x.y:9545 to node:192.168.x.y:9545 so they are easier to see in grafana
+    - job_name: node
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      dns_sd_configs:
+        - names:
+            - node
+          type: 'A'
+          port: 9545
+      relabel_configs:
+        - source_labels: [__address__]
+          regex: '(.*)'
+          target_label: instance
+          replacement: "node:$1"
+

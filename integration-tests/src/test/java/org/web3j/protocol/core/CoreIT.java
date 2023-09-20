@@ -31,7 +31,6 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthCoinbase;
-import org.web3j.protocol.core.methods.response.EthCompileSolidity;
 import org.web3j.protocol.core.methods.response.EthEstimateGas;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
@@ -39,7 +38,6 @@ import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
-import org.web3j.protocol.core.methods.response.EthGetCompilers;
 import org.web3j.protocol.core.methods.response.EthGetProof;
 import org.web3j.protocol.core.methods.response.EthGetStorageAt;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
@@ -64,7 +62,6 @@ import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.test.contract.Fibonacci;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -94,21 +91,11 @@ public class CoreIT {
         CoreIT.config = new TestnetConfig(web3j, transactionManager, gasProvider);
     }
 
-    @Disabled // Method does not exist
     @Test
     public void testWeb3ClientVersion() throws Exception {
         Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
         String clientVersion = web3ClientVersion.getWeb3ClientVersion();
         assertFalse(clientVersion.isEmpty());
-    }
-
-    @Disabled // Method Does not Exist
-    @Test
-    public void testWeb3Sha3() throws Exception {
-        Web3Sha3 web3Sha3 = web3j.web3Sha3("0x68656c6c6f20776f726c64").send();
-        assertEquals(
-                web3Sha3.getResult(),
-                ("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
     }
 
     @Test
@@ -226,6 +213,7 @@ public class CoreIT {
     public void testEthGetUncleCountByBlockHash(Web3j web3j) throws Exception {
         EthGetUncleCountByBlockHash ethGetUncleCountByBlockHash =
                 web3j.ethGetUncleCountByBlockHash(config.validBlockHash()).send();
+
         assertEquals(ethGetUncleCountByBlockHash.getUncleCount(), (config.validBlockUncleCount()));
     }
 
@@ -233,6 +221,7 @@ public class CoreIT {
     public void testEthGetUncleCountByBlockNumber(Web3j web3j) throws Exception {
         EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber =
                 web3j.ethGetUncleCountByBlockNumber(DefaultBlockParameter.valueOf("latest")).send();
+
         assertEquals(
                 ethGetUncleCountByBlockNumber.getUncleCount(), (config.validBlockUncleCount()));
     }
@@ -255,12 +244,15 @@ public class CoreIT {
     }
 
     @Test
-    @Disabled("Enable in the next release when geth is fixed")
     public void testEthSendTransaction(Web3j web3j, ContractGasProvider gasProvider)
             throws Exception {
         EthSendTransaction ethSendTransaction =
                 web3j.ethSendTransaction(config.buildTransaction(web3j, gasProvider)).send();
-        assertFalse(ethSendTransaction.getTransactionHash().isEmpty());
+        assertTrue(
+                ethSendTransaction
+                        .getError()
+                        .getMessage()
+                        .contains("The method eth_sendTransaction is not supported"));
     }
 
     @Test
@@ -288,7 +280,6 @@ public class CoreIT {
     }
 
     @Test
-    @Disabled("This should be enabled in the next release when geth is fixed")
     public void testEthCall(Web3j web3j, ContractGasProvider gasProvider) throws Exception {
 
         EthCall ethCall =
@@ -303,7 +294,6 @@ public class CoreIT {
     }
 
     @Test
-    @Disabled("Enable in the next release when geth is fixed")
     public void testEthEstimateGas(Web3j web3j, ContractGasProvider gasProvider) throws Exception {
         org.web3j.protocol.core.methods.request.Transaction transaction =
                 org.web3j.protocol.core.methods.request.Transaction.createContractTransaction(
@@ -404,7 +394,7 @@ public class CoreIT {
     }
 
     @Test
-    @Disabled
+    @Disabled("Specified block has no uncle blocks, so result returning as null")
     public void testEthGetUncleByBlockHashAndIndex() throws Exception {
         EthBlock ethBlock =
                 web3j.ethGetUncleByBlockHashAndIndex(config.validUncleBlockHash(), BigInteger.ZERO)
@@ -413,31 +403,15 @@ public class CoreIT {
     }
 
     @Test
-    @Disabled
+    @Disabled("Specified block has no uncle blocks, so result returning as null")
     public void testEthGetUncleByBlockNumberAndIndex(Web3j web3j) throws Exception {
+
         EthBlock ethBlock =
                 web3j.ethGetUncleByBlockNumberAndIndex(
                                 DefaultBlockParameter.valueOf(config.validUncleBlock()),
                                 BigInteger.ZERO)
                         .send();
         assertNotNull(ethBlock.getBlock());
-    }
-
-    @Test
-    @Disabled
-    public void testEthCompileSolidity() throws Exception {
-        String sourceCode =
-                "pragma solidity ^0.4.0;"
-                        + "\ncontract test { function multiply(uint a) returns(uint d) {"
-                        + "   return a * 7;   } }"
-                        + "\ncontract test2 { function multiply2(uint a) returns(uint d) {"
-                        + "   return a * 7;   } }";
-        EthCompileSolidity ethCompileSolidity = web3j.ethCompileSolidity(sourceCode).send();
-        // This methods does not exist
-        //  assertNotNull(ethCompileSolidity.getCompiledSolidity());
-        assertEquals(
-                ethCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
-                (sourceCode));
     }
 
     @Test
@@ -514,18 +488,15 @@ public class CoreIT {
         assertNotNull(ethGetProof.getResult());
     }
 
-    @Disabled // Not available
     @Test
     public void testEthGetWork() throws Exception {
         EthGetWork ethGetWork = web3j.ethGetWork().send();
-        assertNotNull(ethGetWork.getResult());
-    }
 
-    @Disabled // Not available
-    @Test
-    public void testEthGetCompilers(Web3j web3j) throws Exception {
-        EthGetCompilers ethGetCompilers = web3j.ethGetCompilers().send();
-        assertNotNull(ethGetCompilers.getCompilers());
+        if (ethGetWork.hasError()) {
+            assertEquals(ethGetWork.getError().getMessage(), "No mining work available yet");
+        } else {
+            assertNotNull(ethGetWork.getResult());
+        }
     }
 
     @Test

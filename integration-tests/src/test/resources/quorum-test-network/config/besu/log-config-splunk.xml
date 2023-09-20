@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="root.log.level">${env:LOG_LEVEL:-INFO}</Property>
+    <Property name="root.log.logger">${env:LOGGER:-Console}</Property>
+    <Property name="host">${env:HOST:-${docker:containerId:-${hostName:-locahost}}}</Property>
+    <Property name="splunk.url">${env:SPLUNK_URL}</Property>
+    <Property name="splunk.token">${env:SPLUNK_TOKEN}</Property>
+    <Property name="splunk.index">${env:SPLUNK_INDEX}</Property>
+    <Property name="splunk.source">${env:SPLUNK_SOURCE:-besu}</Property>
+    <Property name="splunk.sourcetype">${env:SPLUNK_SOURCETYPE:-besu}</Property>
+    <Property name="splunk.batch_size_bytes">${env:SPLUNK_BATCH_SIZE_BYTES:-65536}</Property>
+    <Property name="splunk.batch_size_count">${env:SPLUNK_BATCH_SIZE_COUNT:-1000}</Property>
+    <Property name="splunk.batch_interval">${env:SPLUNK_BATCH_INTERVAL:-500}</Property>
+    <Property name="splunk.disableCertificateValidation">${env:SPLUNK_SKIPTLSVERIFY:-false}</Property>
+  </Properties>
+
+  <Appenders>
+    <Routing name="Router">
+      <Routes pattern="$${sys:root.log.logger}">
+        <Route key="Splunk">
+          <SplunkHttp name="Splunk"
+                      url="${sys:splunk.url}"
+                      token="${sys:splunk.token}"
+                      host="${sys:host}"
+                      index="${sys:splunk.index}"
+                      source="${sys:splunk.source}"
+                      sourcetype="${sys:splunk.sourcetype}"
+                      messageFormat="text"
+                      batch_size_bytes="${sys:splunk.batch_size_bytes}"
+                      batch_size_count="${sys:splunk.batch_size_count}"
+                      batch_interval="${sys:splunk.batch_interval}"
+                      disableCertificateValidation="${sys:splunk.disableCertificateValidation}">
+            <PatternLayout pattern="%msg" />
+          </SplunkHttp>
+        </Route>
+      </Routes>
+    </Routing>
+  </Appenders>
+  <Loggers>
+    <Logger name="org.apache.logging.log4j.status.StatusLogger" level="OFF"/>
+    <Root level="${sys:root.log.level}">
+      <AppenderRef ref="Router" />
+    </Root>
+  </Loggers>
+</Configuration>

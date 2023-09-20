@@ -1,0 +1,13 @@
+# ensure name is set so that monitoring in Kibana is easy to identify
+node.name: "logstash-quorum"
+
+log.format: json
+path:
+  config: /usr/share/logstash/pipeline
+  logs: /usr/share/logstash/logs
+
+xpack:
+  monitoring:
+    enabled: true
+    elasticsearch:
+      hosts:  ${ES_HOST}
