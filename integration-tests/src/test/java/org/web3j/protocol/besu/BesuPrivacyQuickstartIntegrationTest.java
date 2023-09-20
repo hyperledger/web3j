@@ -102,6 +102,11 @@ public class BesuPrivacyQuickstartIntegrationTest {
         assertNotNull(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion());
         assertNotNull(nodeBob.web3ClientVersion().send().getWeb3ClientVersion());
         assertNotNull(nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion());
+
+        assertEquals(CHAIN_ID, rpcNode.ethChainId().send().getChainId().intValue());
+        assertEquals(CHAIN_ID, nodeAlice.ethChainId().send().getChainId().intValue());
+        assertEquals(CHAIN_ID, nodeBob.ethChainId().send().getChainId().intValue());
+        assertEquals(CHAIN_ID, nodeCharlie.ethChainId().send().getChainId().intValue());
     }
 
     @Test
