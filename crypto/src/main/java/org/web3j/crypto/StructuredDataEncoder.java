@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,14 +121,10 @@ public class StructuredDataEncoder {
     public String encodeStruct(String structName) {
         HashMap<String, List<StructuredData.Entry>> types = jsonMessageObject.getTypes();
 
-        StringBuilder structRepresentation = new StringBuilder(structName + "(");
+        StringJoiner structRepresentation = new StringJoiner(",", structName + "(", ")");
         for (StructuredData.Entry entry : types.get(structName)) {
-            structRepresentation.append(String.format("%s %s,", entry.getType(), entry.getName()));
+            structRepresentation.add(String.format("%s %s", entry.getType(), entry.getName()));
         }
-        structRepresentation =
-                new StringBuilder(
-                        structRepresentation.substring(0, structRepresentation.length() - 1));
-        structRepresentation.append(")");
 
         return structRepresentation.toString();
     }

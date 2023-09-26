@@ -1,0 +1,8 @@
+{
+  "types": {
+    "EIP712Domain": []
+  },
+  "primaryType": "EIP712Domain",
+  "domain": {},
+  "message": {}
+}
