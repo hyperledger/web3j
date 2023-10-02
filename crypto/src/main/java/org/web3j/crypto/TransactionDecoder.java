@@ -30,7 +30,10 @@ public class TransactionDecoder {
     private static final int UNSIGNED_EIP2930TX_RLP_LIST_SIZE = 8;
 
     public static RawTransaction decode(final String hexTransaction) {
-        final byte[] transaction = Numeric.hexStringToByteArray(hexTransaction);
+        return decode(Numeric.hexStringToByteArray(hexTransaction));
+    }
+
+    public static RawTransaction decode(final byte[] transaction) {
         if (getTransactionType(transaction) == TransactionType.EIP1559) {
             return decodeEIP1559Transaction(transaction);
         } else if (getTransactionType(transaction) == TransactionType.EIP2930) {
