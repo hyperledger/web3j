@@ -21,6 +21,7 @@ public class Contracts {
     public static final String ROPSTEN = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
     public static final String RINKEBY = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
     public static final String GOERLI = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
+    public static final String SEPOLIA = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
 
     public static String resolveRegistryContract(String chainId) {
         final Long chainIdLong = Long.parseLong(chainId);
@@ -32,6 +33,8 @@ public class Contracts {
             return RINKEBY;
         } else if (chainIdLong.equals(ChainIdLong.GOERLI)) {
             return GOERLI;
+        } else if (chainIdLong.equals(ChainIdLong.SEPOLIA)) {
+            return SEPOLIA;
         } else {
             throw new EnsResolutionException(
                     "Unable to resolve ENS registry contract for network id: " + chainId);
