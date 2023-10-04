@@ -114,6 +114,20 @@ public class StructuredDataTest {
     }
 
     @Test
+    public void testMinimalEncodeType() throws IOException, RuntimeException {
+        String validMinimalStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/ValidMinimalStructuredData.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(validMinimalStructuredDataJSONFilePath));
+        String expectedTypeEncoding = "EIP712Domain()";
+
+        assertEquals(
+                dataEncoder.encodeType(dataEncoder.jsonMessageObject.getPrimaryType()),
+                expectedTypeEncoding);
+    }
+
+    @Test
     public void testTypeHash() throws IOException, RuntimeException {
         StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
         String expectedTypeHashHex =
