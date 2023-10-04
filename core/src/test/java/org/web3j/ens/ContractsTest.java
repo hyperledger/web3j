@@ -14,13 +14,14 @@ package org.web3j.ens;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.tx.ChainId;
+import org.web3j.tx.ChainIdLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.web3j.ens.Contracts.MAINNET;
 import static org.web3j.ens.Contracts.RINKEBY;
 import static org.web3j.ens.Contracts.ROPSTEN;
+import static org.web3j.ens.Contracts.SEPOLIA;
 import static org.web3j.ens.Contracts.resolveRegistryContract;
 
 @SuppressWarnings("deprecation")
@@ -28,14 +29,15 @@ public class ContractsTest {
 
     @Test
     public void testResolveRegistryContract() {
-        assertEquals(resolveRegistryContract(ChainId.MAINNET + ""), (MAINNET));
-        assertEquals(resolveRegistryContract(ChainId.ROPSTEN + ""), (ROPSTEN));
-        assertEquals(resolveRegistryContract(ChainId.RINKEBY + ""), (RINKEBY));
+        assertEquals(resolveRegistryContract(ChainIdLong.MAINNET + ""), (MAINNET));
+        assertEquals(resolveRegistryContract(ChainIdLong.ROPSTEN + ""), (ROPSTEN));
+        assertEquals(resolveRegistryContract(ChainIdLong.RINKEBY + ""), (RINKEBY));
+        assertEquals(resolveRegistryContract(ChainIdLong.SEPOLIA + ""), (SEPOLIA));
     }
 
     @Test
     public void testResolveRegistryContractInvalid() {
         assertThrows(
-                EnsResolutionException.class, () -> resolveRegistryContract(ChainId.NONE + ""));
+                EnsResolutionException.class, () -> resolveRegistryContract(ChainIdLong.NONE + ""));
     }
 }
