@@ -77,19 +77,6 @@ public class PrivateTransactionEncoder {
             final RawPrivateTransaction privateTransaction,
             final Sign.SignatureData signatureData) {
 
-        final List<RlpType> result =
-                new ArrayList<>(TransactionEncoder.asRlpValues(privateTransaction, signatureData));
-
-        result.add(privateTransaction.getPrivateFrom().asRlp());
-
-        privateTransaction
-                .getPrivateFor()
-                .ifPresent(privateFor -> result.add(Base64String.unwrapListToRlp(privateFor)));
-
-        privateTransaction.getPrivacyGroupId().map(Base64String::asRlp).ifPresent(result::add);
-
-        result.add(RlpString.create(privateTransaction.getRestriction().getRestriction()));
-
-        return result;
+        return privateTransaction.asRlpValues(signatureData);
     }
 }
