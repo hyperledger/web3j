@@ -517,6 +517,9 @@ public class TypeDecoder {
                     final Class<T> parameterFromAnnotation =
                             Utils.extractParameterFromAnnotation(
                                     constructor.getParameterAnnotations()[i]);
+                    if (parameterFromAnnotation == null) {
+                        throw new RuntimeException("Can not extract parameter from annotation, try to use annotation @Parameterized to specify the parameter type");
+                    }
                     parameters.put(
                             i,
                             decodeDynamicParameterFromStruct(
