@@ -23,6 +23,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.test.contract.Fibonacci;
+import org.web3j.test.contract.JavaReservedWords;
 import org.web3j.tx.gas.ContractGasProvider;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,12 +39,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FunctionWrappersIT extends Scenario {
 
     private static Fibonacci fib;
+    private static JavaReservedWords javaReservedWords;
 
     @BeforeAll
     public static void setUp(Web3j web3j, ContractGasProvider contractGasProvider)
             throws Exception {
         Scenario.web3j = web3j;
         FunctionWrappersIT.fib = Fibonacci.deploy(web3j, ALICE, contractGasProvider).send();
+        FunctionWrappersIT.javaReservedWords =
+                JavaReservedWords.deploy(web3j, ALICE, contractGasProvider).send();
+    }
+
+    @Test
+    public void testJavaReservedWords() throws Exception {
+
+        JavaReservedWords javaReservedWordsContract =
+                JavaReservedWords.load(
+                        javaReservedWords.getContractAddress(),
+                        Web3j.build(new HttpService()),
+                        ALICE,
+                        STATIC_GAS_PROVIDER);
+
+        BigInteger result =
+                javaReservedWordsContract
+                        ._void(new JavaReservedWords._extends(BigInteger.TEN))
+                        .send();
+        assertEquals(result, (BigInteger.valueOf(10)));
     }
 
     @Test

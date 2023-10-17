@@ -449,7 +449,12 @@ public class SolidityFunctionWrapper extends Generator {
             } else {
                 final String fullStructName =
                         internalType.substring(internalType.lastIndexOf(" ") + 1);
-                structName = fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
+                final String tempStructName =
+                        fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
+                structName =
+                        SourceVersion.isName(tempStructName)
+                                ? tempStructName
+                                : "_" + tempStructName;
             }
 
             final TypeSpec.Builder builder =
@@ -513,22 +518,25 @@ public class SolidityFunctionWrapper extends Generator {
                                         .build();
                     }
                 }
-                builder.addField(typeName, component.getName(), Modifier.PUBLIC);
-                constructorBuilder.addParameter(typeName, component.getName());
+                final String componentName =
+                        !SourceVersion.isName(component.getName())
+                                ? "_" + component.getName()
+                                : component.getName();
+                builder.addField(typeName, componentName, Modifier.PUBLIC);
+                constructorBuilder.addParameter(typeName, componentName);
                 ParameterSpec.Builder nativeParameterBuilder =
-                        ParameterSpec.builder(nativeTypeName, component.getName());
+                        ParameterSpec.builder(nativeTypeName, componentName);
                 if (annotationSpec != null) {
                     nativeParameterBuilder.addAnnotation(annotationSpec);
                 }
                 nativeConstructorBuilder.addParameter(nativeParameterBuilder.build());
 
-                constructorBuilder.addStatement(
-                        "this." + component.getName() + " = " + component.getName());
+                constructorBuilder.addStatement("this." + componentName + " = " + componentName);
                 nativeConstructorBuilder.addStatement(
                         "this."
-                                + component.getName()
+                                + componentName
                                 + " = "
-                                + component.getName()
+                                + componentName
                                 + adjustToNativeTypeIfNecessary(component),
                         Collectors.class);
             }
@@ -1014,8 +1022,11 @@ public class SolidityFunctionWrapper extends Generator {
 
         for (int i = 0; i < inputParameterTypes.size(); ++i) {
             final TypeName typeName = getTypenameForArray(namedTypes.get(i), useJavaPrimitiveTypes);
-            nativeInputParameterTypes.add(
-                    ParameterSpec.builder(typeName, inputParameterTypes.get(i).name).build());
+            final String paramName =
+                    !SourceVersion.isName(inputParameterTypes.get(i).name)
+                            ? "_" + inputParameterTypes.get(i).name
+                            : inputParameterTypes.get(i).name;
+            nativeInputParameterTypes.add(ParameterSpec.builder(typeName, paramName).build());
         }
 
         methodBuilder.addParameters(nativeInputParameterTypes);
@@ -1273,6 +1284,9 @@ public class SolidityFunctionWrapper extends Generator {
         if (name == null || name.equals("")) {
             return "param" + idx;
         } else {
+            if (!SourceVersion.isName(name)) {
+                name = "_" + name;
+            }
             return name;
         }
     }
