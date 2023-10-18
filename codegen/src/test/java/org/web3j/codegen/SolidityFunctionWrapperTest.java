@@ -77,6 +77,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testCreateValidParamName() {
         assertEquals(createValidParamName("param", 1), ("param"));
         assertEquals(createValidParamName("", 1), ("param1"));
+        assertEquals(createValidParamName("class", 1), ("_class"));
     }
 
     @Test
