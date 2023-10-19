@@ -38,7 +38,7 @@ public class Transfer extends ManagedTransaction {
     }
 
     /**
-     * Given the duration required to execute a transaction, asyncronous execution is strongly
+     * Given the duration required to execute a transaction, asynchronous execution is strongly
      * recommended via {@link Transfer#sendFunds(String, BigDecimal, Convert.Unit)}.
      *
      * @param toAddress destination address
