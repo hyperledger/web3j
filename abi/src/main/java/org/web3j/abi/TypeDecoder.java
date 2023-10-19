@@ -564,6 +564,9 @@ public class TypeDecoder {
         if (DynamicStruct.class.isAssignableFrom(declaredField)) {
             value = decodeDynamicStruct(dynamicElementData, 0, TypeReference.create(declaredField));
         } else if (DynamicArray.class.isAssignableFrom(declaredField)) {
+            if (parameter == null) {
+                throw new RuntimeException("parameter can not be null, try to use annotation @Parameterized to specify the parameter type");
+            }
             value =
                     (T)
                             decodeDynamicArray(
