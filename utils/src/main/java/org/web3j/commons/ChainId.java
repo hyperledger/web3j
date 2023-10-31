@@ -13,7 +13,10 @@
 package org.web3j.commons;
 
 public enum ChainId {
-    MAIN_NET(1);
+    MAIN_NET(1),
+    GOERLI(5),
+    SEPOLIA(58008);
+
 
     private int id;
 
