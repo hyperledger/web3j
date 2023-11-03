@@ -19,6 +19,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
@@ -40,8 +41,8 @@ public class PrivateTransactionEncoderTest {
     public void testSignLegacyTransaction() {
         final String expected =
                 "0xf8d4808203e8832dc6c094627306090abab3a6e1400e9345bc60c78a8bef578080820fe8a0e0b547d71d7a23d52382288b3a2a5a1610e0b504c404cc5009d7ada97d9015b2a076e997a83856d876fa2397b74510890eea3b73ffeda33daa4188120dac42d62fa0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486af842a0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa02a8d9b56a0fe9cd94d60be4413bcb721d3a7be27ed8e28b3a6346df874ee141b8a72657374726963746564";
-        final RawPrivateTransaction privateTransactionCreation =
-                new RawPrivateTransaction(
+        final LegacyPrivateTransaction privateTransactionCreation =
+                new LegacyPrivateTransaction(
                         BigInteger.ZERO,
                         BigInteger.valueOf(1000),
                         BigInteger.valueOf(3000000),
@@ -67,8 +68,8 @@ public class PrivateTransactionEncoderTest {
     public void testSignBesuTransaction() {
         final String expected =
                 "0xf8b1808203e8832dc6c094627306090abab3a6e1400e9345bc60c78a8bef578080820fe7a060c70c3f989ef5459021142959f8fc1ad6e5fe8542cf238484c6d6b8c8a6dbcca075727642ce691c4bf5ae945523cdd172d44b451ddfe11ae67c376f1e5c7069eea0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa00f200e885ff29e973e2576b6600181d1b0a2b5294e30d9be4a1981ffb33a0b8c8a72657374726963746564";
-        final RawPrivateTransaction privateTransactionCreation =
-                new RawPrivateTransaction(
+        final LegacyPrivateTransaction privateTransactionCreation =
+                new LegacyPrivateTransaction(
                         BigInteger.ZERO,
                         BigInteger.valueOf(1000),
                         BigInteger.valueOf(3000000),

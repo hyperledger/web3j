@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.SignedRawTransaction;
 import org.web3j.crypto.TransactionDecoder;
+import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
+import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -30,25 +32,50 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class PrivateTransactionDecoder {
 
-    public static RawPrivateTransaction decode(final String hexTransaction) {
+    public static LegacyPrivateTransaction decode(final String hexTransaction) {
         final byte[] transaction = Numeric.hexStringToByteArray(hexTransaction);
+        final PrivateTransactionType transactionType = getPrivateTransactionType(transaction);
+
+        switch (transactionType) {
+            case PRIVATE_LEGACY:
+                return decodeLegacyPrivateTransaction(transaction);
+            default:
+                throw new IllegalArgumentException("Unsupported private transaction type.");
+        }
+    }
+
+    private static PrivateTransactionType getPrivateTransactionType(final byte[] transaction) {
+        // Determine the type of the private transaction, similar to TransactionDecoder.
+        byte firstByte = transaction[0];
+        //        if (firstByte == PrivateTransactionType.PRIVATE_LEGACY.getRlpType())
+        //            return PrivateTransactionType.PRIVATE_LEGACY;
+
+        // Return LEGACY as default, or throw an exception depending on your needs
+        return PrivateTransactionType.PRIVATE_LEGACY;
+    }
+
+    private static LegacyPrivateTransaction decodeLegacyPrivateTransaction(
+            final byte[] transaction) {
         final RlpList rlpList = RlpDecoder.decode(transaction);
         final RlpList temp = (RlpList) rlpList.getValues().get(0);
         final List<RlpType> values = temp.getValues();
 
-        final RawTransaction rawTransaction = TransactionDecoder.decode(hexTransaction);
+        final RawTransaction rawTransaction =
+                TransactionDecoder.decode(Numeric.toHexString(transaction));
 
         if (values.size() == 9) {
             final Base64String privateFrom = extractBase64(values.get(6));
             final Restriction restriction = extractRestriction(values.get(8));
-            if (values.get(7) instanceof RlpList) {
-                return new RawPrivateTransaction(
-                        rawTransaction, privateFrom, extractBase64List(values.get(7)), restriction);
-            } else {
-                return new RawPrivateTransaction(
-                        rawTransaction, privateFrom, extractBase64(values.get(7)), restriction);
-            }
 
+            if (values.get(7) instanceof RlpList) {
+                List<Base64String> privateForList = extractBase64List(values.get(7));
+                return new LegacyPrivateTransaction(
+                        rawTransaction, privateFrom, privateForList, null, restriction);
+            } else {
+                Base64String privacyGroupId = extractBase64(values.get(7));
+                return new LegacyPrivateTransaction(
+                        rawTransaction, privateFrom, null, privacyGroupId, restriction);
+            }
         } else {
             final Base64String privateFrom = extractBase64(values.get(9));
             final Restriction restriction = extractRestriction(values.get(11));

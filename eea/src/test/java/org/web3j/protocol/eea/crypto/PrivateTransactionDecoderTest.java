@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
+import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
@@ -42,8 +43,8 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final RawPrivateTransaction rawTransaction =
-                RawPrivateTransaction.createTransaction(
+        final LegacyPrivateTransaction rawTransaction =
+                LegacyPrivateTransaction.createTransaction(
                         nonce,
                         gasPrice,
                         gasLimit,
@@ -55,7 +56,7 @@ public class PrivateTransactionDecoderTest {
         byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
-        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+        final LegacyPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
         assertNotNull(result);
         assertEquals(nonce, result.getNonce());
         assertEquals(gasPrice, result.getGasPrice());
@@ -73,8 +74,8 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final RawPrivateTransaction rawTransaction =
-                RawPrivateTransaction.createTransaction(
+        final LegacyPrivateTransaction rawTransaction =
+                LegacyPrivateTransaction.createTransaction(
                         nonce,
                         gasPrice,
                         gasLimit,
@@ -86,7 +87,7 @@ public class PrivateTransactionDecoderTest {
         byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
-        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+        final LegacyPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
         assertNotNull(result);
         assertEquals(nonce, result.getNonce());
         assertEquals(gasPrice, result.getGasPrice());
@@ -104,8 +105,8 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final RawPrivateTransaction rawTransaction =
-                RawPrivateTransaction.createTransaction(
+        final LegacyPrivateTransaction rawTransaction =
+                LegacyPrivateTransaction.createTransaction(
                         nonce,
                         gasPrice,
                         gasLimit,
@@ -121,7 +122,7 @@ public class PrivateTransactionDecoderTest {
                 PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
-        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+        final LegacyPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
         assertNotNull(result);
         assertEquals(nonce, result.getNonce());
         assertEquals(gasPrice, result.getGasPrice());
@@ -149,8 +150,8 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final RawPrivateTransaction rawTransaction =
-                RawPrivateTransaction.createTransaction(
+        final LegacyPrivateTransaction rawTransaction =
+                LegacyPrivateTransaction.createTransaction(
                         nonce,
                         gasPrice,
                         gasLimit,
@@ -166,7 +167,7 @@ public class PrivateTransactionDecoderTest {
                 PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
-        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+        final LegacyPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
         assertNotNull(result);
         assertEquals(nonce, result.getNonce());
         assertEquals(gasPrice, result.getGasPrice());
@@ -195,8 +196,8 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
         final long chainId = 2018L;
-        final RawPrivateTransaction rawTransaction =
-                RawPrivateTransaction.createTransaction(
+        final LegacyPrivateTransaction rawTransaction =
+                LegacyPrivateTransaction.createTransaction(
                         nonce,
                         gasPrice,
                         gasLimit,
@@ -212,7 +213,7 @@ public class PrivateTransactionDecoderTest {
                 PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         final String hexMessage = Numeric.toHexString(signedMessage);
 
-        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+        final LegacyPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
         assertNotNull(result);
         assertEquals(nonce, result.getNonce());
         assertEquals(gasPrice, result.getGasPrice());

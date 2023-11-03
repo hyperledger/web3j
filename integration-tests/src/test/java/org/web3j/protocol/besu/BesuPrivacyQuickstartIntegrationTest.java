@@ -28,7 +28,7 @@ import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
-import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
+import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.test.contract.HumanStandardToken;
 import org.web3j.tx.ChainIdLong;
@@ -127,8 +127,8 @@ public class BesuPrivacyQuickstartIntegrationTest {
                         .privGetTransactionCount(ALICE.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
-        final RawPrivateTransaction rawPrivateTransaction =
-                RawPrivateTransaction.createContractTransaction(
+        final LegacyPrivateTransaction rawPrivateTransaction =
+                LegacyPrivateTransaction.createContractTransaction(
                         nonce,
                         ZERO_GAS_PROVIDER.getGasPrice(),
                         ZERO_GAS_PROVIDER.getGasLimit(),

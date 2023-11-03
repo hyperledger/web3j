@@ -14,6 +14,7 @@ package org.web3j.protocol.eea.crypto;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
+import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
 import org.web3j.service.TxSignService;
 import org.web3j.tx.ChainId;
 
@@ -26,10 +27,9 @@ public class PrivateTxSignServiceImpl implements TxSignService {
         this.credentials = credentials;
     }
 
-    @Override
-    public byte[] sign(RawTransaction rawTransaction, long chainId) {
-        if (!(rawTransaction instanceof RawPrivateTransaction)) {
-            throw new RuntimeException("Can only sign RawPrivateTransaction");
+    public byte[] sign(RawTransaction privateTransaction, long chainId) {
+        if (!(privateTransaction instanceof LegacyPrivateTransaction)) {
+            throw new RuntimeException("Can only sign LegacyPrivateTransaction");
         }
 
         final byte[] signedMessage;
@@ -37,16 +37,15 @@ public class PrivateTxSignServiceImpl implements TxSignService {
         if (chainId > ChainId.NONE) {
             signedMessage =
                     PrivateTransactionEncoder.signMessage(
-                            (RawPrivateTransaction) rawTransaction, chainId, credentials);
+                            (LegacyPrivateTransaction) privateTransaction, chainId, credentials);
         } else {
             signedMessage =
                     PrivateTransactionEncoder.signMessage(
-                            (RawPrivateTransaction) rawTransaction, credentials);
+                            (LegacyPrivateTransaction) privateTransaction, credentials);
         }
         return signedMessage;
     }
 
-    @Override
     public String getAddress() {
         return credentials.getAddress();
     }

@@ -25,7 +25,7 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.crypto.PrivateTxSignServiceImpl;
-import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
+import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
 import org.web3j.service.TxSignService;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
@@ -138,11 +138,11 @@ public class PrivateTransactionManager extends TransactionManager {
                         .send()
                         .getTransactionCount();
 
-        final RawPrivateTransaction transaction;
+        final LegacyPrivateTransaction transaction;
 
         if (privateFor != null) {
             transaction =
-                    RawPrivateTransaction.createTransaction(
+                    LegacyPrivateTransaction.createTransaction(
                             nonce,
                             gasPrice,
                             gasLimit,
@@ -153,7 +153,7 @@ public class PrivateTransactionManager extends TransactionManager {
                             restriction);
         } else {
             transaction =
-                    RawPrivateTransaction.createTransaction(
+                    LegacyPrivateTransaction.createTransaction(
                             nonce,
                             gasPrice,
                             gasLimit,
@@ -183,36 +183,36 @@ public class PrivateTransactionManager extends TransactionManager {
                         .send()
                         .getTransactionCount();
 
-        final RawPrivateTransaction transaction;
-        if (privateFor != null) {
-            transaction =
-                    RawPrivateTransaction.createTransaction(
-                            chainId,
-                            nonce,
-                            maxPriorityFeePerGas,
-                            maxFeePerGas,
-                            gasLimit,
-                            to,
-                            data,
-                            privateFrom,
-                            privateFor,
-                            restriction);
-        } else {
-            transaction =
-                    RawPrivateTransaction.createTransaction(
-                            chainId,
-                            nonce,
-                            maxPriorityFeePerGas,
-                            maxFeePerGas,
-                            gasLimit,
-                            to,
-                            data,
-                            privateFrom,
-                            privacyGroupId,
-                            restriction);
-        }
+        final LegacyPrivateTransaction transaction;
+        //        if (privateFor != null) {
+        //            transaction =
+        //                    RawPrivateTransaction.createTransaction(
+        //                            chainId,
+        //                            nonce,
+        //                            maxPriorityFeePerGas,
+        //                            maxFeePerGas,
+        //                            gasLimit,
+        //                            to,
+        //                            data,
+        //                            privateFrom,
+        //                            privateFor,
+        //                            restriction);
+        //        } else {
+        //            transaction =
+        //                    RawPrivateTransaction.createTransaction(
+        //                            chainId,
+        //                            nonce,
+        //                            maxPriorityFeePerGas,
+        //                            maxFeePerGas,
+        //                            gasLimit,
+        //                            to,
+        //                            data,
+        //                            privateFrom,
+        //                            privacyGroupId,
+        //                            restriction);
+        //        }
 
-        return signAndSend(transaction);
+        return signAndSend(null);
     }
 
     @Override
@@ -239,20 +239,20 @@ public class PrivateTransactionManager extends TransactionManager {
                 .send();
     }
 
-    public String sign(final RawPrivateTransaction rawTransaction) {
+    public String sign(final LegacyPrivateTransaction rawTransaction) {
 
         final byte[] signedMessage = txSignService.sign(rawTransaction, chainId);
 
         return Numeric.toHexString(signedMessage);
     }
 
-    public EthSendTransaction signAndSend(final RawPrivateTransaction rawTransaction)
+    public EthSendTransaction signAndSend(final LegacyPrivateTransaction rawTransaction)
             throws IOException {
         final String hexValue = sign(rawTransaction);
         return this.besu.eeaSendRawTransaction(hexValue).send();
     }
 
-    public PrivateEnclaveKey signAndDistribute(RawPrivateTransaction rawTransaction)
+    public PrivateEnclaveKey signAndDistribute(LegacyPrivateTransaction rawTransaction)
             throws IOException {
         String hexValue = sign(rawTransaction);
         return this.besu.privDistributeRawTransaction(hexValue).send();
