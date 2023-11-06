@@ -25,13 +25,13 @@ import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Restriction;
 
-public class PrivateTransaction1559 extends LegacyPrivateTransaction implements ITransaction {
+public class PrivateTransaction1559 extends RawPrivateTransaction implements ITransaction {
 
     private long chainId;
     private BigInteger maxPriorityFeePerGas;
     private BigInteger maxFeePerGas;
 
-    public PrivateTransaction1559(
+    protected PrivateTransaction1559(
             long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
@@ -58,7 +58,84 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
         this.maxFeePerGas = maxFeePerGas;
     }
 
-    public PrivateTransaction1559(
+    public static PrivateTransaction1559 createContractTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            Base64String privateFrom,
+            List<Base64String> privateFor,
+            Base64String privacyGroupId,
+            Restriction restriction) {
+
+        return new PrivateTransaction1559(
+                chainId,
+                nonce,
+                gasLimit,
+                null,
+                data,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                privateFrom,
+                privateFor,
+                privacyGroupId,
+                restriction);
+    }
+
+    public static PrivateTransaction1559 createContractTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            Base64String privateFrom,
+            Base64String privacyGroupId,
+            Restriction restriction) {
+
+        return createContractTransaction(
+                chainId,
+                nonce,
+                gasLimit,
+                data,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                privateFrom,
+                null,
+                privacyGroupId,
+                restriction);
+    }
+
+    public static PrivateTransaction1559 createTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            Base64String privateFrom,
+            List<Base64String> privateFor,
+            Base64String privacyGroupId,
+            Restriction restriction) {
+
+        return new PrivateTransaction1559(
+                chainId,
+                nonce,
+                gasLimit,
+                to,
+                data,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                privateFrom,
+                privateFor,
+                privacyGroupId,
+                restriction);
+    }
+
+    public static PrivateTransaction1559 createTransaction(
             long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
@@ -69,7 +146,8 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
             Base64String privateFrom,
             Base64String privacyGroupId,
             Restriction restriction) {
-        this(
+
+        return createTransaction(
                 chainId,
                 nonce,
                 gasLimit,
@@ -83,7 +161,7 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
                 restriction);
     }
 
-    public PrivateTransaction1559(
+    public static PrivateTransaction1559 createTransaction(
             long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
@@ -94,7 +172,8 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
             Base64String privateFrom,
             List<Base64String> privateFor,
             Restriction restriction) {
-        this(
+
+        return new PrivateTransaction1559(
                 chainId,
                 nonce,
                 gasLimit,

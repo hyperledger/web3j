@@ -28,7 +28,7 @@ import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Restriction;
 
-public class LegacyPrivateTransaction extends RawTransaction implements IPrivateTransaction {
+public class RawPrivateTransaction extends RawTransaction implements IPrivateTransaction {
 
     private final Base64String privateFrom;
     private final List<Base64String> privateFor;
@@ -36,7 +36,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
     private final Restriction restriction;
 
     // Constructor
-    public LegacyPrivateTransaction(
+    protected RawPrivateTransaction(
             BigInteger nonce,
             BigInteger gasPrice,
             BigInteger gasLimit,
@@ -53,7 +53,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
         this.restriction = restriction;
     }
 
-    public LegacyPrivateTransaction(
+    protected RawPrivateTransaction(
             final RawTransaction rawTransaction,
             final Base64String privateFrom,
             final List<Base64String> privateFor,
@@ -62,7 +62,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
         this(rawTransaction.getTransaction(), privateFrom, privateFor, privacyGroupId, restriction);
     }
 
-    protected LegacyPrivateTransaction(
+    protected RawPrivateTransaction(
             final ITransaction transaction,
             final Base64String privateFrom,
             final List<Base64String> privateFor,
@@ -75,7 +75,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
         this.restriction = restriction;
     }
 
-    public static LegacyPrivateTransaction createContractTransaction(
+    public static RawPrivateTransaction createContractTransaction(
             BigInteger nonce,
             BigInteger gasPrice,
             BigInteger gasLimit,
@@ -85,7 +85,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
             Base64String privacyGroupId,
             Restriction restriction) {
 
-        return new LegacyPrivateTransaction(
+        return new RawPrivateTransaction(
                 nonce,
                 gasPrice,
                 gasLimit,
@@ -97,7 +97,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
                 restriction);
     }
 
-    public static LegacyPrivateTransaction createContractTransaction(
+    public static RawPrivateTransaction createContractTransaction(
             BigInteger nonce,
             BigInteger gasPrice,
             BigInteger gasLimit,
@@ -110,7 +110,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
                 nonce, gasPrice, gasLimit, data, privateFrom, null, privacyGroupId, restriction);
     }
 
-    public static LegacyPrivateTransaction createTransaction(
+    public static RawPrivateTransaction createTransaction(
             final BigInteger nonce,
             final BigInteger gasPrice,
             final BigInteger gasLimit,
@@ -121,7 +121,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
             final Base64String privacyGroupId,
             final Restriction restriction) {
 
-        return new LegacyPrivateTransaction(
+        return new RawPrivateTransaction(
                 nonce,
                 gasPrice,
                 gasLimit,
@@ -133,7 +133,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
                 restriction);
     }
 
-    public static LegacyPrivateTransaction createTransaction(
+    public static RawPrivateTransaction createTransaction(
             BigInteger nonce,
             BigInteger gasPrice,
             BigInteger gasLimit,
@@ -155,7 +155,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
                 restriction);
     }
 
-    public static LegacyPrivateTransaction createTransaction(
+    public static RawPrivateTransaction createTransaction(
             BigInteger nonce,
             BigInteger gasPrice,
             BigInteger gasLimit,
@@ -177,7 +177,7 @@ public class LegacyPrivateTransaction extends RawTransaction implements IPrivate
                 restriction);
     }
 
-    public static LegacyPrivateTransaction createTransaction(
+    public static RawPrivateTransaction createTransaction(
             BigInteger nonce,
             BigInteger gasPrice,
             BigInteger gasLimit,

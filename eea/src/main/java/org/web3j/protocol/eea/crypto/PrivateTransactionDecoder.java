@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.SignedRawTransaction;
 import org.web3j.crypto.TransactionDecoder;
-import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
 import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
 import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransactionType;
+import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -35,7 +35,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class PrivateTransactionDecoder {
 
-    public static LegacyPrivateTransaction decode(final String hexTransaction) {
+    public static RawPrivateTransaction decode(final String hexTransaction) {
         final byte[] transaction = Numeric.hexStringToByteArray(hexTransaction);
         final PrivateTransactionType transactionType = getPrivateTransactionType(transaction);
 
@@ -53,45 +53,31 @@ public class PrivateTransactionDecoder {
         else return PrivateTransactionType.PRIVATE_LEGACY;
     }
 
-    private static LegacyPrivateTransaction decodePrivateTransaction1559(final byte[] transaction) {
+    private static RawPrivateTransaction decodePrivateTransaction1559(final byte[] transaction) {
         final byte[] encodedTx = Arrays.copyOfRange(transaction, 1, transaction.length);
         final RlpList rlpList = RlpDecoder.decode(encodedTx);
         final RlpList temp = (RlpList) rlpList.getValues().get(0);
         final List<RlpType> values = temp.getValues();
 
-        System.out.println(rlpList);
-        System.out.println(temp);
-        System.out.println(values);
-
         final long chainId =
                 ((RlpString) temp.getValues().get(0)).asPositiveBigInteger().longValue();
-        System.out.println("chainId " + chainId);
         final BigInteger nonce = ((RlpString) temp.getValues().get(1)).asPositiveBigInteger();
-        System.out.println("nonce " + nonce);
 
         final BigInteger maxPriorityFeePerGas =
                 ((RlpString) temp.getValues().get(2)).asPositiveBigInteger();
-        System.out.println("maxPriorityFeePerGas " + maxPriorityFeePerGas);
         final BigInteger maxFeePerGas =
                 ((RlpString) temp.getValues().get(3)).asPositiveBigInteger();
-        System.out.println("maxFeePerGas " + maxFeePerGas);
 
         final BigInteger gasLimit = ((RlpString) temp.getValues().get(4)).asPositiveBigInteger();
-        System.out.println("gasLimit " + gasLimit);
         final String to = ((RlpString) temp.getValues().get(5)).asString();
-        System.out.println("to " + to);
-
         final String data = ((RlpString) temp.getValues().get(7)).asString();
-        System.out.println("data " + data);
 
         final Base64String privateFrom = extractBase64(values.get(8));
-        System.out.println("privateFrom " + privateFrom);
         final Restriction restriction = extractRestriction(values.get(10));
-        System.out.println("restriction " + restriction);
 
         if (values.get(9) instanceof RlpList) {
             List<Base64String> privateForList = extractBase64List(values.get(9));
-            return new PrivateTransaction1559(
+            return PrivateTransaction1559.createTransaction(
                     chainId,
                     nonce,
                     gasLimit,
@@ -101,11 +87,10 @@ public class PrivateTransactionDecoder {
                     maxFeePerGas,
                     privateFrom,
                     privateForList,
-                    null,
                     restriction);
         } else {
             Base64String privacyGroupId = extractBase64(values.get(9));
-            return new PrivateTransaction1559(
+            return PrivateTransaction1559.createTransaction(
                     chainId,
                     nonce,
                     gasLimit,
@@ -114,14 +99,12 @@ public class PrivateTransactionDecoder {
                     maxPriorityFeePerGas,
                     maxFeePerGas,
                     privateFrom,
-                    null,
                     privacyGroupId,
                     restriction);
         }
     }
 
-    private static LegacyPrivateTransaction decodeLegacyPrivateTransaction(
-            final byte[] transaction) {
+    private static RawPrivateTransaction decodeLegacyPrivateTransaction(final byte[] transaction) {
         final RlpList rlpList = RlpDecoder.decode(transaction);
         final RlpList temp = (RlpList) rlpList.getValues().get(0);
         final List<RlpType> values = temp.getValues();
@@ -135,12 +118,26 @@ public class PrivateTransactionDecoder {
 
             if (values.get(7) instanceof RlpList) {
                 List<Base64String> privateForList = extractBase64List(values.get(7));
-                return new LegacyPrivateTransaction(
-                        rawTransaction, privateFrom, privateForList, null, restriction);
+                return RawPrivateTransaction.createTransaction(
+                        rawTransaction.getNonce(),
+                        rawTransaction.getGasPrice(),
+                        rawTransaction.getGasLimit(),
+                        rawTransaction.getTo(),
+                        rawTransaction.getData(),
+                        privateFrom,
+                        privateForList,
+                        restriction);
             } else {
                 Base64String privacyGroupId = extractBase64(values.get(7));
-                return new LegacyPrivateTransaction(
-                        rawTransaction, privateFrom, null, privacyGroupId, restriction);
+                return RawPrivateTransaction.createTransaction(
+                        rawTransaction.getNonce(),
+                        rawTransaction.getGasPrice(),
+                        rawTransaction.getGasLimit(),
+                        rawTransaction.getTo(),
+                        rawTransaction.getData(),
+                        privateFrom,
+                        privacyGroupId,
+                        restriction);
             }
         } else {
             final Base64String privateFrom = extractBase64(values.get(9));

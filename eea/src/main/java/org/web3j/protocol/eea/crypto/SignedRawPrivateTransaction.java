@@ -18,11 +18,11 @@ import java.util.List;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.SignatureDataOperations;
 import org.web3j.crypto.SignedRawTransaction;
-import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
+import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Restriction;
 
-public class SignedRawPrivateTransaction extends LegacyPrivateTransaction
+public class SignedRawPrivateTransaction extends RawPrivateTransaction
         implements SignatureDataOperations {
 
     private final Sign.SignatureData signatureData;

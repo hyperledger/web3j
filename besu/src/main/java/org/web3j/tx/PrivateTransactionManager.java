@@ -25,8 +25,9 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.crypto.PrivateTxSignServiceImpl;
-import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
 import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
+import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
+import org.web3j.service.TxSignService;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
@@ -37,7 +38,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     private final Besu besu;
 
-    private final PrivateTxSignServiceImpl privateTxSignService;
+    private final TxSignService privateTxSignService;
     private final long chainId;
 
     private final Base64String privateFrom;
@@ -74,7 +75,7 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final Base64String privacyGroupId,
             final Restriction restriction,
-            final PrivateTxSignServiceImpl privateTxSignService) {
+            final TxSignService privateTxSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -112,7 +113,7 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final List<Base64String> privateFor,
             final Restriction restriction,
-            final PrivateTxSignServiceImpl privateTxSignService) {
+            final TxSignService privateTxSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -138,11 +139,11 @@ public class PrivateTransactionManager extends TransactionManager {
                         .send()
                         .getTransactionCount();
 
-        final LegacyPrivateTransaction transaction;
+        final RawPrivateTransaction transaction;
 
         if (privateFor != null) {
             transaction =
-                    LegacyPrivateTransaction.createTransaction(
+                    RawPrivateTransaction.createTransaction(
                             nonce,
                             gasPrice,
                             gasLimit,
@@ -153,7 +154,7 @@ public class PrivateTransactionManager extends TransactionManager {
                             restriction);
         } else {
             transaction =
-                    LegacyPrivateTransaction.createTransaction(
+                    RawPrivateTransaction.createTransaction(
                             nonce,
                             gasPrice,
                             gasLimit,
@@ -186,7 +187,7 @@ public class PrivateTransactionManager extends TransactionManager {
         final PrivateTransaction1559 transaction;
         if (privateFor != null) {
             transaction =
-                    new PrivateTransaction1559(
+                    PrivateTransaction1559.createTransaction(
                             chainId,
                             nonce,
                             gasLimit,
@@ -199,7 +200,7 @@ public class PrivateTransactionManager extends TransactionManager {
                             restriction);
         } else {
             transaction =
-                    new PrivateTransaction1559(
+                    PrivateTransaction1559.createTransaction(
                             chainId,
                             nonce,
                             gasLimit,
@@ -239,20 +240,20 @@ public class PrivateTransactionManager extends TransactionManager {
                 .send();
     }
 
-    public String sign(final LegacyPrivateTransaction rawTransaction) {
+    public String sign(final RawPrivateTransaction rawTransaction) {
 
         final byte[] signedMessage = privateTxSignService.sign(rawTransaction, chainId);
 
         return Numeric.toHexString(signedMessage);
     }
 
-    public EthSendTransaction signAndSend(final LegacyPrivateTransaction rawTransaction)
+    public EthSendTransaction signAndSend(final RawPrivateTransaction rawTransaction)
             throws IOException {
         final String hexValue = sign(rawTransaction);
         return this.besu.eeaSendRawTransaction(hexValue).send();
     }
 
-    public PrivateEnclaveKey signAndDistribute(LegacyPrivateTransaction rawTransaction)
+    public PrivateEnclaveKey signAndDistribute(RawPrivateTransaction rawTransaction)
             throws IOException {
         String hexValue = sign(rawTransaction);
         return this.besu.privDistributeRawTransaction(hexValue).send();
