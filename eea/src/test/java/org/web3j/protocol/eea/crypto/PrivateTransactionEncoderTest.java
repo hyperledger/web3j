@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
+import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
@@ -60,6 +61,36 @@ public class PrivateTransactionEncoderTest {
                 Numeric.toHexString(
                         PrivateTransactionEncoder.signMessage(
                                 privateTransactionCreation, chainId, credentials));
+
+        assertEquals(expected, privateRawTransaction);
+    }
+
+    @Test
+    public void testSign1559Transaction() {
+        final String expected =
+                "0x01f8d48207e2800101832dc6c094627306090abab3a6e1400e9345bc60c78a8bef57808001a0c0e9d5c7656fdf74a5b5423b20c01663e6c3ee9f855a2371a0bbb07569fafd6ea02543caba35757c6b9401eebfe724c538cb94f817106927fedaa4669ffcbae7efa0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486af842a0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa02a8d9b56a0fe9cd94d60be4413bcb721d3a7be27ed8e28b3a6346df874ee141b8a72657374726963746564";
+        final long chainId = 2018;
+        final PrivateTransaction1559 privateTransactionCreation =
+                new PrivateTransaction1559(
+                        chainId,
+                        BigInteger.ZERO,
+                        BigInteger.valueOf(3000000),
+                        "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                        "0x",
+                        BigInteger.ONE,
+                        BigInteger.ONE,
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_PRIVATE_FOR,
+                        null,
+                        RESTRICTED);
+
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final Credentials credentials = Credentials.create(privateKey);
+        final String privateRawTransaction =
+                Numeric.toHexString(
+                        PrivateTransactionEncoder.signMessage(
+                                privateTransactionCreation, credentials));
 
         assertEquals(expected, privateRawTransaction);
     }

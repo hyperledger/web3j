@@ -13,16 +13,24 @@
 package org.web3j.protocol.eea.crypto.transaction.type;
 
 public enum PrivateTransactionType {
-    PRIVATE_LEGACY("Legacy"),
-    PRIVATE_1559("EIP-1559");
+    PRIVATE_LEGACY(null),
+    PRIVATE_1559(((byte) 0x01));
 
-    private String description;
+    Byte type;
 
-    PrivateTransactionType(String description) {
-        this.description = description;
+    PrivateTransactionType(final Byte type) {
+        this.type = type;
     }
 
-    public String getDescription() {
-        return description;
+    public Byte getRlpType() {
+        return type;
+    }
+
+    public boolean isPrivateLegacy() {
+        return this.equals(PrivateTransactionType.PRIVATE_LEGACY);
+    }
+
+    public boolean isPrivateEip1559() {
+        return this.equals(PrivateTransactionType.PRIVATE_1559);
     }
 }

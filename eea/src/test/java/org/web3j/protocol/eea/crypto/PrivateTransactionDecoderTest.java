@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
+import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
@@ -60,6 +61,47 @@ public class PrivateTransactionDecoderTest {
         assertNotNull(result);
         assertEquals(nonce, result.getNonce());
         assertEquals(gasPrice, result.getGasPrice());
+        assertEquals(gasLimit, result.getGasLimit());
+        assertEquals(to, result.getTo());
+        assertEquals("", result.getData());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivateFrom());
+        assertEquals(MOCK_PRIVATE_FOR, result.getPrivateFor().get());
+        assertEquals(RESTRICTED, result.getRestriction());
+    }
+
+    @Test
+    public void testDecoding1559() {
+        final BigInteger nonce = BigInteger.ZERO;
+        final long chainId = 2018;
+        final BigInteger gasLimit = BigInteger.TEN;
+        final BigInteger maxPriorityFeePerGas = BigInteger.ONE;
+        final BigInteger maxFeePerGas = BigInteger.ONE;
+        final String to = "0x0add5355";
+
+        final PrivateTransaction1559 privateTx =
+                new PrivateTransaction1559(
+                        chainId,
+                        nonce,
+                        gasLimit,
+                        to,
+                        "",
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_PRIVATE_FOR,
+                        null,
+                        RESTRICTED);
+
+        byte[] encodedMessage = PrivateTransactionEncoder.encode(privateTx);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final PrivateTransaction1559 result =
+                (PrivateTransaction1559) PrivateTransactionDecoder.decode(hexMessage);
+        assertNotNull(result);
+        assertEquals(nonce, result.getNonce());
+        assertEquals(chainId, result.getChainId());
+        assertEquals(maxPriorityFeePerGas, result.getMaxPriorityFeePerGas());
+        assertEquals(maxFeePerGas, result.getMaxFeePerGas());
         assertEquals(gasLimit, result.getGasLimit());
         assertEquals(to, result.getTo());
         assertEquals("", result.getData());

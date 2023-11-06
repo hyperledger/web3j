@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.transaction.type.ITransaction;
-import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Base64String;
@@ -32,7 +31,7 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
     private BigInteger maxPriorityFeePerGas;
     private BigInteger maxFeePerGas;
 
-    protected PrivateTransaction1559(
+    public PrivateTransaction1559(
             long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
@@ -59,7 +58,7 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
         this.maxFeePerGas = maxFeePerGas;
     }
 
-    protected PrivateTransaction1559(
+    public PrivateTransaction1559(
             long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
@@ -84,7 +83,7 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
                 restriction);
     }
 
-    protected PrivateTransaction1559(
+    public PrivateTransaction1559(
             long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
@@ -140,9 +139,6 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
         byte[] data = Numeric.hexStringToByteArray(getData());
         result.add(RlpString.create(data));
 
-        // access list
-        result.add(new RlpList());
-
         if (signatureData != null) {
             result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
@@ -176,5 +172,10 @@ public class PrivateTransaction1559 extends LegacyPrivateTransaction implements 
 
     public BigInteger getMaxFeePerGas() {
         return maxFeePerGas;
+    }
+
+    @Override
+    public PrivateTransactionType getTransactionType() {
+        return PrivateTransactionType.PRIVATE_1559;
     }
 }

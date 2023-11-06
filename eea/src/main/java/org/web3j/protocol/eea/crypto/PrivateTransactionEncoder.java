@@ -27,12 +27,12 @@ import org.web3j.rlp.RlpType;
 public class PrivateTransactionEncoder {
 
     public static byte[] signMessage(
-            final LegacyPrivateTransaction rawTransaction, final Credentials credentials) {
-        final byte[] encodedTransaction = encode(rawTransaction);
+            final LegacyPrivateTransaction privateTransaction, final Credentials credentials) {
+        final byte[] encodedTransaction = encode(privateTransaction);
         final Sign.SignatureData signatureData =
                 Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
 
-        return encode(rawTransaction, signatureData);
+        return encode(privateTransaction, signatureData);
     }
 
     public static byte[] signMessage(
@@ -59,11 +59,20 @@ public class PrivateTransactionEncoder {
     }
 
     private static byte[] encode(
-            final LegacyPrivateTransaction rawTransaction, final Sign.SignatureData signatureData) {
+            final LegacyPrivateTransaction privateTransaction,
+            final Sign.SignatureData signatureData) {
         //        final List<RlpType> values = asRlpValues(rawTransaction, signatureData);
-        final List<RlpType> values = rawTransaction.asRlpValues(signatureData);
+        final List<RlpType> values = privateTransaction.asRlpValues(signatureData);
         final RlpList rlpList = new RlpList(values);
-        return RlpEncoder.encode(rlpList);
+        byte[] encoded = RlpEncoder.encode(rlpList);
+
+        if (privateTransaction.getTransactionType().isPrivateEip1559()) {
+            return ByteBuffer.allocate(encoded.length + 1)
+                    .put(privateTransaction.getTransactionType().getRlpType())
+                    .put(encoded)
+                    .array();
+        }
+        return encoded;
     }
 
     private static byte[] longToBytes(long x) {

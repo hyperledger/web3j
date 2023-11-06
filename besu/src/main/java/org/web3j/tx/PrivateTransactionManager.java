@@ -26,7 +26,7 @@ import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.crypto.PrivateTxSignServiceImpl;
 import org.web3j.protocol.eea.crypto.transaction.type.LegacyPrivateTransaction;
-import org.web3j.service.TxSignService;
+import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
@@ -37,7 +37,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     private final Besu besu;
 
-    private final TxSignService txSignService;
+    private final PrivateTxSignServiceImpl privateTxSignService;
     private final long chainId;
 
     private final Base64String privateFrom;
@@ -74,7 +74,7 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final Base64String privacyGroupId,
             final Restriction restriction,
-            final TxSignService txSignService) {
+            final PrivateTxSignServiceImpl privateTxSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -82,7 +82,7 @@ public class PrivateTransactionManager extends TransactionManager {
         this.privateFor = null;
         this.privacyGroupId = privacyGroupId;
         this.restriction = restriction;
-        this.txSignService = txSignService;
+        this.privateTxSignService = privateTxSignService;
     }
 
     public PrivateTransactionManager(
@@ -112,7 +112,7 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final List<Base64String> privateFor,
             final Restriction restriction,
-            final TxSignService txSignService) {
+            final PrivateTxSignServiceImpl privateTxSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -120,7 +120,7 @@ public class PrivateTransactionManager extends TransactionManager {
         this.privateFor = privateFor;
         this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
         this.restriction = restriction;
-        this.txSignService = txSignService;
+        this.privateTxSignService = privateTxSignService;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class PrivateTransactionManager extends TransactionManager {
             throws IOException {
 
         final BigInteger nonce =
-                besu.privGetTransactionCount(txSignService.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(privateTxSignService.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
@@ -179,40 +179,40 @@ public class PrivateTransactionManager extends TransactionManager {
             boolean constructor)
             throws IOException {
         final BigInteger nonce =
-                besu.privGetTransactionCount(txSignService.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(privateTxSignService.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
-        final LegacyPrivateTransaction transaction;
-        //        if (privateFor != null) {
-        //            transaction =
-        //                    RawPrivateTransaction.createTransaction(
-        //                            chainId,
-        //                            nonce,
-        //                            maxPriorityFeePerGas,
-        //                            maxFeePerGas,
-        //                            gasLimit,
-        //                            to,
-        //                            data,
-        //                            privateFrom,
-        //                            privateFor,
-        //                            restriction);
-        //        } else {
-        //            transaction =
-        //                    RawPrivateTransaction.createTransaction(
-        //                            chainId,
-        //                            nonce,
-        //                            maxPriorityFeePerGas,
-        //                            maxFeePerGas,
-        //                            gasLimit,
-        //                            to,
-        //                            data,
-        //                            privateFrom,
-        //                            privacyGroupId,
-        //                            restriction);
-        //        }
+        final PrivateTransaction1559 transaction;
+        if (privateFor != null) {
+            transaction =
+                    new PrivateTransaction1559(
+                            chainId,
+                            nonce,
+                            gasLimit,
+                            to,
+                            data,
+                            maxPriorityFeePerGas,
+                            maxFeePerGas,
+                            privateFrom,
+                            privateFor,
+                            restriction);
+        } else {
+            transaction =
+                    new PrivateTransaction1559(
+                            chainId,
+                            nonce,
+                            gasLimit,
+                            to,
+                            data,
+                            maxPriorityFeePerGas,
+                            maxFeePerGas,
+                            privateFrom,
+                            privacyGroupId,
+                            restriction);
+        }
 
-        return signAndSend(null);
+        return signAndSend(transaction);
     }
 
     @Override
@@ -241,7 +241,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     public String sign(final LegacyPrivateTransaction rawTransaction) {
 
-        final byte[] signedMessage = txSignService.sign(rawTransaction, chainId);
+        final byte[] signedMessage = privateTxSignService.sign(rawTransaction, chainId);
 
         return Numeric.toHexString(signedMessage);
     }
