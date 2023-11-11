@@ -60,7 +60,6 @@ public class PrivateTransactionEncoder {
     private static byte[] encode(
             final RawPrivateTransaction privateTransaction,
             final Sign.SignatureData signatureData) {
-        //        final List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         final List<RlpType> values =
                 privateTransaction.getPrivateTransaction().asRlpValues(signatureData);
         final RlpList rlpList = new RlpList(values);
