@@ -18,7 +18,6 @@ import java.util.List;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.TransactionEncoder;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpType;
@@ -62,13 +61,14 @@ public class PrivateTransactionEncoder {
             final RawPrivateTransaction privateTransaction,
             final Sign.SignatureData signatureData) {
         //        final List<RlpType> values = asRlpValues(rawTransaction, signatureData);
-        final List<RlpType> values = privateTransaction.asRlpValues(signatureData);
+        final List<RlpType> values =
+                privateTransaction.getPrivateTransaction().asRlpValues(signatureData);
         final RlpList rlpList = new RlpList(values);
         byte[] encoded = RlpEncoder.encode(rlpList);
 
-        if (privateTransaction.getTransactionType().isPrivateEip1559()) {
+        if (privateTransaction.getType().isEip1559()) {
             return ByteBuffer.allocate(encoded.length + 1)
-                    .put(privateTransaction.getTransactionType().getRlpType())
+                    .put(privateTransaction.getType().getRlpType())
                     .put(encoded)
                     .array();
         }

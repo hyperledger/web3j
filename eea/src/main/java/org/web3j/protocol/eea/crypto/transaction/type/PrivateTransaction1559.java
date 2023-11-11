@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.web3j.crypto.Sign;
-import org.web3j.crypto.transaction.type.ITransaction;
+import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Base64String;
@@ -25,20 +25,22 @@ import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Restriction;
 
-public class PrivateTransaction1559 extends RawPrivateTransaction implements ITransaction {
+public class PrivateTransaction1559 extends LegacyPrivateTransaction
+        implements IPrivateTransaction {
 
-    private long chainId;
-    private BigInteger maxPriorityFeePerGas;
-    private BigInteger maxFeePerGas;
+    private final TransactionType transactionType;
+    private final long chainId;
+    private final BigInteger maxPriorityFeePerGas;
+    private final BigInteger maxFeePerGas;
 
-    protected PrivateTransaction1559(
+    public PrivateTransaction1559(
             long chainId,
             BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,
-            BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas,
             Base64String privateFrom,
             List<Base64String> privateFor,
             Base64String privacyGroupId,
@@ -53,6 +55,7 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
                 privateFor,
                 privacyGroupId,
                 restriction);
+        this.transactionType = TransactionType.EIP1559;
         this.chainId = chainId;
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
         this.maxFeePerGas = maxFeePerGas;
@@ -61,10 +64,10 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
     public static PrivateTransaction1559 createContractTransaction(
             long chainId,
             BigInteger nonce,
-            BigInteger gasLimit,
-            String data,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String data,
             Base64String privateFrom,
             List<Base64String> privateFor,
             Base64String privacyGroupId,
@@ -73,11 +76,11 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
         return new PrivateTransaction1559(
                 chainId,
                 nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
                 gasLimit,
                 null,
                 data,
-                maxPriorityFeePerGas,
-                maxFeePerGas,
                 privateFrom,
                 privateFor,
                 privacyGroupId,
@@ -87,10 +90,10 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
     public static PrivateTransaction1559 createContractTransaction(
             long chainId,
             BigInteger nonce,
-            BigInteger gasLimit,
-            String data,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String data,
             Base64String privateFrom,
             Base64String privacyGroupId,
             Restriction restriction) {
@@ -98,10 +101,10 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
         return createContractTransaction(
                 chainId,
                 nonce,
-                gasLimit,
-                data,
                 maxPriorityFeePerGas,
                 maxFeePerGas,
+                gasLimit,
+                data,
                 privateFrom,
                 null,
                 privacyGroupId,
@@ -111,11 +114,11 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
     public static PrivateTransaction1559 createTransaction(
             long chainId,
             BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,
-            BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas,
             Base64String privateFrom,
             List<Base64String> privateFor,
             Base64String privacyGroupId,
@@ -124,11 +127,11 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
         return new PrivateTransaction1559(
                 chainId,
                 nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
                 gasLimit,
                 to,
                 data,
-                maxPriorityFeePerGas,
-                maxFeePerGas,
                 privateFrom,
                 privateFor,
                 privacyGroupId,
@@ -150,11 +153,11 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
         return createTransaction(
                 chainId,
                 nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
                 gasLimit,
                 to,
                 data,
-                maxPriorityFeePerGas,
-                maxFeePerGas,
                 privateFrom,
                 null,
                 privacyGroupId,
@@ -176,11 +179,11 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
         return new PrivateTransaction1559(
                 chainId,
                 nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
                 gasLimit,
                 to,
                 data,
-                maxPriorityFeePerGas,
-                maxFeePerGas,
                 privateFrom,
                 privateFor,
                 null,
@@ -254,7 +257,7 @@ public class PrivateTransaction1559 extends RawPrivateTransaction implements ITr
     }
 
     @Override
-    public PrivateTransactionType getTransactionType() {
-        return PrivateTransactionType.PRIVATE_1559;
+    public TransactionType getType() {
+        return transactionType;
     }
 }

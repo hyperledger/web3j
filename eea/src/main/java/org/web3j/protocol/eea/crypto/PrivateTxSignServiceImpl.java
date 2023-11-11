@@ -14,7 +14,6 @@ package org.web3j.protocol.eea.crypto;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
 import org.web3j.service.TxSignService;
 import org.web3j.tx.ChainId;
 

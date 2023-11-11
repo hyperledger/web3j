@@ -24,7 +24,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
+import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;

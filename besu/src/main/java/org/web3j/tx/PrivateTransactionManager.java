@@ -25,8 +25,7 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.crypto.PrivateTxSignServiceImpl;
-import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
+import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.service.TxSignService;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
@@ -184,30 +183,30 @@ public class PrivateTransactionManager extends TransactionManager {
                         .send()
                         .getTransactionCount();
 
-        final PrivateTransaction1559 transaction;
+        final RawPrivateTransaction transaction;
         if (privateFor != null) {
             transaction =
-                    PrivateTransaction1559.createTransaction(
+                    RawPrivateTransaction.createTransaction(
                             chainId,
                             nonce,
+                            maxPriorityFeePerGas,
+                            maxFeePerGas,
                             gasLimit,
                             to,
                             data,
-                            maxPriorityFeePerGas,
-                            maxFeePerGas,
                             privateFrom,
                             privateFor,
                             restriction);
         } else {
             transaction =
-                    PrivateTransaction1559.createTransaction(
+                    RawPrivateTransaction.createTransaction(
                             chainId,
                             nonce,
+                            maxPriorityFeePerGas,
+                            maxFeePerGas,
                             gasLimit,
                             to,
                             data,
-                            maxPriorityFeePerGas,
-                            maxFeePerGas,
                             privateFrom,
                             privacyGroupId,
                             restriction);

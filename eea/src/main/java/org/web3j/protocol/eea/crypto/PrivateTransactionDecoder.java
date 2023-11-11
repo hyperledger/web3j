@@ -20,9 +20,7 @@ import java.util.stream.Collectors;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.SignedRawTransaction;
 import org.web3j.crypto.TransactionDecoder;
-import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
-import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransactionType;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
+import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -37,20 +35,19 @@ public class PrivateTransactionDecoder {
 
     public static RawPrivateTransaction decode(final String hexTransaction) {
         final byte[] transaction = Numeric.hexStringToByteArray(hexTransaction);
-        final PrivateTransactionType transactionType = getPrivateTransactionType(transaction);
+        final TransactionType transactionType = getPrivateTransactionType(transaction);
 
-        if (transactionType == PrivateTransactionType.PRIVATE_1559) {
+        if (transactionType == TransactionType.EIP1559) {
             return decodePrivateTransaction1559(transaction);
         }
         return decodeLegacyPrivateTransaction(transaction);
     }
 
-    private static PrivateTransactionType getPrivateTransactionType(final byte[] transaction) {
+    private static TransactionType getPrivateTransactionType(final byte[] transaction) {
         // Determine the type of the private transaction, similar to TransactionDecoder.
         byte firstByte = transaction[0];
-        if (firstByte == PrivateTransactionType.PRIVATE_1559.getRlpType())
-            return PrivateTransactionType.PRIVATE_1559;
-        else return PrivateTransactionType.PRIVATE_LEGACY;
+        if (firstByte == TransactionType.EIP1559.getRlpType()) return TransactionType.EIP1559;
+        else return TransactionType.LEGACY;
     }
 
     private static RawPrivateTransaction decodePrivateTransaction1559(final byte[] transaction) {
@@ -77,28 +74,30 @@ public class PrivateTransactionDecoder {
 
         if (values.get(9) instanceof RlpList) {
             List<Base64String> privateForList = extractBase64List(values.get(9));
-            return PrivateTransaction1559.createTransaction(
+            return RawPrivateTransaction.createTransaction(
                     chainId,
                     nonce,
+                    maxPriorityFeePerGas,
+                    maxFeePerGas,
                     gasLimit,
                     to,
                     data,
-                    maxPriorityFeePerGas,
-                    maxFeePerGas,
                     privateFrom,
                     privateForList,
+                    null,
                     restriction);
         } else {
             Base64String privacyGroupId = extractBase64(values.get(9));
-            return PrivateTransaction1559.createTransaction(
+            return RawPrivateTransaction.createTransaction(
                     chainId,
                     nonce,
+                    maxPriorityFeePerGas,
+                    maxFeePerGas,
                     gasLimit,
                     to,
                     data,
-                    maxPriorityFeePerGas,
-                    maxFeePerGas,
                     privateFrom,
+                    null,
                     privacyGroupId,
                     restriction);
         }
@@ -126,6 +125,7 @@ public class PrivateTransactionDecoder {
                         rawTransaction.getData(),
                         privateFrom,
                         privateForList,
+                        null,
                         restriction);
             } else {
                 Base64String privacyGroupId = extractBase64(values.get(7));
@@ -136,6 +136,7 @@ public class PrivateTransactionDecoder {
                         rawTransaction.getTo(),
                         rawTransaction.getData(),
                         privateFrom,
+                        null,
                         privacyGroupId,
                         restriction);
             }

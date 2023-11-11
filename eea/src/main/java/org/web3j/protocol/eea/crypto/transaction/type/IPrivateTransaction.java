@@ -12,26 +12,14 @@
  */
 package org.web3j.protocol.eea.crypto.transaction.type;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import org.web3j.crypto.Sign;
-import org.web3j.rlp.RlpType;
+import org.web3j.crypto.transaction.type.ITransaction;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Restriction;
 
-public interface IPrivateTransaction {
-
-    BigInteger getNonce();
-
-    BigInteger getGasPrice();
-
-    BigInteger getGasLimit();
-
-    String getTo();
-
-    String getData();
+public interface IPrivateTransaction extends ITransaction {
 
     Base64String getPrivateFrom();
 
@@ -40,8 +28,4 @@ public interface IPrivateTransaction {
     Optional<Base64String> getPrivacyGroupId();
 
     Restriction getRestriction();
-
-    List<RlpType> asRlpValues(Sign.SignatureData signatureData);
-
-    PrivateTransactionType getTransactionType();
 }

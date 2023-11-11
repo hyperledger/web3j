@@ -19,8 +19,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Credentials;
-import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
@@ -67,17 +65,17 @@ public class PrivateTransactionEncoderTest {
     @Test
     public void testSign1559Transaction() {
         final String expected =
-                "0x01f8d48207e2800101832dc6c094627306090abab3a6e1400e9345bc60c78a8bef57808001a0c0e9d5c7656fdf74a5b5423b20c01663e6c3ee9f855a2371a0bbb07569fafd6ea02543caba35757c6b9401eebfe724c538cb94f817106927fedaa4669ffcbae7efa0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486af842a0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa02a8d9b56a0fe9cd94d60be4413bcb721d3a7be27ed8e28b3a6346df874ee141b8a72657374726963746564";
+                "0x02f8d48207e2800101832dc6c094627306090abab3a6e1400e9345bc60c78a8bef57808001a0c4b5ae238eaa5cb154788d675ff61946e6886bfcc007591042d6a7daf14cbd6fa047f417ac1923e7e6adc77b3384dc1dd3bdf9208e4f1e5436775d56e5f595e249a0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486af842a0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa02a8d9b56a0fe9cd94d60be4413bcb721d3a7be27ed8e28b3a6346df874ee141b8a72657374726963746564";
         final long chainId = 2018;
-        final PrivateTransaction1559 privateTransactionCreation =
-                PrivateTransaction1559.createTransaction(
+        final RawPrivateTransaction privateTransactionCreation =
+                RawPrivateTransaction.createTransaction(
                         chainId,
                         BigInteger.ZERO,
+                        BigInteger.ONE,
+                        BigInteger.ONE,
                         BigInteger.valueOf(3000000),
                         "0x627306090abab3a6e1400e9345bc60c78a8bef57",
                         "0x",
-                        BigInteger.ONE,
-                        BigInteger.ONE,
                         MOCK_ENCLAVE_KEY,
                         MOCK_PRIVATE_FOR,
                         RESTRICTED);

@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.protocol.eea.crypto.transaction.type.PrivateTransaction1559;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
@@ -53,6 +52,7 @@ public class PrivateTransactionDecoderTest {
                         "",
                         MOCK_ENCLAVE_KEY,
                         MOCK_PRIVATE_FOR,
+                        null,
                         RESTRICTED);
         byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
@@ -91,11 +91,13 @@ public class PrivateTransactionDecoderTest {
                         MOCK_PRIVATE_FOR,
                         RESTRICTED);
 
-        byte[] encodedMessage = PrivateTransactionEncoder.encode(privateTx);
+        byte[] encodedMessage =
+                PrivateTransactionEncoder.encode(new RawPrivateTransaction(privateTx));
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
         final PrivateTransaction1559 result =
-                (PrivateTransaction1559) PrivateTransactionDecoder.decode(hexMessage);
+                (PrivateTransaction1559)
+                        PrivateTransactionDecoder.decode(hexMessage).getPrivateTransaction();
         assertNotNull(result);
         assertEquals(nonce, result.getNonce());
         assertEquals(chainId, result.getChainId());
@@ -103,7 +105,7 @@ public class PrivateTransactionDecoderTest {
         assertEquals(maxFeePerGas, result.getMaxFeePerGas());
         assertEquals(gasLimit, result.getGasLimit());
         assertEquals(to, result.getTo());
-        assertEquals("", result.getData());
+        assertEquals("0x", result.getData());
         assertEquals(MOCK_ENCLAVE_KEY, result.getPrivateFrom());
         assertEquals(MOCK_PRIVATE_FOR, result.getPrivateFor().get());
         assertEquals(RESTRICTED, result.getRestriction());

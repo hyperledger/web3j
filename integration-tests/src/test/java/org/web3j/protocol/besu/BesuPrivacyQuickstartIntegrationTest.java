@@ -28,7 +28,7 @@ import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
-import org.web3j.protocol.eea.crypto.transaction.type.RawPrivateTransaction;
+import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.test.contract.HumanStandardToken;
 import org.web3j.tx.ChainIdLong;
