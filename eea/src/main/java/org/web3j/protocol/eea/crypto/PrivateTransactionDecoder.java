@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.Sign;
 import org.web3j.crypto.SignedRawTransaction;
 import org.web3j.crypto.TransactionDecoder;
 import org.web3j.crypto.transaction.type.TransactionType;
@@ -69,37 +70,85 @@ public class PrivateTransactionDecoder {
         final String to = ((RlpString) temp.getValues().get(5)).asString();
         final String data = ((RlpString) temp.getValues().get(7)).asString();
 
-        final Base64String privateFrom = extractBase64(values.get(8));
-        final Restriction restriction = extractRestriction(values.get(10));
+        if (values.size() == 11) {
+            final Base64String privateFrom = extractBase64(values.get(8));
+            final Restriction restriction = extractRestriction(values.get(10));
 
-        if (values.get(9) instanceof RlpList) {
-            List<Base64String> privateForList = extractBase64List(values.get(9));
-            return RawPrivateTransaction.createTransaction(
-                    chainId,
-                    nonce,
-                    maxPriorityFeePerGas,
-                    maxFeePerGas,
-                    gasLimit,
-                    to,
-                    data,
-                    privateFrom,
-                    privateForList,
-                    null,
-                    restriction);
+            if (values.get(9) instanceof RlpList) {
+                List<Base64String> privateForList = extractBase64List(values.get(9));
+                return RawPrivateTransaction.createTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        privateFrom,
+                        privateForList,
+                        null,
+                        restriction);
+            } else {
+                Base64String privacyGroupId = extractBase64(values.get(9));
+                return RawPrivateTransaction.createTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        privateFrom,
+                        null,
+                        privacyGroupId,
+                        restriction);
+            }
         } else {
-            Base64String privacyGroupId = extractBase64(values.get(9));
-            return RawPrivateTransaction.createTransaction(
-                    chainId,
-                    nonce,
-                    maxPriorityFeePerGas,
-                    maxFeePerGas,
-                    gasLimit,
-                    to,
-                    data,
-                    privateFrom,
-                    null,
-                    privacyGroupId,
-                    restriction);
+            final Base64String privateFrom = extractBase64(values.get(11));
+            final Restriction restriction = extractRestriction(values.get(13));
+
+            final byte[] v =
+                    Sign.getVFromRecId(
+                            Numeric.toBigInt(((RlpString) values.get(8)).getBytes()).intValue());
+            final byte[] r =
+                    Numeric.toBytesPadded(
+                            Numeric.toBigInt(((RlpString) values.get(9)).getBytes()), 32);
+            final byte[] s =
+                    Numeric.toBytesPadded(
+                            Numeric.toBigInt(((RlpString) values.get(10)).getBytes()), 32);
+            final Sign.SignatureData signatureData = new Sign.SignatureData(v, r, s);
+
+            if (values.get(12) instanceof RlpList) {
+                List<Base64String> privateForList = extractBase64List(values.get(12));
+                return new SignedRawPrivateTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        signatureData,
+                        privateFrom,
+                        privateForList,
+                        null,
+                        restriction);
+            } else {
+                Base64String privacyGroupId = extractBase64(values.get(12));
+                return new SignedRawPrivateTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        signatureData,
+                        privateFrom,
+                        null,
+                        privacyGroupId,
+                        restriction);
+            }
         }
     }
 

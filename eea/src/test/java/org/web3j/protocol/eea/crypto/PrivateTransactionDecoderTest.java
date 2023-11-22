@@ -188,6 +188,62 @@ public class PrivateTransactionDecoderTest {
     }
 
     @Test
+    public void testDecodingSigned1559() throws Exception {
+        final BigInteger nonce = BigInteger.ZERO;
+        final long chainId = 2018;
+        final BigInteger gasLimit = BigInteger.TEN;
+        final BigInteger maxPriorityFeePerGas = BigInteger.ONE;
+        final BigInteger maxFeePerGas = BigInteger.ONE;
+        final String to = "0x0add5355";
+
+        final RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        "",
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_PRIVATE_FOR,
+                        RESTRICTED);
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final Credentials credentials = Credentials.create(privateKey);
+        final byte[] encodedMessage =
+                PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+
+        final PrivateTransaction1559 result1559 =
+                (PrivateTransaction1559) result.getPrivateTransaction();
+        assertNotNull(result1559);
+        assertEquals(nonce, result1559.getNonce());
+        assertEquals(chainId, result1559.getChainId());
+        assertEquals(maxPriorityFeePerGas, result1559.getMaxPriorityFeePerGas());
+        assertEquals(maxFeePerGas, result1559.getMaxFeePerGas());
+        assertEquals(gasLimit, result1559.getGasLimit());
+        assertEquals(to, result1559.getTo());
+        assertEquals("0x", result1559.getData());
+        assertEquals(MOCK_ENCLAVE_KEY, result1559.getPrivateFrom());
+        assertEquals(MOCK_PRIVATE_FOR, result1559.getPrivateFor().get());
+        assertEquals(RESTRICTED, result1559.getRestriction());
+
+        assertTrue(result instanceof SignedRawPrivateTransaction);
+        final SignedRawPrivateTransaction signedResult = (SignedRawPrivateTransaction) result;
+        assertNotNull(signedResult.getSignatureData());
+        Sign.SignatureData signatureData = signedResult.getSignatureData();
+        final byte[] encodedTransaction = PrivateTransactionEncoder.encode(rawTransaction);
+        final BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
+        assertEquals(key, credentials.getEcKeyPair().getPublicKey());
+        assertEquals(credentials.getAddress(), signedResult.getFrom());
+        signedResult.verify(credentials.getAddress());
+        assertNull(signedResult.getChainId());
+    }
+
+    @Test
     public void testDecodingSignedPrivacyGroup() throws Exception {
         final BigInteger nonce = BigInteger.ZERO;
         final BigInteger gasPrice = BigInteger.ONE;

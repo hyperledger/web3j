@@ -86,6 +86,34 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
                 restriction);
     }
 
+    public SignedRawPrivateTransaction(
+            final long chainId,
+            final BigInteger nonce,
+            final BigInteger maxPriorityFeePerGas,
+            final BigInteger maxFeePerGas,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final Sign.SignatureData signatureData,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
+        super(
+                chainId,
+                nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                gasLimit,
+                to,
+                data,
+                privateFrom,
+                privateFor,
+                privacyGroupId,
+                restriction);
+        this.signatureData = signatureData;
+    }
+
     public Sign.SignatureData getSignatureData() {
         return signatureData;
     }
