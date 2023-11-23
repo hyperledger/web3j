@@ -262,6 +262,7 @@ public class SolidityFunctionWrapper extends Generator {
                 buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, true));
         if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
             classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
+            classBuilder.addMethod(buildLinkLibraryFunction());
         }
 
         addAddressesSupport(classBuilder, addresses);
@@ -383,7 +384,7 @@ public class SolidityFunctionWrapper extends Generator {
     private FieldSpec createBinaryDefinition(String binary) {
         if (binary.length() < 65534) {
             return FieldSpec.builder(String.class, BINARY)
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                     .initializer("$S", binary)
                     .build();
         }
@@ -397,7 +398,7 @@ public class SolidityFunctionWrapper extends Generator {
         }
         stringBuilderString.append(".toString()");
         return FieldSpec.builder(String.class, BINARY)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .initializer(CodeBlock.of(stringBuilderString.toString()))
                 .build();
     }
@@ -1454,6 +1455,18 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         return results;
+    }
+
+    MethodSpec buildLinkLibraryFunction() {
+        MethodSpec.Builder methodBuilder =
+                MethodSpec.methodBuilder("linkLibraries")
+                        .addModifiers(Modifier.PUBLIC,  Modifier.STATIC)
+                        .addParameter(ParameterizedTypeName.get(
+                                ClassName.get(List.class), ClassName.get(Contract.LinkReference.class)), "references")
+                        .addStatement(BINARY + " = " + "linkBinaryWithReferences(" + BINARY + ", references)");
+
+        return methodBuilder.build();
+
     }
 
     private void buildConstantFunction(
