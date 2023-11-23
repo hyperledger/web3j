@@ -262,7 +262,7 @@ public class SolidityFunctionWrapper extends Generator {
                 buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, true));
         if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
             classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
-            classBuilder.addMethod(buildLinkLibraryFunction());
+            classBuilder.addMethod(buildLinkLibraryMethod());
         }
 
         addAddressesSupport(classBuilder, addresses);
@@ -1457,7 +1457,7 @@ public class SolidityFunctionWrapper extends Generator {
         return results;
     }
 
-    MethodSpec buildLinkLibraryFunction() {
+    MethodSpec buildLinkLibraryMethod() {
         MethodSpec.Builder methodBuilder =
                 MethodSpec.methodBuilder("linkLibraries")
                         .addModifiers(Modifier.PUBLIC,  Modifier.STATIC)
