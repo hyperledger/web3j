@@ -37,7 +37,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     private final Besu besu;
 
-    private final TxSignService txSignService;
+    private final TxSignService privateTxSignService;
     private final long chainId;
 
     private final Base64String privateFrom;
@@ -74,7 +74,7 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final Base64String privacyGroupId,
             final Restriction restriction,
-            final TxSignService txSignService) {
+            final TxSignService privateTxSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -82,7 +82,7 @@ public class PrivateTransactionManager extends TransactionManager {
         this.privateFor = null;
         this.privacyGroupId = privacyGroupId;
         this.restriction = restriction;
-        this.txSignService = txSignService;
+        this.privateTxSignService = privateTxSignService;
     }
 
     public PrivateTransactionManager(
@@ -112,7 +112,7 @@ public class PrivateTransactionManager extends TransactionManager {
             final Base64String privateFrom,
             final List<Base64String> privateFor,
             final Restriction restriction,
-            final TxSignService txSignService) {
+            final TxSignService privateTxSignService) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.chainId = chainId;
@@ -120,7 +120,7 @@ public class PrivateTransactionManager extends TransactionManager {
         this.privateFor = privateFor;
         this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
         this.restriction = restriction;
-        this.txSignService = txSignService;
+        this.privateTxSignService = privateTxSignService;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class PrivateTransactionManager extends TransactionManager {
             throws IOException {
 
         final BigInteger nonce =
-                besu.privGetTransactionCount(txSignService.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(privateTxSignService.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
@@ -179,7 +179,7 @@ public class PrivateTransactionManager extends TransactionManager {
             boolean constructor)
             throws IOException {
         final BigInteger nonce =
-                besu.privGetTransactionCount(txSignService.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(privateTxSignService.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
@@ -241,7 +241,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     public String sign(final RawPrivateTransaction rawTransaction) {
 
-        final byte[] signedMessage = txSignService.sign(rawTransaction, chainId);
+        final byte[] signedMessage = privateTxSignService.sign(rawTransaction, chainId);
 
         return Numeric.toHexString(signedMessage);
     }

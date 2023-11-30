@@ -55,21 +55,22 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
             final Base64String privateFrom,
             final List<Base64String> privateFor,
             final Restriction restriction) {
-        this(signedRawTransaction, privateFrom, privateFor, null, restriction);
+        this(
+                signedRawTransaction.getNonce(),
+                signedRawTransaction.getGasPrice(),
+                signedRawTransaction.getGasLimit(),
+                signedRawTransaction.getTo(),
+                signedRawTransaction.getData(),
+                signedRawTransaction.getSignatureData(),
+                privateFrom,
+                privateFor,
+                null,
+                restriction);
     }
 
     public SignedRawPrivateTransaction(
             final SignedRawTransaction signedRawTransaction,
             final Base64String privateFrom,
-            final Base64String privacyGroupId,
-            final Restriction restriction) {
-        this(signedRawTransaction, privateFrom, null, privacyGroupId, restriction);
-    }
-
-    private SignedRawPrivateTransaction(
-            final SignedRawTransaction signedRawTransaction,
-            final Base64String privateFrom,
-            final List<Base64String> privateFor,
             final Base64String privacyGroupId,
             final Restriction restriction) {
         this(
@@ -80,9 +81,37 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
                 signedRawTransaction.getData(),
                 signedRawTransaction.getSignatureData(),
                 privateFrom,
+                null,
+                privacyGroupId,
+                restriction);
+    }
+
+    public SignedRawPrivateTransaction(
+            final long chainId,
+            final BigInteger nonce,
+            final BigInteger maxPriorityFeePerGas,
+            final BigInteger maxFeePerGas,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final Sign.SignatureData signatureData,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
+        super(
+                chainId,
+                nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                gasLimit,
+                to,
+                data,
+                privateFrom,
                 privateFor,
                 privacyGroupId,
                 restriction);
+        this.signatureData = signatureData;
     }
 
     public Sign.SignatureData getSignatureData() {

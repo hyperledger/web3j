@@ -26,10 +26,9 @@ public class PrivateTxSignServiceImpl implements TxSignService {
         this.credentials = credentials;
     }
 
-    @Override
-    public byte[] sign(RawTransaction rawTransaction, long chainId) {
-        if (!(rawTransaction instanceof RawPrivateTransaction)) {
-            throw new RuntimeException("Can only sign RawPrivateTransaction");
+    public byte[] sign(RawTransaction privateTransaction, long chainId) {
+        if (!(privateTransaction instanceof RawPrivateTransaction)) {
+            throw new RuntimeException("Can only sign LegacyPrivateTransaction");
         }
 
         final byte[] signedMessage;
@@ -37,16 +36,15 @@ public class PrivateTxSignServiceImpl implements TxSignService {
         if (chainId > ChainId.NONE) {
             signedMessage =
                     PrivateTransactionEncoder.signMessage(
-                            (RawPrivateTransaction) rawTransaction, chainId, credentials);
+                            (RawPrivateTransaction) privateTransaction, chainId, credentials);
         } else {
             signedMessage =
                     PrivateTransactionEncoder.signMessage(
-                            (RawPrivateTransaction) rawTransaction, credentials);
+                            (RawPrivateTransaction) privateTransaction, credentials);
         }
         return signedMessage;
     }
 
-    @Override
     public String getAddress() {
         return credentials.getAddress();
     }

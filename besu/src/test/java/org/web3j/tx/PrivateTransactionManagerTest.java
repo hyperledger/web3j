@@ -21,6 +21,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
@@ -50,6 +51,8 @@ class PrivateTransactionManagerTest {
     Besu besu = Besu.build(service);
     DefaultBlockParameter defaultBlockParameter = mock(DefaultBlockParameter.class);
     EthCall response = mock(EthCall.class);
+
+    EthSendTransaction sendTransaction = mock(EthSendTransaction.class);
 
     @Test
     public void sendPrivCallTest() throws IOException {

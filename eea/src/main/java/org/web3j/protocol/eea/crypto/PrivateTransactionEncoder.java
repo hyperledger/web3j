@@ -13,7 +13,6 @@
 package org.web3j.protocol.eea.crypto;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.web3j.crypto.Credentials;
@@ -21,20 +20,18 @@ import org.web3j.crypto.Sign;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
-import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.Base64String;
 
 /** Create signed RLP encoded private transaction. */
 public class PrivateTransactionEncoder {
 
     public static byte[] signMessage(
-            final RawPrivateTransaction rawTransaction, final Credentials credentials) {
-        final byte[] encodedTransaction = encode(rawTransaction);
+            final RawPrivateTransaction privateTransaction, final Credentials credentials) {
+        final byte[] encodedTransaction = encode(privateTransaction);
         final Sign.SignatureData signatureData =
                 Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
 
-        return encode(rawTransaction, signatureData);
+        return encode(privateTransaction, signatureData);
     }
 
     public static byte[] signMessage(
@@ -61,35 +58,25 @@ public class PrivateTransactionEncoder {
     }
 
     private static byte[] encode(
-            final RawPrivateTransaction rawTransaction, final Sign.SignatureData signatureData) {
-        final List<RlpType> values = asRlpValues(rawTransaction, signatureData);
+            final RawPrivateTransaction privateTransaction,
+            final Sign.SignatureData signatureData) {
+        final List<RlpType> values =
+                privateTransaction.getPrivateTransaction().asRlpValues(signatureData);
         final RlpList rlpList = new RlpList(values);
-        return RlpEncoder.encode(rlpList);
+        byte[] encoded = RlpEncoder.encode(rlpList);
+
+        if (privateTransaction.getType().isEip1559()) {
+            return ByteBuffer.allocate(encoded.length + 1)
+                    .put(privateTransaction.getType().getRlpType())
+                    .put(encoded)
+                    .array();
+        }
+        return encoded;
     }
 
     private static byte[] longToBytes(long x) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(x);
         return buffer.array();
-    }
-
-    public static List<RlpType> asRlpValues(
-            final RawPrivateTransaction privateTransaction,
-            final Sign.SignatureData signatureData) {
-
-        final List<RlpType> result =
-                new ArrayList<>(TransactionEncoder.asRlpValues(privateTransaction, signatureData));
-
-        result.add(privateTransaction.getPrivateFrom().asRlp());
-
-        privateTransaction
-                .getPrivateFor()
-                .ifPresent(privateFor -> result.add(Base64String.unwrapListToRlp(privateFor)));
-
-        privateTransaction.getPrivacyGroupId().map(Base64String::asRlp).ifPresent(result::add);
-
-        result.add(RlpString.create(privateTransaction.getRestriction().getRestriction()));
-
-        return result;
     }
 }

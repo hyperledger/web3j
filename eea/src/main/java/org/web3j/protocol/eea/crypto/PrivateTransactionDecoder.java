@@ -12,12 +12,16 @@
  */
 package org.web3j.protocol.eea.crypto;
 
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.Sign;
 import org.web3j.crypto.SignedRawTransaction;
 import org.web3j.crypto.TransactionDecoder;
+import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -32,23 +36,159 @@ public class PrivateTransactionDecoder {
 
     public static RawPrivateTransaction decode(final String hexTransaction) {
         final byte[] transaction = Numeric.hexStringToByteArray(hexTransaction);
+        final TransactionType transactionType = getPrivateTransactionType(transaction);
+
+        if (transactionType == TransactionType.EIP1559) {
+            return decodePrivateTransaction1559(transaction);
+        }
+        return decodeLegacyPrivateTransaction(transaction);
+    }
+
+    private static TransactionType getPrivateTransactionType(final byte[] transaction) {
+        // Determine the type of the private transaction, similar to TransactionDecoder.
+        byte firstByte = transaction[0];
+        if (firstByte == TransactionType.EIP1559.getRlpType()) return TransactionType.EIP1559;
+        else return TransactionType.LEGACY;
+    }
+
+    private static RawPrivateTransaction decodePrivateTransaction1559(final byte[] transaction) {
+        final byte[] encodedTx = Arrays.copyOfRange(transaction, 1, transaction.length);
+        final RlpList rlpList = RlpDecoder.decode(encodedTx);
+        final RlpList temp = (RlpList) rlpList.getValues().get(0);
+        final List<RlpType> values = temp.getValues();
+
+        final long chainId =
+                ((RlpString) temp.getValues().get(0)).asPositiveBigInteger().longValue();
+        final BigInteger nonce = ((RlpString) temp.getValues().get(1)).asPositiveBigInteger();
+
+        final BigInteger maxPriorityFeePerGas =
+                ((RlpString) temp.getValues().get(2)).asPositiveBigInteger();
+        final BigInteger maxFeePerGas =
+                ((RlpString) temp.getValues().get(3)).asPositiveBigInteger();
+
+        final BigInteger gasLimit = ((RlpString) temp.getValues().get(4)).asPositiveBigInteger();
+        final String to = ((RlpString) temp.getValues().get(5)).asString();
+        final String data = ((RlpString) temp.getValues().get(7)).asString();
+
+        if (values.size() == 11) {
+            final Base64String privateFrom = extractBase64(values.get(8));
+            final Restriction restriction = extractRestriction(values.get(10));
+
+            if (values.get(9) instanceof RlpList) {
+                List<Base64String> privateForList = extractBase64List(values.get(9));
+                return RawPrivateTransaction.createTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        privateFrom,
+                        privateForList,
+                        null,
+                        restriction);
+            } else {
+                Base64String privacyGroupId = extractBase64(values.get(9));
+                return RawPrivateTransaction.createTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        privateFrom,
+                        null,
+                        privacyGroupId,
+                        restriction);
+            }
+        } else {
+            final Base64String privateFrom = extractBase64(values.get(11));
+            final Restriction restriction = extractRestriction(values.get(13));
+
+            final byte[] v =
+                    Sign.getVFromRecId(
+                            Numeric.toBigInt(((RlpString) values.get(8)).getBytes()).intValue());
+            final byte[] r =
+                    Numeric.toBytesPadded(
+                            Numeric.toBigInt(((RlpString) values.get(9)).getBytes()), 32);
+            final byte[] s =
+                    Numeric.toBytesPadded(
+                            Numeric.toBigInt(((RlpString) values.get(10)).getBytes()), 32);
+            final Sign.SignatureData signatureData = new Sign.SignatureData(v, r, s);
+
+            if (values.get(12) instanceof RlpList) {
+                List<Base64String> privateForList = extractBase64List(values.get(12));
+                return new SignedRawPrivateTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        signatureData,
+                        privateFrom,
+                        privateForList,
+                        null,
+                        restriction);
+            } else {
+                Base64String privacyGroupId = extractBase64(values.get(12));
+                return new SignedRawPrivateTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        data,
+                        signatureData,
+                        privateFrom,
+                        null,
+                        privacyGroupId,
+                        restriction);
+            }
+        }
+    }
+
+    private static RawPrivateTransaction decodeLegacyPrivateTransaction(final byte[] transaction) {
         final RlpList rlpList = RlpDecoder.decode(transaction);
         final RlpList temp = (RlpList) rlpList.getValues().get(0);
         final List<RlpType> values = temp.getValues();
 
-        final RawTransaction rawTransaction = TransactionDecoder.decode(hexTransaction);
+        final RawTransaction rawTransaction =
+                TransactionDecoder.decode(Numeric.toHexString(transaction));
 
         if (values.size() == 9) {
             final Base64String privateFrom = extractBase64(values.get(6));
             final Restriction restriction = extractRestriction(values.get(8));
-            if (values.get(7) instanceof RlpList) {
-                return new RawPrivateTransaction(
-                        rawTransaction, privateFrom, extractBase64List(values.get(7)), restriction);
-            } else {
-                return new RawPrivateTransaction(
-                        rawTransaction, privateFrom, extractBase64(values.get(7)), restriction);
-            }
 
+            if (values.get(7) instanceof RlpList) {
+                List<Base64String> privateForList = extractBase64List(values.get(7));
+                return RawPrivateTransaction.createTransaction(
+                        rawTransaction.getNonce(),
+                        rawTransaction.getGasPrice(),
+                        rawTransaction.getGasLimit(),
+                        rawTransaction.getTo(),
+                        rawTransaction.getData(),
+                        privateFrom,
+                        privateForList,
+                        null,
+                        restriction);
+            } else {
+                Base64String privacyGroupId = extractBase64(values.get(7));
+                return RawPrivateTransaction.createTransaction(
+                        rawTransaction.getNonce(),
+                        rawTransaction.getGasPrice(),
+                        rawTransaction.getGasLimit(),
+                        rawTransaction.getTo(),
+                        rawTransaction.getData(),
+                        privateFrom,
+                        null,
+                        privacyGroupId,
+                        restriction);
+            }
         } else {
             final Base64String privateFrom = extractBase64(values.get(9));
             final Restriction restriction = extractRestriction(values.get(11));
