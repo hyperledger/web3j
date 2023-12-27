@@ -32,9 +32,8 @@ import static org.web3j.crypto.transaction.type.TransactionType.EIP1559;
  * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">yellow
  * paper</a>.
  */
-public class Transaction1559 extends LegacyTransaction implements ITransaction {
+public class Transaction1559 extends Transaction2930 implements ITransaction {
 
-    private long chainId;
     private BigInteger maxPriorityFeePerGas;
     private BigInteger maxFeePerGas;
 
@@ -48,8 +47,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
             List<AccessListObject> accessList) {
-        super(EIP1559, nonce, null, gasLimit, to, value, data);
-        this.chainId = chainId;
+        super(chainId, nonce, null, gasLimit, to, value, data,accessList);
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
         this.maxFeePerGas = maxFeePerGas;
     }
@@ -86,7 +84,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
         result.add(RlpString.create(data));
 
         // access list
-        result.add(new RlpList());
+        result.add(new RlpList(rlpAccessListRlp()));
 
         if (signatureData != null) {
             result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
@@ -127,10 +125,6 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
     @Override
     public BigInteger getGasPrice() {
         throw new UnsupportedOperationException("not available for 1559 transaction");
-    }
-
-    public long getChainId() {
-        return chainId;
     }
 
     public BigInteger getMaxPriorityFeePerGas() {
