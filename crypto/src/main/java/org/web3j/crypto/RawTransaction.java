@@ -13,6 +13,7 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 import org.web3j.crypto.transaction.type.ITransaction;
@@ -115,7 +116,9 @@ public class RawTransaction {
                         value,
                         data,
                         maxPriorityFeePerGas,
-                        maxFeePerGas));
+                        maxFeePerGas,
+                        Collections.emptyList()
+                        ));
     }
 
     public static RawTransaction createTransaction(

@@ -14,8 +14,10 @@ package org.web3j.crypto.transaction.type;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.web3j.crypto.AccessListObject;
 import org.web3j.crypto.Sign;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -44,7 +46,8 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             BigInteger value,
             String data,
             BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas) {
+            BigInteger maxFeePerGas,
+            List<AccessListObject> accessList) {
         super(EIP1559, nonce, null, gasLimit, to, value, data);
         this.chainId = chainId;
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
@@ -103,7 +106,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas) {
         return new Transaction1559(
-                chainId, nonce, gasLimit, to, value, "", maxPriorityFeePerGas, maxFeePerGas);
+                chainId, nonce, gasLimit, to, value, "", maxPriorityFeePerGas, maxFeePerGas, Collections.emptyList());
     }
 
     public static Transaction1559 createTransaction(
@@ -114,10 +117,11 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             BigInteger value,
             String data,
             BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas) {
+            BigInteger maxFeePerGas,
+            List<AccessListObject> accessList) {
 
         return new Transaction1559(
-                chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
+                chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas, accessList);
     }
 
     @Override
