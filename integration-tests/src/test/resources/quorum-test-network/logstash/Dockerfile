@@ -4,7 +4,7 @@ ENV ES_HOST http://localhost:9200
 ENV REDIS_HOST localhost
 ENV REDIS_PORT 6379
 
-# Remove exisiting file
+# Remove exsiting file
 RUN mkdir -p /usr/share/logstash/logs && \
     rm -f /usr/share/logstash/pipeline/logstash.conf
 
