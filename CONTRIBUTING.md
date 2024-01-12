@@ -14,7 +14,7 @@ Thank you for reading this! If you'd like to report a bug or join in the buidl-i
 
 * Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
 
-* Make sure that the code is formated with Spotless by executing `./gradlew spotlessApply` otherwise the build will fail.
+* Make sure that the code is formatted with Spotless by executing `./gradlew spotlessApply` otherwise the build will fail.
 
 #### **Do you intend to add a new feature or change an existing one?**
 
