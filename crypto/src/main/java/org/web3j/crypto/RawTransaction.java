@@ -15,10 +15,12 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.crypto.transaction.type.ITransaction;
 import org.web3j.crypto.transaction.type.LegacyTransaction;
 import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.crypto.transaction.type.Transaction2930;
+import org.web3j.crypto.transaction.type.Transaction4844;
 import org.web3j.crypto.transaction.type.TransactionType;
 
 /**
@@ -116,6 +118,32 @@ public class RawTransaction {
                         data,
                         maxPriorityFeePerGas,
                         maxFeePerGas));
+    }
+
+    public static RawTransaction createTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas,
+            List<Bytes32> versionedHashes) {
+
+        return new RawTransaction(
+                Transaction4844.createTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxFeePerBlobGas,
+                        versionedHashes));
     }
 
     public static RawTransaction createTransaction(
