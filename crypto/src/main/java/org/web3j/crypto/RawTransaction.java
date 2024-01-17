@@ -117,8 +117,31 @@ public class RawTransaction {
                         data,
                         maxPriorityFeePerGas,
                         maxFeePerGas,
-                        Collections.emptyList()
-                        ));
+                        Collections.emptyList()));
+    }
+
+    public static RawTransaction createTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            List<AccessListObject> accessList) {
+
+        return new RawTransaction(
+                Transaction1559.createTransaction(
+                        chainId,
+                        nonce,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        accessList));
     }
 
     public static RawTransaction createTransaction(

@@ -154,6 +154,32 @@ public class TransactionDecoderTest {
     }
 
     @Test
+    public void testDecoding1559AccessList() {
+        final RawTransaction rawTransaction = createEip1559RawTransactionAccessList();
+        final Transaction1559 transaction1559 = (Transaction1559) rawTransaction.getTransaction();
+
+        final byte[] encodedMessage = TransactionEncoder.encode(rawTransaction);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(hexMessage);
+        assertTrue(result.getTransaction() instanceof Transaction1559);
+        final Transaction1559 resultTransaction1559 = (Transaction1559) result.getTransaction();
+
+        assertNotNull(result);
+        assertEquals(transaction1559.getChainId(), resultTransaction1559.getChainId());
+        assertEquals(transaction1559.getNonce(), resultTransaction1559.getNonce());
+        assertEquals(transaction1559.getMaxFeePerGas(), resultTransaction1559.getMaxFeePerGas());
+        assertEquals(
+                transaction1559.getMaxPriorityFeePerGas(),
+                resultTransaction1559.getMaxPriorityFeePerGas());
+        assertEquals(transaction1559.getGasLimit(), resultTransaction1559.getGasLimit());
+        assertEquals(transaction1559.getTo(), resultTransaction1559.getTo());
+        assertEquals(transaction1559.getValue(), resultTransaction1559.getValue());
+        assertEquals(transaction1559.getData(), resultTransaction1559.getData());
+        assertEquals(transaction1559.getAccessList(), resultTransaction1559.getAccessList());
+    }
+
+    @Test
     public void testDecodingSigned1559() throws SignatureException {
         final RawTransaction rawTransaction = createEip1559RawTransaction();
         final Transaction1559 transaction1559 = (Transaction1559) rawTransaction.getTransaction();
@@ -200,6 +226,31 @@ public class TransactionDecoderTest {
                 BigInteger.valueOf(123),
                 BigInteger.valueOf(5678),
                 BigInteger.valueOf(1100000));
+    }
+
+    private static RawTransaction createEip1559RawTransactionAccessList() {
+        List<AccessListObject> accessList =
+                Stream.of(
+                                new AccessListObject(
+                                        "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+                                        Stream.of(
+                                                        "0x0000000000000000000000000000000000000000000000000000000000000003",
+                                                        "0x0000000000000000000000000000000000000000000000000000000000000007")
+                                                .collect(toList())),
+                                new AccessListObject(
+                                        "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
+                                        Collections.emptyList()))
+                        .collect(toList());
+        return RawTransaction.createTransaction(
+                3L,
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(30000),
+                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                BigInteger.valueOf(123),
+                "0x1000001111100000",
+                BigInteger.valueOf(5678),
+                BigInteger.valueOf(1100000),
+                accessList);
     }
 
     @Test

@@ -64,6 +64,8 @@ public class TransactionDecoder {
 
         final BigInteger value = ((RlpString) values.getValues().get(6)).asPositiveBigInteger();
         final String data = ((RlpString) values.getValues().get(7)).asString();
+        List<AccessListObject> accessList =
+                decodeAccessList(((RlpList) values.getValues().get(8)).getValues());
 
         final RawTransaction rawTransaction =
                 RawTransaction.createTransaction(
@@ -74,7 +76,8 @@ public class TransactionDecoder {
                         value,
                         data,
                         maxPriorityFeePerGas,
-                        maxFeePerGas);
+                        maxFeePerGas,
+                        accessList);
 
         if (values.getValues().size() == UNSIGNED_EIP1559TX_RLP_LIST_SIZE) {
             return rawTransaction;

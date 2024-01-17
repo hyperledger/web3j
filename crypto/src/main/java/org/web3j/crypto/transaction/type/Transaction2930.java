@@ -81,6 +81,7 @@ public class Transaction2930 extends LegacyTransaction {
 
         return result;
     }
+
     protected List<RlpType> rlpAccessListRlp() {
 
         List<AccessListObject> accessList = getAccessList();
