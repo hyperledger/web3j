@@ -4,6 +4,11 @@ plugins {
 
 description 'EEA JSON-RPC API'
 
+repositories {
+    mavenCentral()
+    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
+}
+
 dependencies {
     api project(':core')
     testImplementation project(path: ':core', configuration: 'testArtifacts')

@@ -15,7 +15,7 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.Bytes;
 import org.web3j.crypto.transaction.type.ITransaction;
 import org.web3j.crypto.transaction.type.LegacyTransaction;
 import org.web3j.crypto.transaction.type.Transaction1559;
@@ -130,7 +130,7 @@ public class RawTransaction {
             BigInteger value,
             String data,
             BigInteger maxFeePerBlobGas,
-            List<Bytes32> versionedHashes) {
+            List<Bytes> versionedHashes) {
 
         return new RawTransaction(
                 Transaction4844.createTransaction(

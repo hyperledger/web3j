@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.Bytes;
 import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
@@ -79,7 +79,7 @@ public class TransactionDecoder {
         final BigInteger maxFeePerBlobGas =
                 ((RlpString) values.getValues().get(9)).asPositiveBigInteger();
 
-        final List<Bytes32> versionedHashes =
+        final List<Bytes> versionedHashes =
                 decodeVersionedHashes(((RlpList) values.getValues().get(10)).getValues());
 
         final RawTransaction rawTransaction =
@@ -252,7 +252,7 @@ public class TransactionDecoder {
                 .collect(toList());
     }
 
-    public static List<Bytes32> decodeVersionedHashes(List<RlpType> rlp) {
+    public static List<Bytes> decodeVersionedHashes(List<RlpType> rlp) {
         return rlp.stream()
                 .map(
                         rlpType -> {
@@ -260,7 +260,7 @@ public class TransactionDecoder {
                             if (rlpType instanceof RlpString) {
                                 RlpString rlpString = (RlpString) rlpType;
                                 // Convert the RlpString to Bytes32
-                                return new Bytes32(rlpString.getBytes());
+                                return new Bytes(32, rlpString.getBytes());
                             } else {
                                 throw new IllegalArgumentException(
                                         "List contains non-RlpString elements");

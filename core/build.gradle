@@ -5,8 +5,12 @@ plugins {
     id 'org.ajoberstar.git-publish'
 }
 
-
 description 'web3j is a lightweight Java library for integration with Ethereum clients'
+
+repositories {
+    mavenCentral()
+    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
+}
 
 dependencies {
     api project(':abi'),

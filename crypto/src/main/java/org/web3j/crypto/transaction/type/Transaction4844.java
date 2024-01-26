@@ -14,21 +14,28 @@ package org.web3j.crypto.transaction.type;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.crypto.Blob;
+import org.web3j.crypto.BlobUtils;
 import org.web3j.crypto.Sign;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 
 public class Transaction4844 extends Transaction1559 implements ITransaction {
 
-    private BigInteger maxFeePerBlobGas;
-    private List<Bytes32> versionedHashes;
+    private final BigInteger maxFeePerBlobGas;
+    private final List<Bytes> versionedHashes;
+    private final Optional<List<Blob>> blobs;
+    private final Optional<List<Bytes>> kzgProofs;
+    private final Optional<List<Bytes>> kzgCommitments;
 
     public Transaction4844(
             long chainId,
@@ -40,40 +47,73 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
             BigInteger value,
             String data,
             BigInteger maxFeePerBlobGas,
-            List<Bytes32> versionedHashes) {
+            List<Bytes> versionedHashes) {
         super(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
         this.maxFeePerBlobGas = maxFeePerBlobGas;
         this.versionedHashes = versionedHashes;
+        this.blobs = Optional.empty();
+        this.kzgCommitments = Optional.empty();
+        this.kzgProofs = Optional.empty();
+    }
+
+    public Transaction4844(
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas,
+            List<Blob> blobsData,
+            String trustedSetupFile) {
+        super(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
+        this.maxFeePerBlobGas = maxFeePerBlobGas;
+        this.blobs = Optional.ofNullable(blobsData);
+        List<BlobUtils> blobUtils =
+                blobsData.stream()
+                        .map(blob -> new BlobUtils(trustedSetupFile, blob))
+                        .collect(Collectors.toList());
+        this.kzgCommitments =
+                Optional.of(
+                        blobUtils.stream()
+                                .map(BlobUtils::getCommitment)
+                                .collect(Collectors.toList()));
+        this.kzgProofs =
+                Optional.of(
+                        IntStream.range(0, blobUtils.size())
+                                .mapToObj(
+                                        i -> blobUtils.get(i).getProof(kzgCommitments.get().get(i)))
+                                .collect(Collectors.toList()));
+        this.versionedHashes =
+                IntStream.range(0, blobUtils.size())
+                        .mapToObj(
+                                i ->
+                                        blobUtils
+                                                .get(i)
+                                                .kzgToVersionedHash(kzgCommitments.get().get(i)))
+                        .collect(Collectors.toList());
     }
 
     @Override
     public List<RlpType> asRlpValues(Sign.SignatureData signatureData) {
-
         List<RlpType> result = new ArrayList<>();
 
         result.add(RlpString.create(getChainId()));
-
         result.add(RlpString.create(getNonce()));
-
-        // add maxPriorityFeePerGas and maxFeePerGas if this is an EIP-1559 transaction
         result.add(RlpString.create(getMaxPriorityFeePerGas()));
         result.add(RlpString.create(getMaxFeePerGas()));
-
         result.add(RlpString.create(getGasLimit()));
 
-        // an empty to address (contract creation) should not be encoded as a numeric 0 value
         String to = getTo();
         if (to != null && to.length() > 0) {
-            // addresses that start with zeros should be encoded with the zeros included, not
-            // as numeric values
             result.add(RlpString.create(Numeric.hexStringToByteArray(to)));
         } else {
             result.add(RlpString.create(""));
         }
 
         result.add(RlpString.create(getValue()));
-
-        // value field will already be hex encoded, so we need to convert into binary first
         byte[] data = Numeric.hexStringToByteArray(getData());
         result.add(RlpString.create(data));
 
@@ -86,9 +126,18 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
 
         if (signatureData != null) {
             result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
+            result.add(
+                    RlpString.create(
+                            org.web3j.utils.Bytes.trimLeadingZeroes(signatureData.getR())));
+            result.add(
+                    RlpString.create(
+                            org.web3j.utils.Bytes.trimLeadingZeroes(signatureData.getS())));
         }
+
+        // Adding blobs, commitments, and proofs
+        result.add(new RlpList(getBlobs()));
+        result.add(new RlpList(getKzgCommitments()));
+        result.add(new RlpList(getKzgProofs()));
 
         return result;
     }
@@ -103,7 +152,7 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
             BigInteger value,
             String data,
             BigInteger maxFeePerBlobGas,
-            List<Bytes32> versionedHashes) {
+            List<Bytes> versionedHashes) {
 
         return new Transaction4844(
                 chainId,
@@ -126,6 +175,35 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         return versionedHashes.stream()
                 .map(hash -> RlpString.create(hash.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    public List<RlpType> getKzgCommitments() {
+        return kzgCommitments
+                .<List<RlpType>>map(
+                        bytesList ->
+                                bytesList.stream()
+                                        .map(bytes -> RlpString.create(bytes.getValue()))
+                                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
+    }
+
+    public List<RlpType> getKzgProofs() {
+        return kzgProofs
+                .<List<RlpType>>map(
+                        bytesList ->
+                                bytesList.stream()
+                                        .map(bytes -> RlpString.create(bytes.getValue()))
+                                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
+    }
+
+    public List<RlpType> getBlobs() {
+        return blobs.<List<RlpType>>map(
+                        blobList ->
+                                blobList.stream()
+                                        .map(blob -> RlpString.create(blob.getData().getValue()))
+                                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
     }
 
     @Override
