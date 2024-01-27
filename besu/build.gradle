@@ -4,7 +4,6 @@ plugins {
 description 'Besu JSON-RPC API'
 
 repositories {
-    mavenCentral()
     maven { url "https://artifacts.consensys.net/public/maven/maven/" }
 }
 

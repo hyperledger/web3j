@@ -2,7 +2,6 @@
 description 'web3j customisations for working with hosted web3 providers (Infura.io & Nodesmith.io)'
 
 repositories {
-    mavenCentral()
     maven { url "https://artifacts.consensys.net/public/maven/maven/" }
 }
 

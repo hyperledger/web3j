@@ -71,10 +71,11 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         super(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
         this.maxFeePerBlobGas = maxFeePerBlobGas;
         this.blobs = Optional.ofNullable(blobsData);
+        if (!BlobUtils.libraryLoaded) {
+            BlobUtils.loadTrustedSetupFromResource();
+        }
         List<BlobUtils> blobUtils =
-                blobsData.stream()
-                        .map(blob -> new BlobUtils(trustedSetupFile, blob))
-                        .collect(Collectors.toList());
+                blobsData.stream().map(BlobUtils::new).collect(Collectors.toList());
         this.kzgCommitments =
                 Optional.of(
                         blobUtils.stream()
@@ -98,42 +99,44 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
 
     @Override
     public List<RlpType> asRlpValues(Sign.SignatureData signatureData) {
-        List<RlpType> result = new ArrayList<>();
+        List<RlpType> resultTx = new ArrayList<>();
 
-        result.add(RlpString.create(getChainId()));
-        result.add(RlpString.create(getNonce()));
-        result.add(RlpString.create(getMaxPriorityFeePerGas()));
-        result.add(RlpString.create(getMaxFeePerGas()));
-        result.add(RlpString.create(getGasLimit()));
+        resultTx.add(RlpString.create(getChainId()));
+        resultTx.add(RlpString.create(getNonce()));
+        resultTx.add(RlpString.create(getMaxPriorityFeePerGas()));
+        resultTx.add(RlpString.create(getMaxFeePerGas()));
+        resultTx.add(RlpString.create(getGasLimit()));
 
         String to = getTo();
         if (to != null && to.length() > 0) {
-            result.add(RlpString.create(Numeric.hexStringToByteArray(to)));
+            resultTx.add(RlpString.create(Numeric.hexStringToByteArray(to)));
         } else {
-            result.add(RlpString.create(""));
+            resultTx.add(RlpString.create(""));
         }
 
-        result.add(RlpString.create(getValue()));
+        resultTx.add(RlpString.create(getValue()));
         byte[] data = Numeric.hexStringToByteArray(getData());
-        result.add(RlpString.create(data));
+        resultTx.add(RlpString.create(data));
 
         // access list
-        result.add(new RlpList());
+        resultTx.add(new RlpList());
 
         // Blob Transaction: max_fee_per_blob_gas and versioned_hashes
-        result.add(RlpString.create(getMaxFeePerBlobGas()));
-        result.add(new RlpList(getVersionedHashes()));
+        resultTx.add(RlpString.create(getMaxFeePerBlobGas()));
+        resultTx.add(new RlpList(getVersionedHashes()));
 
         if (signatureData != null) {
-            result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
-            result.add(
+            resultTx.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
+            resultTx.add(
                     RlpString.create(
                             org.web3j.utils.Bytes.trimLeadingZeroes(signatureData.getR())));
-            result.add(
+            resultTx.add(
                     RlpString.create(
                             org.web3j.utils.Bytes.trimLeadingZeroes(signatureData.getS())));
         }
 
+        List<RlpType> result = new ArrayList<>();
+        result.add(new RlpList(resultTx));
         // Adding blobs, commitments, and proofs
         result.add(new RlpList(getBlobs()));
         result.add(new RlpList(getKzgCommitments()));

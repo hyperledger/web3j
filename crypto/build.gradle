@@ -5,10 +5,8 @@ plugins {
 description 'web3j Ethereum crypto library'
 
 repositories {
-    mavenCentral()
     maven { url "https://artifacts.consensys.net/public/maven/maven/" }
 }
-
 
 dependencies {
     api project(':abi'),
