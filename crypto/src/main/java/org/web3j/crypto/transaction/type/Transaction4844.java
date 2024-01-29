@@ -57,6 +57,9 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
     }
 
     public Transaction4844(
+            List<Blob> blobs,
+            List<Bytes> kzgCommitments,
+            List<Bytes> kzgProofs,
             long chainId,
             BigInteger nonce,
             BigInteger maxPriorityFeePerGas,
@@ -66,8 +69,26 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
             BigInteger value,
             String data,
             BigInteger maxFeePerBlobGas,
+            List<Bytes> versionedHashes) {
+        super(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
+        this.maxFeePerBlobGas = maxFeePerBlobGas;
+        this.versionedHashes = versionedHashes;
+        this.blobs = Optional.ofNullable(blobs);
+        this.kzgCommitments = Optional.ofNullable(kzgCommitments);
+        this.kzgProofs = Optional.ofNullable(kzgProofs);
+    }
+
+    public Transaction4844(
             List<Blob> blobsData,
-            String trustedSetupFile) {
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas) {
         super(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
         this.maxFeePerBlobGas = maxFeePerBlobGas;
         this.blobs = Optional.ofNullable(blobsData);
@@ -143,6 +164,62 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         result.add(new RlpList(getKzgProofs()));
 
         return result;
+    }
+
+    public static Transaction4844 createTransaction(
+            List<Blob> blobs,
+            List<Bytes> kzgCommitments,
+            List<Bytes> kzgProofs,
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas,
+            List<Bytes> versionedHashes) {
+
+        return new Transaction4844(
+                blobs,
+                kzgCommitments,
+                kzgProofs,
+                chainId,
+                nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                gasLimit,
+                to,
+                value,
+                data,
+                maxFeePerBlobGas,
+                versionedHashes);
+    }
+
+    public static Transaction4844 createTransaction(
+            List<Blob> blobs,
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas) {
+
+        return new Transaction4844(
+                blobs,
+                chainId,
+                nonce,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                gasLimit,
+                to,
+                value,
+                data,
+                maxFeePerBlobGas);
     }
 
     public static Transaction4844 createTransaction(

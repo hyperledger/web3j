@@ -60,30 +60,38 @@ public class TransactionDecoder {
     private static RawTransaction decodeEIP4844Transaction(final byte[] transaction) {
         final byte[] encodedTx = Arrays.copyOfRange(transaction, 1, transaction.length);
         final RlpList rlpList = RlpDecoder.decode(encodedTx);
-        final RlpList values = (RlpList) rlpList.getValues().get(0);
+        final RlpList outerList = (RlpList) rlpList.getValues().get(0);
 
-        final long chainId =
-                ((RlpString) values.getValues().get(0)).asPositiveBigInteger().longValue();
-        final BigInteger nonce = ((RlpString) values.getValues().get(1)).asPositiveBigInteger();
+        // Decode the transaction payload
+        final RlpList txPayload = (RlpList) outerList.getValues().get(0);
+        final List<RlpType> txValues = txPayload.getValues();
+
+        final long chainId = ((RlpString) txValues.get(0)).asPositiveBigInteger().longValue();
+        final BigInteger nonce = ((RlpString) txValues.get(1)).asPositiveBigInteger();
         final BigInteger maxPriorityFeePerGas =
-                ((RlpString) values.getValues().get(2)).asPositiveBigInteger();
-        final BigInteger maxFeePerGas =
-                ((RlpString) values.getValues().get(3)).asPositiveBigInteger();
-        final BigInteger gasLimit = ((RlpString) values.getValues().get(4)).asPositiveBigInteger();
-        final String to = ((RlpString) values.getValues().get(5)).asString();
-
-        final BigInteger value = ((RlpString) values.getValues().get(6)).asPositiveBigInteger();
-        final String data = ((RlpString) values.getValues().get(7)).asString();
-        final List<AccessListObject> accessList =
-                decodeAccessList(((RlpList) values.getValues().get(8)).getValues());
-        final BigInteger maxFeePerBlobGas =
-                ((RlpString) values.getValues().get(9)).asPositiveBigInteger();
-
+                ((RlpString) txValues.get(2)).asPositiveBigInteger();
+        final BigInteger maxFeePerGas = ((RlpString) txValues.get(3)).asPositiveBigInteger();
+        final BigInteger gasLimit = ((RlpString) txValues.get(4)).asPositiveBigInteger();
+        final String to = ((RlpString) txValues.get(5)).asString();
+        final BigInteger value = ((RlpString) txValues.get(6)).asPositiveBigInteger();
+        final String data = ((RlpString) txValues.get(7)).asString();
+        final BigInteger maxFeePerBlobGas = ((RlpString) txValues.get(9)).asPositiveBigInteger();
         final List<Bytes> versionedHashes =
-                decodeVersionedHashes(((RlpList) values.getValues().get(10)).getValues());
+                decodeVersionedHashes(((RlpList) txValues.get(10)).getValues());
 
+        // Decode blobs, commitments, and proofs
+        final List<Blob> blobs = decodeBlobs(((RlpList) outerList.getValues().get(1)).getValues());
+        final List<Bytes> kzgCommitments =
+                decodeBytesList(((RlpList) outerList.getValues().get(2)).getValues());
+        final List<Bytes> kzgProofs =
+                decodeBytesList(((RlpList) outerList.getValues().get(3)).getValues());
+
+        // Create the raw transaction object
         final RawTransaction rawTransaction =
                 RawTransaction.createTransaction(
+                        blobs,
+                        kzgCommitments,
+                        kzgProofs,
                         chainId,
                         nonce,
                         maxPriorityFeePerGas,
@@ -95,24 +103,37 @@ public class TransactionDecoder {
                         maxFeePerBlobGas,
                         versionedHashes);
 
-        if (values.getValues().size() == UNSIGNED_EIP4844TX_RLP_LIST_SIZE) {
-            return rawTransaction;
-        } else {
+        // Handle signature if present
+        if (txValues.size() > UNSIGNED_EIP4844TX_RLP_LIST_SIZE) {
             final byte[] v =
                     Sign.getVFromRecId(
-                            Numeric.toBigInt(((RlpString) values.getValues().get(11)).getBytes())
-                                    .intValue());
+                            Numeric.toBigInt(((RlpString) txValues.get(11)).getBytes()).intValue());
             final byte[] r =
                     Numeric.toBytesPadded(
-                            Numeric.toBigInt(((RlpString) values.getValues().get(12)).getBytes()),
-                            32);
+                            Numeric.toBigInt(((RlpString) txValues.get(12)).getBytes()), 32);
             final byte[] s =
                     Numeric.toBytesPadded(
-                            Numeric.toBigInt(((RlpString) values.getValues().get(13)).getBytes()),
-                            32);
+                            Numeric.toBigInt(((RlpString) txValues.get(13)).getBytes()), 32);
             final Sign.SignatureData signatureData = new Sign.SignatureData(v, r, s);
             return new SignedRawTransaction(rawTransaction.getTransaction(), signatureData);
         }
+
+        return rawTransaction;
+    }
+
+    // Helper methods to decode blobs, commitments, and proofs
+    private static List<Blob> decodeBlobs(List<RlpType> rlpBlobs) {
+        // Implement decoding logic for blobs
+        return rlpBlobs.stream()
+                .map(r -> new Blob(((RlpString) r).getBytes()))
+                .collect(Collectors.toList());
+    }
+
+    private static List<Bytes> decodeBytesList(List<RlpType> rlpBytesList) {
+        // Implement decoding logic for commitments and proofs
+        return rlpBytesList.stream()
+                .map(r -> new Bytes(48, ((RlpString) r).getBytes()))
+                .collect(Collectors.toList());
     }
 
     private static RawTransaction decodeEIP1559Transaction(final byte[] transaction) {

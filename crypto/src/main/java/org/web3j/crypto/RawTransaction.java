@@ -147,6 +147,38 @@ public class RawTransaction {
     }
 
     public static RawTransaction createTransaction(
+            List<Blob> blobs,
+            List<Bytes> kzgCommitments,
+            List<Bytes> kzgProofs,
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas,
+            List<Bytes> versionedHashes) {
+
+        return new RawTransaction(
+                Transaction4844.createTransaction(
+                        blobs,
+                        kzgCommitments,
+                        kzgProofs,
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxFeePerBlobGas,
+                        versionedHashes));
+    }
+
+    public static RawTransaction createTransaction(
             long chainId,
             BigInteger nonce,
             BigInteger gasPrice,

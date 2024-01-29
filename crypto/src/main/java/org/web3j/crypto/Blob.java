@@ -21,10 +21,19 @@ public class Blob {
     /**
      * Create a new Blob.
      *
-     * @param data that represents the blob.
+     * @param data that represents the blob in Bytes.
      */
     public Blob(final Bytes data) {
         this.data = data;
+    }
+
+    /**
+     * Create a new Blob.
+     *
+     * @param data that represents the blob in byte[].
+     */
+    public Blob(final byte[] data) {
+        this.data = new Bytes(data.length, data);
     }
 
     /**
