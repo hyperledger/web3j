@@ -1,9 +1,5 @@
 description 'web3j project code generators'
 
-repositories {
-    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
-}
-
 dependencies {
     implementation project(':core'),
             "com.squareup:kotlinpoet:$kotlinPoetVersion",

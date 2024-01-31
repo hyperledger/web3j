@@ -7,7 +7,6 @@ repositories {
     maven { url "https://hyperledger.jfrog.io/artifactory/besu-maven/" }
     maven { url "https://artifacts.consensys.net/public/maven/maven/" }
     maven { url "https://splunk.jfrog.io/splunk/ext-releases-local" }
-    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
 }
 ext {
     besuPluginVersion = '23.7.0'

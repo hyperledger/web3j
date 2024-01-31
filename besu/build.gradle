@@ -3,10 +3,6 @@ plugins {
 }
 description 'Besu JSON-RPC API'
 
-repositories {
-    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
-}
-
 dependencies {
     api project(':eea')
     testImplementation project(path: ':core', configuration: 'testArtifacts')

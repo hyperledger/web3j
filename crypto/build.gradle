@@ -4,17 +4,13 @@ plugins {
 
 description 'web3j Ethereum crypto library'
 
-repositories {
-    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
-}
-
 dependencies {
     api project(':abi'),
             project(':rlp'),
             project(':utils'),
             "org.slf4j:slf4j-api:$slf4jVersion",
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    implementation("tech.pegasys:jc-kzg-4844:0.8.0")
+    implementation("tech.pegasys:jc-kzg-4844:$kzg4844Version")
 }
 
 configurations { testArtifacts.extendsFrom testRuntime }

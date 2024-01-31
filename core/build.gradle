@@ -7,10 +7,6 @@ plugins {
 
 description 'web3j is a lightweight Java library for integration with Ethereum clients'
 
-repositories {
-    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
-}
-
 dependencies {
     api project(':abi'),
             project(':crypto'),

@@ -1,10 +1,6 @@
 
 description 'Geth JSON-RPC API'
 
-repositories {
-    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
-}
-
 dependencies {
     implementation project(':core')
     testImplementation project(path: ':core', configuration: 'testArtifacts')

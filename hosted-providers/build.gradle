@@ -1,10 +1,6 @@
 
 description 'web3j customisations for working with hosted web3 providers (Infura.io & Nodesmith.io)'
 
-repositories {
-    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
-}
-
 dependencies { implementation project(':core') }
 
 tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc","test") }
