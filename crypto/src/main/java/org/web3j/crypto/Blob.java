@@ -12,7 +12,7 @@
  */
 package org.web3j.crypto;
 
-import org.web3j.abi.datatypes.Bytes;
+import org.apache.tuweni.bytes.Bytes;
 
 public class Blob {
 
@@ -33,7 +33,7 @@ public class Blob {
      * @param data that represents the blob in byte[].
      */
     public Blob(final byte[] data) {
-        this.data = new Bytes(data.length, data);
+        this.data = Bytes.wrap(data);
     }
 
     /**

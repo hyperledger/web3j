@@ -20,7 +20,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.web3j.abi.datatypes.Bytes;
+import org.apache.tuweni.bytes.Bytes;
+
 import org.web3j.crypto.Blob;
 import org.web3j.crypto.BlobUtils;
 import org.web3j.crypto.Sign;
@@ -144,7 +145,7 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
 
         // Blob Transaction: max_fee_per_blob_gas and versioned_hashes
         resultTx.add(RlpString.create(getMaxFeePerBlobGas()));
-        resultTx.add(new RlpList(getVersionedHashes()));
+        resultTx.add(new RlpList(getRlpVersionedHashes()));
 
         if (signatureData != null) {
             resultTx.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
@@ -159,9 +160,9 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         List<RlpType> result = new ArrayList<>();
         result.add(new RlpList(resultTx));
         // Adding blobs, commitments, and proofs
-        result.add(new RlpList(getBlobs()));
-        result.add(new RlpList(getKzgCommitments()));
-        result.add(new RlpList(getKzgProofs()));
+        result.add(new RlpList(getRlpBlobs()));
+        result.add(new RlpList(getRlpKzgCommitments()));
+        result.add(new RlpList(getRlpKzgProofs()));
 
         return result;
     }
@@ -251,37 +252,49 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         return maxFeePerBlobGas;
     }
 
-    public List<RlpType> getVersionedHashes() {
+    public Optional<List<Blob>> getBlobs() {
+        return blobs;
+    }
+
+    public Optional<List<Bytes>> getKzgCommitments() {
+        return kzgCommitments;
+    }
+
+    public Optional<List<Bytes>> getKzgProofs() {
+        return kzgProofs;
+    }
+
+    public List<RlpType> getRlpVersionedHashes() {
         return versionedHashes.stream()
-                .map(hash -> RlpString.create(hash.getValue()))
+                .map(hash -> RlpString.create(hash.toArray()))
                 .collect(Collectors.toList());
     }
 
-    public List<RlpType> getKzgCommitments() {
+    public List<RlpType> getRlpKzgCommitments() {
         return kzgCommitments
                 .<List<RlpType>>map(
                         bytesList ->
                                 bytesList.stream()
-                                        .map(bytes -> RlpString.create(bytes.getValue()))
+                                        .map(bytes -> RlpString.create(bytes.toArray()))
                                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
     }
 
-    public List<RlpType> getKzgProofs() {
+    public List<RlpType> getRlpKzgProofs() {
         return kzgProofs
                 .<List<RlpType>>map(
                         bytesList ->
                                 bytesList.stream()
-                                        .map(bytes -> RlpString.create(bytes.getValue()))
+                                        .map(bytes -> RlpString.create(bytes.toArray()))
                                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
     }
 
-    public List<RlpType> getBlobs() {
+    public List<RlpType> getRlpBlobs() {
         return blobs.<List<RlpType>>map(
                         blobList ->
                                 blobList.stream()
-                                        .map(blob -> RlpString.create(blob.getData().getValue()))
+                                        .map(blob -> RlpString.create(blob.getData().toArray()))
                                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
     }

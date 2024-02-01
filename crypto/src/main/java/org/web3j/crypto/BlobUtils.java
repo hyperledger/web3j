@@ -18,8 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 import ethereum.ckzg4844.CKZG4844JNI;
-
-import org.web3j.abi.datatypes.Bytes;
+import org.apache.tuweni.bytes.Bytes;
 
 public class BlobUtils {
     public static boolean libraryLoaded = false;
@@ -52,24 +51,23 @@ public class BlobUtils {
     }
 
     public Bytes getCommitment() {
-        return new Bytes(48, CKZG4844JNI.blobToKzgCommitment(blobData.data.getValue()));
+        return Bytes.wrap(CKZG4844JNI.blobToKzgCommitment(blobData.data.toArray()));
     }
 
     public Bytes getProof(Bytes commitment) {
-        return new Bytes(
-                48,
-                CKZG4844JNI.computeBlobKzgProof(blobData.data.getValue(), commitment.getValue()));
+        return Bytes.wrap(
+                CKZG4844JNI.computeBlobKzgProof(blobData.data.toArray(), commitment.toArray()));
     }
 
-    public boolean checkProofValidity(Bytes commitment, Bytes proof) {
-        return CKZG4844JNI.verifyBlobKzgProof(
-                blobData.data.getValue(), commitment.getValue(), proof.getValue());
-    }
+    //    public boolean checkProofValidity(Bytes commitment, Bytes proof) {
+    //        return CKZG4844JNI.verifyBlobKzgProof(
+    //                blobData.data.getValue(), commitment.getValue(), proof.getValue());
+    //    }
 
     public Bytes kzgToVersionedHash(Bytes commitment) {
-        byte[] hash = Hash.sha256(commitment.getValue());
+        byte[] hash = Hash.sha256(commitment.toArray());
         hash[0] = blobCommitmentVersionKZG;
-        return new Bytes(32, hash);
+        return Bytes.wrap(hash);
     }
 
     public static void freeTrustedSetup() {

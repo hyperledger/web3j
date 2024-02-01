@@ -21,12 +21,12 @@ public class Bytes extends BytesType {
         super(value, TYPE_NAME + value.length);
         if (!isValid(byteSize)) {
             throw new UnsupportedOperationException(
-                    "Input byte array must be in range 0 < M <= 48 and length must match type");
+                    "Input byte array must be in range 0 < M <= 32 and length must match type");
         }
     }
 
     private boolean isValid(int byteSize) {
         int length = getValue().length;
-        return length > 0 && length <= 48 && length == byteSize;
+        return length > 0 && length <= 32 && length == byteSize;
     }
 }

@@ -17,7 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.web3j.abi.datatypes.Bytes;
+import org.apache.tuweni.bytes.Bytes;
+
 import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
@@ -132,7 +133,7 @@ public class TransactionDecoder {
     private static List<Bytes> decodeBytesList(List<RlpType> rlpBytesList) {
         // Implement decoding logic for commitments and proofs
         return rlpBytesList.stream()
-                .map(r -> new Bytes(48, ((RlpString) r).getBytes()))
+                .map(r -> Bytes.wrap(((RlpString) r).getBytes()))
                 .collect(Collectors.toList());
     }
 
@@ -281,7 +282,7 @@ public class TransactionDecoder {
                             if (rlpType instanceof RlpString) {
                                 RlpString rlpString = (RlpString) rlpType;
                                 // Convert the RlpString to Bytes32
-                                return new Bytes(32, rlpString.getBytes());
+                                return Bytes.wrap(rlpString.getBytes());
                             } else {
                                 throw new IllegalArgumentException(
                                         "List contains non-RlpString elements");

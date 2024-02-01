@@ -13,18 +13,27 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.security.SecureRandom;
 import java.security.SignatureException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import ethereum.ckzg4844.CKZG4844JNI;
+import org.apache.tuweni.units.bigints.UInt256;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.crypto.transaction.type.Transaction2930;
+import org.web3j.crypto.transaction.type.Transaction4844;
 import org.web3j.utils.Numeric;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,6 +41,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionDecoderTest {
+
+    private static final int FIELD_ELEMENT_SIZE = 32; // Size of each field element in bytes
+    private static final int BLOB_SIZE = 131072; // Total size of the blob in bytes
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     @Test
     public void testDecoding() throws Exception {
@@ -287,5 +300,156 @@ public class TransactionDecoderTest {
                 BigInteger.valueOf(1000000),
                 "0x1000001111100000",
                 accessList);
+    }
+
+    @Test
+    public void testDecoding4844() {
+        final RawTransaction rawTransaction = createEip4844RawTransaction();
+        final Transaction4844 transaction4844 = (Transaction4844) rawTransaction.getTransaction();
+
+        final byte[] encodedMessage = TransactionEncoder.encode(rawTransaction);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(hexMessage);
+        assertTrue(result.getTransaction() instanceof Transaction4844);
+        final Transaction4844 resultTransaction4844 = (Transaction4844) result.getTransaction();
+
+        assertNotNull(result);
+        assertTrue(
+                range(0, transaction4844.getBlobs().get().size())
+                        .allMatch(
+                                i ->
+                                        transaction4844
+                                                .getBlobs()
+                                                .get()
+                                                .get(i)
+                                                .getData()
+                                                .equals(
+                                                        resultTransaction4844
+                                                                .getBlobs()
+                                                                .get()
+                                                                .get(i)
+                                                                .getData())));
+        assertEquals(
+                transaction4844.getBlobs().get().get(0).getData(),
+                resultTransaction4844.getBlobs().get().get(0).getData());
+        assertEquals(transaction4844.getChainId(), resultTransaction4844.getChainId());
+        assertEquals(transaction4844.getNonce(), resultTransaction4844.getNonce());
+        assertEquals(transaction4844.getMaxFeePerGas(), resultTransaction4844.getMaxFeePerGas());
+        assertEquals(
+                transaction4844.getMaxPriorityFeePerGas(),
+                resultTransaction4844.getMaxPriorityFeePerGas());
+        assertEquals(transaction4844.getGasLimit(), resultTransaction4844.getGasLimit());
+        assertEquals(transaction4844.getTo(), resultTransaction4844.getTo());
+        assertEquals(transaction4844.getValue(), resultTransaction4844.getValue());
+        assertEquals(transaction4844.getData(), resultTransaction4844.getData());
+    }
+
+    @Test
+    public void testDecodingSigned4844() {
+        final RawTransaction rawTransaction = createEip4844RawTransaction();
+        final Transaction4844 transaction4844 = (Transaction4844) rawTransaction.getTransaction();
+
+        final byte[] signedMessage =
+                TransactionEncoder.signMessage(rawTransaction, SampleKeys.CREDENTIALS);
+        final String signedHexMessage = Numeric.toHexString(signedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(signedHexMessage);
+        assertTrue(result.getTransaction() instanceof Transaction4844);
+        final Transaction4844 resultTransaction4844 = (Transaction4844) result.getTransaction();
+
+        assertNotNull(result);
+        assertTrue(
+                range(0, transaction4844.getBlobs().get().size())
+                        .allMatch(
+                                i ->
+                                        transaction4844
+                                                .getBlobs()
+                                                .get()
+                                                .get(i)
+                                                .getData()
+                                                .equals(
+                                                        resultTransaction4844
+                                                                .getBlobs()
+                                                                .get()
+                                                                .get(i)
+                                                                .getData())));
+        assertEquals(transaction4844.getChainId(), resultTransaction4844.getChainId());
+        assertEquals(transaction4844.getNonce(), resultTransaction4844.getNonce());
+        assertEquals(transaction4844.getMaxFeePerGas(), resultTransaction4844.getMaxFeePerGas());
+        assertEquals(
+                transaction4844.getMaxPriorityFeePerGas(),
+                resultTransaction4844.getMaxPriorityFeePerGas());
+        assertEquals(transaction4844.getGasLimit(), resultTransaction4844.getGasLimit());
+        assertEquals(transaction4844.getTo(), resultTransaction4844.getTo());
+        assertEquals(transaction4844.getValue(), resultTransaction4844.getValue());
+        assertEquals(transaction4844.getData(), resultTransaction4844.getData());
+    }
+
+    private static RawTransaction createEip4844RawTransaction() {
+        List<Blob> blobs = new ArrayList<>();
+
+        blobs.add(new Blob(createRandomBlob()));
+        blobs.add(new Blob(createRandomBlob()));
+        return RawTransaction.createTransaction(
+                blobs,
+                1559L,
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(5678),
+                BigInteger.valueOf(1100000),
+                BigInteger.valueOf(30000),
+                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                BigInteger.valueOf(0),
+                "",
+                BigInteger.valueOf(30000));
+    }
+
+    //    @Test
+    //    public void testBlobToCommitmentProofVersionedHashes() {
+    //        BlobUtils.loadTrustedSetupFromResource();
+    //        Blob blob = new Blob(createRandomBlob());
+    //        byte[] commitment = CKZG4844JNI.blobToKzgCommitment(blob.getData().toArray());
+    //        byte[] proofs = CKZG4844JNI.computeBlobKzgProof(blob.getData().toArray(), commitment);
+    //        System.out.println("commitments = " + Arrays.toString(commitment));
+    //        System.out.println("proofs = " + Arrays.toString(proofs));
+    //        BlobUtils.freeTrustedSetup();
+    //    }
+    //
+    //    @Test
+    //    public void testBlobUtils() {
+    //        BlobUtils.loadTrustedSetupFromResource();
+    //        Blob blob = new Blob(createRandomBlob());
+    //        System.out.println("blob = " + blob.getData());
+    //        BlobUtils blobUtils = new BlobUtils(blob);
+    //        System.out.println("commitments = " + blobUtils.getCommitment());
+    //        System.out.println("proofs = " + blobUtils.getProof(blobUtils.getCommitment()));
+    //        System.out.println(
+    //                "versioned Hashes = " +
+    // blobUtils.kzgToVersionedHash(blobUtils.getCommitment()));
+    //        BlobUtils.freeTrustedSetup();
+    //    }
+
+    private static UInt256 randomBLSFieldElement() {
+        final BigInteger attempt = new BigInteger(CKZG4844JNI.BLS_MODULUS.bitLength(), RANDOM);
+        if (attempt.compareTo(CKZG4844JNI.BLS_MODULUS) < 0) {
+            return UInt256.valueOf(attempt);
+        }
+        return randomBLSFieldElement();
+    }
+
+    public static byte[] flatten(final byte[]... bytes) {
+        final int capacity = Arrays.stream(bytes).mapToInt(b -> b.length).sum();
+        final ByteBuffer buffer = ByteBuffer.allocate(capacity);
+        Arrays.stream(bytes).forEach(buffer::put);
+        return buffer.array();
+    }
+
+    public static byte[] createRandomBlob() {
+        final byte[][] blob =
+                range(0, CKZG4844JNI.FIELD_ELEMENTS_PER_BLOB)
+                        .mapToObj(__ -> randomBLSFieldElement())
+                        .map(fieldElement -> fieldElement.toArray(ByteOrder.BIG_ENDIAN))
+                        .toArray(byte[][]::new);
+        return flatten(blob);
     }
 }

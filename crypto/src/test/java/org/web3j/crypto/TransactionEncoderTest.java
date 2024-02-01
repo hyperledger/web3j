@@ -13,6 +13,8 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -147,5 +149,30 @@ public class TransactionEncoderTest {
                 BigInteger.valueOf(123),
                 BigInteger.valueOf(5678),
                 BigInteger.valueOf(1100000));
+    }
+
+    private static RawTransaction createEip4844RawTransaction() {
+        List<Blob> blobs = new ArrayList<>();
+
+        blobs.add(new Blob(createRandomBlob(32)));
+        blobs.add(new Blob(createRandomBlob(32)));
+        return RawTransaction.createTransaction(
+                blobs,
+                1559L,
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(5678),
+                BigInteger.valueOf(1100000),
+                BigInteger.valueOf(30000),
+                "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
+                BigInteger.valueOf(0),
+                "",
+                BigInteger.valueOf(30000));
+    }
+
+    public static byte[] createRandomBlob(int size) {
+        SecureRandom random = new SecureRandom();
+        byte[] blob = new byte[size];
+        random.nextBytes(blob);
+        return blob;
     }
 }

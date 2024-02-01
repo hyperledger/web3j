@@ -11,6 +11,8 @@ dependencies {
             "org.slf4j:slf4j-api:$slf4jVersion",
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     implementation("tech.pegasys:jc-kzg-4844:$kzg4844Version")
+    implementation("io.tmio:tuweni-bytes:2.4.2")
+    implementation("io.tmio:tuweni-units:2.4.2")
 }
 
 configurations { testArtifacts.extendsFrom testRuntime }
