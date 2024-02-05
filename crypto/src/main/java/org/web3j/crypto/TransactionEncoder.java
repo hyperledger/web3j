@@ -38,7 +38,12 @@ public class TransactionEncoder {
      * @return signature
      */
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
-        byte[] encodedTransaction = encode(rawTransaction);
+        byte[] encodedTransaction;
+        if (rawTransaction.getTransaction().getType().isEip4844()) {
+            encodedTransaction = encode4844(rawTransaction);
+        } else {
+            encodedTransaction = encode(rawTransaction);
+        }
         Sign.SignatureData signatureData =
                 Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
 
@@ -126,6 +131,18 @@ public class TransactionEncoder {
                     .array();
         }
         return encoded;
+    }
+
+    public static byte[] encode4844(RawTransaction rawTransaction) {
+        List<RlpType> values = asRlpValues(rawTransaction, null);
+        RlpList rlpList = (RlpList) values.get(0);
+
+        byte[] encoded = RlpEncoder.encode(rlpList);
+
+        return ByteBuffer.allocate(encoded.length + 1)
+                .put(rawTransaction.getType().getRlpType())
+                .put(encoded)
+                .array();
     }
 
     private static byte[] longToBytes(long x) {

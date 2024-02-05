@@ -21,20 +21,14 @@ import ethereum.ckzg4844.CKZG4844JNI;
 import org.apache.tuweni.bytes.Bytes;
 
 public class BlobUtils {
-    public static boolean libraryLoaded = false;
-    private static final byte blobCommitmentVersionKZG = 0x01;
-    private final Blob blobData;
 
-    public BlobUtils(Blob blobData) {
-        if (!libraryLoaded) {
-            throw new RuntimeException(
-                    "Please load CKZG4844JNI Library by running BlobUtils.loadTrustedSetupFromResource()");
-        }
-        this.blobData = blobData;
+    static {
+        CKZG4844JNI.loadNativeLibrary();
     }
 
+    private static final byte blobCommitmentVersionKZG = 0x01;
+
     public static void loadTrustedSetupFromResource() {
-        CKZG4844JNI.loadNativeLibrary();
         try (InputStream resourceStream =
                 BlobUtils.class.getClassLoader().getResourceAsStream("trusted_setup.txt")) {
             if (resourceStream == null) {
@@ -47,24 +41,23 @@ public class BlobUtils {
         } catch (Exception e) {
             throw new RuntimeException("Failed to load trusted setup from resource", e);
         }
-        libraryLoaded = true;
     }
 
-    public Bytes getCommitment() {
+    public static Bytes getCommitment(Blob blobData) {
         return Bytes.wrap(CKZG4844JNI.blobToKzgCommitment(blobData.data.toArray()));
     }
 
-    public Bytes getProof(Bytes commitment) {
+    public static Bytes getProof(Blob blobData, Bytes commitment) {
         return Bytes.wrap(
                 CKZG4844JNI.computeBlobKzgProof(blobData.data.toArray(), commitment.toArray()));
     }
 
-    //    public boolean checkProofValidity(Bytes commitment, Bytes proof) {
-    //        return CKZG4844JNI.verifyBlobKzgProof(
-    //                blobData.data.getValue(), commitment.getValue(), proof.getValue());
-    //    }
+    public static boolean checkProofValidity(Blob blobData, Bytes commitment, Bytes proof) {
+        return CKZG4844JNI.verifyBlobKzgProof(
+                blobData.data.toArray(), commitment.toArray(), proof.toArray());
+    }
 
-    public Bytes kzgToVersionedHash(Bytes commitment) {
+    public static Bytes kzgToVersionedHash(Bytes commitment) {
         byte[] hash = Hash.sha256(commitment.toArray());
         hash[0] = blobCommitmentVersionKZG;
         return Bytes.wrap(hash);
@@ -73,6 +66,5 @@ public class BlobUtils {
     public static void freeTrustedSetup() {
         // the current trusted setup should be freed before a new one is loaded
         CKZG4844JNI.freeTrustedSetup();
-        libraryLoaded = false;
     }
 }

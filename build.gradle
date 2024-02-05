@@ -21,7 +21,7 @@ ext {
     jnr_unixsocketVersion = '0.38.17'
     okhttpVersion = '4.9.0'
     rxjavaVersion = '2.2.2'
-    slf4jVersion = '1.7.30'
+    slf4jVersion = '2.0.11'
     javaWebSocketVersion = '1.5.3'
     picocliVersion = '3.0.0'
     ensAdraffyVersion = '0.1.2'

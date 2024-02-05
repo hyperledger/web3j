@@ -38,7 +38,7 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
     private final Optional<List<Bytes>> kzgProofs;
     private final Optional<List<Bytes>> kzgCommitments;
 
-    public Transaction4844(
+    protected Transaction4844(
             long chainId,
             BigInteger nonce,
             BigInteger maxPriorityFeePerGas,
@@ -57,7 +57,7 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         this.kzgProofs = Optional.empty();
     }
 
-    public Transaction4844(
+    protected Transaction4844(
             List<Blob> blobs,
             List<Bytes> kzgCommitments,
             List<Bytes> kzgProofs,
@@ -79,7 +79,7 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         this.kzgProofs = Optional.ofNullable(kzgProofs);
     }
 
-    public Transaction4844(
+    protected Transaction4844(
             List<Blob> blobsData,
             long chainId,
             BigInteger nonce,
@@ -93,30 +93,31 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         super(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
         this.maxFeePerBlobGas = maxFeePerBlobGas;
         this.blobs = Optional.ofNullable(blobsData);
-        if (!BlobUtils.libraryLoaded) {
-            BlobUtils.loadTrustedSetupFromResource();
-        }
-        List<BlobUtils> blobUtils =
-                blobsData.stream().map(BlobUtils::new).collect(Collectors.toList());
+        BlobUtils.loadTrustedSetupFromResource();
+
+        assert blobsData != null;
         this.kzgCommitments =
                 Optional.of(
-                        blobUtils.stream()
+                        blobsData.stream()
                                 .map(BlobUtils::getCommitment)
                                 .collect(Collectors.toList()));
+
         this.kzgProofs =
                 Optional.of(
-                        IntStream.range(0, blobUtils.size())
+                        IntStream.range(0, blobsData.size())
                                 .mapToObj(
-                                        i -> blobUtils.get(i).getProof(kzgCommitments.get().get(i)))
+                                        i ->
+                                                BlobUtils.getProof(
+                                                        blobsData.get(i),
+                                                        this.kzgCommitments.get().get(i)))
                                 .collect(Collectors.toList()));
+
         this.versionedHashes =
-                IntStream.range(0, blobUtils.size())
-                        .mapToObj(
-                                i ->
-                                        blobUtils
-                                                .get(i)
-                                                .kzgToVersionedHash(kzgCommitments.get().get(i)))
+                this.kzgCommitments.get().stream()
+                        .map(BlobUtils::kzgToVersionedHash)
                         .collect(Collectors.toList());
+
+        BlobUtils.freeTrustedSetup();
     }
 
     @Override
@@ -159,6 +160,7 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
 
         List<RlpType> result = new ArrayList<>();
         result.add(new RlpList(resultTx));
+
         // Adding blobs, commitments, and proofs
         result.add(new RlpList(getRlpBlobs()));
         result.add(new RlpList(getRlpKzgCommitments()));
@@ -262,6 +264,10 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
 
     public Optional<List<Bytes>> getKzgProofs() {
         return kzgProofs;
+    }
+
+    public List<Bytes> getVersionedHashes() {
+        return versionedHashes;
     }
 
     public List<RlpType> getRlpVersionedHashes() {

@@ -122,16 +122,14 @@ public class TransactionDecoder {
         return rawTransaction;
     }
 
-    // Helper methods to decode blobs, commitments, and proofs
     private static List<Blob> decodeBlobs(List<RlpType> rlpBlobs) {
-        // Implement decoding logic for blobs
         return rlpBlobs.stream()
                 .map(r -> new Blob(((RlpString) r).getBytes()))
                 .collect(Collectors.toList());
     }
 
+    //  Decoding logic for commitments and proofs
     private static List<Bytes> decodeBytesList(List<RlpType> rlpBytesList) {
-        // Implement decoding logic for commitments and proofs
         return rlpBytesList.stream()
                 .map(r -> Bytes.wrap(((RlpString) r).getBytes()))
                 .collect(Collectors.toList());
@@ -278,10 +276,8 @@ public class TransactionDecoder {
         return rlp.stream()
                 .map(
                         rlpType -> {
-                            // Ensure the RlpType is actually an RlpString
                             if (rlpType instanceof RlpString) {
                                 RlpString rlpString = (RlpString) rlpType;
-                                // Convert the RlpString to Bytes32
                                 return Bytes.wrap(rlpString.getBytes());
                             } else {
                                 throw new IllegalArgumentException(
