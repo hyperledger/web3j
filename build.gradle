@@ -26,6 +26,7 @@ ext {
     picocliVersion = '3.0.0'
     ensAdraffyVersion = '0.1.2'
     kzg4844Version = '0.8.0'
+    tuweniVersion = '2.4.2'
     // test dependencies
     equalsverifierVersion = '3.14.1'
     junitVersion = '5.5.2'

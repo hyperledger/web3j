@@ -17,7 +17,7 @@ public class Bytes extends BytesType {
 
     public static final String TYPE_NAME = "bytes";
 
-    public Bytes(int byteSize, byte[] value) {
+    protected Bytes(int byteSize, byte[] value) {
         super(value, TYPE_NAME + value.length);
         if (!isValid(byteSize)) {
             throw new UnsupportedOperationException(

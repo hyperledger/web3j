@@ -93,7 +93,7 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
         super(chainId, nonce, gasLimit, to, value, data, maxPriorityFeePerGas, maxFeePerGas);
         this.maxFeePerBlobGas = maxFeePerBlobGas;
         this.blobs = Optional.ofNullable(blobsData);
-        BlobUtils.loadTrustedSetupFromResource();
+        BlobUtils.loadTrustedSetupParameters();
 
         assert blobsData != null;
         this.kzgCommitments =

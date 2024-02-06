@@ -41,7 +41,7 @@ public class BlobUtilsTest {
 
     @BeforeEach
     public void load() {
-        BlobUtils.loadTrustedSetupFromResource();
+        BlobUtils.loadTrustedSetupParameters();
     }
 
     @Test
@@ -64,7 +64,6 @@ public class BlobUtilsTest {
 
     @Test
     public void testBlobUtils() throws Exception {
-
         Blob blob =
                 new Blob(
                         Numeric.hexStringToByteArray(

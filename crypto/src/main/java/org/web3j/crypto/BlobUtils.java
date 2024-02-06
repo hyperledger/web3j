@@ -12,10 +12,13 @@
  */
 package org.web3j.crypto;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 import ethereum.ckzg4844.CKZG4844JNI;
 import org.apache.tuweni.bytes.Bytes;
@@ -28,18 +31,27 @@ public class BlobUtils {
 
     private static final byte blobCommitmentVersionKZG = 0x01;
 
-    public static void loadTrustedSetupFromResource() {
-        try (InputStream resourceStream =
+    public static void loadTrustedSetupParameters() {
+        try (InputStream inputStream =
                 BlobUtils.class.getClassLoader().getResourceAsStream("trusted_setup.txt")) {
-            if (resourceStream == null) {
-                throw new IllegalArgumentException("Resource not found");
+            assert inputStream != null;
+            final BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            final int g1Count = Integer.parseInt(reader.readLine());
+            final int g2Count = Integer.parseInt(reader.readLine());
+
+            final ByteBuffer g1 = ByteBuffer.allocate(g1Count * CKZG4844JNI.BYTES_PER_G1);
+            final ByteBuffer g2 = ByteBuffer.allocate(g2Count * CKZG4844JNI.BYTES_PER_G2);
+
+            for (int i = 0; i < g1Count; i++) {
+                g1.put(Bytes.fromHexString(reader.readLine()).toArray());
             }
-            Path tempFile = Files.createTempFile("trusted_setup", "txt");
-            Files.copy(resourceStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
-            CKZG4844JNI.loadTrustedSetup(tempFile.toString());
-            tempFile.toFile().deleteOnExit(); // Delete temp file when JVM exits
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load trusted setup from resource", e);
+            for (int i = 0; i < g2Count; i++) {
+                g2.put(Bytes.fromHexString(reader.readLine()).toArray());
+            }
+            CKZG4844JNI.loadTrustedSetup(g1.array(), g1Count, g2.array(), g2Count);
+        } catch (final IOException ex) {
+            throw new UncheckedIOException(ex);
         }
     }
 
