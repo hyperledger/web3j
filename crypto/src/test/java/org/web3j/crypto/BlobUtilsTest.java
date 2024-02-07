@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 import ethereum.ckzg4844.CKZG4844JNI;
 import org.apache.tuweni.bytes.Bytes;
 import org.apache.tuweni.units.bigints.UInt256;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
@@ -39,13 +37,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BlobUtilsTest {
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    @BeforeEach
-    public void load() {
-        BlobUtils.loadTrustedSetupParameters();
-    }
-
     @Test
     public void testBlobToCommitmentProofVersionedHashes() throws Exception {
+        new BlobUtils();
         Blob blob =
                 new Blob(
                         Numeric.hexStringToByteArray(
@@ -131,10 +125,5 @@ public class BlobUtilsTest {
                         .map(fieldElement -> fieldElement.toArray(ByteOrder.BIG_ENDIAN))
                         .toArray(byte[][]::new);
         return flatten(blob);
-    }
-
-    @AfterEach
-    public void free() {
-        BlobUtils.freeTrustedSetup();
     }
 }

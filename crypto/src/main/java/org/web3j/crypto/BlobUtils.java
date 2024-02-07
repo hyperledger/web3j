@@ -25,15 +25,17 @@ import org.apache.tuweni.bytes.Bytes;
 
 public class BlobUtils {
 
+    private static final byte blobCommitmentVersionKZG = 0x01;
+    private static final String trustedSetupFilePath = "trusted_setup.txt";
+
     static {
         CKZG4844JNI.loadNativeLibrary();
+        loadTrustedSetupParameters(trustedSetupFilePath);
     }
 
-    private static final byte blobCommitmentVersionKZG = 0x01;
-
-    public static void loadTrustedSetupParameters() {
+    public static void loadTrustedSetupParameters(String filePath) {
         try (InputStream inputStream =
-                BlobUtils.class.getClassLoader().getResourceAsStream("trusted_setup.txt")) {
+                BlobUtils.class.getClassLoader().getResourceAsStream(filePath)) {
             assert inputStream != null;
             final BufferedReader reader =
                     new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));

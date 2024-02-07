@@ -12,6 +12,8 @@
  */
 package org.web3j.crypto;
 
+import java.util.Objects;
+
 import org.apache.tuweni.bytes.Bytes;
 
 public class Blob {
@@ -43,5 +45,23 @@ public class Blob {
      */
     public Bytes getData() {
         return data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Blob blob = (Blob) o;
+        return Objects.equals(data, blob.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return data != null ? data.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Blob{" + "data=" + data + '}';
     }
 }
