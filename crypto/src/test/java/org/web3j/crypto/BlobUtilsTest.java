@@ -39,7 +39,9 @@ public class BlobUtilsTest {
 
     @Test
     public void testBlobToCommitmentProofVersionedHashes() throws Exception {
-        new BlobUtils();
+        CKZG4844JNI.loadNativeLibrary();
+        CKZG4844JNI.loadTrustedSetupFromResource("/trusted_setup.txt", BlobUtils.class);
+
         Blob blob =
                 new Blob(
                         Numeric.hexStringToByteArray(
@@ -54,6 +56,8 @@ public class BlobUtilsTest {
         assertEquals(
                 "0xc00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
                 Numeric.toHexString(proofs));
+
+        CKZG4844JNI.freeTrustedSetup();
     }
 
     @Test
