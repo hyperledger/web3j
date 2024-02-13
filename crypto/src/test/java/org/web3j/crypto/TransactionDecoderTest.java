@@ -13,7 +13,9 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.security.SignatureException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -22,16 +24,23 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.crypto.transaction.type.Transaction2930;
+import org.web3j.crypto.transaction.type.Transaction4844;
 import org.web3j.utils.Numeric;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.web3j.crypto.BlobUtilsTest.*;
 
 public class TransactionDecoderTest {
+
+    private static final int FIELD_ELEMENT_SIZE = 32; // Size of each field element in bytes
+    private static final int BLOB_SIZE = 131072; // Total size of the blob in bytes
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     @Test
     public void testDecoding() throws Exception {
@@ -338,5 +347,161 @@ public class TransactionDecoderTest {
                 BigInteger.valueOf(1000000),
                 "0x1000001111100000",
                 accessList);
+    }
+
+    @Test
+    public void testDecoding4844() {
+        final RawTransaction rawTransaction = createEip4844RawTransaction();
+        final Transaction4844 transaction4844 = (Transaction4844) rawTransaction.getTransaction();
+
+        final byte[] encodedMessage = TransactionEncoder.encode(rawTransaction);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawTransaction result = TransactionDecoder.decode(hexMessage);
+        assertTrue(result.getTransaction() instanceof Transaction4844);
+        final Transaction4844 resultTransaction4844 = (Transaction4844) result.getTransaction();
+
+        assertNotNull(result);
+        assertTrue(
+                range(0, transaction4844.getBlobs().get().size())
+                        .allMatch(
+                                i ->
+                                        transaction4844
+                                                .getBlobs()
+                                                .get()
+                                                .get(i)
+                                                .getData()
+                                                .equals(
+                                                        resultTransaction4844
+                                                                .getBlobs()
+                                                                .get()
+                                                                .get(i)
+                                                                .getData())));
+        assertEquals(
+                transaction4844.getBlobs().get().get(0).getData(),
+                resultTransaction4844.getBlobs().get().get(0).getData());
+        assertEquals(transaction4844.getChainId(), resultTransaction4844.getChainId());
+        assertEquals(transaction4844.getNonce(), resultTransaction4844.getNonce());
+        assertEquals(transaction4844.getMaxFeePerGas(), resultTransaction4844.getMaxFeePerGas());
+        assertEquals(
+                transaction4844.getMaxPriorityFeePerGas(),
+                resultTransaction4844.getMaxPriorityFeePerGas());
+        assertEquals(transaction4844.getGasLimit(), resultTransaction4844.getGasLimit());
+        assertEquals(transaction4844.getTo(), resultTransaction4844.getTo());
+        assertEquals(transaction4844.getValue(), resultTransaction4844.getValue());
+        assertEquals(transaction4844.getData(), resultTransaction4844.getData());
+    }
+
+    @Test
+    public void testDecodingSigned4844() throws SignatureException {
+        final RawTransaction rawTransaction = createEip4844RawTransaction();
+        final Transaction4844 transaction4844 = (Transaction4844) rawTransaction.getTransaction();
+
+        final byte[] signedMessage =
+                TransactionEncoder.signMessage(rawTransaction, SampleKeys.CREDENTIALS);
+        final String signedHexMessage = Numeric.toHexString(signedMessage);
+
+        final SignedRawTransaction result =
+                (SignedRawTransaction) TransactionDecoder.decode(signedHexMessage);
+        assertTrue(result.getTransaction() instanceof Transaction4844);
+        final Transaction4844 resultTransaction4844 = (Transaction4844) result.getTransaction();
+
+        assertNotNull(result);
+        assertTrue(
+                range(0, transaction4844.getBlobs().get().size())
+                        .allMatch(
+                                i ->
+                                        transaction4844
+                                                .getBlobs()
+                                                .get()
+                                                .get(i)
+                                                .getData()
+                                                .equals(
+                                                        resultTransaction4844
+                                                                .getBlobs()
+                                                                .get()
+                                                                .get(i)
+                                                                .getData())));
+        assertEquals(transaction4844.getChainId(), resultTransaction4844.getChainId());
+        assertEquals(transaction4844.getNonce(), resultTransaction4844.getNonce());
+        assertEquals(transaction4844.getMaxFeePerGas(), resultTransaction4844.getMaxFeePerGas());
+        assertEquals(
+                transaction4844.getMaxPriorityFeePerGas(),
+                resultTransaction4844.getMaxPriorityFeePerGas());
+        assertEquals(transaction4844.getGasLimit(), resultTransaction4844.getGasLimit());
+        assertEquals(transaction4844.getTo(), resultTransaction4844.getTo());
+        assertEquals(transaction4844.getValue(), resultTransaction4844.getValue());
+        assertEquals(transaction4844.getData(), resultTransaction4844.getData());
+        assertEquals(
+                transaction4844.getMaxFeePerBlobGas(), resultTransaction4844.getMaxFeePerBlobGas());
+        assertEquals(result.getFrom(), SampleKeys.CREDENTIALS.getAddress());
+    }
+
+    @Test
+    public void testDecodingPreSigned4844() throws Exception {
+
+        for (int i = 1; i < 3; i++) {
+            String signedHexMessage = loadResourceAsString("blob_data/blob_tx_" + i + ".txt");
+            SignedRawTransaction result =
+                    (SignedRawTransaction) TransactionDecoder.decode(signedHexMessage);
+            assertTrue(result.getTransaction() instanceof Transaction4844);
+            Transaction4844 resultTransaction4844 = (Transaction4844) result.getTransaction();
+
+            assertNotNull(result);
+            assertEquals(
+                    loadResourceAsString("blob_data/blob_data_" + i + ".txt"),
+                    Numeric.toHexString(
+                            resultTransaction4844.getBlobs().get().get(0).getData().toArray()));
+            assertEquals(7L, resultTransaction4844.getChainId());
+            assertEquals(BigInteger.valueOf(i - 1), resultTransaction4844.getNonce());
+            assertEquals(BigInteger.valueOf(30000000000L), resultTransaction4844.getMaxFeePerGas());
+            assertEquals(
+                    BigInteger.valueOf(1000000000L),
+                    resultTransaction4844.getMaxPriorityFeePerGas());
+            assertEquals(BigInteger.valueOf(100000L), resultTransaction4844.getGasLimit());
+            assertEquals(
+                    "0x0000000000000000000000000000000000020000", resultTransaction4844.getTo());
+            assertEquals(BigInteger.ZERO, resultTransaction4844.getValue());
+            assertEquals("", resultTransaction4844.getData());
+            assertEquals(BigInteger.ONE, resultTransaction4844.getMaxFeePerBlobGas());
+            assertEquals("0x47b62d14c5d04d5b1489a4e46cee3ada098b1839", result.getFrom());
+        }
+    }
+
+    public static RawTransaction createEip4844RawTransactionZeroBlob() {
+        List<Blob> blobs = new ArrayList<>();
+
+        blobs.add(new Blob(createZeroBlob()));
+        return RawTransaction.createTransaction(
+                blobs,
+                1L,
+                BigInteger.valueOf(1),
+                BigInteger.valueOf(50L),
+                BigInteger.valueOf(1000L),
+                BigInteger.valueOf(100000),
+                "0x45Ae5777c9b35Eb16280e423b0d7c91C06C66B58",
+                BigInteger.valueOf(1),
+                "0x52fdfc072182654f",
+                BigInteger.valueOf(100));
+    }
+
+    public static RawTransaction createEip4844RawTransaction() {
+        List<Blob> blobs = new ArrayList<>();
+
+        blobs.add(new Blob(createRandomBlob()));
+        blobs.add(new Blob(createRandomBlob()));
+        blobs.add(new Blob(createRandomBlob()));
+        blobs.add(new Blob(createRandomBlob()));
+        return RawTransaction.createTransaction(
+                blobs,
+                1559L,
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(5678),
+                BigInteger.valueOf(1100000),
+                BigInteger.valueOf(30000),
+                "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                BigInteger.valueOf(0),
+                "",
+                BigInteger.valueOf(30000));
     }
 }

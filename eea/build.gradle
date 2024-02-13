@@ -4,6 +4,7 @@ plugins {
 
 description 'EEA JSON-RPC API'
 
+
 dependencies {
     api project(':core')
     testImplementation project(path: ':core', configuration: 'testArtifacts')

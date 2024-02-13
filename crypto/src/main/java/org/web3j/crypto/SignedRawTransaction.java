@@ -43,7 +43,9 @@ public class SignedRawTransaction extends RawTransaction implements SignatureDat
 
     @Override
     public byte[] getEncodedTransaction(Long chainId) {
-        if (null == chainId) {
+        if (this.getTransaction().getType().isEip4844()) {
+            return TransactionEncoder.encode4844(this);
+        } else if (null == chainId) {
             return TransactionEncoder.encode(this);
         } else {
             return TransactionEncoder.encode(this, chainId);

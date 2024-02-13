@@ -21,10 +21,12 @@ ext {
     jnr_unixsocketVersion = '0.38.17'
     okhttpVersion = '4.9.0'
     rxjavaVersion = '2.2.2'
-    slf4jVersion = '1.7.30'
+    slf4jVersion = '2.0.11'
     javaWebSocketVersion = '1.5.3'
     picocliVersion = '3.0.0'
     ensAdraffyVersion = '0.1.2'
+    kzg4844Version = '0.8.0'
+    tuweniVersion = '2.4.2'
     // test dependencies
     equalsverifierVersion = '3.14.1'
     junitVersion = '5.5.2'
@@ -70,6 +72,10 @@ allprojects {
     tasks.withType(Test) {
         reports.html.destination = file("${reporting.baseDir}/${name}")
         useJUnitPlatform()
+    }
+
+    repositories {
+        maven { url "https://artifacts.consensys.net/public/maven/maven/" }
     }
 
     dependencies {

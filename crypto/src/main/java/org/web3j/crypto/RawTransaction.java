@@ -16,10 +16,13 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.tuweni.bytes.Bytes;
+
 import org.web3j.crypto.transaction.type.ITransaction;
 import org.web3j.crypto.transaction.type.LegacyTransaction;
 import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.crypto.transaction.type.Transaction2930;
+import org.web3j.crypto.transaction.type.Transaction4844;
 import org.web3j.crypto.transaction.type.TransactionType;
 
 /**
@@ -142,6 +145,90 @@ public class RawTransaction {
                         maxPriorityFeePerGas,
                         maxFeePerGas,
                         accessList));
+    }
+
+    public static RawTransaction createTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas,
+            List<Bytes> versionedHashes) {
+
+        return new RawTransaction(
+                Transaction4844.createTransaction(
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxFeePerBlobGas,
+                        versionedHashes));
+    }
+
+    public static RawTransaction createTransaction(
+            List<Blob> blobs,
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas) {
+
+        return new RawTransaction(
+                Transaction4844.createTransaction(
+                        blobs,
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxFeePerBlobGas));
+    }
+
+    public static RawTransaction createTransaction(
+            List<Blob> blobs,
+            List<Bytes> kzgCommitments,
+            List<Bytes> kzgProofs,
+            long chainId,
+            BigInteger nonce,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxFeePerBlobGas,
+            List<Bytes> versionedHashes) {
+
+        return new RawTransaction(
+                Transaction4844.createTransaction(
+                        blobs,
+                        kzgCommitments,
+                        kzgProofs,
+                        chainId,
+                        nonce,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxFeePerBlobGas,
+                        versionedHashes));
     }
 
     public static RawTransaction createTransaction(

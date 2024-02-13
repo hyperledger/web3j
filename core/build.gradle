@@ -5,7 +5,6 @@ plugins {
     id 'org.ajoberstar.git-publish'
 }
 
-
 description 'web3j is a lightweight Java library for integration with Ethereum clients'
 
 dependencies {
