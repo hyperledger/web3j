@@ -178,7 +178,7 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     /*
-     * @param rawTransaction a RawTransaction istance to be signed
+     * @param rawTransaction a RawTransaction instance to be signed
      * @return The transaction signed and encoded without ever broadcasting it
      */
     public String sign(RawTransaction rawTransaction) {
