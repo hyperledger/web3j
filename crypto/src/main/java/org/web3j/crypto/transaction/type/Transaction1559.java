@@ -14,8 +14,10 @@ package org.web3j.crypto.transaction.type;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.web3j.crypto.AccessListObject;
 import org.web3j.crypto.Sign;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -23,16 +25,13 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 
-import static org.web3j.crypto.transaction.type.TransactionType.EIP1559;
-
 /**
  * Transaction class used for signing 1559 transactions locally.<br>
  * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">yellow
  * paper</a>.
  */
-public class Transaction1559 extends LegacyTransaction implements ITransaction {
+public class Transaction1559 extends Transaction2930 implements ITransaction {
 
-    private long chainId;
     private BigInteger maxPriorityFeePerGas;
     private BigInteger maxFeePerGas;
 
@@ -45,8 +44,22 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             String data,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas) {
-        super(EIP1559, nonce, null, gasLimit, to, value, data);
-        this.chainId = chainId;
+        super(chainId, nonce, null, gasLimit, to, value, data, Collections.emptyList());
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        this.maxFeePerGas = maxFeePerGas;
+    }
+
+    public Transaction1559(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            List<AccessListObject> accessList) {
+        super(chainId, nonce, null, gasLimit, to, value, data, accessList);
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
         this.maxFeePerGas = maxFeePerGas;
     }
@@ -83,7 +96,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
         result.add(RlpString.create(data));
 
         // access list
-        result.add(new RlpList());
+        result.add(new RlpList(rlpAccessListRlp()));
 
         if (signatureData != null) {
             result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
@@ -103,7 +116,38 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas) {
         return new Transaction1559(
-                chainId, nonce, gasLimit, to, value, "", maxPriorityFeePerGas, maxFeePerGas);
+                chainId,
+                nonce,
+                gasLimit,
+                to,
+                value,
+                "",
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                Collections.emptyList());
+    }
+
+    public static Transaction1559 createTransaction(
+            long chainId,
+            BigInteger nonce,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            List<AccessListObject> accessList) {
+
+        return new Transaction1559(
+                chainId,
+                nonce,
+                gasLimit,
+                to,
+                value,
+                data,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                accessList);
     }
 
     public static Transaction1559 createTransaction(
@@ -121,12 +165,13 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
     }
 
     @Override
-    public BigInteger getGasPrice() {
-        throw new UnsupportedOperationException("not available for 1559 transaction");
+    public TransactionType getType() {
+        return TransactionType.EIP1559;
     }
 
-    public long getChainId() {
-        return chainId;
+    @Override
+    public BigInteger getGasPrice() {
+        throw new UnsupportedOperationException("not available for 1559 transaction");
     }
 
     public BigInteger getMaxPriorityFeePerGas() {

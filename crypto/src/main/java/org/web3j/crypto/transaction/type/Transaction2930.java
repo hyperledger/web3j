@@ -71,6 +71,19 @@ public class Transaction2930 extends LegacyTransaction {
         result.add(RlpString.create(data));
 
         // access list
+        result.add(new RlpList(rlpAccessListRlp()));
+
+        if (signatureData != null) {
+            result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
+        }
+
+        return result;
+    }
+
+    protected List<RlpType> rlpAccessListRlp() {
+
         List<AccessListObject> accessList = getAccessList();
         List<RlpType> rlpAccessList = new ArrayList<>();
         accessList.forEach(
@@ -89,15 +102,7 @@ public class Transaction2930 extends LegacyTransaction {
                     rlpAccessListObject.add(new RlpList(keyList));
                     rlpAccessList.add(new RlpList(rlpAccessListObject));
                 });
-        result.add(new RlpList(rlpAccessList));
-
-        if (signatureData != null) {
-            result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
-        }
-
-        return result;
+        return rlpAccessList;
     }
 
     public static Transaction2930 createEtherTransaction(
