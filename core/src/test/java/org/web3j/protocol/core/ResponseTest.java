@@ -663,7 +663,9 @@ public class ResponseTest extends ResponseTester {
                         + "        \"address\": \"0x1e09b4199780a45792f4ff195ef68410a091b047\",\n"
                         + "        \"amount\": \"0xd1f129\"\n"
                         + "      }\n"
-                        + "    ]\n"
+                        + "    ],\n"
+                        + "    \"blobGasUsed\": \"0xa0000\",\n"
+                        + "    \"excessBlobGas\": \"0x4bc0000\"\n"
                         + "  }\n"
                         + "}");
 
@@ -708,7 +710,9 @@ public class ResponseTest extends ResponseTester {
                                         "0x68ba80",
                                         "0x65285",
                                         "0x1e09b4199780a45792f4ff195ef68410a091b047",
-                                        "0xd1f129")));
+                                        "0xd1f129")),
+                        "0xa0000",
+                        "0x4bc0000");
         assertEquals(ethBlock.getBlock(), (block));
     }
 
@@ -785,7 +789,9 @@ public class ResponseTest extends ResponseTester {
                         + "        \"address\": \"0x1e09b4199780a45792f4ff195ef68410a091b047\",\n"
                         + "        \"amount\": \"0xd1f129\"\n"
                         + "      }\n"
-                        + "    ]\n"
+                        + "    ],\n"
+                        + "    \"blobGasUsed\": \"0xa0000\",\n"
+                        + "    \"excessBlobGas\": \"0x4bc0000\"\n"
                         + "  }\n"
                         + "}");
 
@@ -852,7 +858,9 @@ public class ResponseTest extends ResponseTester {
                                         "0x68ba80",
                                         "0x65285",
                                         "0x1e09b4199780a45792f4ff195ef68410a091b047",
-                                        "0xd1f129")));
+                                        "0xd1f129")),
+                        "0xa0000",
+                        "0x4bc0000");
 
         assertEquals(ethBlock.getBlock(), (block));
     }
@@ -931,7 +939,9 @@ public class ResponseTest extends ResponseTester {
                         + "        \"address\": \"0x1e09b4199780a45792f4ff195ef68410a091b047\",\n"
                         + "        \"amount\": \"0xd1f129\"\n"
                         + "      }\n"
-                        + "    ]\n"
+                        + "    ],\n"
+                        + "    \"blobGasUsed\": \"0xa0000\",\n"
+                        + "    \"excessBlobGas\": \"0x4bc0000\"\n"
                         + "  }\n"
                         + "}");
 
@@ -998,7 +1008,9 @@ public class ResponseTest extends ResponseTester {
                                         "0x68ba80",
                                         "0x65285",
                                         "0x1e09b4199780a45792f4ff195ef68410a091b047",
-                                        "0xd1f129")));
+                                        "0xd1f129")),
+                        "0xa0000",
+                        "0x4bc0000");
 
         assertEquals(ethBlock.getBlock(), (block));
     }

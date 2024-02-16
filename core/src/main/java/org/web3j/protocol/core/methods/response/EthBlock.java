@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
-import org.apache.tuweni.bytes.Bytes;
 
 /**
  * Block object returned by:
@@ -145,6 +144,59 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.withdrawals = withdrawals;
             this.blobGasUsed = blobGasUsed;
             this.excessBlobGas = excessBlobGas;
+        }
+
+        public Block(
+                String number,
+                String hash,
+                String parentHash,
+                String nonce,
+                String sha3Uncles,
+                String logsBloom,
+                String transactionsRoot,
+                String stateRoot,
+                String receiptsRoot,
+                String author,
+                String miner,
+                String mixHash,
+                String difficulty,
+                String totalDifficulty,
+                String extraData,
+                String size,
+                String gasLimit,
+                String gasUsed,
+                String timestamp,
+                List<TransactionResult> transactions,
+                List<String> uncles,
+                List<String> sealFields,
+                String baseFeePerGas,
+                String withdrawalsRoot,
+                List<Withdrawal> withdrawals) {
+            this.number = number;
+            this.hash = hash;
+            this.parentHash = parentHash;
+            this.nonce = nonce;
+            this.sha3Uncles = sha3Uncles;
+            this.logsBloom = logsBloom;
+            this.transactionsRoot = transactionsRoot;
+            this.stateRoot = stateRoot;
+            this.receiptsRoot = receiptsRoot;
+            this.author = author;
+            this.miner = miner;
+            this.mixHash = mixHash;
+            this.difficulty = difficulty;
+            this.totalDifficulty = totalDifficulty;
+            this.extraData = extraData;
+            this.size = size;
+            this.gasLimit = gasLimit;
+            this.gasUsed = gasUsed;
+            this.timestamp = timestamp;
+            this.transactions = transactions;
+            this.uncles = uncles;
+            this.sealFields = sealFields;
+            this.baseFeePerGas = baseFeePerGas;
+            this.withdrawalsRoot = withdrawalsRoot;
+            this.withdrawals = withdrawals;
         }
 
         public BigInteger getNumber() {
@@ -556,8 +608,6 @@ public class EthBlock extends Response<EthBlock.Block> {
             return getWithdrawals() != null
                     ? getWithdrawals().equals(block.getWithdrawals())
                     : block.getWithdrawals() == null;
-
-
         }
 
         @Override
@@ -601,8 +651,14 @@ public class EthBlock extends Response<EthBlock.Block> {
                     31 * result
                             + (getWithdrawalsRoot() != null ? getWithdrawalsRoot().hashCode() : 0);
             result = 31 * result + (getWithdrawals() != null ? getWithdrawals().hashCode() : 0);
-            result = 31 * result + (getBlobGasUsedRaw() != null ? getBlobGasUsedRaw().hashCode() : 0);
-            result = 31 * result + (getExcessBlobGasRaw() != null ? getExcessBlobGasRaw().hashCode() : 0);
+            result =
+                    31 * result
+                            + (getBlobGasUsedRaw() != null ? getBlobGasUsedRaw().hashCode() : 0);
+            result =
+                    31 * result
+                            + (getExcessBlobGasRaw() != null
+                                    ? getExcessBlobGasRaw().hashCode()
+                                    : 0);
             return result;
         }
     }
@@ -776,7 +832,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 String maxPriorityFeePerGas,
                 List<AccessListObject> accessList,
                 String maxFeePerBlobGas,
-                List<Bytes> versionedHashes) {
+                List<String> versionedHashes) {
             super(
                     hash,
                     nonce,

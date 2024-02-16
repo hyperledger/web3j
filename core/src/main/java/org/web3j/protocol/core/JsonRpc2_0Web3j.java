@@ -99,6 +99,8 @@ import org.web3j.utils.Numeric;
 public class JsonRpc2_0Web3j implements Web3j {
 
     public static final int DEFAULT_BLOCK_TIME = 15 * 1000;
+    private static final BigInteger MIN_BLOB_BASE_FEE = new BigInteger("1");
+    private static final BigInteger BLOB_BASE_FEE_UPDATE_FRACTION = new BigInteger("3338477");
 
     protected final Web3jService web3jService;
     private final JsonRpc2_0Rx web3jRx;
@@ -875,5 +877,33 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public BatchRequest newBatch() {
         return new BatchRequest(web3jService);
+    }
+
+    @Override
+    public BigInteger ethGetBaseFeePerBlobGas() {
+        try {
+            EthBlock ethBlock =
+                    web3jService.send(
+                            ethGetBlockByNumber(DefaultBlockParameter.valueOf("latest"), false),
+                            EthBlock.class);
+            return fakeExponential(ethBlock.getBlock().getExcessBlobGas());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to get baseFeePerBlobGas value", e);
+        }
+    }
+
+    private static BigInteger fakeExponential(BigInteger numerator) {
+        BigInteger i = BigInteger.ONE;
+        BigInteger output = BigInteger.ZERO;
+        BigInteger numeratorAccum = MIN_BLOB_BASE_FEE.multiply(BLOB_BASE_FEE_UPDATE_FRACTION);
+        while (numeratorAccum.compareTo(BigInteger.ZERO) > 0) {
+            output = output.add(numeratorAccum);
+            numeratorAccum =
+                    numeratorAccum
+                            .multiply(numerator)
+                            .divide(BLOB_BASE_FEE_UPDATE_FRACTION.multiply(i));
+            i = i.add(BigInteger.ONE);
+        }
+        return output.divide(BLOB_BASE_FEE_UPDATE_FRACTION);
     }
 }

@@ -13,11 +13,9 @@
 package org.web3j.protocol.core.methods.request;
 
 import java.math.BigInteger;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import org.apache.tuweni.bytes.Bytes;
 import org.web3j.utils.Numeric;
 
 /**

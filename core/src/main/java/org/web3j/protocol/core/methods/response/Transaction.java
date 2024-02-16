@@ -15,7 +15,6 @@ package org.web3j.protocol.core.methods.response;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.apache.tuweni.bytes.Bytes;
 import org.web3j.crypto.TransactionUtils;
 import org.web3j.utils.Numeric;
 
@@ -45,7 +44,7 @@ public class Transaction {
     private String maxPriorityFeePerGas;
     private List<AccessListObject> accessList;
     private String maxFeePerBlobGas;
-    private List<Bytes> versionedHashes;
+    private List<String> versionedHashes;
 
     public Transaction() {}
 
@@ -170,7 +169,7 @@ public class Transaction {
             String maxPriorityFeePerGas,
             List accessList,
             String maxFeePerBlobGas,
-            List<Bytes> versionedHashes) {
+            List versionedHashes) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -450,11 +449,11 @@ public class Transaction {
         this.maxFeePerBlobGas = maxFeePerBlobGas;
     }
 
-    public List<Bytes> getVersionedHashes() {
+    public List<String> getVersionedHashes() {
         return versionedHashes;
     }
 
-    public void setVersionedHashes(List<Bytes> versionedHashes) {
+    public void setVersionedHashes(List<String> versionedHashes) {
         this.versionedHashes = versionedHashes;
     }
 
@@ -611,7 +610,11 @@ public class Transaction {
                         + (getMaxPriorityFeePerGasRaw() != null
                                 ? getMaxPriorityFeePerGasRaw().hashCode()
                                 : 0);
-        result = 31 * result + (getMaxFeePerBlobGasRaw() != null ? getMaxFeePerBlobGasRaw().hashCode() : 0);
+        result =
+                31 * result
+                        + (getMaxFeePerBlobGasRaw() != null
+                                ? getMaxFeePerBlobGasRaw().hashCode()
+                                : 0);
         result = 31 * result + (getVersionedHashes() != null ? getVersionedHashes().hashCode() : 0);
         result = 31 * result + (getAccessList() != null ? getAccessList().hashCode() : 0);
         return result;

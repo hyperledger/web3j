@@ -32,8 +32,6 @@ import org.web3j.utils.Numeric;
 
 public class Transaction4844 extends Transaction1559 implements ITransaction {
 
-    private static final BigInteger MIN_BLOB_BASE_FEE = new BigInteger("1");
-    private static final BigInteger BLOB_BASE_FEE_UPDATE_FRACTION = new BigInteger("3338477");
     private final BigInteger maxFeePerBlobGas;
     private final List<Bytes> versionedHashes;
     private final Optional<List<Blob>> blobs;
@@ -307,23 +305,5 @@ public class Transaction4844 extends Transaction1559 implements ITransaction {
     @Override
     public TransactionType getType() {
         return TransactionType.EIP4844;
-    }
-
-    public static BigInteger getMaxFeePerBlobGasEstimate(BigInteger excessBlobGas) {
-        return fakeExponential(
-                excessBlobGas
-        );
-    }
-
-    private static BigInteger fakeExponential(BigInteger numerator) {
-        BigInteger i = BigInteger.ONE;
-        BigInteger output = BigInteger.ZERO;
-        BigInteger numeratorAccum = MIN_BLOB_BASE_FEE.multiply(BLOB_BASE_FEE_UPDATE_FRACTION);
-        while (numeratorAccum.compareTo(BigInteger.ZERO) > 0) {
-            output = output.add(numeratorAccum);
-            numeratorAccum = numeratorAccum.multiply(numerator).divide(BLOB_BASE_FEE_UPDATE_FRACTION.multiply(i));
-            i = i.add(BigInteger.ONE);
-        }
-        return output.divide(BLOB_BASE_FEE_UPDATE_FRACTION);
     }
 }
