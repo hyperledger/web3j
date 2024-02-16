@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
+import org.apache.tuweni.bytes.Bytes;
 
 /**
  * Block object returned by:
@@ -84,6 +85,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String baseFeePerGas;
         private String withdrawalsRoot;
         private List<Withdrawal> withdrawals;
+        private String blobGasUsed;
+        private String excessBlobGas;
 
         public Block() {}
 
@@ -112,7 +115,9 @@ public class EthBlock extends Response<EthBlock.Block> {
                 List<String> sealFields,
                 String baseFeePerGas,
                 String withdrawalsRoot,
-                List<Withdrawal> withdrawals) {
+                List<Withdrawal> withdrawals,
+                String blobGasUsed,
+                String excessBlobGas) {
             this.number = number;
             this.hash = hash;
             this.parentHash = parentHash;
@@ -138,6 +143,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.baseFeePerGas = baseFeePerGas;
             this.withdrawalsRoot = withdrawalsRoot;
             this.withdrawals = withdrawals;
+            this.blobGasUsed = blobGasUsed;
+            this.excessBlobGas = excessBlobGas;
         }
 
         public BigInteger getNumber() {
@@ -377,6 +384,30 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.withdrawals = withdrawals;
         }
 
+        public BigInteger getBlobGasUsed() {
+            return Numeric.decodeQuantity(blobGasUsed);
+        }
+
+        public String getBlobGasUsedRaw() {
+            return blobGasUsed;
+        }
+
+        public void setBlobGasUsed(String blobGasUsed) {
+            this.blobGasUsed = blobGasUsed;
+        }
+
+        public BigInteger getExcessBlobGas() {
+            return Numeric.decodeQuantity(excessBlobGas);
+        }
+
+        public String getExcessBlobGasRaw() {
+            return excessBlobGas;
+        }
+
+        public void setExcessBlobGas(String excessBlobGas) {
+            this.excessBlobGas = excessBlobGas;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -504,6 +535,18 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             }
 
+            if (getBlobGasUsedRaw() != null
+                    ? !getBlobGasUsedRaw().equals(block.getBlobGasUsedRaw())
+                    : block.getBlobGasUsedRaw() != null) {
+                return false;
+            }
+
+            if (getExcessBlobGasRaw() != null
+                    ? !getExcessBlobGasRaw().equals(block.getExcessBlobGasRaw())
+                    : block.getExcessBlobGasRaw() != null) {
+                return false;
+            }
+
             if (getWithdrawalsRoot() != null
                     ? !getWithdrawalsRoot().equals(block.getWithdrawalsRoot())
                     : block.getWithdrawalsRoot() != null) {
@@ -513,6 +556,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             return getWithdrawals() != null
                     ? getWithdrawals().equals(block.getWithdrawals())
                     : block.getWithdrawals() == null;
+
+
         }
 
         @Override
@@ -556,6 +601,8 @@ public class EthBlock extends Response<EthBlock.Block> {
                     31 * result
                             + (getWithdrawalsRoot() != null ? getWithdrawalsRoot().hashCode() : 0);
             result = 31 * result + (getWithdrawals() != null ? getWithdrawals().hashCode() : 0);
+            result = 31 * result + (getBlobGasUsedRaw() != null ? getBlobGasUsedRaw().hashCode() : 0);
+            result = 31 * result + (getExcessBlobGasRaw() != null ? getExcessBlobGasRaw().hashCode() : 0);
             return result;
         }
     }
@@ -702,6 +749,60 @@ public class EthBlock extends Response<EthBlock.Block> {
                     maxFeePerGas,
                     maxPriorityFeePerGas,
                     accessList);
+        }
+
+        public TransactionObject(
+                String hash,
+                String nonce,
+                String blockHash,
+                String blockNumber,
+                String chainId,
+                String transactionIndex,
+                String from,
+                String to,
+                String value,
+                String gasPrice,
+                String gas,
+                String input,
+                String creates,
+                String publicKey,
+                String raw,
+                String r,
+                String s,
+                long v,
+                String yParity,
+                String type,
+                String maxFeePerGas,
+                String maxPriorityFeePerGas,
+                List<AccessListObject> accessList,
+                String maxFeePerBlobGas,
+                List<Bytes> versionedHashes) {
+            super(
+                    hash,
+                    nonce,
+                    blockHash,
+                    blockNumber,
+                    chainId,
+                    transactionIndex,
+                    from,
+                    to,
+                    value,
+                    gas,
+                    gasPrice,
+                    input,
+                    creates,
+                    publicKey,
+                    raw,
+                    r,
+                    s,
+                    v,
+                    yParity,
+                    type,
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                    accessList,
+                    maxFeePerBlobGas,
+                    versionedHashes);
         }
 
         @Override
