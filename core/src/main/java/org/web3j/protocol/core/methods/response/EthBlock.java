@@ -437,10 +437,12 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getBlobGasUsed() {
+            if (blobGasUsed == null) return BigInteger.ZERO;
             return Numeric.decodeQuantity(blobGasUsed);
         }
 
         public String getBlobGasUsedRaw() {
+            if (blobGasUsed == null) return "0";
             return blobGasUsed;
         }
 
@@ -449,10 +451,12 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getExcessBlobGas() {
+            if (excessBlobGas == null) return BigInteger.ZERO;
             return Numeric.decodeQuantity(excessBlobGas);
         }
 
         public String getExcessBlobGasRaw() {
+            if (excessBlobGas == null) return "0";
             return excessBlobGas;
         }
 

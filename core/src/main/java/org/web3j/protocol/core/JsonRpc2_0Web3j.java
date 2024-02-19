@@ -887,8 +887,8 @@ public class JsonRpc2_0Web3j implements Web3j {
                             ethGetBlockByNumber(DefaultBlockParameter.valueOf("latest"), false),
                             EthBlock.class);
             return fakeExponential(ethBlock.getBlock().getExcessBlobGas());
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to get baseFeePerBlobGas value", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get baseFeePerBlobGas value: ", e);
         }
     }
 
