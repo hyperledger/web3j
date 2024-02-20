@@ -519,4 +519,10 @@ public class CoreIT {
                         .send();
         assertNotNull(ethHashRate);
     }
+
+    @Test
+    public void testEthGetBaseFeePerBlobGas() {
+        BigInteger blobFee = web3j.ethGetBaseFeePerBlobGas();
+        assertEquals(BigInteger.ONE, blobFee);
+    }
 }

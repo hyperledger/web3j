@@ -18,7 +18,9 @@ dependencies {
             "org.java-websocket:Java-WebSocket:$javaWebSocketVersion",
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "org.slf4j:slf4j-api:$slf4jVersion",
-            "io.github.adraffy:ens-normalize:$ensAdraffyVersion"
+            "io.github.adraffy:ens-normalize:$ensAdraffyVersion",
+            "io.tmio:tuweni-bytes:$tuweniVersion",
+            "io.tmio:tuweni-units:$tuweniVersion"
     testImplementation project(path: ':crypto', configuration: 'testArtifacts'),
     "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
     "ch.qos.logback:logback-classic:$logbackVersion"

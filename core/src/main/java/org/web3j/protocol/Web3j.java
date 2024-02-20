@@ -15,12 +15,13 @@ package org.web3j.protocol;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.protocol.core.Batcher;
+import org.web3j.protocol.core.BlobFee;
 import org.web3j.protocol.core.Ethereum;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.rx.Web3jRx;
 
 /** JSON-RPC Request object building factory. */
-public interface Web3j extends Ethereum, Web3jRx, Batcher {
+public interface Web3j extends Ethereum, Web3jRx, Batcher, BlobFee {
 
     /**
      * Construct a new Web3j instance.

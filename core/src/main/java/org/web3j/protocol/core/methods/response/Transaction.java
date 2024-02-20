@@ -43,6 +43,8 @@ public class Transaction {
     private String maxFeePerGas;
     private String maxPriorityFeePerGas;
     private List<AccessListObject> accessList;
+    private String maxFeePerBlobGas;
+    private List<String> versionedHashes;
 
     public Transaction() {}
 
@@ -140,6 +142,59 @@ public class Transaction {
         this.maxFeePerGas = maxFeePerGas;
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
         this.accessList = accessList;
+    }
+
+    public Transaction(
+            String hash,
+            String nonce,
+            String blockHash,
+            String blockNumber,
+            String chainId,
+            String transactionIndex,
+            String from,
+            String to,
+            String value,
+            String gas,
+            String gasPrice,
+            String input,
+            String creates,
+            String publicKey,
+            String raw,
+            String r,
+            String s,
+            long v,
+            String yParity,
+            String type,
+            String maxFeePerGas,
+            String maxPriorityFeePerGas,
+            List accessList,
+            String maxFeePerBlobGas,
+            List versionedHashes) {
+        this.hash = hash;
+        this.nonce = nonce;
+        this.blockHash = blockHash;
+        this.blockNumber = blockNumber;
+        this.chainId = chainId;
+        this.transactionIndex = transactionIndex;
+        this.from = from;
+        this.to = to;
+        this.value = value;
+        this.gasPrice = gasPrice;
+        this.gas = gas;
+        this.input = input;
+        this.creates = creates;
+        this.publicKey = publicKey;
+        this.raw = raw;
+        this.r = r;
+        this.s = s;
+        this.v = v;
+        this.yParity = yParity;
+        this.type = type;
+        this.maxFeePerGas = maxFeePerGas;
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        this.accessList = accessList;
+        this.maxFeePerBlobGas = maxFeePerBlobGas;
+        this.versionedHashes = versionedHashes;
     }
 
     public void setChainId(String chainId) {
@@ -382,6 +437,26 @@ public class Transaction {
         this.accessList = accessList;
     }
 
+    public String getMaxFeePerBlobGasRaw() {
+        return maxFeePerBlobGas;
+    }
+
+    public BigInteger getMaxFeePerBlobGas() {
+        return Numeric.decodeQuantity(maxFeePerBlobGas);
+    }
+
+    public void setMaxFeePerBlobGas(String maxFeePerBlobGas) {
+        this.maxFeePerBlobGas = maxFeePerBlobGas;
+    }
+
+    public List<String> getVersionedHashes() {
+        return versionedHashes;
+    }
+
+    public void setVersionedHashes(List<String> versionedHashes) {
+        this.versionedHashes = versionedHashes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -484,6 +559,17 @@ public class Transaction {
                 : that.getMaxPriorityFeePerGasRaw() != null) {
             return false;
         }
+
+        if (getMaxFeePerBlobGasRaw() != null
+                ? !getMaxFeePerBlobGasRaw().equals(that.getMaxFeePerBlobGasRaw())
+                : that.getMaxFeePerBlobGasRaw() != null) {
+            return false;
+        }
+        if (getVersionedHashes() != null
+                ? !getVersionedHashes().equals(that.getVersionedHashes())
+                : that.getVersionedHashes() != null) {
+            return false;
+        }
         if (getAccessList() != null
                 ? !getAccessList().equals(that.getAccessList())
                 : that.getAccessList() != null) {
@@ -524,6 +610,12 @@ public class Transaction {
                         + (getMaxPriorityFeePerGasRaw() != null
                                 ? getMaxPriorityFeePerGasRaw().hashCode()
                                 : 0);
+        result =
+                31 * result
+                        + (getMaxFeePerBlobGasRaw() != null
+                                ? getMaxFeePerBlobGasRaw().hashCode()
+                                : 0);
+        result = 31 * result + (getVersionedHashes() != null ? getVersionedHashes().hashCode() : 0);
         result = 31 * result + (getAccessList() != null ? getAccessList().hashCode() : 0);
         return result;
     }

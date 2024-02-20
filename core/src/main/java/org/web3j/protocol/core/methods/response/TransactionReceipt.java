@@ -37,6 +37,8 @@ public class TransactionReceipt {
     private String revertReason;
     private String type;
     private String effectiveGasPrice;
+    private String blobGasPrice;
+    private String blobGasUsed;
 
     public TransactionReceipt() {}
 
@@ -73,6 +75,45 @@ public class TransactionReceipt {
         this.revertReason = revertReason;
         this.type = type;
         this.effectiveGasPrice = effectiveGasPrice;
+    }
+
+    public TransactionReceipt(
+            String transactionHash,
+            String transactionIndex,
+            String blockHash,
+            String blockNumber,
+            String cumulativeGasUsed,
+            String gasUsed,
+            String contractAddress,
+            String root,
+            String status,
+            String from,
+            String to,
+            List<Log> logs,
+            String logsBloom,
+            String revertReason,
+            String type,
+            String effectiveGasPrice,
+            String blobGasPrice,
+            String blobGasUsed) {
+        this.transactionHash = transactionHash;
+        this.transactionIndex = transactionIndex;
+        this.blockHash = blockHash;
+        this.blockNumber = blockNumber;
+        this.cumulativeGasUsed = cumulativeGasUsed;
+        this.gasUsed = gasUsed;
+        this.contractAddress = contractAddress;
+        this.root = root;
+        this.status = status;
+        this.from = from;
+        this.to = to;
+        this.logs = logs;
+        this.logsBloom = logsBloom;
+        this.revertReason = revertReason;
+        this.type = type;
+        this.effectiveGasPrice = effectiveGasPrice;
+        this.blobGasPrice = blobGasPrice;
+        this.blobGasUsed = blobGasUsed;
     }
 
     public String getTransactionHash() {
@@ -227,6 +268,22 @@ public class TransactionReceipt {
         this.effectiveGasPrice = effectiveGasPrice;
     }
 
+    public String getBlobGasPrice() {
+        return blobGasPrice;
+    }
+
+    public void setBlobGasPrice(String blobGasPrice) {
+        this.blobGasPrice = blobGasPrice;
+    }
+
+    public String getBlobGasUsed() {
+        return blobGasUsed;
+    }
+
+    public void setBlobGasUsed(String blobGasUsed) {
+        this.blobGasUsed = blobGasUsed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -302,6 +359,18 @@ public class TransactionReceipt {
                 : that.getEffectiveGasPrice() != null) {
             return false;
         }
+
+        if (blobGasPrice != null
+                ? !blobGasPrice.equals(that.blobGasPrice)
+                : that.blobGasPrice != null) {
+            return false;
+        }
+
+        if (blobGasUsed != null
+                ? !blobGasUsed.equals(that.blobGasUsed)
+                : that.blobGasUsed != null) {
+            return false;
+        }
         return getRevertReason() != null
                 ? getRevertReason().equals(that.getRevertReason())
                 : that.getRevertReason() == null;
@@ -327,6 +396,8 @@ public class TransactionReceipt {
         result =
                 31 * result
                         + (getEffectiveGasPrice() != null ? getEffectiveGasPrice().hashCode() : 0);
+        result = 31 * result + (blobGasPrice != null ? blobGasPrice.hashCode() : 0);
+        result = 31 * result + (blobGasUsed != null ? blobGasUsed.hashCode() : 0);
         return result;
     }
 
@@ -379,6 +450,12 @@ public class TransactionReceipt {
                 + '\''
                 + ", effectiveGasPrice='"
                 + effectiveGasPrice
+                + '\''
+                + ", blobGasPrice='"
+                + blobGasPrice
+                + '\''
+                + ", blobGasused='"
+                + blobGasUsed
                 + '\''
                 + '}';
     }

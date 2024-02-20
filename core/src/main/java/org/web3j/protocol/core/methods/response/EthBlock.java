@@ -84,8 +84,67 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String baseFeePerGas;
         private String withdrawalsRoot;
         private List<Withdrawal> withdrawals;
+        private String blobGasUsed;
+        private String excessBlobGas;
 
         public Block() {}
+
+        public Block(
+                String number,
+                String hash,
+                String parentHash,
+                String nonce,
+                String sha3Uncles,
+                String logsBloom,
+                String transactionsRoot,
+                String stateRoot,
+                String receiptsRoot,
+                String author,
+                String miner,
+                String mixHash,
+                String difficulty,
+                String totalDifficulty,
+                String extraData,
+                String size,
+                String gasLimit,
+                String gasUsed,
+                String timestamp,
+                List<TransactionResult> transactions,
+                List<String> uncles,
+                List<String> sealFields,
+                String baseFeePerGas,
+                String withdrawalsRoot,
+                List<Withdrawal> withdrawals,
+                String blobGasUsed,
+                String excessBlobGas) {
+            this.number = number;
+            this.hash = hash;
+            this.parentHash = parentHash;
+            this.nonce = nonce;
+            this.sha3Uncles = sha3Uncles;
+            this.logsBloom = logsBloom;
+            this.transactionsRoot = transactionsRoot;
+            this.stateRoot = stateRoot;
+            this.receiptsRoot = receiptsRoot;
+            this.author = author;
+            this.miner = miner;
+            this.mixHash = mixHash;
+            this.difficulty = difficulty;
+            this.totalDifficulty = totalDifficulty;
+            this.extraData = extraData;
+            this.size = size;
+            this.gasLimit = gasLimit;
+            this.gasUsed = gasUsed;
+            this.timestamp = timestamp;
+            this.transactions = transactions;
+            this.uncles = uncles;
+            this.sealFields = sealFields;
+            this.baseFeePerGas = baseFeePerGas;
+            this.withdrawalsRoot = withdrawalsRoot;
+            this.withdrawals = withdrawals;
+            this.blobGasUsed = blobGasUsed;
+            this.excessBlobGas = excessBlobGas;
+        }
 
         public Block(
                 String number,
@@ -377,6 +436,34 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.withdrawals = withdrawals;
         }
 
+        public BigInteger getBlobGasUsed() {
+            if (blobGasUsed == null) return BigInteger.ZERO;
+            return Numeric.decodeQuantity(blobGasUsed);
+        }
+
+        public String getBlobGasUsedRaw() {
+            if (blobGasUsed == null) return "0";
+            return blobGasUsed;
+        }
+
+        public void setBlobGasUsed(String blobGasUsed) {
+            this.blobGasUsed = blobGasUsed;
+        }
+
+        public BigInteger getExcessBlobGas() {
+            if (excessBlobGas == null) return BigInteger.ZERO;
+            return Numeric.decodeQuantity(excessBlobGas);
+        }
+
+        public String getExcessBlobGasRaw() {
+            if (excessBlobGas == null) return "0";
+            return excessBlobGas;
+        }
+
+        public void setExcessBlobGas(String excessBlobGas) {
+            this.excessBlobGas = excessBlobGas;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -504,6 +591,18 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             }
 
+            if (getBlobGasUsedRaw() != null
+                    ? !getBlobGasUsedRaw().equals(block.getBlobGasUsedRaw())
+                    : block.getBlobGasUsedRaw() != null) {
+                return false;
+            }
+
+            if (getExcessBlobGasRaw() != null
+                    ? !getExcessBlobGasRaw().equals(block.getExcessBlobGasRaw())
+                    : block.getExcessBlobGasRaw() != null) {
+                return false;
+            }
+
             if (getWithdrawalsRoot() != null
                     ? !getWithdrawalsRoot().equals(block.getWithdrawalsRoot())
                     : block.getWithdrawalsRoot() != null) {
@@ -556,6 +655,14 @@ public class EthBlock extends Response<EthBlock.Block> {
                     31 * result
                             + (getWithdrawalsRoot() != null ? getWithdrawalsRoot().hashCode() : 0);
             result = 31 * result + (getWithdrawals() != null ? getWithdrawals().hashCode() : 0);
+            result =
+                    31 * result
+                            + (getBlobGasUsedRaw() != null ? getBlobGasUsedRaw().hashCode() : 0);
+            result =
+                    31 * result
+                            + (getExcessBlobGasRaw() != null
+                                    ? getExcessBlobGasRaw().hashCode()
+                                    : 0);
             return result;
         }
     }
@@ -702,6 +809,60 @@ public class EthBlock extends Response<EthBlock.Block> {
                     maxFeePerGas,
                     maxPriorityFeePerGas,
                     accessList);
+        }
+
+        public TransactionObject(
+                String hash,
+                String nonce,
+                String blockHash,
+                String blockNumber,
+                String chainId,
+                String transactionIndex,
+                String from,
+                String to,
+                String value,
+                String gasPrice,
+                String gas,
+                String input,
+                String creates,
+                String publicKey,
+                String raw,
+                String r,
+                String s,
+                long v,
+                String yParity,
+                String type,
+                String maxFeePerGas,
+                String maxPriorityFeePerGas,
+                List<AccessListObject> accessList,
+                String maxFeePerBlobGas,
+                List<String> versionedHashes) {
+            super(
+                    hash,
+                    nonce,
+                    blockHash,
+                    blockNumber,
+                    chainId,
+                    transactionIndex,
+                    from,
+                    to,
+                    value,
+                    gas,
+                    gasPrice,
+                    input,
+                    creates,
+                    publicKey,
+                    raw,
+                    r,
+                    s,
+                    v,
+                    yParity,
+                    type,
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                    accessList,
+                    maxFeePerBlobGas,
+                    versionedHashes);
         }
 
         @Override
