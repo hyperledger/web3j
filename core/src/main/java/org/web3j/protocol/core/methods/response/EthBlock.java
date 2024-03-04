@@ -62,6 +62,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String number;
         private String hash;
         private String parentHash;
+        private String parentBeaconBlockRoot;
         private String nonce;
         private String sha3Uncles;
         private String logsBloom;
@@ -93,6 +94,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 String number,
                 String hash,
                 String parentHash,
+                String parentBeaconBlockRoot,
                 String nonce,
                 String sha3Uncles,
                 String logsBloom,
@@ -120,6 +122,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.number = number;
             this.hash = hash;
             this.parentHash = parentHash;
+            this.parentBeaconBlockRoot = parentBeaconBlockRoot;
             this.nonce = nonce;
             this.sha3Uncles = sha3Uncles;
             this.logsBloom = logsBloom;
@@ -225,6 +228,14 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         public void setParentHash(String parentHash) {
             this.parentHash = parentHash;
+        }
+
+        public String getParentBeaconBlockRoot() {
+            return parentBeaconBlockRoot;
+        }
+
+        public void setParentBeaconBlockRoot(String parentBeaconBlockRoot) {
+            this.parentBeaconBlockRoot = parentBeaconBlockRoot;
         }
 
         public BigInteger getNonce() {
@@ -488,6 +499,11 @@ public class EthBlock extends Response<EthBlock.Block> {
                     : block.getParentHash() != null) {
                 return false;
             }
+            if (getParentBeaconBlockRoot() != null
+                    ? !getParentBeaconBlockRoot().equals(block.getParentBeaconBlockRoot())
+                    : block.getParentBeaconBlockRoot() != null) {
+                return false;
+            }
             if (getNonceRaw() != null
                     ? !getNonceRaw().equals(block.getNonceRaw())
                     : block.getNonceRaw() != null) {
@@ -619,6 +635,11 @@ public class EthBlock extends Response<EthBlock.Block> {
             int result = getNumberRaw() != null ? getNumberRaw().hashCode() : 0;
             result = 31 * result + (getHash() != null ? getHash().hashCode() : 0);
             result = 31 * result + (getParentHash() != null ? getParentHash().hashCode() : 0);
+            result =
+                    31 * result
+                            + (getParentBeaconBlockRoot() != null
+                                    ? getParentBeaconBlockRoot().hashCode()
+                                    : 0);
             result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
             result = 31 * result + (getSha3Uncles() != null ? getSha3Uncles().hashCode() : 0);
             result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);

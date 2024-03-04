@@ -26,7 +26,7 @@ public class EthBlockTest {
                 new EthBlock.Block(
                         null, null, null, null, null, null, null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null, null, null, null, null,
-                        null, null, null);
+                        null, null, null, null);
 
         assertEquals(ethBlock.getSize(), BigInteger.ZERO);
     }
@@ -36,8 +36,8 @@ public class EthBlockTest {
         EthBlock.Block ethBlock =
                 new EthBlock.Block(
                         null, null, null, null, null, null, null, null, null, null, null, null,
-                        null, null, null, "0x3e8", null, null, null, null, null, null, null, null,
-                        null, null, null);
+                        null, null, null, null, "0x3e8", null, null, null, null, null, null, null,
+                        null, null, null, null);
 
         assertEquals(ethBlock.getSize(), BigInteger.valueOf(1000));
     }
