@@ -44,7 +44,7 @@ public class Transaction {
     private String maxPriorityFeePerGas;
     private List<AccessListObject> accessList;
     private String maxFeePerBlobGas;
-    private List<String> versionedHashes;
+    private List<String> blobVersionedHashes;
 
     public Transaction() {}
 
@@ -194,7 +194,7 @@ public class Transaction {
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
         this.accessList = accessList;
         this.maxFeePerBlobGas = maxFeePerBlobGas;
-        this.versionedHashes = versionedHashes;
+        this.blobVersionedHashes = versionedHashes;
     }
 
     public void setChainId(String chainId) {
@@ -449,12 +449,12 @@ public class Transaction {
         this.maxFeePerBlobGas = maxFeePerBlobGas;
     }
 
-    public List<String> getVersionedHashes() {
-        return versionedHashes;
+    public List<String> getBlobVersionedHashes() {
+        return blobVersionedHashes;
     }
 
-    public void setVersionedHashes(List<String> versionedHashes) {
-        this.versionedHashes = versionedHashes;
+    public void setBlobVersionedHashes(List<String> blobVersionedHashes) {
+        this.blobVersionedHashes = blobVersionedHashes;
     }
 
     @Override
@@ -565,9 +565,9 @@ public class Transaction {
                 : that.getMaxFeePerBlobGasRaw() != null) {
             return false;
         }
-        if (getVersionedHashes() != null
-                ? !getVersionedHashes().equals(that.getVersionedHashes())
-                : that.getVersionedHashes() != null) {
+        if (getBlobVersionedHashes() != null
+                ? !getBlobVersionedHashes().equals(that.getBlobVersionedHashes())
+                : that.getBlobVersionedHashes() != null) {
             return false;
         }
         if (getAccessList() != null
@@ -615,7 +615,7 @@ public class Transaction {
                         + (getMaxFeePerBlobGasRaw() != null
                                 ? getMaxFeePerBlobGasRaw().hashCode()
                                 : 0);
-        result = 31 * result + (getVersionedHashes() != null ? getVersionedHashes().hashCode() : 0);
+        result = 31 * result + (getBlobVersionedHashes() != null ? getBlobVersionedHashes().hashCode() : 0);
         result = 31 * result + (getAccessList() != null ? getAccessList().hashCode() : 0);
         return result;
     }

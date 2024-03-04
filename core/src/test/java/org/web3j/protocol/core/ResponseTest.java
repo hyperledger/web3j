@@ -919,7 +919,7 @@ public class ResponseTest extends ResponseTester {
                         + "        \"maxFeePerGas\": \"0x7f110\",\n"
                         + "        \"maxPriorityFeePerGas\": \"0x7f110\",\n"
                         + "        \"maxFeePerBlobGas\": \"0x7f110\",\n"
-                        + "        \"versionedHashes\": [\"0x013343644e9aaa7e8673ba3be38b56bb3dfaa57db923797247e5f2e504b721c3\", \"0x01cad19a7fe88d9e14575394847a4a0026fccf292c4ca30ef047e6d03d3a74bb\"]"
+                        + "        \"blobVersionedHashes\": [\"0x013343644e9aaa7e8673ba3be38b56bb3dfaa57db923797247e5f2e504b721c3\", \"0x01cad19a7fe88d9e14575394847a4a0026fccf292c4ca30ef047e6d03d3a74bb\"]"
                         + "    }], \n"
                         + "    \"uncles\": [\n"
                         + "       \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n"
