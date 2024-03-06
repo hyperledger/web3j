@@ -836,7 +836,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 String maxPriorityFeePerGas,
                 List<AccessListObject> accessList,
                 String maxFeePerBlobGas,
-                List<String> versionedHashes) {
+                List<String> blobVersionedHashes) {
             super(
                     hash,
                     nonce,
@@ -862,7 +862,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                     maxPriorityFeePerGas,
                     accessList,
                     maxFeePerBlobGas,
-                    versionedHashes);
+                    blobVersionedHashes);
         }
 
         @Override
