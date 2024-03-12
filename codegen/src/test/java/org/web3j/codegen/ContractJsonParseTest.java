@@ -89,8 +89,18 @@ public class ContractJsonParseTest {
         Contract mc = parseContractJson(contractBaseDir, "MetaCoin", "MetaCoin");
         assertTrue(mc.getBytecode().contains("__ConvertLib____________________________"));
 
-        String linked = linkBinaryWithReferences(mc.getBytecode(), Collections.singletonList(new org.web3j.tx.Contract.LinkReference("./ConvertLib.sol", "ConvertLib" , Address.DEFAULT)));
+        String linked =
+                linkBinaryWithReferences(
+                        mc.getBytecode(),
+                        Collections.singletonList(
+                                new org.web3j.tx.Contract.LinkReference(
+                                        "./ConvertLib.sol", "ConvertLib", Address.DEFAULT)));
         assertFalse(linked.contains("__ConvertLib____________________________"));
-        assertEquals(mc.getBytecode().replace("__ConvertLib____________________________", Address.DEFAULT.toString().substring(2)), linked);
+        assertEquals(
+                mc.getBytecode()
+                        .replace(
+                                "__ConvertLib____________________________",
+                                Address.DEFAULT.toString().substring(2)),
+                linked);
     }
 }

@@ -501,17 +501,18 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
-    public static String linkBinaryWithReferences(String binary, List<LinkReference> links){
+    public static String linkBinaryWithReferences(String binary, List<LinkReference> links) {
         String replacingBinary = binary;
-        for(LinkReference link: links) {
-            //solc / hardhat convention
+        for (LinkReference link : links) {
+            // solc / hardhat convention
             String libSourceName = link.source + ":" + link.libraryName;
             String placeHolder = "__$" + sha3String(libSourceName).substring(2, 36) + "$__";
             String addressReplacement = cleanHexPrefix(link.address.toString());
             replacingBinary = replacingBinary.replace(placeHolder, addressReplacement);
 
-            //truffle old version
-            String trufflePlaceHolder = "__" + link.libraryName + "_".repeat(40 - link.libraryName.length() - 2);
+            // truffle old version
+            String trufflePlaceHolder =
+                    "__" + link.libraryName + "_".repeat(40 - link.libraryName.length() - 2);
             replacingBinary = replacingBinary.replace(trufflePlaceHolder, addressReplacement);
         }
         return replacingBinary;

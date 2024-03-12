@@ -1460,13 +1460,20 @@ public class SolidityFunctionWrapper extends Generator {
     MethodSpec buildLinkLibraryMethod() {
         MethodSpec.Builder methodBuilder =
                 MethodSpec.methodBuilder("linkLibraries")
-                        .addModifiers(Modifier.PUBLIC,  Modifier.STATIC)
-                        .addParameter(ParameterizedTypeName.get(
-                                ClassName.get(List.class), ClassName.get(Contract.LinkReference.class)), "references")
-                        .addStatement(BINARY + " = " + "linkBinaryWithReferences(" + BINARY + ", references)");
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addParameter(
+                                ParameterizedTypeName.get(
+                                        ClassName.get(List.class),
+                                        ClassName.get(Contract.LinkReference.class)),
+                                "references")
+                        .addStatement(
+                                BINARY
+                                        + " = "
+                                        + "linkBinaryWithReferences("
+                                        + BINARY
+                                        + ", references)");
 
         return methodBuilder.build();
-
     }
 
     private void buildConstantFunction(
