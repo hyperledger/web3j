@@ -37,7 +37,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  */
 @SuppressWarnings("rawtypes")
 public class EventParameters extends Contract {
-    public static final String BINARY = "Bin file was not provided";
+    public static String BINARY = "Bin file was not provided";
 
     public static final String FUNC__CONTRACTNUMBER = "_contractNumber";
 

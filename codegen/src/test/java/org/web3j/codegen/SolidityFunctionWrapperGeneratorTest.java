@@ -218,9 +218,9 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                                         "java",
                                         inputFileName + ".java"),
                                 File.separator));
-        assertEquals(
-                new String(Files.readAllBytes(fileExpected.toPath())).replaceAll("(\r\n|\n)", ""),
-                new String(Files.readAllBytes(fileActual.toPath())).replaceAll("(\r\n|\n)", ""));
+        String s1 = new String(Files.readAllBytes(fileExpected.toPath()));
+        String s2 = new String(Files.readAllBytes(fileActual.toPath()));
+        assertEquals(s1.replaceAll("(\r\n|\n)", ""), s2.replaceAll("(\r\n|\n)", ""));
     }
 
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
