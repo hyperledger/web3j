@@ -17,7 +17,6 @@ public enum ChainId {
     GOERLI(5),
     SEPOLIA(58008);
 
-
     private int id;
 
     ChainId(int id) {
