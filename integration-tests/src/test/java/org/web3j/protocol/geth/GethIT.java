@@ -41,7 +41,7 @@ public class GethIT {
 
     @Test // Method not Implemented.
     public void testWeb3ClientVersion() throws Exception {
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         TxPoolContent content = web3j.txPoolContent().send();
         assertNotNull(content.getResult());
     }
@@ -49,7 +49,7 @@ public class GethIT {
     @Test
     @Disabled("Deprecated. Replaced by Clef's equivalent method - 'account_new'")
     public void testPersonalAccountCreation() throws Exception {
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         Admin admin = Admin.build(new HttpService());
         NewAccountIdentifier accountId = admin.personalNewAccount("web3j-geth-IT").send();
         assertFalse(accountId.getResult().isEmpty());
