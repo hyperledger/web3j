@@ -12,7 +12,6 @@
  */
 package org.web3j.protocol.geth;
 
-import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -42,13 +41,15 @@ public class GethIT {
 
     @Test // Method not Implemented.
     public void testWeb3ClientVersion() throws Exception {
+        Thread.sleep(2000);
         TxPoolContent content = web3j.txPoolContent().send();
         assertNotNull(content.getResult());
     }
 
     @Test
     @Disabled("Deprecated. Replaced by Clef's equivalent method - 'account_new'")
-    public void testPersonalAccountCreation() throws IOException {
+    public void testPersonalAccountCreation() throws Exception {
+        Thread.sleep(2000);
         Admin admin = Admin.build(new HttpService());
         NewAccountIdentifier accountId = admin.personalNewAccount("web3j-geth-IT").send();
         assertFalse(accountId.getResult().isEmpty());
