@@ -69,17 +69,23 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     private void testCodeGeneration(
-            String contractName, String inputFileName, String packageName, String types, boolean generateBothCallAndSend)
+            String contractName,
+            String inputFileName,
+            String packageName,
+            String types,
+            boolean generateBothCallAndSend)
             throws Exception {
 
-        List<String> argList = new ArrayList<>(Arrays.asList(
-                types,
-                ContractJsonParseTest.jsonFileLocation(
-                        contractBaseDir, contractName, inputFileName),
-                "-p",
-                packageName,
-                "-o",
-                tempDirPath));
+        List<String> argList =
+                new ArrayList<>(
+                        Arrays.asList(
+                                types,
+                                ContractJsonParseTest.jsonFileLocation(
+                                        contractBaseDir, contractName, inputFileName),
+                                "-p",
+                                packageName,
+                                "-o",
+                                tempDirPath));
 
         if (generateBothCallAndSend) {
             argList.add("-B");

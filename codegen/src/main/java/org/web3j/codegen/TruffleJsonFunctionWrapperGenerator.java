@@ -58,7 +58,6 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
     public static final String COMMAND_GENERATE = "generate";
     public static final String COMMAND_PREFIX = COMMAND_TRUFFLE + " " + COMMAND_GENERATE;
 
-
     private final String jsonFileLocation;
     private final boolean generateBothCallAndSend;
 
@@ -82,7 +81,10 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             args = tail(args);
         }
         CommandLine cmd = new CommandLine(new PicocliRunner());
-        cmd.parseWithHandlers(new RunLast().useOut(System.out).useAnsi(Help.Ansi.AUTO), RethrowExceptionHandler.HANDLER, args);
+        cmd.parseWithHandlers(
+                new RunLast().useOut(System.out).useAnsi(Help.Ansi.AUTO),
+                RethrowExceptionHandler.HANDLER,
+                args);
     }
 
     @Command(
@@ -128,19 +130,20 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public Void call() throws Exception {
             useJavaNativeTypes = !(useSolidityTypes);
             new TruffleJsonFunctionWrapperGenerator(
-                    jsonFileLocation,
-                    destinationDirLocation,
-                    basePackageName,
-                    useJavaNativeTypes,
-                    generateBothCallAndSend)
+                            jsonFileLocation,
+                            destinationDirLocation,
+                            basePackageName,
+                            useJavaNativeTypes,
+                            generateBothCallAndSend)
                     .generate();
             return null;
         }
     }
 
-    public static class RethrowExceptionHandler implements CommandLine.IExceptionHandler2<List<Object>>{
+    public static class RethrowExceptionHandler
+            implements CommandLine.IExceptionHandler2<List<Object>> {
 
-        public final static RethrowExceptionHandler HANDLER = new RethrowExceptionHandler();
+        public static final RethrowExceptionHandler HANDLER = new RethrowExceptionHandler();
 
         @Override
         public List<Object> handleParseException(ParameterException ex, String[] args) {
@@ -148,7 +151,8 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         }
 
         @Override
-        public List<Object> handleExecutionException(ExecutionException ex, ParseResult parseResult) {
+        public List<Object> handleExecutionException(
+                ExecutionException ex, ParseResult parseResult) {
             throw ex;
         }
     }
@@ -189,7 +193,8 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             } else {
                 addresses = Collections.EMPTY_MAP;
             }
-            new SolidityFunctionWrapper(useJavaNativeTypes, Address.DEFAULT_LENGTH, generateBothCallAndSend)
+            new SolidityFunctionWrapper(
+                            useJavaNativeTypes, Address.DEFAULT_LENGTH, generateBothCallAndSend)
                     .generateJavaFiles(
                             contractName,
                             c.getBytecode(),
