@@ -268,7 +268,6 @@ public class SolidityFunctionWrapper extends Generator {
             classBuilder.addMethod(buildGetDeploymentBinaryMethod());
         }
 
-
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
