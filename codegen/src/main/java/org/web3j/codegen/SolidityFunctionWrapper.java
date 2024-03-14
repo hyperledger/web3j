@@ -670,13 +670,14 @@ public class SolidityFunctionWrapper extends Generator {
                         .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                         .returns(ClassName.get(String.class));
 
-        CodeBlock codeBlock = CodeBlock.builder()
-                .beginControlFlow("if ($L != null)", LIBRARIES_LINKED_BINARY)
-                .addStatement("return $L", LIBRARIES_LINKED_BINARY)
-                .nextControlFlow("else")
-                .addStatement("return $L", BINARY)
-                .endControlFlow()
-                .build();
+        CodeBlock codeBlock =
+                CodeBlock.builder()
+                        .beginControlFlow("if ($L != null)", LIBRARIES_LINKED_BINARY)
+                        .addStatement("return $L", LIBRARIES_LINKED_BINARY)
+                        .nextControlFlow("else")
+                        .addStatement("return $L", BINARY)
+                        .endControlFlow()
+                        .build();
 
         toReturn.addCode(codeBlock);
 
