@@ -37,8 +37,7 @@ public class MethodFilter {
                                         && parametersAreMatching(m)
                                         && !m.getName().toLowerCase().contains("event")
                                         && !m.getName().equals("load")
-                                        && !m.getName().equals("kill")
-                                        && !m.getName().equals("linkLibraries"))
+                                        && !m.getName().equals("kill"))
                 .collect(Collectors.toList());
     }
 

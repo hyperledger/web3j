@@ -39,7 +39,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  */
 @SuppressWarnings("rawtypes")
 public class ArraysInStruct extends Contract {
-    public static String BINARY = "Bin file was not provided";
+    public static final String BINARY = "Bin file was not provided";
 
     public static final String FUNC_CALLFUNCTION = "callFunction";
 
