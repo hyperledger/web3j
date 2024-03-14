@@ -39,6 +39,8 @@ import org.web3j.tx.gas.ContractGasProvider;
 public class EventParameters extends Contract {
     public static final String BINARY = "Bin file was not provided";
 
+    private static String librariesLinkedBinary;
+
     public static final String FUNC__CONTRACTNUMBER = "_contractNumber";
 
     public static final String FUNC__TESTADDRESS = "_testAddress";
@@ -141,6 +143,14 @@ public class EventParameters extends Contract {
 
     public static EventParameters load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         return new EventParameters(contractAddress, web3j, transactionManager, contractGasProvider);
+    }
+
+    private static String getDeploymentBinary() {
+        if (librariesLinkedBinary != null) {
+            return librariesLinkedBinary;
+        } else {
+            return BINARY;
+        }
     }
 
     public static class TestEventEventResponse extends BaseEventResponse {

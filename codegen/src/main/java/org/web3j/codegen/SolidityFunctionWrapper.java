@@ -90,6 +90,7 @@ import org.web3j.utils.Version;
 public class SolidityFunctionWrapper extends Generator {
 
     private static final String BINARY = "BINARY";
+    private static final String LIBRARIES_LINKED_BINARY = "librariesLinkedBinary";
     private static final String WEB3J = "web3j";
     private static final String CREDENTIALS = "credentials";
     private static final String CONTRACT_GAS_PROVIDER = "contractGasProvider";
@@ -265,6 +266,8 @@ public class SolidityFunctionWrapper extends Generator {
             classBuilder.addMethod(buildLinkLibraryMethod());
         }
 
+        classBuilder.addMethod(buildGetDeploymentBinaryMethod());
+
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
@@ -365,7 +368,8 @@ public class SolidityFunctionWrapper extends Generator {
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(javadoc)
                 .superclass(contractClass)
-                .addField(createBinaryDefinition(binary));
+                .addField(createBinaryDefinition(binary))
+                .addField(createLibrariesLinkedBinary());
     }
 
     private String getWeb3jVersion() {
@@ -381,10 +385,16 @@ public class SolidityFunctionWrapper extends Generator {
         return "\n<p>Generated with web3j version " + version + ".\n";
     }
 
+    private FieldSpec createLibrariesLinkedBinary() {
+        return FieldSpec.builder(String.class, LIBRARIES_LINKED_BINARY)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                .build();
+    }
+
     private FieldSpec createBinaryDefinition(String binary) {
         if (binary.length() < 65534) {
             return FieldSpec.builder(String.class, BINARY)
-                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                     .initializer("$S", binary)
                     .build();
         }
@@ -398,7 +408,7 @@ public class SolidityFunctionWrapper extends Generator {
         }
         stringBuilderString.append(".toString()");
         return FieldSpec.builder(String.class, BINARY)
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                 .initializer(CodeBlock.of(stringBuilderString.toString()))
                 .build();
     }
@@ -654,6 +664,25 @@ public class SolidityFunctionWrapper extends Generator {
         return duplicateNames;
     }
 
+    private static MethodSpec buildGetDeploymentBinaryMethod() {
+        MethodSpec.Builder toReturn =
+                MethodSpec.methodBuilder("getDeploymentBinary")
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                        .returns(ClassName.get(String.class));
+
+        CodeBlock codeBlock = CodeBlock.builder()
+                .beginControlFlow("if ($L != null)", LIBRARIES_LINKED_BINARY)
+                .addStatement("return $L", LIBRARIES_LINKED_BINARY)
+                .nextControlFlow("else")
+                .addStatement("return $L", BINARY)
+                .endControlFlow()
+                .build();
+
+        toReturn.addCode(codeBlock);
+
+        return toReturn.build();
+    }
+
     List<MethodSpec> buildDeployMethods(
             String className,
             TypeSpec.Builder classBuilder,
@@ -850,43 +879,39 @@ public class SolidityFunctionWrapper extends Generator {
         if (isPayable && !withGasProvider) {
             methodBuilder.addStatement(
                     "return deployRemoteCall("
-                            + "$L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                            + "$L.class, $L, $L, $L, $L, getDeploymentBinary(), encodedConstructor, $L)",
                     className,
                     WEB3J,
                     authName,
                     GAS_PRICE,
                     GAS_LIMIT,
-                    BINARY,
                     INITIAL_VALUE);
             methodBuilder.addAnnotation(Deprecated.class);
         } else if (isPayable && withGasProvider) {
             methodBuilder.addStatement(
                     "return deployRemoteCall("
-                            + "$L.class, $L, $L, $L, $L, encodedConstructor, $L)",
+                            + "$L.class, $L, $L, $L, getDeploymentBinary(), encodedConstructor, $L)",
                     className,
                     WEB3J,
                     authName,
                     CONTRACT_GAS_PROVIDER,
-                    BINARY,
                     INITIAL_VALUE);
         } else if (!isPayable && !withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, getDeploymentBinary(), encodedConstructor)",
                     className,
                     WEB3J,
                     authName,
                     GAS_PRICE,
-                    GAS_LIMIT,
-                    BINARY);
+                    GAS_LIMIT);
             methodBuilder.addAnnotation(Deprecated.class);
         } else {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, encodedConstructor)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, getDeploymentBinary(), encodedConstructor)",
                     className,
                     WEB3J,
                     authName,
-                    CONTRACT_GAS_PROVIDER,
-                    BINARY);
+                    CONTRACT_GAS_PROVIDER);
         }
 
         return methodBuilder.build();
@@ -900,42 +925,38 @@ public class SolidityFunctionWrapper extends Generator {
             boolean withGasProvider) {
         if (isPayable && !withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\", $L)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, getDeploymentBinary(), \"\", $L)",
                     className,
                     WEB3J,
                     authName,
                     GAS_PRICE,
                     GAS_LIMIT,
-                    BINARY,
                     INITIAL_VALUE);
             methodBuilder.addAnnotation(Deprecated.class);
         } else if (isPayable && withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, \"\", $L)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, getDeploymentBinary(), \"\", $L)",
                     className,
                     WEB3J,
                     authName,
                     CONTRACT_GAS_PROVIDER,
-                    BINARY,
                     INITIAL_VALUE);
         } else if (!isPayable && !withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\")",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, getDeploymentBinary(), \"\")",
                     className,
                     WEB3J,
                     authName,
                     GAS_PRICE,
-                    GAS_LIMIT,
-                    BINARY);
+                    GAS_LIMIT);
             methodBuilder.addAnnotation(Deprecated.class);
         } else {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, \"\")",
+                    "return deployRemoteCall($L.class, $L, $L, $L, getDeploymentBinary(), \"\")",
                     className,
                     WEB3J,
                     authName,
-                    CONTRACT_GAS_PROVIDER,
-                    BINARY);
+                    CONTRACT_GAS_PROVIDER);
         }
 
         return methodBuilder.build();
@@ -1467,7 +1488,7 @@ public class SolidityFunctionWrapper extends Generator {
                                         ClassName.get(Contract.LinkReference.class)),
                                 "references")
                         .addStatement(
-                                BINARY
+                                LIBRARIES_LINKED_BINARY
                                         + " = "
                                         + "linkBinaryWithReferences("
                                         + BINARY

@@ -978,7 +978,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         String expected =
                 "public static void linkLibraries(java.util.List<org.web3j.tx.Contract.LinkReference> references) {\n"
-                        + "  BINARY = linkBinaryWithReferences(BINARY, references);\n"
+                        + "  librariesLinkedBinary = linkBinaryWithReferences(BINARY, references);\n"
                         + "}\n";
 
         assertEquals(methodSpec.toString(), (expected));
