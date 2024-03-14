@@ -1,0 +1,1 @@
+[{"constant":true,"inputs":[{"name":"amount","type":"uint256"},{"name":"conversionRate","type":"uint256"}],"name":"convert","outputs":[{"name":"convertedAmount","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"}]

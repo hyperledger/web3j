@@ -510,6 +510,12 @@ public abstract class Contract extends ManagedTransaction {
             String addressReplacement = cleanHexPrefix(link.address.toString());
             replacingBinary = replacingBinary.replace(placeHolder, addressReplacement);
 
+            // old version solc
+            String linkString = link.source + ":" + link.libraryName;
+            String oldSolcPlaceHolder =
+                    "__" + linkString + "_".repeat(40 - linkString.length() - 2);
+            replacingBinary = replacingBinary.replace(oldSolcPlaceHolder, addressReplacement);
+
             // truffle old version
             String trufflePlaceHolder =
                     "__" + link.libraryName + "_".repeat(40 - link.libraryName.length() - 2);
