@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.web3j.TempFileProvider;
 import org.web3j.utils.Strings;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
 import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
 
