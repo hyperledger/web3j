@@ -20,6 +20,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.tools.*;
 
@@ -204,7 +205,6 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testDeployMethodGenerated() throws Exception {
-        compareJavaFile("MetaCoin", false);
         compareJavaFile("MetaCoin", true);
     }
 
@@ -227,6 +227,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         assertEquals(
                 new String(Files.readAllBytes(fileExpected.toPath())).replaceAll("(\r\n|\n)", ""),
                 new String(Files.readAllBytes(fileActual.toPath())).replaceAll("(\r\n|\n)", ""));
+
+        verifyGeneratedCode(fileActual.getAbsolutePath());
     }
 
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
