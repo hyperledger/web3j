@@ -263,7 +263,6 @@ public class SolidityFunctionWrapper extends Generator {
                 buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, true));
         if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
             classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
-            classBuilder.addField(createLibrariesLinkedBinary());
             classBuilder.addMethod(buildLinkLibraryMethod());
             classBuilder.addMethod(buildGetDeploymentBinaryMethod());
         }
@@ -364,11 +363,16 @@ public class SolidityFunctionWrapper extends Generator {
 
         String javadoc = CODEGEN_WARNING + getWeb3jVersion();
 
-        return TypeSpec.classBuilder(className)
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(javadoc)
                 .superclass(contractClass)
                 .addField(createBinaryDefinition(binary));
+
+        if (!binary.equals(Contract.BIN_NOT_PROVIDED)) {
+            classBuilder.addField(createLibrariesLinkedBinaryField());
+        }
+        return classBuilder;
     }
 
     private String getWeb3jVersion() {
@@ -384,7 +388,7 @@ public class SolidityFunctionWrapper extends Generator {
         return "\n<p>Generated with web3j version " + version + ".\n";
     }
 
-    private FieldSpec createLibrariesLinkedBinary() {
+    private FieldSpec createLibrariesLinkedBinaryField() {
         return FieldSpec.builder(String.class, LIBRARIES_LINKED_BINARY)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .build();
