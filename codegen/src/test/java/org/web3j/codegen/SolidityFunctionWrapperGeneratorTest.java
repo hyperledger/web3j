@@ -143,12 +143,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testStructOnlyInArrayCompareJavaFile() throws Exception {
-        compareJavaFile("OnlyInArrayStruct");
+        compareJavaFile("OnlyInArrayStruct", false);
     }
 
     @Test
     public void testArraysInStructCompareJavaFileTest() throws Exception {
-        compareJavaFile("ArraysInStruct");
+        compareJavaFile("ArraysInStruct", false);
     }
 
     @Test
@@ -199,14 +199,19 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testEventParametersNoNamedCompareJavaFile() throws Exception {
-        compareJavaFile("EventParameters");
+        compareJavaFile("EventParameters", false);
     }
 
-    private void compareJavaFile(String inputFileName) throws Exception {
+    @Test
+    public void testDeployMethodGenerated() throws Exception {
+        compareJavaFile("MetaCoin", true);
+    }
+
+    private void compareJavaFile(String inputFileName, boolean useBin) throws Exception {
         String contract = inputFileName.toLowerCase();
         String packagePath =
                 generateCode(
-                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
+                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, useBin, false, false);
         File fileActual = new File(tempDirPath, packagePath + "/" + inputFileName + ".java");
         File fileExpected =
                 new File(
@@ -221,6 +226,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         assertEquals(
                 new String(Files.readAllBytes(fileExpected.toPath())).replaceAll("(\r\n|\n)", ""),
                 new String(Files.readAllBytes(fileActual.toPath())).replaceAll("(\r\n|\n)", ""));
+
+        verifyGeneratedCode(fileActual.getAbsolutePath());
     }
 
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
