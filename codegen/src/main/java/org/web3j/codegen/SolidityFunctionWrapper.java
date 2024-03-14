@@ -263,10 +263,11 @@ public class SolidityFunctionWrapper extends Generator {
                 buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, true));
         if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
             classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
+            classBuilder.addField(createLibrariesLinkedBinary());
             classBuilder.addMethod(buildLinkLibraryMethod());
+            classBuilder.addMethod(buildGetDeploymentBinaryMethod());
         }
 
-        classBuilder.addMethod(buildGetDeploymentBinaryMethod());
 
         addAddressesSupport(classBuilder, addresses);
 
@@ -368,8 +369,7 @@ public class SolidityFunctionWrapper extends Generator {
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(javadoc)
                 .superclass(contractClass)
-                .addField(createBinaryDefinition(binary))
-                .addField(createLibrariesLinkedBinary());
+                .addField(createBinaryDefinition(binary));
     }
 
     private String getWeb3jVersion() {

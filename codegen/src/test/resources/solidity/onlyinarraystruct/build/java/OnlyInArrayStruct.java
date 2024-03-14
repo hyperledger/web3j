@@ -32,8 +32,6 @@ import org.web3j.tx.gas.ContractGasProvider;
 public class OnlyInArrayStruct extends Contract {
     public static final String BINARY = "Bin file was not provided";
 
-    private static String librariesLinkedBinary;
-
     public static final String FUNC_GETFOO = "getFoo";
 
     public static final String FUNC_SETFOO = "setFoo";
@@ -95,14 +93,6 @@ public class OnlyInArrayStruct extends Contract {
 
     public static OnlyInArrayStruct load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         return new OnlyInArrayStruct(contractAddress, web3j, transactionManager, contractGasProvider);
-    }
-
-    private static String getDeploymentBinary() {
-        if (librariesLinkedBinary != null) {
-            return librariesLinkedBinary;
-        } else {
-            return BINARY;
-        }
     }
 
     public static class Foo extends DynamicStruct {
