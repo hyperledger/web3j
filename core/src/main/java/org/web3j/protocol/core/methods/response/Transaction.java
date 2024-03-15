@@ -615,7 +615,11 @@ public class Transaction {
                         + (getMaxFeePerBlobGasRaw() != null
                                 ? getMaxFeePerBlobGasRaw().hashCode()
                                 : 0);
-        result = 31 * result + (getBlobVersionedHashes() != null ? getBlobVersionedHashes().hashCode() : 0);
+        result =
+                31 * result
+                        + (getBlobVersionedHashes() != null
+                                ? getBlobVersionedHashes().hashCode()
+                                : 0);
         result = 31 * result + (getAccessList() != null ? getAccessList().hashCode() : 0);
         return result;
     }

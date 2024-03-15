@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.11.2]() (Upcoming)
+
+### Bug Fixes
+
+*
+
+### Features
+
+* 
+
+### BREAKING CHANGES
+
+* 
+
+
+# [4.11.1](https://github.com/web3j/web3j/releases/tag/v4.11.1) (2024-03-14)
+
+### Bug Fixes
+
+* fix versionedHashes to blobVersionedHashes [#2009](https://github.com/web3j/web3j/pull/2009)
+* Fix typos [#2010](https://github.com/web3j/web3j/pull/2010)
+
+### Features
+
+* **EIP-4844:** Calculate baseFeePerBlobGas value and other EIP4844 changes [#2006](https://github.com/web3j/web3j/pull/2006)
+* **EIP-4788:** add parentBeaconBlockRoot field [#2007](https://github.com/web3j/web3j/pull/2007)
+* Add function to link binary with reference libraries in wrappers contract deployment [#1988](https://github.com/web3j/web3j/pull/1988)
+* Added files for repo migration [#2011](https://github.com/web3j/web3j/pull/2011)
+
+### BREAKING CHANGES
+
+* NIL
+
+
 # [4.11.0](https://github.com/web3j/web3j/compare/v4.10.3...v4.11.0) (2024-02-14)
 
 ### Bug Fixes
