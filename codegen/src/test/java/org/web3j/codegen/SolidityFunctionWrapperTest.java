@@ -18,11 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -982,5 +978,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "}\n";
 
         assertEquals(methodSpec.toString(), (expected));
+    }
+
+
+    @Test
+    public void testBinaryWithUnlinkedLibraryLengthOver65534() throws Exception {
+        solidityFunctionWrapper.createBinaryDefinition("0x" + "a".repeat(40000) + "__$927c5a12e2f339676f56d42ec1c0537964$__" + "a".repeat(40000));
     }
 }

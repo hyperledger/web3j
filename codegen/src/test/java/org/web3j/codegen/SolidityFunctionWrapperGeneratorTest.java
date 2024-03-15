@@ -96,6 +96,11 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testContractWithLargeBinaryAndUnlinkedLib() throws Exception {
+        testCodeGenerationJvmTypes("largewithunlinkedlib", "largewithunlinkedlib");
+    }
+
+    @Test
     public void testShipIt() throws Exception {
         testCodeGenerationJvmTypes("shipit", "ShipIt");
         testCodeGenerationSolidityTypes("shipit", "ShipIt");

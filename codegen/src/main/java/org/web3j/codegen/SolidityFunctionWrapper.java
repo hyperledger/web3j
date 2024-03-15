@@ -395,7 +395,7 @@ public class SolidityFunctionWrapper extends Generator {
                 .build();
     }
 
-    private FieldSpec createBinaryDefinition(String binary) {
+    FieldSpec createBinaryDefinition(String binary) {
         if (binary.length() < 65534) {
             return FieldSpec.builder(String.class, BINARY)
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
@@ -407,7 +407,7 @@ public class SolidityFunctionWrapper extends Generator {
         StringBuilder stringBuilderString = new StringBuilder().append("new StringBuilder()");
         for (String s : argsArray) {
             stringBuilderString.append(".append(\"");
-            stringBuilderString.append(s);
+            stringBuilderString.append(s.replaceAll("\\$", "\\$\\$")); //escape $ which bytecode may contain
             stringBuilderString.append("\")");
         }
         stringBuilderString.append(".toString()");
