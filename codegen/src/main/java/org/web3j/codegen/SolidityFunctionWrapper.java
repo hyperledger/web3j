@@ -407,7 +407,8 @@ public class SolidityFunctionWrapper extends Generator {
         StringBuilder stringBuilderString = new StringBuilder().append("new StringBuilder()");
         for (String s : argsArray) {
             stringBuilderString.append(".append(\"");
-            stringBuilderString.append(s.replaceAll("\\$", "\\$\\$")); //escape $ which bytecode may contain
+            stringBuilderString.append(
+                    s.replaceAll("\\$", "\\$\\$")); // escape $ which bytecode may contain
             stringBuilderString.append("\")");
         }
         stringBuilderString.append(".toString()");
