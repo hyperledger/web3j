@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.11.2]() (Upcoming)
+
+### Bug Fixes
+
+*
+
+### Features
+
+* 
+
+### BREAKING CHANGES
+
+* 
+
+
 # [4.11.1](https://github.com/web3j/web3j/releases/tag/v4.11.1) (2024-03-14)
 
 ### Bug Fixes
