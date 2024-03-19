@@ -671,7 +671,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static MethodSpec buildGetDeploymentBinaryMethod() {
         MethodSpec.Builder toReturn =
                 MethodSpec.methodBuilder("getDeploymentBinary")
-                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .returns(ClassName.get(String.class));
 
         CodeBlock codeBlock =
