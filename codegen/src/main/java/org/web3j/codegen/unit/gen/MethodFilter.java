@@ -60,11 +60,7 @@ public class MethodFilter {
         extractValidMethods(theContract)
                 .forEach(
                         method -> {
-                            String baseName = method.getName();
-                            int count = methodNameCountMap.getOrDefault(baseName, 0);
-                            methodNameCountMap.put(baseName, count + 1);
-                            String uniqueName = count > 0 ? baseName + count : baseName;
-
+                            String uniqueName = getUniqueName(method, methodNameCountMap);
                             listOfMethodSpecs.add(
                                     new MethodParser(method, theContract, uniqueName)
                                             .getMethodSpec());
@@ -79,15 +75,18 @@ public class MethodFilter {
         extractValidMethods(theContract)
                 .forEach(
                         method -> {
-                            String baseName = method.getName();
-                            int count = functionNameCountMap.getOrDefault(baseName, 0);
-                            functionNameCountMap.put(baseName, count + 1);
-                            String uniqueName = count > 0 ? baseName + count : baseName;
-
+                            String uniqueName = getUniqueName(method, functionNameCountMap);
                             listOfFunSpecs.add(
                                     new FunParser(method, theContract, uniqueName).getFunSpec());
                         });
 
         return listOfFunSpecs;
+    }
+
+    private static String getUniqueName(Method method, Map<String, Integer> nameCountMap) {
+        String baseName = method.getName();
+        int count = nameCountMap.getOrDefault(baseName, 0);
+        nameCountMap.put(baseName, count + 1);
+        return count > 0 ? baseName + count : baseName;
     }
 }

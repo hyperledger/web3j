@@ -31,4 +31,8 @@ contract Greeter is Mortal {
     function greet() public view returns (string) {
         return greeting;
     }
+
+    function greet(string newGreet) public pure returns (string) {
+        return newGreet;
+    }
 }
