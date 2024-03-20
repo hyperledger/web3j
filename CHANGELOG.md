@@ -7,7 +7,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-*
+* Fix contract wrapper generation [#2017](https://github.com/web3j/web3j/pull/2017)
 
 ### Features
 
