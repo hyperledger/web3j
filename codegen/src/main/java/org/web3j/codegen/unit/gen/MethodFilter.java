@@ -15,7 +15,9 @@ package org.web3j.codegen.unit.gen;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.squareup.javapoet.MethodSpec;
@@ -54,21 +56,38 @@ public class MethodFilter {
 
     public static List<MethodSpec> generateMethodSpecsForEachTest(Class theContract) {
         List<MethodSpec> listOfMethodSpecs = new ArrayList<>();
+        Map<String, Integer> methodNameCountMap = new HashMap<>();
         extractValidMethods(theContract)
                 .forEach(
-                        method ->
-                                listOfMethodSpecs.add(
-                                        new MethodParser(method, theContract).getMethodSpec()));
+                        method -> {
+                            String baseName = method.getName();
+                            int count = methodNameCountMap.getOrDefault(baseName, 0);
+                            methodNameCountMap.put(baseName, count + 1);
+                            String uniqueName = count > 0 ? baseName + count : baseName;
+
+                            listOfMethodSpecs.add(
+                                    new MethodParser(method, theContract, uniqueName)
+                                            .getMethodSpec());
+                        });
+
         return listOfMethodSpecs;
     }
 
     public static List<FunSpec> generateFunctionSpecsForEachTest(Class theContract) {
-        List<FunSpec> listOfMethodSpecs = new ArrayList<>();
+        List<FunSpec> listOfFunSpecs = new ArrayList<>();
+        Map<String, Integer> functionNameCountMap = new HashMap<>();
         extractValidMethods(theContract)
                 .forEach(
-                        method ->
-                                listOfMethodSpecs.add(
-                                        new FunParser(method, theContract).getFunSpec()));
-        return listOfMethodSpecs;
+                        method -> {
+                            String baseName = method.getName();
+                            int count = functionNameCountMap.getOrDefault(baseName, 0);
+                            functionNameCountMap.put(baseName, count + 1);
+                            String uniqueName = count > 0 ? baseName + count : baseName;
+
+                            listOfFunSpecs.add(
+                                    new FunParser(method, theContract, uniqueName).getFunSpec());
+                        });
+
+        return listOfFunSpecs;
     }
 }

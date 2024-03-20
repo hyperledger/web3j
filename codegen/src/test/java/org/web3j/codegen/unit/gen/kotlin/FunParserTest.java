@@ -25,7 +25,8 @@ public class FunParserTest extends KotlinTestSetup {
     public void testThatDeployMethodWasGenerated() {
         Optional<Method> deployFun =
                 filteredMethods.stream().filter(m -> m.getName().equals("deploy")).findAny();
-        FunSpec deployFunSpec = new FunParser(deployFun.get(), greeterContractClass).getFunSpec();
+        FunSpec deployFunSpec =
+                new FunParser(deployFun.get(), greeterContractClass, "deploy").getFunSpec();
         assertEquals(
                 deployFunSpec.toString(),
                 "@org.junit.jupiter.api.BeforeAll\n"
@@ -42,7 +43,8 @@ public class FunParserTest extends KotlinTestSetup {
     public void testThatNewGreetingMethodWasGenerated() {
         Optional<Method> deployFun =
                 filteredMethods.stream().filter(m -> m.getName().equals("newGreeting")).findAny();
-        FunSpec deployFunSpec = new FunParser(deployFun.get(), greeterContractClass).getFunSpec();
+        FunSpec deployFunSpec =
+                new FunParser(deployFun.get(), greeterContractClass, "newGreeting").getFunSpec();
         assertEquals(
                 deployFunSpec.toString(),
                 "@org.junit.jupiter.api.Test\n"

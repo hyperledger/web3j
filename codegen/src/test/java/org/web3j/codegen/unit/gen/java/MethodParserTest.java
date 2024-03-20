@@ -27,7 +27,8 @@ public class MethodParserTest extends JavaTestSetup {
         Optional<Method> deployMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("deploy")).findAny();
         MethodSpec deployMethodSpec =
-                new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
+                new MethodParser(deployMethod.get(), greeterContractClass, "deploy")
+                        .getMethodSpec();
         assertEquals(
                 "@org.junit.jupiter.api.BeforeAll\n"
                         + "static void deploy(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
@@ -42,7 +43,8 @@ public class MethodParserTest extends JavaTestSetup {
         Optional<Method> deployMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("newGreeting")).findAny();
         MethodSpec deployMethodSpec =
-                new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
+                new MethodParser(deployMethod.get(), greeterContractClass, "newGreeting")
+                        .getMethodSpec();
         assertEquals(
                 "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar = greeter.newGreeting(\"REPLACE_ME\").send();\n"
                         + "org.junit.jupiter.api.Assertions.assertTrue(transactionReceiptVar.isStatusOK());\n",
