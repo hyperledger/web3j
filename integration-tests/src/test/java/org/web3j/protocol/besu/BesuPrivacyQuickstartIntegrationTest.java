@@ -86,10 +86,10 @@ public class BesuPrivacyQuickstartIntegrationTest {
         rpcNode = Besu.build(new HttpService("http://127.0.0.1:8545"));
 
         int blockNumber = 0;
-        do {
+        for (int i = 0; i < 5 && blockNumber <= 100; i++) {
             TimeUnit.SECONDS.sleep(30);
             blockNumber = rpcNode.ethBlockNumber().send().getBlockNumber().intValue();
-        } while (blockNumber <= 100);
+        }
     }
 
     @AfterAll
@@ -114,11 +114,14 @@ public class BesuPrivacyQuickstartIntegrationTest {
     public void simplePrivateTransactions() throws Exception {
 
         // Build new privacy group using the create API
-        Base64String privacyGroupId;
-        do {
+        Base64String privacyGroupId = null;
+        for (int i = 0; i < 5; i++) {
             privacyGroupId = getPrivacyGroupId();
+            if (privacyGroupId != null) {
+                break;
+            }
             TimeUnit.SECONDS.sleep(30);
-        } while (privacyGroupId == null);
+        }
 
         final BigInteger nonce =
                 nodeCharlie
@@ -140,11 +143,14 @@ public class BesuPrivacyQuickstartIntegrationTest {
                         PrivateTransactionEncoder.signMessage(
                                 rawPrivateTransaction, CHAIN_ID, ALICE));
 
-        EthSendTransaction eeaTransaction;
-        do {
+        EthSendTransaction eeaTransaction = null;
+        for (int i = 0; i < 5; i++) {
             eeaTransaction = nodeAlice.eeaSendRawTransaction(signedTransactionData).send();
+            if (!eeaTransaction.hasError()) {
+                break;
+            }
             TimeUnit.SECONDS.sleep(30);
-        } while (eeaTransaction.hasError());
+        }
 
         final String transactionHash = eeaTransaction.getTransactionHash();
         final PollingPrivateTransactionReceiptProcessor receiptProcessor =
