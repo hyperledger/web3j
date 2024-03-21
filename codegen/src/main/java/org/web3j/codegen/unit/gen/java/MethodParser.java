@@ -36,24 +36,22 @@ import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 public class MethodParser {
     private final Method method;
     private final Class theContract;
-    private final String uniqueMethodName;
 
-    public MethodParser(final Method method, final Class theContract, String uniqueMethodName) {
+    public MethodParser(final Method method, final Class theContract) {
         this.method = method;
         this.theContract = theContract;
-        this.uniqueMethodName = uniqueMethodName;
     }
 
     public MethodSpec getMethodSpec() {
         return methodNeedsInjection()
                 ? new MethodSpecGenerator(
-                                uniqueMethodName,
+                                method.getName(),
                                 BeforeAll.class,
                                 Modifier.STATIC,
                                 defaultParameterSpecsForEachUnitTest(),
                                 generateStatementBody())
                         .generate()
-                : new MethodSpecGenerator(uniqueMethodName, generateStatementBody()).generate();
+                : new MethodSpecGenerator(method.getName(), generateStatementBody()).generate();
     }
 
     private boolean methodNeedsInjection() {

@@ -27,7 +27,6 @@ import org.web3j.crypto.Sign;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.http.HttpService;
@@ -86,10 +85,10 @@ public class BesuPrivacyQuickstartIntegrationTest {
         rpcNode = Besu.build(new HttpService("http://127.0.0.1:8545"));
 
         int blockNumber = 0;
-        for (int i = 0; i < 5 && blockNumber <= 100; i++) {
-            TimeUnit.SECONDS.sleep(30);
+        do {
+            TimeUnit.MINUTES.sleep(1);
             blockNumber = rpcNode.ethBlockNumber().send().getBlockNumber().intValue();
-        }
+        } while (blockNumber <= 100);
     }
 
     @AfterAll
@@ -114,14 +113,14 @@ public class BesuPrivacyQuickstartIntegrationTest {
     public void simplePrivateTransactions() throws Exception {
 
         // Build new privacy group using the create API
-        Base64String privacyGroupId = null;
-        for (int i = 0; i < 5; i++) {
-            privacyGroupId = getPrivacyGroupId();
-            if (privacyGroupId != null) {
-                break;
-            }
-            TimeUnit.SECONDS.sleep(30);
-        }
+        final Base64String privacyGroupId =
+                nodeBob.privCreatePrivacyGroup(
+                                Arrays.asList(
+                                        ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB, ENCLAVE_KEY_CHARLIE),
+                                "AliceBobCharlie",
+                                "AliceBobCharlie group")
+                        .send()
+                        .getPrivacyGroupId();
 
         final BigInteger nonce =
                 nodeCharlie
@@ -143,16 +142,9 @@ public class BesuPrivacyQuickstartIntegrationTest {
                         PrivateTransactionEncoder.signMessage(
                                 rawPrivateTransaction, CHAIN_ID, ALICE));
 
-        EthSendTransaction eeaTransaction = null;
-        for (int i = 0; i < 5; i++) {
-            eeaTransaction = nodeAlice.eeaSendRawTransaction(signedTransactionData).send();
-            if (!eeaTransaction.hasError()) {
-                break;
-            }
-            TimeUnit.SECONDS.sleep(30);
-        }
+        final String transactionHash =
+                nodeAlice.eeaSendRawTransaction(signedTransactionData).send().getTransactionHash();
 
-        final String transactionHash = eeaTransaction.getTransactionHash();
         final PollingPrivateTransactionReceiptProcessor receiptProcessor =
                 new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1 * 1000, 120);
         final PrivateTransactionReceipt receipt =
@@ -310,15 +302,6 @@ public class BesuPrivacyQuickstartIntegrationTest {
 
         tokenAlice.transfer(BOB.getAddress(), BigInteger.TEN).send();
         testBalances(tokenAlice, tokenBob, BigInteger.ZERO, BigInteger.TEN);
-    }
-
-    public Base64String getPrivacyGroupId() throws IOException {
-        return nodeBob.privCreatePrivacyGroup(
-                        Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB, ENCLAVE_KEY_CHARLIE),
-                        "AliceBobCharlie",
-                        "AliceBobCharlie group")
-                .send()
-                .getPrivacyGroupId();
     }
 
     private void testBalances(

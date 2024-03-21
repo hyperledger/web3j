@@ -34,23 +34,21 @@ import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 public class FunParser {
     private final Method method;
     private final Class theContract;
-    private final String uniqueFunctionName;
 
-    public FunParser(final Method method, final Class theContract, String uniqueFunctionName) {
+    public FunParser(final Method method, final Class theContract) {
         this.method = method;
         this.theContract = theContract;
-        this.uniqueFunctionName = uniqueFunctionName;
     }
 
     public FunSpec getFunSpec() {
         return methodNeedsInjection()
                 ? new FunSpecGenerator(
-                                uniqueFunctionName,
+                                method.getName(),
                                 BeforeAll.class,
                                 defaultParameterSpecsForEachUnitTest(),
                                 generateStatementBody())
                         .generate()
-                : new FunSpecGenerator(uniqueFunctionName, generateStatementBody()).generate();
+                : new FunSpecGenerator(method.getName(), generateStatementBody()).generate();
     }
 
     private boolean methodNeedsInjection() {
