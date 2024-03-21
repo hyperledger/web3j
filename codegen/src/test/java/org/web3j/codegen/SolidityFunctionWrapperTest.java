@@ -983,4 +983,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         assertEquals(methodSpec.toString(), (expected));
     }
+
+    @Test
+    public void testBinaryWithUnlinkedLibraryLengthOver65534() throws Exception {
+        solidityFunctionWrapper.createBinaryDefinition(
+                "0x"
+                        + "a".repeat(40000)
+                        + "__$927c5a12e2f339676f56d42ec1c0537964$__"
+                        + "a".repeat(40000));
+    }
 }
