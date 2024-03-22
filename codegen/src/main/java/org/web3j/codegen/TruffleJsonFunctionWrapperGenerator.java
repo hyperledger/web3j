@@ -42,8 +42,15 @@ import org.web3j.utils.Strings;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
-import static picocli.CommandLine.*;
+import static picocli.CommandLine.Command;
+import static picocli.CommandLine.ExecutionException;
+import static picocli.CommandLine.Help;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
+import static picocli.CommandLine.Option;
+import static picocli.CommandLine.ParameterException;
+import static picocli.CommandLine.Parameters;
+import static picocli.CommandLine.ParseResult;
+import static picocli.CommandLine.RunLast;
 
 /**
  * Java wrapper source code generator for Truffle JSON format. Truffle embeds the Solidity ABI
