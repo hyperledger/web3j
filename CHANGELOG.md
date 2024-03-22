@@ -7,7 +7,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
+* Bug fix for large binary with unlink libraries codegen [#2016](https://github.com/web3j/web3j/pull/2016)
 * Fix contract wrapper generation [#2017](https://github.com/web3j/web3j/pull/2017)
+* Fix for test java wrappers with duplicate name [#2020](https://github.com/web3j/web3j/pull/2020)
 
 ### Features
 

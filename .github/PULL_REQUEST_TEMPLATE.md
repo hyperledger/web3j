@@ -7,3 +7,8 @@
 ### Why is it needed?
 *required*
 
+## Checklist
+
+- [ ] I've read the contribution guidelines.
+- [ ] I've added tests (if applicable).
+- [ ] I've added a changelog entry if necessary.
