@@ -13,7 +13,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* 
+* Changelog entry and PR template edited [#2021](https://github.com/web3j/web3j/pull/2021)
 
 ### BREAKING CHANGES
 
