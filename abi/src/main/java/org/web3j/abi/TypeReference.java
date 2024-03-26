@@ -14,10 +14,13 @@ package org.web3j.abi;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.web3j.abi.datatypes.AbiTypes;
+import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
 
@@ -39,8 +42,15 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     private final Type type;
     private final boolean indexed;
 
+    private List<TypeReference<?>> innerTypes;
+
     protected TypeReference() {
         this(false);
+    }
+
+    protected TypeReference(List<TypeReference<?>> innerTypeReferences) {
+        this(false);
+        innerTypes = innerTypeReferences;
     }
 
     protected TypeReference(boolean indexed) {
@@ -61,6 +71,19 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      */
     TypeReference getSubTypeReference() {
         return null;
+    }
+
+    public List<TypeReference<?>> getInnerTypeReferences() {
+        return innerTypes;
+    }
+
+    public List<TypeReference<?>> addInnerTypeReferences(TypeReference<?> typeReference) {
+        if(innerTypes == null) {
+            innerTypes = new ArrayList<>();
+        }
+
+        innerTypes.add(typeReference);
+        return innerTypes;
     }
 
     public int compareTo(TypeReference<T> o) {

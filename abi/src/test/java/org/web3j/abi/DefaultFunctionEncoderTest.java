@@ -14,22 +14,11 @@ package org.web3j.abi;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.DynamicStruct;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.StaticStruct;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Bytes10;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
@@ -68,6 +57,49 @@ public class DefaultFunctionEncoderTest {
                         Arrays.asList(
                                 new AbiV2TestFixture.ArrayStruct(
                                         BigInteger.ONE, Collections.emptyList()))));
+    }
+
+    @Test
+    public void testDynamicStructFix() throws ClassNotFoundException {
+        // Return data from 'testInputAndOutput' function of this contract https://sepolia.etherscan.io/address/0x009C10396226ECFE3E39b3f1AEFa072E37578e30#readContract
+        String returnedData = "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000000b76616c75656265666f72650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000001320000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000063078313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a76616c7565616674657200000000000000000000000000000000000000000000";
+
+        List<TypeReference<?>> MyStruct2Types = new ArrayList<>();
+        List<TypeReference<?>> MyStructTypes = new ArrayList<>();
+        List<TypeReference<?>> MyParamaters = new ArrayList<>();
+
+        MyStruct2Types.add(TypeReference.makeTypeReference("string"));
+        MyStruct2Types.add(TypeReference.makeTypeReference("string"));
+
+        MyStructTypes.add(TypeReference.makeTypeReference("uint256"));
+        MyStructTypes.add(TypeReference.makeTypeReference("string"));
+        MyStructTypes.add(TypeReference.makeTypeReference("string"));
+        MyStructTypes.add(new TypeReference<DynamicStruct>(MyStruct2Types){});
+
+        MyParamaters.add(TypeReference.makeTypeReference("string"));
+        MyParamaters.add(new TypeReference<DynamicStruct>(MyStructTypes){});
+
+        MyParamaters.add(TypeReference.makeTypeReference("string"));
+
+        List<Type> decodedData = FunctionReturnDecoder.decode(returnedData, Utils.convert(MyParamaters));
+
+        assertEquals(decodedData.get(0).getValue(), "valuebefore");
+
+        List<Type> structData = ((DynamicStruct) decodedData.get(1)).getValue();
+
+        assertEquals(structData.get(0).getValue(), BigInteger.valueOf(1));
+        assertEquals(structData.get(1).getValue(), "2");
+        assertEquals(structData.get(2).getValue(), "3");
+
+        List<Type> innerStructData = ((DynamicStruct) structData.get(3)).getValue();
+
+        assertEquals(innerStructData.get(0).getValue(), "1234");
+        assertEquals(innerStructData.get(1).getValue(), "0x1234");
+
+
+        assertEquals(decodedData.get(2).getValue(), "valueafter");
+
+
     }
 
     @Test
