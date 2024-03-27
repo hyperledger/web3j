@@ -3,7 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [4.11.2]() (Upcoming)
+# [4.11.3]() (Upcoming)
+
+### Bug Fixes
+
+* 
+
+### Features
+
+* Bump snapshot version to 4.11.3 [#2024](https://github.com/web3j/web3j/pull/2024)
+
+### BREAKING CHANGES
+
+*
+
+
+# [4.11.2](https://github.com/web3j/web3j/releases/tag/v4.11.2) (2024-03-27)
 
 ### Bug Fixes
 
@@ -14,6 +29,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * Changelog entry and PR template edited [#2021](https://github.com/web3j/web3j/pull/2021)
+* bump snapshot version to 4.11.2  [#2015](https://github.com/web3j/web3j/pull/2015)
+* Enrich generateBothCallAndSend feature in TruffleJsonFunctionWrapperGenerator [#1986](https://github.com/web3j/web3j/pull/1986)
 
 ### BREAKING CHANGES
 
