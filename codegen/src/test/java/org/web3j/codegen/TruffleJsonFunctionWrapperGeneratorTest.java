@@ -14,7 +14,9 @@ package org.web3j.codegen;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,30 +57,41 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
             throws Exception {
 
-        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG, false);
+        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG, true);
     }
 
     @SuppressWarnings("SameParameterValue")
     private void testCodeGenerationSolidtyTypes(String contractName, String inputFileName)
             throws Exception {
 
-        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG, false);
+        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG, true);
     }
 
     private void testCodeGeneration(
-            String contractName, String inputFileName, String packageName, String types)
+            String contractName,
+            String inputFileName,
+            String packageName,
+            String types,
+            boolean generateBothCallAndSend)
             throws Exception {
 
-        TruffleJsonFunctionWrapperGenerator.main(
-                Arrays.asList(
+        List<String> argList =
+                new ArrayList<>(
+                        Arrays.asList(
                                 types,
                                 ContractJsonParseTest.jsonFileLocation(
                                         contractBaseDir, contractName, inputFileName),
                                 "-p",
                                 packageName,
                                 "-o",
-                                tempDirPath)
-                        .toArray(new String[0]));
+                                tempDirPath));
+
+        if (generateBothCallAndSend) {
+            argList.add("-B");
+        }
+        TruffleJsonFunctionWrapperGenerator.main(argList.toArray(new String[0]));
 
         GeneraterTestUtils.verifyGeneratedCode(
                 tempDirPath
