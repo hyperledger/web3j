@@ -1,6 +1,6 @@
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
-apply plugin: "de.marcphilipp.nexus-publish"
+//apply plugin: 'signing'
+//apply plugin: "de.marcphilipp.nexus-publish"
 
 task javadocsJar(type: Jar) {
     archiveClassifier = 'javadoc'
@@ -65,27 +65,27 @@ publishing {
     }
 }
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            username = System.getenv('OSSRH_USERNAME')
-            password = System.getenv('OSSRH_PASSWORD')
-        }
-    }
-}
+//nexusPublishing {
+//    repositories {
+//        sonatype {
+//            username = System.getenv('OSSRH_USERNAME')
+//            password = System.getenv('OSSRH_PASSWORD')
+//        }
+//    }
+//}
 
 
-nexusStaging {
-    username System.getenv('OSSRH_USERNAME')
-    password System.getenv('OSSRH_PASSWORD')
-    packageGroup = rootProject.group
-}
+//nexusStaging {
+//    username System.getenv('OSSRH_USERNAME')
+//    password System.getenv('OSSRH_PASSWORD')
+//    packageGroup = rootProject.group
+//}
 
 
-signing {
-    sign publishing.publications.maven
-    def signingKey = new File("$rootDir/web3j.asc")
-    if (signingKey.exists()) {
-        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
-    }
-}
+//signing {
+//    sign publishing.publications.maven
+//    def signingKey = new File("$rootDir/web3j.asc")
+//    if (signingKey.exists()) {
+//        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
+//    }
+//}
