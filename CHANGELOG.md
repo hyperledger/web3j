@@ -7,7 +7,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* 
+* Fix for test wrappers generation [#2025](https://github.com/web3j/web3j/pull/2025)
 
 ### Features
 
