@@ -61,9 +61,11 @@ public class MethodFilter {
                 .forEach(
                         method -> {
                             String uniqueName = getUniqueName(method, methodNameCountMap);
-                            listOfMethodSpecs.add(
-                                    new MethodParser(method, theContract, uniqueName)
-                                            .getMethodSpec());
+                            if (!uniqueName.startsWith("getDeploymentBinary")) {
+                                listOfMethodSpecs.add(
+                                        new MethodParser(method, theContract, uniqueName)
+                                                .getMethodSpec());
+                            }
                         });
 
         return listOfMethodSpecs;
@@ -76,8 +78,11 @@ public class MethodFilter {
                 .forEach(
                         method -> {
                             String uniqueName = getUniqueName(method, functionNameCountMap);
-                            listOfFunSpecs.add(
-                                    new FunParser(method, theContract, uniqueName).getFunSpec());
+                            if (!uniqueName.startsWith("getDeploymentBinary")) {
+                                listOfFunSpecs.add(
+                                        new FunParser(method, theContract, uniqueName)
+                                                .getFunSpec());
+                            }
                         });
 
         return listOfFunSpecs;

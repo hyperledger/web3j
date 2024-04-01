@@ -78,4 +78,22 @@ public class FunParserTest extends KotlinTestSetup {
                         .anyMatch(methodSpec -> methodSpec.getName().equals("greet1")));
         assertEquals(2, greetFunSpecs.size());
     }
+
+    @Test
+    public void testGetDeploymentBinaryMethodNotGenerated() {
+        List<FunSpec> allMethodSpecs =
+                MethodFilter.generateFunctionSpecsForEachTest(greeterContractClass);
+
+        // Filter all FunSpecs for those related to "getDeploymentBinary" method
+        List<FunSpec> getDeploymentBinaryFunSpecs =
+                allMethodSpecs.stream()
+                        .filter(funSpec -> funSpec.getName().startsWith("getDeploymentBinary"))
+                        .collect(Collectors.toList());
+
+        // Ensure no MethodSpecs were generated for getDeploymentBinary method
+        assertEquals(
+                0,
+                getDeploymentBinaryFunSpecs.size(),
+                "MethodSpec list should not contain getDeploymentBinary function");
+    }
 }
