@@ -13,6 +13,7 @@
 package org.web3j.codegen.unit.gen;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class MethodFilter {
                 .forEach(
                         method -> {
                             String uniqueName = getUniqueName(method, methodNameCountMap);
-                            if (!uniqueName.startsWith("getDeploymentBinary")) {
+                            if (!Modifier.isPrivate(method.getModifiers())) {
                                 listOfMethodSpecs.add(
                                         new MethodParser(method, theContract, uniqueName)
                                                 .getMethodSpec());
@@ -78,7 +79,7 @@ public class MethodFilter {
                 .forEach(
                         method -> {
                             String uniqueName = getUniqueName(method, functionNameCountMap);
-                            if (!uniqueName.startsWith("getDeploymentBinary")) {
+                            if (!Modifier.isPrivate(method.getModifiers())) {
                                 listOfFunSpecs.add(
                                         new FunParser(method, theContract, uniqueName)
                                                 .getFunSpec());
