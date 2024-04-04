@@ -166,7 +166,7 @@ public class MetaCoin extends Contract {
         librariesLinkedBinary = linkBinaryWithReferences(BINARY, references);
     }
 
-    public static String getDeploymentBinary() {
+    private static String getDeploymentBinary() {
         if (librariesLinkedBinary != null) {
             return librariesLinkedBinary;
         } else {

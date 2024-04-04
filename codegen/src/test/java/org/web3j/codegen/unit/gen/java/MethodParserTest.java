@@ -73,4 +73,22 @@ public class MethodParserTest extends JavaTestSetup {
                 greetMethodSpecs.stream().anyMatch(methodSpec -> methodSpec.name.equals("greet1")));
         assertEquals(2, greetMethodSpecs.size());
     }
+
+    @Test
+    public void testGetDeploymentBinaryMethodNotGenerated() {
+        List<MethodSpec> allMethodSpecs =
+                MethodFilter.generateMethodSpecsForEachTest(greeterContractClass);
+
+        // Filter all MethodSpecs for those related to "getDeploymentBinary" method
+        List<MethodSpec> getDeploymentBinaryMethodSpecs =
+                allMethodSpecs.stream()
+                        .filter(methodSpec -> methodSpec.name.startsWith("getDeploymentBinary"))
+                        .collect(Collectors.toList());
+
+        // Ensure no MethodSpecs were generated for getDeploymentBinary method
+        assertEquals(
+                0,
+                getDeploymentBinaryMethodSpecs.size(),
+                "MethodSpec list should not contain getDeploymentBinary method");
+    }
 }
