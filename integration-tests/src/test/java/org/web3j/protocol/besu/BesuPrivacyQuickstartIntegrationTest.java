@@ -201,6 +201,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
 
     @Test
     public void legacyContract() throws Exception {
+        
         TransactionReceiptProcessor transactionReceiptProcessor =
                 new PollingPrivateTransactionReceiptProcessor(
                         nodeAlice, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
