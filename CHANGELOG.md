@@ -8,6 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * Fix for test wrappers generation [#2025](https://github.com/web3j/web3j/pull/2025)
+* Fix Snapshot release secrets [#2031](https://github.com/hyperledger/web3j/pull/2031)
 
 ### Features
 
