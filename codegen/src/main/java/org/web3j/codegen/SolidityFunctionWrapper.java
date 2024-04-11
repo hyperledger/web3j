@@ -120,7 +120,7 @@ public class SolidityFunctionWrapper extends Generator {
                     + "or the "
                     + SolidityFunctionWrapperGenerator.class.getName()
                     + " in the \n"
-                    + "<a href=\"https://github.com/web3j/web3j/tree/master/codegen\">"
+                    + "<a href=\"https://github.com/web3j/web3j/tree/main/codegen\">"
                     + "codegen module</a> to update.\n";
 
     private final boolean useNativeJavaTypes;

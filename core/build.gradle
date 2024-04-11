@@ -60,7 +60,7 @@ gitPublish {
     }
 
     // branch will be created if it doesn't exist
-    branch = 'master'
+    branch = 'main'
 
     def coreDocs = files("${buildDir.path}/docs/javadoc/")
 

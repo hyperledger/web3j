@@ -7,7 +7,7 @@ import org.web3j.abi.datatypes.Uint;
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
  * <p>Please use org.web3j.codegen.AbiTypesGenerator in the 
- * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
+ * <a href="https://github.com/web3j/web3j/tree/main/codegen">codegen module</a> to update.
  */
 public class Uint120 extends Uint {
     public static final Uint120 DEFAULT = new Uint120(BigInteger.ZERO);
