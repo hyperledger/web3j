@@ -83,7 +83,8 @@ nexusStaging {
 
 signing {
     sign publishing.publications.maven
-    def gpgSecretKey = System.getenv('OSSRH_GPG_SECRET_KEY')
-    def password = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD')
-    useInMemoryPgpKeys(gpgSecretKey, password)
+    def signingKey = new File("$rootDir/web3j.asc")
+    if (signingKey.exists()) {
+        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
+    }
 }
