@@ -18,7 +18,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### BREAKING CHANGES
 
-*
+* Rename default master branch to main. [#2029](https://github.com/hyperledger/web3j/pull/2029)
 
 
 # [4.11.2](https://github.com/web3j/web3j/releases/tag/v4.11.2) (2024-03-27)
