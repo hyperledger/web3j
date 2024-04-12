@@ -50,7 +50,5 @@ docs/build
 **/.settings
 **/bin
 
-web3j.asc
-
 # Besu-dev-quickstart logs
 integration-tests/src/test/resources/quorum-test-network/logs
