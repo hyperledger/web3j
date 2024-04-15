@@ -48,9 +48,9 @@ publishing {
                         slug = project.rootProjectOverride
                     }
 
-                    url = "https://github.com/web3j/$slug"
-                    connection = "scm:https://github.com/web3j/${slug}.git"
-                    developerConnection = "scm:git://github.com/web3j/${slug}.git"
+                    url = "https://github.com/hyperledger/$slug"
+                    connection = "scm:https://github.com/hyperledger/${slug}.git"
+                    developerConnection = "scm:git://github.com/hyperledger/${slug}.git"
                 }
 
                 developers {
@@ -84,8 +84,7 @@ nexusStaging {
 
 signing {
     sign publishing.publications.maven
-    def signingKey = new File("$rootDir/web3j.asc")
-    if (signingKey.exists()) {
-        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
-    }
+    def gpgSecretKey = System.getenv('OSSRH_GPG_SECRET_KEY')
+    def password = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD')
+    useInMemoryPgpKeys(gpgSecretKey, password)
 }
