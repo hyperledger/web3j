@@ -1,9 +1,2 @@
 
 description 'Simple Java tuples library'
-
-signing {
-    sign publishing.publications.maven
-    def gpgSecretKey = System.getenv('OSSRH_GPG_SECRET_KEY')
-    def password = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD')
-    useInMemoryPgpKeys(gpgSecretKey, password)
-}

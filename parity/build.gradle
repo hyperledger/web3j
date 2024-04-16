@@ -6,10 +6,3 @@ dependencies {
     testCompile project(path: ':core', configuration: 'testArtifacts'),
     "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
 }
-
-signing {
-    sign publishing.publications.maven
-    def gpgSecretKey = System.getenv('OSSRH_GPG_SECRET_KEY')
-    def password = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD')
-    useInMemoryPgpKeys(gpgSecretKey, password)
-}
