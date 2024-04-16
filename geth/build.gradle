@@ -2,6 +2,6 @@
 description 'Geth JSON-RPC API'
 
 dependencies {
-    compile project(':core')
-    testCompile project(path: ':core', configuration: 'testArtifacts')
+    implementation project(':core')
+    testImplementation project(path: ':core', configuration: 'testArtifacts')
 }

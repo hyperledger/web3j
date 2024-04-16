@@ -69,8 +69,8 @@ allprojects {
     }
 
     dependencies {
-        testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
-        testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
+        testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
+        testImplementation "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
 
         configurations.all {
             resolutionStrategy {

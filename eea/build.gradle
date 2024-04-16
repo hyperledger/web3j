@@ -1,7 +1,10 @@
+plugins {
+    id 'java-library'
+}
 
 description 'EEA JSON-RPC API'
 
 dependencies {
-    compile project(':core')
-    testCompile project(path: ':core', configuration: 'testArtifacts')
+    api project(':core')
+    testImplementation project(path: ':core', configuration: 'testArtifacts')
 }

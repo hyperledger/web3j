@@ -1,12 +1,12 @@
 description 'web3j integration tests'
 
 dependencies {
-    compile project(':core'),
+    implementation project(':core'),
             project(':besu'),
             project(':parity'),
             project(':geth'),
             project(':codegen')
-    testCompile "ch.qos.logback:logback-core:$logbackVersion",
+    testImplementation "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion",
             "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion",
             "org.web3j:web3j-unit:4.8.3"
