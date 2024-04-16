@@ -1,7 +1,9 @@
-
+plugins {
+    id 'java-library'
+}
 description 'Besu JSON-RPC API'
 
 dependencies {
-    compile project(':eea')
-    testCompile project(path: ':core', configuration: 'testArtifacts')
+    api project(':eea')
+    testImplementation project(path: ':core', configuration: 'testArtifacts')
 }

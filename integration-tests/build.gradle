@@ -18,7 +18,7 @@ ext {
 def withoutAbi = { exclude group: 'org.web3j', module: 'abi' }
 
 dependencies {
-    testCompile project(':core'),
+    implementation project(':core'),
             project(':besu'),
             project(':parity'),
             project(':geth'),
