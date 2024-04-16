@@ -2,3 +2,10 @@
 description 'Minimal set of web3j utility classes'
 
 dependencies { compile "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion" }
+
+signing {
+    sign publishing.publications.maven
+    def gpgSecretKey = System.getenv('OSSRH_GPG_SECRET_KEY')
+    def password = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD')
+    useInMemoryPgpKeys(gpgSecretKey, password)
+}

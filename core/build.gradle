@@ -55,7 +55,7 @@ gitPublish {
     }
 
     // branch will be created if it doesn't exist
-    branch = 'master'
+    branch = 'main'
 
     def coreDocs = files("${buildDir.path}/docs/javadoc/")
 
@@ -78,3 +78,10 @@ classes { dependsOn createProperties }
 configurations { testArtifacts.extendsFrom testRuntime }
 
 artifacts { testArtifacts testsJar }
+
+signing {
+    sign publishing.publications.maven
+    def gpgSecretKey = System.getenv('OSSRH_GPG_SECRET_KEY')
+    def password = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD')
+    useInMemoryPgpKeys(gpgSecretKey, password)
+}

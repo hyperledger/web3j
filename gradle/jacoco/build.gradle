@@ -6,7 +6,9 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
     getClassDirectories().from(subprojects.sourceSets.main.output)
     getExecutionData().from(subprojects.jacocoTestReport.executionData)
-    reports { xml.enabled = true }
+    reports {
+        xml.enabled true
+    }
 
     doFirst {
         getExecutionData().from(executionData.findAll { it.exists() })
@@ -26,6 +28,6 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 }
 
 jacoco {
-    toolVersion = "0.8.4"
+    toolVersion = "0.8.10"
 }
 

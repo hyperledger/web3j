@@ -37,3 +37,10 @@ file("src/test/resources/solidity").listFiles().each { File file ->
         test.dependsOn generateTask
     }
 }
+
+signing {
+    sign publishing.publications.maven
+    def gpgSecretKey = System.getenv('OSSRH_GPG_SECRET_KEY')
+    def password = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD')
+    useInMemoryPgpKeys(gpgSecretKey, password)
+}
