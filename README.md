@@ -21,6 +21,14 @@ integration code for the platform.
 The [Java and the Blockchain](https://www.youtube.com/watch?v=ea3miXs_P6Y) talk provides
 an overview of blockchain, Ethereum and Web3j.
 
+NEW! Get involved!
+--------
+Since Web3J moved under Hyperledger we started to do Web3J Contributors calls every 2 weeks!
+Subscribe to our community page and to see check our call schedule.
+Your contribution matters!
+[Community Link](https://lists.hyperledger.org/g/web3j) 
+[Calendar Invite](https://lists.hyperledger.org/g/web3j/ics/invite.ics?repeatid=57401)
+
 Features
 --------
 
