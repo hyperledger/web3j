@@ -1,3 +1,12 @@
+NEW! Get involved!
+--------
+Since Web3J moved under Hyperledger we started to do Web3J Contributors calls every 2 weeks!
+Subscribe to our community page and to see check our call schedule.
+Your contribution matters!
+- [Community Link](https://lists.hyperledger.org/g/web3j) - Check our last updates!
+- [Calendar Invite](https://lists.hyperledger.org/g/web3j/ics/invite.ics?repeatid=57401) - Add the contributor call to your calendar!
+
+
 ## How to contribute to web3j
 
 Thank you for reading this! If you'd like to report a bug or join in the buidl-ing of web3j, then here are some notes on how to do that.
