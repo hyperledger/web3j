@@ -103,7 +103,7 @@ public class TypeEncoder {
         if (parameter instanceof Utf8String) {
             return removePadding(encode(parameter), parameter);
         } else if (parameter instanceof DynamicBytes) {
-            return encode(parameter).substring(64);
+            return Numeric.toHexStringNoPrefix(((DynamicBytes) parameter).getValue());
         } else if (parameter instanceof DynamicArray) {
             return arrayEncodePacked((DynamicArray) parameter);
         } else if (parameter instanceof StaticArray) {

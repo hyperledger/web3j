@@ -33,6 +33,7 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes10;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -151,6 +152,19 @@ public class DefaultFunctionEncoderTest {
                                 new Address("0x663e27AdC18d862dA9A82f060310621D379e469a"),
                                 new Uint256(BigInteger.TEN),
                                 new Bytes10("1234567890".getBytes()))));
+        assertEquals(
+                "0000004501000102030405",
+                FunctionEncoder.encodeConstructorPacked(
+                        Arrays.asList(
+                                new Uint32(BigInteger.valueOf(69)),
+                                new Bool(true),
+                                new DynamicBytes((new byte[]{0, 1, 2, 3, 4, 5})))));
+        assertEquals(
+                "12000102030405",
+                FunctionEncoder.encodeConstructorPacked(
+                        Arrays.asList(
+                                new DynamicBytes(Numeric.hexStringToByteArray("0x12")),
+                                new DynamicBytes((new byte[]{0, 1, 2, 3, 4, 5})))));
     }
 
     @Test
