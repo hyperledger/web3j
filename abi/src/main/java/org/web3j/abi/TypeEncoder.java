@@ -101,8 +101,10 @@ public class TypeEncoder {
      */
     public static String encodePacked(Type parameter) {
         if (parameter instanceof Utf8String) {
-            return removePadding(encode(parameter), parameter);
+            //removePadding can also be used, but is not necessary
+            return Numeric.toHexStringNoPrefix(((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8));
         } else if (parameter instanceof DynamicBytes) {
+            //removePadding can also be used, but is not necessary
             return Numeric.toHexStringNoPrefix(((DynamicBytes) parameter).getValue());
         } else if (parameter instanceof DynamicArray) {
             return arrayEncodePacked((DynamicArray) parameter);
@@ -140,6 +142,9 @@ public class TypeEncoder {
             int length =
                     ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
             return encodedValue.substring(64, 64 + length * 2);
+        }
+        if (parameter instanceof DynamicBytes) {
+            return encodedValue.substring(64, 64 + ((DynamicBytes) parameter).getValue().length * 2);
         } else {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
