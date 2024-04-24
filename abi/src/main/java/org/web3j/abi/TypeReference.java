@@ -64,7 +64,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     }
 
     public int compareTo(TypeReference<T> o) {
-        // taken from the blog post comments - this results in an errror if the
+        // taken from the blog post comments - this results in an error if the
         // type parameter is left out.
         return 0;
     }
