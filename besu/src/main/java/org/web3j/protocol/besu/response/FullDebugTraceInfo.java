@@ -56,7 +56,7 @@ public class FullDebugTraceInfo {
         return returnValue;
     }
 
-    public void serReturnValue() {
+    public void setReturnValue() {
         this.returnValue = returnValue;
     }
 
