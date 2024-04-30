@@ -905,17 +905,22 @@ class TypeEncoderPackedTest {
     public void testDynamicBytesEncodePacked() {
         DynamicBytes dynamicBytes = new DynamicBytes(new byte[] {0, 1, 2, 3, 4, 5});
         assertEquals(
-                "0001020304050000000000000000000000000000000000000000000000000000",
+                "000102030405",
                 TypeEncoder.encodePacked(dynamicBytes));
 
-        DynamicBytes empty = new DynamicBytes(new byte[] {0});
+        DynamicBytes zero = new DynamicBytes(new byte[] {0});
         assertEquals(
-                "0000000000000000000000000000000000000000000000000000000000000000",
+                "00",
+                TypeEncoder.encodePacked(zero));
+
+        DynamicBytes empty = new DynamicBytes(new byte[] {});
+        assertEquals(
+                "",
                 TypeEncoder.encodePacked(empty));
 
         DynamicBytes dave = new DynamicBytes("dave".getBytes());
         assertEquals(
-                "6461766500000000000000000000000000000000000000000000000000000000",
+                "64617665",
                 TypeEncoder.encodePacked(dave));
 
         DynamicBytes loremIpsum =
@@ -942,7 +947,7 @@ class TypeEncoderPackedTest {
                         + "756c6c612070617269617475722e204578636570746575722073696e74206f63"
                         + "63616563617420637570696461746174206e6f6e2070726f6964656e742c2073"
                         + "756e7420696e2063756c706120717569206f666669636961206465736572756e"
-                        + "74206d6f6c6c697420616e696d20696420657374206c61626f72756d2e000000"),
+                        + "74206d6f6c6c697420616e696d20696420657374206c61626f72756d2e"),
                 TypeEncoder.encodePacked(loremIpsum));
     }
 
