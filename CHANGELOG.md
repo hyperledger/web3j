@@ -11,8 +11,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Fix Snapshot release secrets [#2031](https://github.com/hyperledger/web3j/pull/2031)
 * Fix Sign method [#2033](https://github.com/hyperledger/web3j/pull/2033)
 * Revert 2031 and 2033 [#2034](https://github.com/hyperledger/web3j/pull/2034)
-* Web3j release fix [2037](https://github.com/hyperledger/web3j/pull/2037)
+* Web3j release fix [#2037](https://github.com/hyperledger/web3j/pull/2037)
 * Fix encodePacked DynamicBytes [2042](https://github.com/hyperledger/web3j/pull/2042)
+* Repo owner changed [#2048](https://github.com/hyperledger/web3j/pull/2048)
 
 ### Features
 
