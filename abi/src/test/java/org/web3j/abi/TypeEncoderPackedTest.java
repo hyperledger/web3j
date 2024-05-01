@@ -904,24 +904,16 @@ class TypeEncoderPackedTest {
     @Test
     public void testDynamicBytesEncodePacked() {
         DynamicBytes dynamicBytes = new DynamicBytes(new byte[] {0, 1, 2, 3, 4, 5});
-        assertEquals(
-                "000102030405",
-                TypeEncoder.encodePacked(dynamicBytes));
+        assertEquals("000102030405", TypeEncoder.encodePacked(dynamicBytes));
 
         DynamicBytes zero = new DynamicBytes(new byte[] {0});
-        assertEquals(
-                "00",
-                TypeEncoder.encodePacked(zero));
+        assertEquals("00", TypeEncoder.encodePacked(zero));
 
         DynamicBytes empty = new DynamicBytes(new byte[] {});
-        assertEquals(
-                "",
-                TypeEncoder.encodePacked(empty));
+        assertEquals("", TypeEncoder.encodePacked(empty));
 
         DynamicBytes dave = new DynamicBytes("dave".getBytes());
-        assertEquals(
-                "64617665",
-                TypeEncoder.encodePacked(dave));
+        assertEquals("64617665", TypeEncoder.encodePacked(dave));
 
         DynamicBytes loremIpsum =
                 new DynamicBytes(
