@@ -158,13 +158,13 @@ public class DefaultFunctionEncoderTest {
                         Arrays.asList(
                                 new Uint32(BigInteger.valueOf(69)),
                                 new Bool(true),
-                                new DynamicBytes((new byte[]{0, 1, 2, 3, 4, 5})))));
+                                new DynamicBytes((new byte[] {0, 1, 2, 3, 4, 5})))));
         assertEquals(
                 "12000102030405",
                 FunctionEncoder.encodeConstructorPacked(
                         Arrays.asList(
                                 new DynamicBytes(Numeric.hexStringToByteArray("0x12")),
-                                new DynamicBytes((new byte[]{0, 1, 2, 3, 4, 5})))));
+                                new DynamicBytes((new byte[] {0, 1, 2, 3, 4, 5})))));
     }
 
     @Test
