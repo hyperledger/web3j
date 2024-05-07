@@ -1,5 +1,5 @@
 
-apply plugin: 'com.diffplug.gradle.spotless'
+apply plugin: 'com.diffplug.spotless'
 apply plugin: "de.undercouch.download"
 
 task downloadJavaLicense(type: Download) {
@@ -39,7 +39,7 @@ spotless {
             exclude '**/.gradle/**'
             exclude '**/build/install/**'
         }
-        ktlint('0.31.0')
+        ktlint('0.47.0')
         trimTrailingWhitespace()
         endWithNewline()
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
