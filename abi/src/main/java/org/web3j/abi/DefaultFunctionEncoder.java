@@ -99,7 +99,7 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
                             ((StaticArray) type).getComponentType())) {
                 count++;
             } else if (type instanceof StaticArray) {
-                count += ((StaticArray) type).getValue().size();
+                count += getLength(((StaticArray) type).getValue());
             } else {
                 count++;
             }
