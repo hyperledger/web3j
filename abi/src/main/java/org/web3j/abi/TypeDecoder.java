@@ -71,14 +71,20 @@ public class TypeDecoder {
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
     public static Type instantiateType(String solidityType, Object value)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException,
-                    IllegalAccessException, ClassNotFoundException {
+            throws InvocationTargetException,
+                    NoSuchMethodException,
+                    InstantiationException,
+                    IllegalAccessException,
+                    ClassNotFoundException {
         return instantiateType(makeTypeReference(solidityType), value);
     }
 
     public static Type instantiateType(TypeReference ref, Object value)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-                    InstantiationException, ClassNotFoundException {
+            throws NoSuchMethodException,
+                    IllegalAccessException,
+                    InvocationTargetException,
+                    InstantiationException,
+                    ClassNotFoundException {
         Class rc = ref.getClassType();
         if (Array.class.isAssignableFrom(rc)) {
             return instantiateArrayType(ref, value);
@@ -183,8 +189,11 @@ public class TypeDecoder {
     }
 
     static Type instantiateArrayType(TypeReference ref, Object value)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-                    InstantiationException, ClassNotFoundException {
+            throws NoSuchMethodException,
+                    IllegalAccessException,
+                    InvocationTargetException,
+                    InstantiationException,
+                    ClassNotFoundException {
         List values;
         if (value instanceof List) {
             values = (List) value;
@@ -218,8 +227,11 @@ public class TypeDecoder {
     }
 
     static Type instantiateAtomicType(Class<?> referenceClass, Object value)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-                    InstantiationException, ClassNotFoundException {
+            throws NoSuchMethodException,
+                    IllegalAccessException,
+                    InvocationTargetException,
+                    InstantiationException,
+                    ClassNotFoundException {
         Object constructorArg = null;
         if (NumericType.class.isAssignableFrom(referenceClass)) {
             constructorArg = asBigInteger(value);

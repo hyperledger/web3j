@@ -36,7 +36,9 @@ public class MethodParserTest extends JavaTestSetup {
                         .getMethodSpec();
         assertEquals(
                 "@org.junit.jupiter.api.BeforeAll\n"
-                        + "static void deploy(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
+                        + "static void deploy(org.web3j.protocol.Web3j web3j,\n"
+                        + "    org.web3j.tx.TransactionManager transactionManager,\n"
+                        + "    org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
                         + "  greeter = org.web3j.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send();\n"
                         + "}\n",
                 deployMethodSpec.toString());

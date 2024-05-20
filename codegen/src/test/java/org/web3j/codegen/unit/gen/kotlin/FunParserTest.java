@@ -35,10 +35,10 @@ public class FunParserTest extends KotlinTestSetup {
         assertEquals(
                 deployFunSpec.toString(),
                 "@org.junit.jupiter.api.BeforeAll\n"
-                        + "fun deploy(\n"
+                        + "public fun deploy(\n"
                         + "  web3j: org.web3j.protocol.Web3j,\n"
                         + "  transactionManager: org.web3j.tx.TransactionManager,\n"
-                        + "  contractGasProvider: org.web3j.tx.gas.ContractGasProvider\n"
+                        + "  contractGasProvider: org.web3j.tx.gas.ContractGasProvider,\n"
                         + ") {\n"
                         + "   greeter = org.web3j.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send()\n"
                         + "}\n");
@@ -53,7 +53,7 @@ public class FunParserTest extends KotlinTestSetup {
         assertEquals(
                 deployFunSpec.toString(),
                 "@org.junit.jupiter.api.Test\n"
-                        + "fun newGreeting() {\n"
+                        + "public fun newGreeting() {\n"
                         + "  val transactionReceiptVar = greeter.newGreeting(\"REPLACE_ME\").send()\n"
                         + "  org.junit.jupiter.api.Assertions.assertTrue(transactionReceiptVar.isStatusOK())\n"
                         + "}\n");

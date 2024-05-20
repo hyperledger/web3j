@@ -800,8 +800,11 @@ public class DefaultFunctionEncoderTest {
 
     @Test
     public void testMakeFunction()
-            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
-                    InstantiationException, IllegalAccessException {
+            throws ClassNotFoundException,
+                    NoSuchMethodException,
+                    InvocationTargetException,
+                    InstantiationException,
+                    IllegalAccessException {
 
         Function expectedFunction =
                 new Function(

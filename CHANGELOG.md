@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [4.11.4]() (Upcoming)
+# [4.12.0]() (Upcoming)
 
 ### Bug Fixes
 
@@ -15,7 +15,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### BREAKING CHANGES
 
-*
+* Upgrade gradle to 8.7 and remove Consensys Repo dependency [#2057](https://github.com/hyperledger/web3j/pull/2057)
 
 # [4.11.3](https://github.com/hyperledger/web3j/releases/tag/v4.11.3) (2024-05-01)
 
