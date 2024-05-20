@@ -50,24 +50,29 @@ public class EventParameters extends Contract {
     ;
 
     @Deprecated
-    protected EventParameters(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    protected EventParameters(String contractAddress, Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    protected EventParameters(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected EventParameters(String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     @Deprecated
-    protected EventParameters(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    protected EventParameters(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    protected EventParameters(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected EventParameters(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public static List<TestEventEventResponse> getTestEventEvents(TransactionReceipt transactionReceipt) {
+    public static List<TestEventEventResponse> getTestEventEvents(
+            TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = staticExtractEventParametersWithLog(TESTEVENT_EVENT, transactionReceipt);
         ArrayList<TestEventEventResponse> responses = new ArrayList<TestEventEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
@@ -97,7 +102,8 @@ public class EventParameters extends Contract {
         return web3j.ethLogFlowable(filter).map(log -> getTestEventEventFromLog(log));
     }
 
-    public Flowable<TestEventEventResponse> testEventEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TestEventEventResponse> testEventEventFlowable(DefaultBlockParameter startBlock,
+            DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TESTEVENT_EVENT));
         return testEventEventFlowable(filter);
@@ -126,20 +132,24 @@ public class EventParameters extends Contract {
     }
 
     @Deprecated
-    public static EventParameters load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    public static EventParameters load(String contractAddress, Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit) {
         return new EventParameters(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
-    public static EventParameters load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    public static EventParameters load(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         return new EventParameters(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static EventParameters load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    public static EventParameters load(String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         return new EventParameters(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static EventParameters load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    public static EventParameters load(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         return new EventParameters(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 

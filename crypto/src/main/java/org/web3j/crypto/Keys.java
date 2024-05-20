@@ -57,13 +57,15 @@ public class Keys {
      * <p>Private keys are encoded using X.509
      */
     static KeyPair createSecp256k1KeyPair()
-            throws NoSuchProviderException, NoSuchAlgorithmException,
+            throws NoSuchProviderException,
+                    NoSuchAlgorithmException,
                     InvalidAlgorithmParameterException {
         return createSecp256k1KeyPair(secureRandom());
     }
 
     static KeyPair createSecp256k1KeyPair(SecureRandom random)
-            throws NoSuchProviderException, NoSuchAlgorithmException,
+            throws NoSuchProviderException,
+                    NoSuchAlgorithmException,
                     InvalidAlgorithmParameterException {
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
@@ -77,13 +79,15 @@ public class Keys {
     }
 
     public static ECKeyPair createEcKeyPair()
-            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+            throws InvalidAlgorithmParameterException,
+                    NoSuchAlgorithmException,
                     NoSuchProviderException {
         return createEcKeyPair(secureRandom());
     }
 
     public static ECKeyPair createEcKeyPair(SecureRandom random)
-            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+            throws InvalidAlgorithmParameterException,
+                    NoSuchAlgorithmException,
                     NoSuchProviderException {
         KeyPair keyPair = createSecp256k1KeyPair(random);
         return ECKeyPair.create(keyPair);

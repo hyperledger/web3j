@@ -258,8 +258,11 @@ public class BesuPrivacyQuickstartIntegrationTest {
 
         // Find the privacy group that was built by Alice from Bob's node
         final Base64String aliceBobGroupFromBobNode =
-                nodeBob.privFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
-                        .send().getGroups().stream()
+                nodeBob
+                        .privFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                        .send()
+                        .getGroups()
+                        .stream()
                         .filter(
                                 g ->
                                         g.getName().equals("AliceBob")

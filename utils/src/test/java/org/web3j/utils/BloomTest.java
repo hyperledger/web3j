@@ -20,7 +20,9 @@ import org.junit.jupiter.api.Test;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** @author Mehrdad Salehi */
+/**
+ * @author Mehrdad Salehi
+ */
 public class BloomTest {
 
     // Ethereum logsBloom and logs for block

@@ -70,8 +70,11 @@ public abstract class FunctionEncoder {
             List<String> solidityInputTypes,
             List<Object> arguments,
             List<String> solidityOutputTypes)
-            throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
-                    IllegalAccessException, InvocationTargetException {
+            throws ClassNotFoundException,
+                    NoSuchMethodException,
+                    InstantiationException,
+                    IllegalAccessException,
+                    InvocationTargetException {
         List<Type> encodedInput = new ArrayList<>();
         Iterator argit = arguments.iterator();
         for (String st : solidityInputTypes) {
@@ -88,7 +91,9 @@ public abstract class FunctionEncoder {
 
     protected abstract String encodeParameters(List<Type> parameters);
 
-    /** @param methodId Callback selector / Abi method Id (Hex format) */
+    /**
+     * @param methodId Callback selector / Abi method Id (Hex format)
+     */
     protected abstract String encodeWithSelector(
             final String methodId, final List<Type> parameters);
 

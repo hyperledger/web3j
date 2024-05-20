@@ -44,24 +44,29 @@ public class ArraysInStruct extends Contract {
     public static final String FUNC_CALLFUNCTION = "callFunction";
 
     @Deprecated
-    protected ArraysInStruct(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    protected ArraysInStruct(String contractAddress, Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    protected ArraysInStruct(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected ArraysInStruct(String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     @Deprecated
-    protected ArraysInStruct(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    protected ArraysInStruct(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    protected ArraysInStruct(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected ArraysInStruct(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> callFunction(List<byte[]> bytesArrayField, Entity newEntity) {
+    public RemoteFunctionCall<TransactionReceipt> callFunction(List<byte[]> bytesArrayField,
+            Entity newEntity) {
         final Function function = new Function(
                 FUNC_CALLFUNCTION, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.DynamicBytes>(
@@ -73,20 +78,24 @@ public class ArraysInStruct extends Contract {
     }
 
     @Deprecated
-    public static ArraysInStruct load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    public static ArraysInStruct load(String contractAddress, Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit) {
         return new ArraysInStruct(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
-    public static ArraysInStruct load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    public static ArraysInStruct load(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         return new ArraysInStruct(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static ArraysInStruct load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    public static ArraysInStruct load(String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         return new ArraysInStruct(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static ArraysInStruct load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    public static ArraysInStruct load(String contractAddress, Web3j web3j,
+            TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         return new ArraysInStruct(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
@@ -131,7 +140,16 @@ public class ArraysInStruct extends Contract {
 
         public List<String> addressArrayFieldStatic;
 
-        public Entity(byte[] bytesField, byte[] extraData, List<String> stringArrayField, List<byte[]> bytesArrayField, List<byte[]> bytes2ArrayField, List<byte[]> bytes32ArrayField, List<BigInteger> unitArrayField, List<BigInteger> unit256ArrayField, List<Boolean> boolField, List<BigInteger> intArrayField, List<String> addressArrayField, List<String> stringArrayFieldStatic, List<byte[]> bytesArrayFieldStatic, List<byte[]> bytes2ArrayFieldStatic, List<byte[]> bytes32ArrayFieldStatic, List<BigInteger> unitArrayFieldStatic, List<BigInteger> unit256ArrayFieldStatic, List<Boolean> boolFieldStatic, List<BigInteger> intArrayFieldStatic, List<String> addressArrayFieldStatic) {
+        public Entity(byte[] bytesField, byte[] extraData, List<String> stringArrayField,
+                List<byte[]> bytesArrayField, List<byte[]> bytes2ArrayField,
+                List<byte[]> bytes32ArrayField, List<BigInteger> unitArrayField,
+                List<BigInteger> unit256ArrayField, List<Boolean> boolField,
+                List<BigInteger> intArrayField, List<String> addressArrayField,
+                List<String> stringArrayFieldStatic, List<byte[]> bytesArrayFieldStatic,
+                List<byte[]> bytes2ArrayFieldStatic, List<byte[]> bytes32ArrayFieldStatic,
+                List<BigInteger> unitArrayFieldStatic, List<BigInteger> unit256ArrayFieldStatic,
+                List<Boolean> boolFieldStatic, List<BigInteger> intArrayFieldStatic,
+                List<String> addressArrayFieldStatic) {
             super(new org.web3j.abi.datatypes.DynamicBytes(bytesField), 
                     new org.web3j.abi.datatypes.generated.Bytes32(extraData), 
                     new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Utf8String>(
@@ -210,7 +228,25 @@ public class ArraysInStruct extends Contract {
             this.addressArrayFieldStatic = addressArrayFieldStatic;
         }
 
-        public Entity(DynamicBytes bytesField, Bytes32 extraData, @Parameterized(type = Utf8String.class) DynamicArray<Utf8String> stringArrayField, @Parameterized(type = DynamicBytes.class) DynamicArray<DynamicBytes> bytesArrayField, @Parameterized(type = Bytes2.class) DynamicArray<Bytes2> bytes2ArrayField, @Parameterized(type = Bytes32.class) DynamicArray<Bytes32> bytes32ArrayField, @Parameterized(type = Uint256.class) DynamicArray<Uint256> unitArrayField, @Parameterized(type = Uint256.class) DynamicArray<Uint256> unit256ArrayField, @Parameterized(type = Bool.class) DynamicArray<Bool> boolField, @Parameterized(type = Int256.class) DynamicArray<Int256> intArrayField, @Parameterized(type = Address.class) DynamicArray<Address> addressArrayField, @Parameterized(type = Utf8String.class) StaticArray5<Utf8String> stringArrayFieldStatic, @Parameterized(type = DynamicBytes.class) StaticArray5<DynamicBytes> bytesArrayFieldStatic, @Parameterized(type = Bytes2.class) StaticArray5<Bytes2> bytes2ArrayFieldStatic, @Parameterized(type = Bytes32.class) StaticArray5<Bytes32> bytes32ArrayFieldStatic, @Parameterized(type = Uint256.class) StaticArray5<Uint256> unitArrayFieldStatic, @Parameterized(type = Uint256.class) StaticArray5<Uint256> unit256ArrayFieldStatic, @Parameterized(type = Bool.class) StaticArray5<Bool> boolFieldStatic, @Parameterized(type = Int256.class) StaticArray5<Int256> intArrayFieldStatic, @Parameterized(type = Address.class) StaticArray5<Address> addressArrayFieldStatic) {
+        public Entity(DynamicBytes bytesField, Bytes32 extraData,
+                @Parameterized(type = Utf8String.class) DynamicArray<Utf8String> stringArrayField,
+                @Parameterized(type = DynamicBytes.class) DynamicArray<DynamicBytes> bytesArrayField,
+                @Parameterized(type = Bytes2.class) DynamicArray<Bytes2> bytes2ArrayField,
+                @Parameterized(type = Bytes32.class) DynamicArray<Bytes32> bytes32ArrayField,
+                @Parameterized(type = Uint256.class) DynamicArray<Uint256> unitArrayField,
+                @Parameterized(type = Uint256.class) DynamicArray<Uint256> unit256ArrayField,
+                @Parameterized(type = Bool.class) DynamicArray<Bool> boolField,
+                @Parameterized(type = Int256.class) DynamicArray<Int256> intArrayField,
+                @Parameterized(type = Address.class) DynamicArray<Address> addressArrayField,
+                @Parameterized(type = Utf8String.class) StaticArray5<Utf8String> stringArrayFieldStatic,
+                @Parameterized(type = DynamicBytes.class) StaticArray5<DynamicBytes> bytesArrayFieldStatic,
+                @Parameterized(type = Bytes2.class) StaticArray5<Bytes2> bytes2ArrayFieldStatic,
+                @Parameterized(type = Bytes32.class) StaticArray5<Bytes32> bytes32ArrayFieldStatic,
+                @Parameterized(type = Uint256.class) StaticArray5<Uint256> unitArrayFieldStatic,
+                @Parameterized(type = Uint256.class) StaticArray5<Uint256> unit256ArrayFieldStatic,
+                @Parameterized(type = Bool.class) StaticArray5<Bool> boolFieldStatic,
+                @Parameterized(type = Int256.class) StaticArray5<Int256> intArrayFieldStatic,
+                @Parameterized(type = Address.class) StaticArray5<Address> addressArrayFieldStatic) {
             super(bytesField, extraData, stringArrayField, bytesArrayField, bytes2ArrayField, bytes32ArrayField, unitArrayField, unit256ArrayField, boolField, intArrayField, addressArrayField, stringArrayFieldStatic, bytesArrayFieldStatic, bytes2ArrayFieldStatic, bytes32ArrayFieldStatic, unitArrayFieldStatic, unit256ArrayFieldStatic, boolFieldStatic, intArrayFieldStatic, addressArrayFieldStatic);
             this.bytesField = bytesField.getValue();
             this.extraData = extraData.getValue();

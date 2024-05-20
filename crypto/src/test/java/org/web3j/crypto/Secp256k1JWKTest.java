@@ -50,7 +50,8 @@ public class Secp256k1JWKTest {
 
     @Test
     public void testPublicJWKCreation()
-            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+            throws InvalidAlgorithmParameterException,
+                    NoSuchAlgorithmException,
                     NoSuchProviderException {
         KeyPair keyPair = Keys.createSecp256k1KeyPair();
         BCECPublicKey publicKey = (BCECPublicKey) keyPair.getPublic();
@@ -61,7 +62,8 @@ public class Secp256k1JWKTest {
 
     @Test
     public void testPrivateJWKCreation()
-            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+            throws InvalidAlgorithmParameterException,
+                    NoSuchAlgorithmException,
                     NoSuchProviderException {
         KeyPair keyPair = Keys.createSecp256k1KeyPair();
         BCECPublicKey publicKey = (BCECPublicKey) keyPair.getPublic();

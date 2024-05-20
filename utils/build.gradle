@@ -6,5 +6,10 @@ description 'Minimal set of web3j utility classes'
 
 dependencies { api "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion" }
 
-tasks.named("spotlessJava").configure { dependsOn("spotlessGroovyGradle","compileJava","compileTestJava","javadoc","test") }
-tasks.named("spotlessKotlin").configure { dependsOn("compileJava","spotlessJava", "spotlessGroovyGradle","compileTestJava","processTestResources","javadoc","test") }
+tasks.named("spotlessJava").configure {
+    dependsOn("spotlessGroovyGradle", "compileJava", "compileTestJava", "javadoc", "test", "jacocoTestReport")
+}
+
+tasks.named("spotlessKotlin").configure {
+    dependsOn("compileJava", "spotlessJava", "spotlessGroovyGradle", "compileTestJava", "processTestResources", "javadoc", "test", "jacocoTestReport")
+}

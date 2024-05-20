@@ -14,9 +14,9 @@ jacocoTestReport {
     }
     dependsOn test
     reports {
-        xml.required = true
-        html.required = false
-        csv.required = false
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(true)
         xml.destination file("${buildDir}/reports/jacoco.xml")
     }
 }
