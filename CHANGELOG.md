@@ -3,7 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [4.12.0]() (Upcoming)
+# [4.12.1]() (Upcoming)
+
+### Bug Fixes
+
+*
+
+### Features
+
+* bump snapshot version to 4.12.1 [#2058](https://github.com/web3j/web3j/pull/2058)
+
+### BREAKING CHANGES
+
+*
+
+# [4.12.0](https://github.com/hyperledger/web3j/releases/tag/v4.12.0) (2024-05-23)
 
 ### Bug Fixes
 
@@ -12,6 +26,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * bump snapshot version to 4.11.4 [#2049](https://github.com/web3j/web3j/pull/2049)
+* Fixed DefaultFunctionEncoder calculating offset for nested StaticArray [#2054](https://github.com/web3j/web3j/pull/2054)
 
 ### BREAKING CHANGES
 
