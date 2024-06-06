@@ -207,6 +207,15 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         compareJavaFile("MetaCoin", true);
     }
 
+    @Test
+    public void testArrayOfStructClassGeneration() throws Exception {
+        testCodeGeneration(
+                "arrayofstructclassgeneration",
+                "ArrayOfStructClassGeneration",
+                JAVA_TYPES_ARG,
+                false);
+    }
+
     private void compareJavaFile(String inputFileName, boolean useBin) throws Exception {
         String contract = inputFileName.toLowerCase();
         String packagePath =

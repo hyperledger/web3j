@@ -465,8 +465,12 @@ public class SolidityFunctionWrapper extends Generator {
             } else {
                 final String fullStructName =
                         internalType.substring(internalType.lastIndexOf(" ") + 1);
-                final String tempStructName =
+                String tempStructName =
                         fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
+                int arrayPos = tempStructName.indexOf("[");
+                if (arrayPos > -1) {
+                    tempStructName = tempStructName.substring(0, arrayPos);
+                }
                 structName =
                         SourceVersion.isName(tempStructName)
                                 ? tempStructName
@@ -615,7 +619,7 @@ public class SolidityFunctionWrapper extends Generator {
                             parameters.addAll(definition.getOutputs());
                             return parameters.stream()
                                     .map(this::normalizeNamedType)
-                                    .filter(namedType -> namedType.getType().equals("tuple"));
+                                    .filter(namedType -> namedType.getType().startsWith("tuple"));
                         })
                 .forEach(
                         namedType -> {
@@ -624,7 +628,7 @@ public class SolidityFunctionWrapper extends Generator {
                                     .map(this::normalizeNamedType)
                                     .filter(
                                             nestedNamedStruct ->
-                                                    nestedNamedStruct.getType().equals("tuple"))
+                                                    nestedNamedStruct.getType().startsWith("tuple"))
                                     .forEach(
                                             nestedNamedType ->
                                                     structMap.put(
