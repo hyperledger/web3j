@@ -19,7 +19,6 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Arrays;
 
@@ -40,12 +39,7 @@ public class Keys {
     public static final int ADDRESS_LENGTH_IN_HEX = ADDRESS_SIZE >> 2;
     static final int PUBLIC_KEY_LENGTH_IN_HEX = PUBLIC_KEY_SIZE << 1;
     public static final int PRIVATE_KEY_LENGTH_IN_HEX = PRIVATE_KEY_SIZE << 1;
-
-    static {
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-            Security.addProvider(new BouncyCastleProvider());
-        }
-    }
+    private static final BouncyCastleProvider BC_PROVIDER = new BouncyCastleProvider();
 
     private Keys() {}
 
@@ -68,7 +62,7 @@ public class Keys {
                     NoSuchAlgorithmException,
                     InvalidAlgorithmParameterException {
 
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", BC_PROVIDER);
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
         if (random != null) {
             keyPairGenerator.initialize(ecGenParameterSpec, random);
