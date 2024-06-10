@@ -11,7 +11,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* bump snapshot version to 4.12.1 [#2058](https://github.com/web3j/web3j/pull/2058)
+* bump snapshot version to 4.12.1 [#2058](https://github.com/hyperledger/web3j/pull/2058)
+* Update maintainer requirements status [#2064](https://github.com/hyperledger/web3j/pull/2064)
 
 ### BREAKING CHANGES
 
