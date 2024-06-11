@@ -6,11 +6,12 @@ Maintainers
 
 <!-- web3j-maintainers group has maintainer access to web3j repo -->
 
-| Name             | Github               | LFID      |
-| ---------------- |----------------------|-----------|
-| Conor Svensson   | [conor10][conor10]   |           |
-| George Ţebrean   | [gtebrean][gtebrean] | gtebrean  |
-| Nischal Sharma   | [NickSneo][NickSneo] | nicks1106 |
+| Name           | Github                 | LFID      |
+|----------------|------------------------|-----------|
+| Andrii Kliui   | [andrii-kl][andrii-kl] |           |
+| Conor Svensson | [conor10][conor10]     | conor     |
+| George Ţebrean | [gtebrean][gtebrean]   | gtebrean  |
+| Nischal Sharma | [NickSneo][NickSneo]   | nicks1106 |
 
 [conor10]: https://github.com/conor10
 [gtebrean]: https://github.com/gtebrean
