@@ -8,7 +8,7 @@ Maintainers
 
 | Name           | Github                 | LFID      |
 |----------------|------------------------|-----------|
-| Andrii Kliui   | [andrii-kl][andrii-kl] |           |
+| Andrii Kliui   | [andrii-kl][andrii-kl] | andrii.k  |
 | Conor Svensson | [conor10][conor10]     | conor     |
 | George Ţebrean | [gtebrean][gtebrean]   | gtebrean  |
 | Nischal Sharma | [NickSneo][NickSneo]   | nicks1106 |
