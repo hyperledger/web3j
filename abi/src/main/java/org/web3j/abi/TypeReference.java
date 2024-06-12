@@ -245,7 +245,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
             }
             lastReadStringPosition = nextSquareBrackets.end();
             nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
-            // cant find any more [] and string isn't fully parsed
+            // can't find any more [] and string isn't fully parsed
             if (!nextSquareBrackets.find(lastReadStringPosition) && lastReadStringPosition != len) {
                 throw new ClassNotFoundException(
                         "Unable to make TypeReference from " + solidityType);

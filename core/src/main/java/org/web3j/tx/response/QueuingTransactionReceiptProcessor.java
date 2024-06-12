@@ -94,7 +94,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
     /**
      * Java doesn't provide a concurrent linked hash set, so we use a simple wrapper to store
      * details of the number of requests we've made against this specific transaction hash. This is
-     * so we can preserve submission order as we interate over the outstanding transactions.
+     * so we can preserve submission order as we integrate over the outstanding transactions.
      *
      * <p>Note - the equals/hashcode methods only operate on the transactionHash field. This is
      * intentional.
