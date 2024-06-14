@@ -275,12 +275,11 @@ public class AbiDefinition {
             this.components = components;
         }
 
-        public int structIdentifier() {
+        public String structIdentifier() {
             return ((internalType == null ? type : internalType.isEmpty() ? type : internalType)
                             + components.stream()
-                                    .map(namedType -> String.valueOf(namedType.structIdentifier()))
-                                    .collect(Collectors.joining()))
-                    .hashCode();
+                                    .map(NamedType::structIdentifier)
+                                    .collect(Collectors.joining()));
         }
 
         public int nestedness() {
@@ -297,6 +296,17 @@ public class AbiDefinition {
                 return true;
             }
             return components.stream().anyMatch(NamedType::isDynamic);
+        }
+
+        public NamedType flattenNamedType() {
+            int arrayPos = this.type.indexOf("[");
+            if(arrayPos > 0) return new NamedType(
+                    this.name,
+                    this.type.substring(0, arrayPos),
+                    this.components,
+                    this.internalType.substring(0, this.internalType.indexOf("[")),
+                    this.indexed);
+            return this;
         }
 
         @Override

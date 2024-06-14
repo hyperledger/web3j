@@ -129,7 +129,7 @@ public class SolidityFunctionWrapper extends Generator {
     private final boolean abiFuncs;
     private final int addressLength;
 
-    private final HashMap<Integer, ClassName> structClassNameMap = new HashMap<>();
+    private final HashMap<String, ClassName> structClassNameMap = new HashMap<>();
 
     private final List<NamedType> structsNamedTypeList = new ArrayList<>();
 
@@ -589,7 +589,7 @@ public class SolidityFunctionWrapper extends Generator {
         String tempStructName = fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
         int arrayPos = tempStructName.indexOf("[");
         if (arrayPos > -1) {
-          tempStructName = tempStructName.substring(0, arrayPos);
+            tempStructName = tempStructName.substring(0, arrayPos);
         }
         final String structName =
                 SourceVersion.isName(tempStructName) ? tempStructName : "_" + tempStructName;
@@ -628,7 +628,7 @@ public class SolidityFunctionWrapper extends Generator {
     @NotNull
     private List<AbiDefinition.NamedType> extractStructs(
             final List<AbiDefinition> functionDefinitions) {
-        final HashMap<Integer, AbiDefinition.NamedType> structMap = new LinkedHashMap<>();
+        final HashMap<String, AbiDefinition.NamedType> structMap = new LinkedHashMap<>();
         functionDefinitions.stream()
                 .flatMap(
                         definition -> {
@@ -641,7 +641,8 @@ public class SolidityFunctionWrapper extends Generator {
                         })
                 .forEach(
                         namedType -> {
-                            structMap.put(namedType.structIdentifier(), namedType);
+                            structMap.put(
+                                    namedType.flattenNamedType().structIdentifier(), namedType);
                             extractNested(namedType).stream()
                                     .map(this::normalizeNamedType)
                                     .filter(
@@ -650,7 +651,9 @@ public class SolidityFunctionWrapper extends Generator {
                                     .forEach(
                                             nestedNamedType ->
                                                     structMap.put(
-                                                            nestedNamedType.structIdentifier(),
+                                                            nestedNamedType
+                                                                    .flattenNamedType()
+                                                                    .structIdentifier(),
                                                             nestedNamedType));
                         });
 
@@ -2288,7 +2291,7 @@ public class SolidityFunctionWrapper extends Generator {
             return namedType.isIndexed();
         }
 
-        public int structIdentifier() {
+        public String structIdentifier() {
             return namedType.structIdentifier();
         }
     }
