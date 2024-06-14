@@ -457,24 +457,29 @@ public class SolidityFunctionWrapper extends Generator {
         final List<AbiDefinition.NamedType> orderedKeys = extractStructs(functionDefinitions);
         int structCounter = 0;
         final List<TypeSpec> structs = new ArrayList<>();
+        final Map<String, Integer> structNamesCountPreview = new HashMap<>();
+
+        for (final AbiDefinition.NamedType namedType : orderedKeys) {
+            final String internalType = namedType.getInternalType();
+            if (internalType != null && !internalType.isEmpty()) {
+                final String structName = getStructName(internalType);
+                structNamesCountPreview.putIfAbsent(structName, 0);
+                structNamesCountPreview.compute(structName, (s, count) -> count + 1);
+            }
+        }
+
         for (final AbiDefinition.NamedType namedType : orderedKeys) {
             final String internalType = namedType.getInternalType();
             final String structName;
             if (internalType == null || internalType.isEmpty()) {
                 structName = "Struct" + structCounter;
             } else {
-                final String fullStructName =
-                        internalType.substring(internalType.lastIndexOf(" ") + 1);
-                String tempStructName =
-                        fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
-                int arrayPos = tempStructName.indexOf("[");
-                if (arrayPos > -1) {
-                    tempStructName = tempStructName.substring(0, arrayPos);
+                String tempStructName = getStructName(internalType);
+                if (structNamesCountPreview.getOrDefault(tempStructName, 0) > 1) {
+                    structName = getStructName(internalType.replace(".", "_"));
+                } else {
+                    structName = tempStructName;
                 }
-                structName =
-                        SourceVersion.isName(tempStructName)
-                                ? tempStructName
-                                : "_" + tempStructName;
             }
 
             final TypeSpec.Builder builder =
@@ -576,6 +581,19 @@ public class SolidityFunctionWrapper extends Generator {
             structCounter++;
         }
         return structs;
+    }
+
+    @NotNull
+    private static String getStructName(String internalType) {
+        final String fullStructName = internalType.substring(internalType.lastIndexOf(" ") + 1);
+        String tempStructName = fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
+        int arrayPos = tempStructName.indexOf("[");
+        if (arrayPos > -1) {
+          tempStructName = tempStructName.substring(0, arrayPos);
+        }
+        final String structName =
+                SourceVersion.isName(tempStructName) ? tempStructName : "_" + tempStructName;
+        return structName;
     }
 
     private String adjustToNativeTypeIfNecessary(NamedType component) {

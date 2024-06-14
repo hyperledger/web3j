@@ -208,6 +208,17 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testSameInnerStructName() throws Exception {
+        testCodeGeneration("sameinnerstructname", "SameInnerStructName", JAVA_TYPES_ARG, false);
+        testCodeGeneration("sameinnerstructname", "SameInnerStructName", SOLIDITY_TYPES_ARG, false);
+    }
+
+    @Test
+    public void testSameInnerStructNameCompareJavaFile() throws Exception {
+        compareJavaFile("SameInnerStructName", true);
+    }
+
+    @Test
     public void testArrayOfStructClassGeneration() throws Exception {
         testCodeGeneration(
                 "arrayofstructclassgeneration",
