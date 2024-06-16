@@ -641,20 +641,34 @@ public class SolidityFunctionWrapper extends Generator {
                         })
                 .forEach(
                         namedType -> {
-                            structMap.put(
-                                    namedType.flattenNamedType().structIdentifier(), namedType);
+                            if (namedType.getType().startsWith("tuple[")) {
+                                structMap.putIfAbsent(
+                                        namedType.flattenNamedType().structIdentifier(), namedType);
+                            } else {
+                                structMap.put(namedType.structIdentifier(), namedType);
+                            }
+
                             extractNested(namedType).stream()
                                     .map(this::normalizeNamedType)
                                     .filter(
                                             nestedNamedStruct ->
                                                     nestedNamedStruct.getType().startsWith("tuple"))
                                     .forEach(
-                                            nestedNamedType ->
-                                                    structMap.put(
+                                            nestedNamedType -> {
+                                                if (nestedNamedType
+                                                        .getType()
+                                                        .startsWith("tuple[")) {
+                                                    structMap.putIfAbsent(
                                                             nestedNamedType
                                                                     .flattenNamedType()
                                                                     .structIdentifier(),
-                                                            nestedNamedType));
+                                                            nestedNamedType);
+                                                } else {
+                                                    structMap.put(
+                                                            nestedNamedType.structIdentifier(),
+                                                            nestedNamedType);
+                                                }
+                                            });
                         });
 
         return structMap.values().stream()
