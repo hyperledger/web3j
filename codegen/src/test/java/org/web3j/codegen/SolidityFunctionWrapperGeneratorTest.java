@@ -243,6 +243,17 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         compareJavaFile("ArrayOfStructAndStruct", true);
     }
 
+    @Test
+    public void testStaticArrayOfStructsInStructGeneration() throws Exception {
+        testCodeGeneration(
+                "staticarrayofstructsinstruct", "StaticArrayOfStructsInStruct", JAVA_TYPES_ARG, false);
+    }
+
+    @Test
+    public void testStaticArrayOfStructsInStructGenerationCompareJavaFile() throws Exception {
+        compareJavaFile("StaticArrayOfStructsInStruct", true);
+    }
+
     private void compareJavaFile(String inputFileName, boolean useBin) throws Exception {
         String contract = inputFileName.toLowerCase();
         String packagePath =
