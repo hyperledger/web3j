@@ -587,10 +587,6 @@ public class SolidityFunctionWrapper extends Generator {
     private static String getStructName(String internalType) {
         final String fullStructName = internalType.substring(internalType.lastIndexOf(" ") + 1);
         String tempStructName = fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
-        int arrayPos = tempStructName.indexOf("[");
-        if (arrayPos > -1) {
-            tempStructName = tempStructName.substring(0, arrayPos);
-        }
         final String structName =
                 SourceVersion.isName(tempStructName) ? tempStructName : "_" + tempStructName;
         return structName;
@@ -611,6 +607,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private NamedType normalizeNamedType(NamedType namedType) {
+        // dynamic array
         if (namedType.getType().endsWith("[]") && namedType.getInternalType().endsWith("[]")) {
             return new NamedType(
                     namedType.getName(),
@@ -619,6 +616,18 @@ public class SolidityFunctionWrapper extends Generator {
                     namedType
                             .getInternalType()
                             .substring(0, namedType.getInternalType().length() - 2),
+                    namedType.isIndexed());
+        } else if (namedType.getType().startsWith("tuple[")
+                && namedType.getInternalType().contains("[")
+                && namedType.getInternalType().endsWith("]")) { // static array
+
+            return new NamedType(
+                    namedType.getName(),
+                    namedType.getType().substring(0, namedType.getType().indexOf("[")),
+                    namedType.getComponents(),
+                    namedType
+                            .getInternalType()
+                            .substring(0, namedType.getInternalType().indexOf("[")),
                     namedType.isIndexed());
         } else {
             return namedType;
@@ -637,38 +646,21 @@ public class SolidityFunctionWrapper extends Generator {
                             parameters.addAll(definition.getOutputs());
                             return parameters.stream()
                                     .map(this::normalizeNamedType)
-                                    .filter(namedType -> namedType.getType().startsWith("tuple"));
+                                    .filter(namedType -> namedType.getType().equals("tuple"));
                         })
                 .forEach(
                         namedType -> {
-                            if (namedType.getType().startsWith("tuple[")) {
-                                structMap.putIfAbsent(
-                                        namedType.flattenNamedType().structIdentifier(), namedType);
-                            } else {
-                                structMap.put(namedType.structIdentifier(), namedType);
-                            }
-
+                            structMap.put(namedType.structIdentifier(), namedType);
                             extractNested(namedType).stream()
                                     .map(this::normalizeNamedType)
                                     .filter(
                                             nestedNamedStruct ->
-                                                    nestedNamedStruct.getType().startsWith("tuple"))
+                                                    nestedNamedStruct.getType().equals("tuple"))
                                     .forEach(
-                                            nestedNamedType -> {
-                                                if (nestedNamedType
-                                                        .getType()
-                                                        .startsWith("tuple[")) {
-                                                    structMap.putIfAbsent(
-                                                            nestedNamedType
-                                                                    .flattenNamedType()
-                                                                    .structIdentifier(),
-                                                            nestedNamedType);
-                                                } else {
+                                            nestedNamedType ->
                                                     structMap.put(
                                                             nestedNamedType.structIdentifier(),
-                                                            nestedNamedType);
-                                                }
-                                            });
+                                                            nestedNamedType));
                         });
 
         return structMap.values().stream()

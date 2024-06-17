@@ -298,17 +298,6 @@ public class AbiDefinition {
             return components.stream().anyMatch(NamedType::isDynamic);
         }
 
-        public NamedType flattenNamedType() {
-            int arrayPos = this.type.indexOf("[");
-            if(arrayPos > 0) return new NamedType(
-                    this.name,
-                    this.type.substring(0, arrayPos),
-                    this.components,
-                    this.internalType.substring(0, this.internalType.indexOf("[")),
-                    this.indexed);
-            return this;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (this == o) {
