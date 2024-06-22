@@ -141,17 +141,14 @@ public class TypeDecoder {
         try {
             byte[] inputByteArray = Numeric.hexStringToByteArray(input);
             int typeLengthAsBytes = getTypeLengthInBytes(type);
-
-            byte[] resultByteArray = new byte[typeLengthAsBytes + 1];
-
-            if (Int.class.isAssignableFrom(type) || Fixed.class.isAssignableFrom(type)) {
-                resultByteArray[0] = inputByteArray[0]; // take MSB as sign bit
-            }
-
             int valueOffset = Type.MAX_BYTE_LENGTH - typeLengthAsBytes;
-            System.arraycopy(inputByteArray, valueOffset, resultByteArray, 1, typeLengthAsBytes);
 
-            BigInteger numericValue = new BigInteger(resultByteArray);
+            BigInteger numericValue;
+            if (Uint.class.isAssignableFrom(type) || Ufixed.class.isAssignableFrom(type)) {
+                numericValue = new BigInteger(1, inputByteArray, valueOffset, typeLengthAsBytes);
+            } else {
+                numericValue = new BigInteger(inputByteArray, valueOffset, typeLengthAsBytes);
+            }
             return type.getConstructor(BigInteger.class).newInstance(numericValue);
 
         } catch (NoSuchMethodException
