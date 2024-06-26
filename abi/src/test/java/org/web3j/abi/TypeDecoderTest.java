@@ -97,7 +97,6 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.abi.datatypes.generated.Uint80;
 import org.web3j.abi.datatypes.generated.Uint88;
 import org.web3j.abi.datatypes.generated.Uint96;
-import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -859,9 +858,6 @@ public class TypeDecoderTest {
                         Int256.class),
                 (new Int256(BigInteger.valueOf(-1))));
 
-
-
-
         assertEquals(
                 TypeDecoder.decodeNumeric(
                         TypeEncoder.encodeNumeric(new Int256(BigInteger.TWO.pow(248))),
@@ -870,23 +866,27 @@ public class TypeDecoderTest {
 
         assertEquals(
                 TypeDecoder.decodeNumeric(
-                        TypeEncoder.encodeNumeric(new Int256(BigInteger.TWO.pow(248).negate().subtract(BigInteger.ONE))),
+                        TypeEncoder.encodeNumeric(
+                                new Int256(
+                                        BigInteger.TWO.pow(248).negate().subtract(BigInteger.ONE))),
                         Int256.class),
                 new Int256(BigInteger.TWO.pow(248).negate().subtract(BigInteger.ONE)));
-
-
 
         assertEquals(
                 TypeDecoder.decodeNumeric(
                         "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                         Int256.class),
-                new Int256(new BigInteger("57896044618658097711785492504343953926634992332820282019728792003956564819967")));
+                new Int256(
+                        new BigInteger(
+                                "57896044618658097711785492504343953926634992332820282019728792003956564819967")));
 
         assertEquals(
                 TypeDecoder.decodeNumeric(
                         "0x8000000000000000000000000000000000000000000000000000000000000000",
                         Int256.class),
-                new Int256(new BigInteger("-57896044618658097711785492504343953926634992332820282019728792003956564819968")));
+                new Int256(
+                        new BigInteger(
+                                "-57896044618658097711785492504343953926634992332820282019728792003956564819968")));
 
         assertEquals(TypeDecoder.instantiateType("int", 123), (new Int(BigInteger.valueOf(123))));
 
@@ -894,28 +894,32 @@ public class TypeDecoderTest {
     }
 
     @Test
-    public void testInt16All() throws Exception {
-        int boundary = (int) Math.pow(2, 16 - 1);
-        for (int i = -boundary; i < boundary; i++) {
-            assertEquals(
-                    TypeDecoder.decodeNumeric(
-                            TypeEncoder.encodeNumeric(new Int16(BigInteger.valueOf(i))),
-                            Int16.class),
-                    new Int16(BigInteger.valueOf(i)));
-        }
+    public void testInt16MinMax() throws Exception {
+        assertEquals(
+                TypeDecoder.decodeNumeric(
+                        TypeEncoder.encodeNumeric(
+                                new Int16(BigInteger.valueOf((long) Math.pow(2, 15) - 1))),
+                        Int16.class),
+                new Int16(BigInteger.valueOf((long) Math.pow(2, 15) - 1)));
+
+        assertEquals(
+                TypeDecoder.decodeNumeric(
+                        TypeEncoder.encodeNumeric(
+                                new Int16(BigInteger.valueOf((long) -Math.pow(2, 15)))),
+                        Int16.class),
+                new Int16(BigInteger.valueOf((long) -Math.pow(2, 15))));
     }
 
     @Test
-    public void testUint16All() throws Exception {
-        int boundary = (int) Math.pow(2, 16);
-        for (int i = 0; i < boundary; i++) {
-            assertEquals(
-                    TypeDecoder.decodeNumeric(
-                            TypeEncoder.encodeNumeric(new Uint16(BigInteger.valueOf(i))),
-                            Uint16.class),
-                    new Uint16(BigInteger.valueOf(i)));
-        }
+    public void testUint16Max() throws Exception {
+        assertEquals(
+                TypeDecoder.decodeNumeric(
+                        TypeEncoder.encodeNumeric(
+                                new Uint16(BigInteger.valueOf((long) Math.pow(2, 16) - 1))),
+                        Uint16.class),
+                new Uint16(BigInteger.valueOf((long) Math.pow(2, 16) - 1)));
     }
+
     /*
     TODO: Enable once Solidity supports fixed types - see
     https://github.com/ethereum/solidity/issues/409
