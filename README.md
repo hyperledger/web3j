@@ -122,6 +122,9 @@ Java:
 </dependency>
 ```
 
+**Note:** The Web3j Java binaries are compiled using Java 17. Java 17 or a more recent version is required to use Web3j
+ as a dependency.
+
 Android:
 
 ```xml
