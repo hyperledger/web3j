@@ -129,7 +129,7 @@ public class SolidityFunctionWrapper extends Generator {
     private final boolean abiFuncs;
     private final int addressLength;
 
-    private final HashMap<Integer, ClassName> structClassNameMap = new HashMap<>();
+    private final HashMap<String, ClassName> structClassNameMap = new HashMap<>();
 
     private final List<NamedType> structsNamedTypeList = new ArrayList<>();
 
@@ -587,10 +587,6 @@ public class SolidityFunctionWrapper extends Generator {
     private static String getStructName(String internalType) {
         final String fullStructName = internalType.substring(internalType.lastIndexOf(" ") + 1);
         String tempStructName = fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
-        int arrayPos = tempStructName.indexOf("[");
-        if (arrayPos > -1) {
-          tempStructName = tempStructName.substring(0, arrayPos);
-        }
         final String structName =
                 SourceVersion.isName(tempStructName) ? tempStructName : "_" + tempStructName;
         return structName;
@@ -611,6 +607,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private NamedType normalizeNamedType(NamedType namedType) {
+        // dynamic array
         if (namedType.getType().endsWith("[]") && namedType.getInternalType().endsWith("[]")) {
             return new NamedType(
                     namedType.getName(),
@@ -620,6 +617,18 @@ public class SolidityFunctionWrapper extends Generator {
                             .getInternalType()
                             .substring(0, namedType.getInternalType().length() - 2),
                     namedType.isIndexed());
+        } else if (namedType.getType().startsWith("tuple[")
+                && namedType.getInternalType().contains("[")
+                && namedType.getInternalType().endsWith("]")) { // static array
+
+            return new NamedType(
+                    namedType.getName(),
+                    namedType.getType().substring(0, namedType.getType().indexOf("[")),
+                    namedType.getComponents(),
+                    namedType
+                            .getInternalType()
+                            .substring(0, namedType.getInternalType().indexOf("[")),
+                    namedType.isIndexed());
         } else {
             return namedType;
         }
@@ -628,7 +637,7 @@ public class SolidityFunctionWrapper extends Generator {
     @NotNull
     private List<AbiDefinition.NamedType> extractStructs(
             final List<AbiDefinition> functionDefinitions) {
-        final HashMap<Integer, AbiDefinition.NamedType> structMap = new LinkedHashMap<>();
+        final HashMap<String, AbiDefinition.NamedType> structMap = new LinkedHashMap<>();
         functionDefinitions.stream()
                 .flatMap(
                         definition -> {
@@ -637,7 +646,7 @@ public class SolidityFunctionWrapper extends Generator {
                             parameters.addAll(definition.getOutputs());
                             return parameters.stream()
                                     .map(this::normalizeNamedType)
-                                    .filter(namedType -> namedType.getType().startsWith("tuple"));
+                                    .filter(namedType -> namedType.getType().equals("tuple"));
                         })
                 .forEach(
                         namedType -> {
@@ -646,7 +655,7 @@ public class SolidityFunctionWrapper extends Generator {
                                     .map(this::normalizeNamedType)
                                     .filter(
                                             nestedNamedStruct ->
-                                                    nestedNamedStruct.getType().startsWith("tuple"))
+                                                    nestedNamedStruct.getType().equals("tuple"))
                                     .forEach(
                                             nestedNamedType ->
                                                     structMap.put(
@@ -2288,7 +2297,7 @@ public class SolidityFunctionWrapper extends Generator {
             return namedType.isIndexed();
         }
 
-        public int structIdentifier() {
+        public String structIdentifier() {
             return namedType.structIdentifier();
         }
     }
