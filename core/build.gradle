@@ -54,13 +54,12 @@ gitPublish {
 
     if (ghToken) {
         repoUri = "https://github.com/${docsPath}.git"
-
     } else {
         repoUri = "git@github.com:${docsPath}.git"
     }
 
     // branch will be created if it doesn't exist
-    branch = 'master'
+    branch = 'main'
 
     def coreDocs = files("${buildDir.path}/docs/javadoc/")
 
@@ -84,5 +83,10 @@ configurations { testArtifacts.extendsFrom testRuntime }
 
 artifacts { testArtifacts testsJar }
 
-tasks.named("spotlessJava").configure { dependsOn("compileJava", "compileTestJava", "processResources", "processTestResources", "spotlessGroovyGradle","javadoc","test") }
-tasks.named("spotlessKotlin").configure { dependsOn("compileJava", "compileTestJava", "processResources", "processTestResources","spotlessJava","spotlessGroovyGradle","javadoc","test") }
+tasks.named("spotlessJava").configure {
+    dependsOn("spotlessGroovyGradle", "compileJava", "compileTestJava", "javadoc", "test", "jacocoTestReport")
+}
+
+tasks.named("spotlessKotlin").configure {
+    dependsOn("compileJava", "spotlessJava", "spotlessGroovyGradle", "compileTestJava", "processTestResources", "javadoc", "test", "jacocoTestReport")
+}

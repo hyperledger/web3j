@@ -14,9 +14,9 @@ jacocoTestReport {
     }
     dependsOn test
     reports {
-        xml.enabled true
-        html.enabled false
-        csv.enabled false
+        xml.required.set(true)
+        html.required.set(false)
+        csv.required.set(false)
         xml.destination file("${buildDir}/reports/jacoco.xml")
     }
 }
@@ -29,6 +29,6 @@ sonarqube {
 }
 
 jacoco {
-    toolVersion = "0.8.8"
+    toolVersion = "0.8.10"
 }
 

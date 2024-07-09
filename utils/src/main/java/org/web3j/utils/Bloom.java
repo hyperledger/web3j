@@ -162,12 +162,16 @@ public class Bloom {
         return getBytesHexString();
     }
 
-    /** @return Bloom filter bytes as hex string */
+    /**
+     * @return Bloom filter bytes as hex string
+     */
     public String getBytesHexString() {
         return Numeric.toHexString(this.bytes);
     }
 
-    /** @return Bloom filter bytes (returns a copy) */
+    /**
+     * @return Bloom filter bytes (returns a copy)
+     */
     public byte[] getBytes() {
         byte[] bytesCopy = new byte[BYTES_LENGTH];
         System.arraycopy(this.bytes, 0, bytesCopy, 0, BYTES_LENGTH);

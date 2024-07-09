@@ -13,15 +13,10 @@
 package org.web3j.codegen;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.web3j.TempFileProvider;
 import org.web3j.utils.Strings;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
 import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
 
@@ -38,21 +32,6 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     private static final String PackageName = "org.web3j.unittests.truffle.java";
 
     private String contractBaseDir;
-
-    private static void verifyGeneratedCode(String sourceFile) throws IOException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-
-        try (StandardJavaFileManager fileManager =
-                compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits =
-                    fileManager.getJavaFileObjectsFromStrings(
-                            Collections.singletonList(sourceFile));
-            JavaCompiler.CompilationTask task =
-                    compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
-            assertTrue(task.call(), "Generated contract contains compile time error");
-        }
-    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -78,32 +57,43 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
             throws Exception {
 
-        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG, false);
+        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG, true);
     }
 
     @SuppressWarnings("SameParameterValue")
     private void testCodeGenerationSolidtyTypes(String contractName, String inputFileName)
             throws Exception {
 
-        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG, false);
+        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG, true);
     }
 
     private void testCodeGeneration(
-            String contractName, String inputFileName, String packageName, String types)
+            String contractName,
+            String inputFileName,
+            String packageName,
+            String types,
+            boolean generateBothCallAndSend)
             throws Exception {
 
-        TruffleJsonFunctionWrapperGenerator.main(
-                Arrays.asList(
+        List<String> argList =
+                new ArrayList<>(
+                        Arrays.asList(
                                 types,
                                 ContractJsonParseTest.jsonFileLocation(
                                         contractBaseDir, contractName, inputFileName),
                                 "-p",
                                 packageName,
                                 "-o",
-                                tempDirPath)
-                        .toArray(new String[0]));
+                                tempDirPath));
 
-        verifyGeneratedCode(
+        if (generateBothCallAndSend) {
+            argList.add("-B");
+        }
+        TruffleJsonFunctionWrapperGenerator.main(argList.toArray(new String[0]));
+
+        GeneraterTestUtils.verifyGeneratedCode(
                 tempDirPath
                         + File.separator
                         + packageName.replace('.', File.separatorChar)

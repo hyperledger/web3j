@@ -14,10 +14,12 @@ package org.web3j.codegen;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.codegen.TruffleJsonFunctionWrapperGenerator.Contract;
 import static org.web3j.codegen.TruffleJsonFunctionWrapperGenerator.loadContractDefinition;
+import static org.web3j.tx.Contract.linkBinaryWithReferences;
 
 /** Test that we can parse Truffle Contract from JSON file. */
 public class ContractJsonParseTest {
@@ -79,5 +82,25 @@ public class ContractJsonParseTest {
                 "pure",
                 abi.getStateMutability(),
                 "Expected the 'pure' for the state mutability setting");
+    }
+
+    @Test
+    public void testLinkBinaryWithReferences() throws Exception {
+        Contract mc = parseContractJson(contractBaseDir, "MetaCoin", "MetaCoin");
+        assertTrue(mc.getBytecode().contains("__ConvertLib____________________________"));
+
+        String linked =
+                linkBinaryWithReferences(
+                        mc.getBytecode(),
+                        Collections.singletonList(
+                                new org.web3j.tx.Contract.LinkReference(
+                                        "./ConvertLib.sol", "ConvertLib", Address.DEFAULT)));
+        assertFalse(linked.contains("__ConvertLib____________________________"));
+        assertEquals(
+                mc.getBytecode()
+                        .replace(
+                                "__ConvertLib____________________________",
+                                Address.DEFAULT.toString().substring(2)),
+                linked);
     }
 }

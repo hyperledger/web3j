@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import picocli.CommandLine;
 
 import org.web3j.abi.datatypes.Address;
 import org.web3j.protocol.ObjectMapperFactory;
@@ -40,6 +42,15 @@ import org.web3j.utils.Strings;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
+import static picocli.CommandLine.Command;
+import static picocli.CommandLine.ExecutionException;
+import static picocli.CommandLine.Help;
+import static picocli.CommandLine.Help.Visibility.ALWAYS;
+import static picocli.CommandLine.Option;
+import static picocli.CommandLine.ParameterException;
+import static picocli.CommandLine.Parameters;
+import static picocli.CommandLine.ParseResult;
+import static picocli.CommandLine.RunLast;
 
 /**
  * Java wrapper source code generator for Truffle JSON format. Truffle embeds the Solidity ABI
@@ -50,66 +61,107 @@ import static org.web3j.utils.Collection.tail;
 @SuppressWarnings("deprecation")
 public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
-    private static final String USAGE =
-            "truffle generate "
-                    + "[--javaTypes|--solidityTypes] "
-                    + "<input truffle json file>.json "
-                    + "-p|--package <base package name> "
-                    + "-o|--outputDir <destination base directory>";
+    public static final String COMMAND_TRUFFLE = "truffle";
+    public static final String COMMAND_GENERATE = "generate";
+    public static final String COMMAND_PREFIX = COMMAND_TRUFFLE + " " + COMMAND_GENERATE;
 
-    private String jsonFileLocation;
+    private final String jsonFileLocation;
+    private final boolean generateBothCallAndSend;
 
     public TruffleJsonFunctionWrapperGenerator(
             String jsonFileLocation,
             String destinationDirLocation,
             String basePackageName,
-            boolean useJavaNativeTypes) {
+            boolean useJavaNativeTypes,
+            boolean generateBothCallAndSend) {
 
         super(new File(destinationDirLocation), basePackageName, useJavaNativeTypes);
         this.jsonFileLocation = jsonFileLocation;
+        this.generateBothCallAndSend = generateBothCallAndSend;
     }
 
-    public static void run(String[] args) throws Exception {
-        if (args.length < 1 || !"generate".equals(args[0])) {
-            exitError(USAGE);
-        } else {
-            main(tail(args));
+    public static void main(String[] args) {
+        if (args.length > 0 && args[0].equals(COMMAND_TRUFFLE)) {
+            args = tail(args);
+        }
+        if (args.length > 0 && args[0].equals(COMMAND_GENERATE)) {
+            args = tail(args);
+        }
+        CommandLine cmd = new CommandLine(new PicocliRunner());
+        cmd.parseWithHandlers(
+                new RunLast().useOut(System.out).useAnsi(Help.Ansi.AUTO),
+                RethrowExceptionHandler.HANDLER,
+                args);
+    }
+
+    @Command(
+            name = COMMAND_PREFIX,
+            mixinStandardHelpOptions = true,
+            version = "4.0",
+            sortOptions = false)
+    private static class PicocliRunner implements Callable<Void> {
+
+        @Option(
+                names = {"-jt", JAVA_TYPES_ARG},
+                description = "use native Java types.",
+                showDefaultValue = ALWAYS)
+        boolean useJavaNativeTypes;
+
+        @Option(
+                names = {"-st", SOLIDITY_TYPES_ARG},
+                description = "use solidity types.")
+        boolean useSolidityTypes;
+
+        @Parameters(index = "0")
+        String jsonFileLocation;
+
+        @Option(
+                names = {"-o", "--outputDir"},
+                description = "destination base directory.",
+                required = true)
+        private String destinationDirLocation;
+
+        @Option(
+                names = {"-B", "--generateBoth"},
+                description = "generate both call and send functions.",
+                required = false)
+        private boolean generateBothCallAndSend;
+
+        @Option(
+                names = {"-p", "--package"},
+                description = "base package name.",
+                required = true)
+        private String basePackageName;
+
+        @Override
+        public Void call() throws Exception {
+            useJavaNativeTypes = !(useSolidityTypes);
+            new TruffleJsonFunctionWrapperGenerator(
+                            jsonFileLocation,
+                            destinationDirLocation,
+                            basePackageName,
+                            useJavaNativeTypes,
+                            generateBothCallAndSend)
+                    .generate();
+            return null;
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static class RethrowExceptionHandler
+            implements CommandLine.IExceptionHandler2<List<Object>> {
 
-        String[] fullArgs;
-        if (args.length == 5) {
-            fullArgs = new String[args.length + 1];
-            fullArgs[0] = JAVA_TYPES_ARG;
-            System.arraycopy(args, 0, fullArgs, 1, args.length);
-        } else {
-            fullArgs = args;
+        public static final RethrowExceptionHandler HANDLER = new RethrowExceptionHandler();
+
+        @Override
+        public List<Object> handleParseException(ParameterException ex, String[] args) {
+            throw ex;
         }
 
-        if (fullArgs.length != 6) {
-            exitError(USAGE);
+        @Override
+        public List<Object> handleExecutionException(
+                ExecutionException ex, ParseResult parseResult) {
+            throw ex;
         }
-
-        boolean useJavaNativeTypes = useJavaNativeTypes(fullArgs[0], USAGE);
-
-        String jsonFileLocation = parsePositionalArg(fullArgs, 1);
-        String destinationDirLocation = parseParameterArgument(fullArgs, "-o", "--outputDir");
-        String basePackageName = parseParameterArgument(fullArgs, "-p", "--package");
-
-        if (Strings.isEmpty(jsonFileLocation)
-                || Strings.isEmpty(destinationDirLocation)
-                || Strings.isEmpty(basePackageName)) {
-            exitError(USAGE);
-        }
-
-        new TruffleJsonFunctionWrapperGenerator(
-                        jsonFileLocation,
-                        destinationDirLocation,
-                        basePackageName,
-                        useJavaNativeTypes)
-                .generate();
     }
 
     static Contract loadContractDefinition(File jsonFile) throws IOException {
@@ -148,7 +200,8 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             } else {
                 addresses = Collections.EMPTY_MAP;
             }
-            new SolidityFunctionWrapper(useJavaNativeTypes, Address.DEFAULT_LENGTH)
+            new SolidityFunctionWrapper(
+                            useJavaNativeTypes, Address.DEFAULT_LENGTH, generateBothCallAndSend)
                     .generateJavaFiles(
                             contractName,
                             c.getBytecode(),

@@ -3,7 +3,7 @@ Web3j: Web3 Java Ethereum Ðapp API
 
 [![Documentation Status](https://readthedocs.org/projects/web3j-docs/badge/?version=latest)](https://docs.web3j.io)
 [![build status](https://github.com/web3j/web3j/actions/workflows/build.yml/badge.svg)](https://github.com/web3j/web3j/actions/workflows/build.yml)
-[![codecov](https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg?token=a4G9ITI6CU)](https://codecov.io/gh/web3j/web3j)
+[![codecov](https://codecov.io/gh/web3j/web3j/branch/main/graph/badge.svg?token=a4G9ITI6CU)](https://codecov.io/gh/web3j/web3j)
 [![Discord](https://img.shields.io/discord/779382027614158919?label=discord)](https://discord.gg/A9UXfPF2tS)
 
 
@@ -20,6 +20,14 @@ integration code for the platform.
 
 The [Java and the Blockchain](https://www.youtube.com/watch?v=ea3miXs_P6Y) talk provides
 an overview of blockchain, Ethereum and Web3j.
+
+NEW! Get involved!
+--------
+Since Web3J moved under Hyperledger we started to do Web3J Contributors calls every 2 weeks!
+Subscribe to our community page and to see check our call schedule.
+Your contribution matters!
+- [Community Link](https://lists.hyperledger.org/g/web3j) - Check our last updates! 
+- [Calendar Invite](https://lists.hyperledger.org/g/web3j/ics/invite.ics?repeatid=57401) - Add the contributor call to your calendar!
 
 Features
 --------
@@ -110,9 +118,12 @@ Java:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.11.0</version>
+  <version>4.12.0</version>
 </dependency>
 ```
+
+**Note:** The Web3j Java binaries are compiled using Java 17. Java 17 or a more recent version is required to use Web3j
+ as a dependency.
 
 Android:
 
@@ -120,7 +131,7 @@ Android:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.8.7-android</version>
+  <version>4.8.9-android</version>
 </dependency>
 ```
 
@@ -130,13 +141,13 @@ Gradle
 Java:
 
 ```groovy
-implementation ('org.web3j:core:4.11.0')
+implementation ('org.web3j:core:4.12.0')
 ```
 
 Android:
 
 ```groovy
-implementation ('org.web3j:core:4.8.7-android')
+implementation ('org.web3j:core:4.8.9-android')
 ```
 
 Build instructions

@@ -60,7 +60,7 @@ import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
  * documented, but is the reverse of the encoding details located <a
  * href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  *
- * <p>The public API is composed of "decode*" methods and provides backward-compatbility. See
+ * <p>The public API is composed of "decode*" methods and provides backward-compatibility. See
  * https://github.com/web3j/web3j/issues/1591 for a discussion about decoding and possible
  * improvements.
  */
@@ -69,14 +69,20 @@ public class TypeDecoder {
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
     public static Type instantiateType(String solidityType, Object value)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException,
-                    IllegalAccessException, ClassNotFoundException {
+            throws InvocationTargetException,
+                    NoSuchMethodException,
+                    InstantiationException,
+                    IllegalAccessException,
+                    ClassNotFoundException {
         return instantiateType(makeTypeReference(solidityType), value);
     }
 
     public static Type instantiateType(TypeReference ref, Object value)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-                    InstantiationException, ClassNotFoundException {
+            throws NoSuchMethodException,
+                    IllegalAccessException,
+                    InvocationTargetException,
+                    InstantiationException,
+                    ClassNotFoundException {
         Class rc = ref.getClassType();
         if (Array.class.isAssignableFrom(rc)) {
             return instantiateArrayType(ref, value);
@@ -137,17 +143,14 @@ public class TypeDecoder {
         try {
             byte[] inputByteArray = Numeric.hexStringToByteArray(input);
             int typeLengthAsBytes = getTypeLengthInBytes(type);
-
-            byte[] resultByteArray = new byte[typeLengthAsBytes + 1];
-
-            if (Int.class.isAssignableFrom(type) || Fixed.class.isAssignableFrom(type)) {
-                resultByteArray[0] = inputByteArray[0]; // take MSB as sign bit
-            }
-
             int valueOffset = Type.MAX_BYTE_LENGTH - typeLengthAsBytes;
-            System.arraycopy(inputByteArray, valueOffset, resultByteArray, 1, typeLengthAsBytes);
 
-            BigInteger numericValue = new BigInteger(resultByteArray);
+            BigInteger numericValue;
+            if (Uint.class.isAssignableFrom(type) || Ufixed.class.isAssignableFrom(type)) {
+                numericValue = new BigInteger(1, inputByteArray, valueOffset, typeLengthAsBytes);
+            } else {
+                numericValue = new BigInteger(inputByteArray, valueOffset, typeLengthAsBytes);
+            }
             return type.getConstructor(BigInteger.class).newInstance(numericValue);
 
         } catch (NoSuchMethodException
@@ -185,8 +188,11 @@ public class TypeDecoder {
     }
 
     static Type instantiateArrayType(TypeReference ref, Object value)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-                    InstantiationException, ClassNotFoundException {
+            throws NoSuchMethodException,
+                    IllegalAccessException,
+                    InvocationTargetException,
+                    InstantiationException,
+                    ClassNotFoundException {
         List values;
         if (value instanceof List) {
             values = (List) value;
@@ -220,8 +226,11 @@ public class TypeDecoder {
     }
 
     static Type instantiateAtomicType(Class<?> referenceClass, Object value)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-                    InstantiationException, ClassNotFoundException {
+            throws NoSuchMethodException,
+                    IllegalAccessException,
+                    InvocationTargetException,
+                    InstantiationException,
+                    ClassNotFoundException {
         Object constructorArg = null;
         if (NumericType.class.isAssignableFrom(referenceClass)) {
             constructorArg = asBigInteger(value);

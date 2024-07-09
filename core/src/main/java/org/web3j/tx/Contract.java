@@ -52,8 +52,9 @@ import org.web3j.tx.gas.ContractEIP1559GasProvider;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.tx.response.EmptyTransactionReceipt;
-import org.web3j.utils.Numeric;
 
+import static org.web3j.crypto.Hash.sha3String;
+import static org.web3j.utils.Numeric.cleanHexPrefix;
 import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
 
 /**
@@ -262,7 +263,7 @@ public abstract class Contract extends ManagedTransaction {
             return false;
         }
 
-        String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
+        String code = cleanHexPrefix(ethGetCode.getCode());
 
         int metadataIndex = -1;
         for (String metadataIndicator : METADATA_HASH_INDICATORS) {
@@ -486,6 +487,41 @@ public abstract class Contract extends ManagedTransaction {
         contract.setTransactionReceipt(transactionReceipt);
 
         return contract;
+    }
+
+    public static class LinkReference {
+        final String source;
+        final String libraryName;
+        final Address address;
+
+        public LinkReference(String source, String libraryName, Address address) {
+            this.source = source;
+            this.libraryName = libraryName;
+            this.address = address;
+        }
+    }
+
+    public static String linkBinaryWithReferences(String binary, List<LinkReference> links) {
+        String replacingBinary = binary;
+        for (LinkReference link : links) {
+            // solc / hardhat convention
+            String libSourceName = link.source + ":" + link.libraryName;
+            String placeHolder = "__$" + sha3String(libSourceName).substring(2, 36) + "$__";
+            String addressReplacement = cleanHexPrefix(link.address.toString());
+            replacingBinary = replacingBinary.replace(placeHolder, addressReplacement);
+
+            // old version solc
+            String linkString = link.source + ":" + link.libraryName;
+            String oldSolcPlaceHolder =
+                    "__" + linkString + "_".repeat(40 - linkString.length() - 2);
+            replacingBinary = replacingBinary.replace(oldSolcPlaceHolder, addressReplacement);
+
+            // truffle old version
+            String trufflePlaceHolder =
+                    "__" + link.libraryName + "_".repeat(40 - link.libraryName.length() - 2);
+            replacingBinary = replacingBinary.replace(trufflePlaceHolder, addressReplacement);
+        }
+        return replacingBinary;
     }
 
     protected static <T extends Contract> T deploy(

@@ -39,7 +39,7 @@ public class FunSpecGeneratorTest {
         assertEquals(
                 generatedFunSpec.toString(),
                 "@org.junit.jupiter.api.Test\n"
-                        + "fun test() {\n"
+                        + "public fun test() {\n"
                         + "  val hello  =  \"Hello how are you\"\n"
                         + "  val web3j = org.web3j.protocol.Web3j.build()\n"
                         + "}\n");

@@ -87,7 +87,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     }
 
     public int compareTo(TypeReference<T> o) {
-        // taken from the blog post comments - this results in an errror if the
+        // taken from the blog post comments - this results in an error if the
         // type parameter is left out.
         return 0;
     }
@@ -268,7 +268,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
             }
             lastReadStringPosition = nextSquareBrackets.end();
             nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
-            // cant find any more [] and string isn't fully parsed
+            // can't find any more [] and string isn't fully parsed
             if (!nextSquareBrackets.find(lastReadStringPosition) && lastReadStringPosition != len) {
                 throw new ClassNotFoundException(
                         "Unable to make TypeReference from " + solidityType);
