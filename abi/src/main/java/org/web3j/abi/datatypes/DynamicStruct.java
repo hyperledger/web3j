@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DynamicStruct extends DynamicArray<Type> implements StructType {
 
-    public final List<Class<Type>> itemTypes = new ArrayList<>();
+    private final List<Class<Type>> itemTypes = new ArrayList<>();
 
     public DynamicStruct(List<Type> values) {
         this(Type.class, values);

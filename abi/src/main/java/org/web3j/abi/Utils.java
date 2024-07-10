@@ -92,7 +92,7 @@ public class Utils {
     public static TypeReference<DynamicArray> getDynamicArrayTypeReference(Class parameter) {
         return new TypeReference<DynamicArray>() {
             @Override
-            TypeReference getSubTypeReference() {
+            public TypeReference getSubTypeReference() {
                 return TypeReference.create(parameter);
             }
         };
