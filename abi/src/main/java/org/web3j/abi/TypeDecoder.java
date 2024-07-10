@@ -134,8 +134,9 @@ public class TypeDecoder {
         return decode(input, 0, type);
     }
 
-    public static <T extends Type> T decode(String input, TypeReference<?> type) throws ClassNotFoundException {
-        return decode(input, 0, ((TypeReference<T>)type).getClassType());
+    public static <T extends Type> T decode(String input, TypeReference<?> type)
+            throws ClassNotFoundException {
+        return decode(input, 0, ((TypeReference<T>) type).getClassType());
     }
 
     public static Address decodeAddress(String input) {
@@ -461,7 +462,8 @@ public class TypeDecoder {
     }
 
     public static <T extends Type> T decodeDynamicStruct(
-            String input, int offset, TypeReference<T> typeReference) throws ClassNotFoundException {
+            String input, int offset, TypeReference<T> typeReference)
+            throws ClassNotFoundException {
 
         BiFunction<List<T>, String, T> function =
                 (elements, typeName) -> {
@@ -473,31 +475,13 @@ public class TypeDecoder {
                     }
                 };
 
-        if (typeReference.getClassType().isAssignableFrom(DynamicStruct.class) && typeReference.getInnerTypes() != null) {
-            return decodeDynamicStructElementsFromInnerTypes(input, offset, typeReference, function);
+        if (typeReference.getClassType().isAssignableFrom(DynamicStruct.class)
+                && typeReference.getInnerTypes() != null) {
+            return decodeDynamicStructElementsFromInnerTypes(
+                    input, offset, typeReference, function);
         } else {
             return decodeDynamicStructElements(input, offset, typeReference, function);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T extends Type> T decodeDynamicStructElements(
-            final String input,
-            final int offset,
-            final TypeReference<T> typeReference,
-            final BiFunction<List<T>, String, T> consumer) throws ClassNotFoundException {
-
-            final Class<T> classType = typeReference.getClassType();
-
-            if(classType.isAssignableFrom(DynamicStruct.class)) {
-                // We handle it dynamically. User has not constructed a class representing their struct but instead we have a DynamicStruct type reference with inner references
-                return decodeDynamicStructElementsWithInnerTypeRefs(classType, input, offset, typeReference, consumer);
-            }
-            else {
-                // we handle it the constructor way
-                return decodeDynamicStructElementsWithCtor(classType, input, offset, typeReference, consumer);
-            }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -505,7 +489,8 @@ public class TypeDecoder {
             final String input,
             final int offset,
             final TypeReference<T> typeReference,
-            final BiFunction<List<T>, String, T> consumer) throws ClassNotFoundException {
+            final BiFunction<List<T>, String, T> consumer)
+            throws ClassNotFoundException {
         final Class<T> classType = typeReference.getClassType();
         final List<TypeReference<?>> innerTypes = typeReference.getInnerTypes();
         final int length = innerTypes.size();
@@ -547,24 +532,22 @@ public class TypeDecoder {
         int dynamicParametersProcessed = 0;
         for (int i = 0; i < length; ++i) {
             final TypeReference<T> parameterTypeReference = (TypeReference<T>) innerTypes.get(i);
-            final Class<T> declaredField = (Class<T>) parameterTypeReference.getClassType();
+            final Class<T> declaredField = parameterTypeReference.getClassType();
             if (isDynamic(declaredField)) {
                 final boolean isLastParameterInStruct =
                         dynamicParametersProcessed == (dynamicParametersToProcess - 1);
                 final int parameterLength =
                         isLastParameterInStruct
-                                ? input.length()
-                                        - parameterOffsets.get(dynamicParametersProcessed)
+                                ? input.length() - parameterOffsets.get(dynamicParametersProcessed)
                                 : parameterOffsets.get(dynamicParametersProcessed + 1)
                                         - parameterOffsets.get(dynamicParametersProcessed);
 
                 parameters.put(
                         i,
-                        decodeDynamicParameterFromStructWithInnerTypes(
+                        decodeDynamicParameterFromStructWithTypeReference(
                                 input,
                                 parameterOffsets.get(dynamicParametersProcessed),
                                 parameterLength,
-                                declaredField,
                                 parameterTypeReference));
                 dynamicParametersProcessed++;
             }
@@ -639,9 +622,6 @@ public class TypeDecoder {
                     final Class<T> parameterFromAnnotation =
                             Utils.extractParameterFromAnnotation(
                                     constructor.getParameterAnnotations()[i]);
-                    // Used if the field is a dynamic array.
-                    final TypeReference<T> parameterTypeReference =
-                            (TypeReference<T>) Utils.getDynamicArrayTypeReference(parameterFromAnnotation);
                     parameters.put(
                             i,
                             decodeDynamicParameterFromStruct(
@@ -681,7 +661,8 @@ public class TypeDecoder {
             final int parameterOffset,
             final int parameterLength,
             final Class<T> declaredField,
-            final TypeReference<T> parameterTypeReference) throws ClassNotFoundException {
+            final Class<T> parameter)
+            throws ClassNotFoundException {
         final String dynamicElementData =
                 input.substring(parameterOffset, parameterOffset + parameterLength);
 
@@ -689,12 +670,37 @@ public class TypeDecoder {
         if (DynamicStruct.class.isAssignableFrom(declaredField)) {
             value = decodeDynamicStruct(dynamicElementData, 0, TypeReference.create(declaredField));
         } else if (DynamicArray.class.isAssignableFrom(declaredField)) {
+            if (parameter == null) {
+                throw new RuntimeException(
+                        "parameter can not be null, try to use annotation @Parameterized to specify the parameter type");
+            }
             value =
                     (T)
                             decodeDynamicArray(
                                     dynamicElementData,
                                     0,
-                                    parameterTypeReference);
+                                    Utils.getDynamicArrayTypeReference(parameter));
+        } else {
+            value = decode(dynamicElementData, declaredField);
+        }
+        return value;
+    }
+
+    private static <T extends Type> T decodeDynamicParameterFromStructWithTypeReference(
+            final String input,
+            final int parameterOffset,
+            final int parameterLength,
+            final TypeReference<T> parameterTypeReference)
+            throws ClassNotFoundException {
+        final String dynamicElementData =
+                input.substring(parameterOffset, parameterOffset + parameterLength);
+        final Class<T> declaredField = parameterTypeReference.getClassType();
+
+        final T value;
+        if (DynamicStruct.class.isAssignableFrom(declaredField)) {
+            value = decodeDynamicStruct(dynamicElementData, 0, parameterTypeReference);
+        } else if (DynamicArray.class.isAssignableFrom(declaredField)) {
+            value = (T) decodeDynamicArray(dynamicElementData, 0, parameterTypeReference);
         } else {
             value = decode(dynamicElementData, declaredField);
         }
@@ -776,19 +782,25 @@ public class TypeDecoder {
                                 .map(x -> x.getInnerTypes())
                                 .isPresent()) {
                             value =
-                                TypeDecoder.decodeDynamicStruct(
-                                    input,
-                                    offset + getDataOffset(input, currOffset, typeReference),
-                                    (TypeReference<T>) new TypeReference<DynamicStruct>(
-                                        typeReference.isIndexed(),
-                                        typeReference.getSubTypeReference().getInnerTypes()
-                                    ) {});
+                                    TypeDecoder.decodeDynamicStruct(
+                                            input,
+                                            offset
+                                                    + getDataOffset(
+                                                            input, currOffset, typeReference),
+                                            (TypeReference<T>)
+                                                    new TypeReference<DynamicStruct>(
+                                                            typeReference.isIndexed(),
+                                                            typeReference
+                                                                    .getSubTypeReference()
+                                                                    .getInnerTypes()) {});
                         } else {
                             value =
-                                TypeDecoder.decodeDynamicStruct(
-                                        input,
-                                        offset + getDataOffset(input, currOffset, typeReference),
-                                        TypeReference.create(cls));
+                                    TypeDecoder.decodeDynamicStruct(
+                                            input,
+                                            offset
+                                                    + getDataOffset(
+                                                            input, currOffset, typeReference),
+                                            TypeReference.create(cls));
                         }
                     } else {
                         value =
