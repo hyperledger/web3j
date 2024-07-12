@@ -25,6 +25,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import org.web3j.commons.ChainId;
 import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -114,6 +115,15 @@ public class SignTest {
                                 "0x06624da478b3f862582e85b31c6a21c6cae2eee2bd50f55c93c4faad9d9c8d7f"));
 
         assertEquals(signatureData, (expected));
+    }
+
+    @Test
+    public void testSignedPrefixedMessageToKeyWithEip155() throws SignatureException {
+        Sign.SignatureData signatureData = Sign.signPrefixedMessage(TEST_MESSAGE, SampleKeys.KEY_PAIR);
+        assert(signatureData.getV()[0] == 28);
+        signatureData.getV()[0] = (byte)(ChainId.GOERLI.getId() * 2 + 36);
+        BigInteger key = Sign.signedPrefixedMessageToKey(TEST_MESSAGE, signatureData, ChainId.GOERLI);
+        assertEquals(key, (SampleKeys.  PUBLIC_KEY));
     }
 
     @ParameterizedTest(name = "testGetRecId(chainId={0}, recId={1}, isEip155={2})")
