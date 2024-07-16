@@ -246,7 +246,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     @Test
     public void testStaticArrayOfStructsInStructGeneration() throws Exception {
         testCodeGeneration(
-                "staticarrayofstructsinstruct", "StaticArrayOfStructsInStruct", JAVA_TYPES_ARG, false);
+                "staticarrayofstructsinstruct",
+                "StaticArrayOfStructsInStruct",
+                JAVA_TYPES_ARG,
+                false);
     }
 
     @Test
