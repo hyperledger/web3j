@@ -484,33 +484,44 @@ public class TypeDecoder {
         return decodeDynamicStructElements(input, offset, typeReference, function);
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T extends Type> T decodeDynamicStructElementsFromInnerTypes(
-            final String input,
-            final int offset,
-            final TypeReference<T> typeReference,
-            final BiFunction<List<T>, String, T> consumer)
-            throws ClassNotFoundException {
-        final Class<T> classType = typeReference.getClassType();
-        final List<TypeReference<?>> innerTypes = typeReference.getInnerTypes();
-        final int length = innerTypes.size();
-        final Map<Integer, T> parameters = new HashMap<>();
-        int staticOffset = 0;
-        final List<Integer> parameterOffsets = new ArrayList<>();
+    private static class ParameterOffsetTracker<T extends Type> {
+        public final Map<Integer, T> parameters;
+        public final List<Integer> parameterOffsets;
+        public int staticOffset;
+        public int dynamicParametersToProcess;
 
-        int dynamicParametersToProcess = 0;
-        for (int i = 0; i < length; ++i) {
+        ParameterOffsetTracker(
+                final Map<Integer, T> parametersIn,
+                final List<Integer> parameterOffsetsIn,
+                int staticOffsetIn,
+                int dynamicParametersToProcessIn) {
+            this.parameters = parametersIn;
+            this.parameterOffsets = parameterOffsetsIn;
+            this.staticOffset = staticOffsetIn;
+            this.dynamicParametersToProcess = dynamicParametersToProcess;
+        }
+    }
+
+    private static <T extends Type>
+            ParameterOffsetTracker<T> getDynamicOffsetsAndNonDynamicParameters(
+                    final String input, final int offset, final TypeReference<T> typeReference)
+                    throws ClassNotFoundException {
+        ParameterOffsetTracker<T> tracker =
+                new ParameterOffsetTracker<T>(new HashMap<>(), new ArrayList<>(), 0, 0);
+
+        final List<TypeReference<?>> innerTypes = typeReference.getInnerTypes();
+        for (int i = 0; i < innerTypes.size(); ++i) {
             final Class<T> declaredField = (Class<T>) innerTypes.get(i).getClassType();
             final T value;
-            final int beginIndex = offset + staticOffset;
+            final int beginIndex = offset + tracker.staticOffset;
             if (isDynamic(declaredField)) {
                 final int parameterOffset =
                         decodeDynamicStructDynamicParameterOffset(
                                         input.substring(beginIndex, beginIndex + 64))
                                 + offset;
-                parameterOffsets.add(parameterOffset);
-                staticOffset += 64;
-                dynamicParametersToProcess += 1;
+                tracker.parameterOffsets.add(parameterOffset);
+                tracker.staticOffset += 64;
+                tracker.dynamicParametersToProcess += 1;
             } else {
                 if (StaticStruct.class.isAssignableFrom(declaredField)) {
                     value =
@@ -518,49 +529,73 @@ public class TypeDecoder {
                                     input.substring(beginIndex),
                                     0,
                                     TypeReference.create(declaredField));
-                    staticOffset +=
+                    tracker.staticOffset +=
                             staticStructNestedPublicFieldsFlatList((Class<Type>) declaredField)
                                             .size()
                                     * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 } else {
                     value = decode(input.substring(beginIndex), 0, declaredField);
-                    staticOffset += value.bytes32PaddedLength() * 2;
+                    tracker.staticOffset += value.bytes32PaddedLength() * 2;
                 }
-                parameters.put(i, value);
+                tracker.parameters.put(i, value);
             }
         }
+
+        return tracker;
+    }
+
+    private static <T extends Type> List<T> getDynamicParametersWithTracker(
+            final String input,
+            final TypeReference<T> typeReference,
+            final ParameterOffsetTracker<T> tracker)
+            throws ClassNotFoundException {
+
+        final List<TypeReference<?>> innerTypes = typeReference.getInnerTypes();
         int dynamicParametersProcessed = 0;
-        for (int i = 0; i < length; ++i) {
+        for (int i = 0; i < innerTypes.size(); ++i) {
             final TypeReference<T> parameterTypeReference = (TypeReference<T>) innerTypes.get(i);
             final Class<T> declaredField = parameterTypeReference.getClassType();
             if (isDynamic(declaredField)) {
                 final boolean isLastParameterInStruct =
-                        dynamicParametersProcessed == (dynamicParametersToProcess - 1);
+                        dynamicParametersProcessed == (tracker.dynamicParametersToProcess - 1);
                 final int parameterLength =
                         isLastParameterInStruct
-                                ? input.length() - parameterOffsets.get(dynamicParametersProcessed)
-                                : parameterOffsets.get(dynamicParametersProcessed + 1)
-                                        - parameterOffsets.get(dynamicParametersProcessed);
+                                ? input.length()
+                                        - tracker.parameterOffsets.get(dynamicParametersProcessed)
+                                : tracker.parameterOffsets.get(dynamicParametersProcessed + 1)
+                                        - tracker.parameterOffsets.get(dynamicParametersProcessed);
 
-                parameters.put(
+                tracker.parameters.put(
                         i,
                         decodeDynamicParameterFromStructWithTypeReference(
                                 input,
-                                parameterOffsets.get(dynamicParametersProcessed),
+                                tracker.parameterOffsets.get(dynamicParametersProcessed),
                                 parameterLength,
                                 parameterTypeReference));
                 dynamicParametersProcessed++;
             }
         }
 
-        String typeName = getSimpleTypeName(classType);
-
         final List<T> elements = new ArrayList<>();
-        for (int i = 0; i < length; ++i) {
-            elements.add(parameters.get(i));
+        for (int i = 0; i < innerTypes.size(); ++i) {
+            elements.add(tracker.parameters.get(i));
         }
 
-        return consumer.apply(elements, typeName);
+        return elements;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Type> T decodeDynamicStructElementsFromInnerTypes(
+            final String input,
+            final int offset,
+            final TypeReference<T> typeReference,
+            final BiFunction<List<T>, String, T> consumer)
+            throws ClassNotFoundException {
+        ParameterOffsetTracker<T> tracker =
+                getDynamicOffsetsAndNonDynamicParameters(input, offset, typeReference);
+        final List<T> parameters = getDynamicParametersWithTracker(input, typeReference, tracker);
+        String typeName = getSimpleTypeName(typeReference.getClassType());
+        return consumer.apply(parameters, typeName);
     }
 
     @SuppressWarnings("unchecked")
