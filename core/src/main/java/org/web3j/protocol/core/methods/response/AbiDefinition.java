@@ -277,9 +277,9 @@ public class AbiDefinition {
 
         public String structIdentifier() {
             return ((internalType == null ? type : internalType.isEmpty() ? type : internalType)
-                            + components.stream()
-                                    .map(NamedType::structIdentifier)
-                                    .collect(Collectors.joining()));
+                    + components.stream()
+                            .map(NamedType::structIdentifier)
+                            .collect(Collectors.joining()));
         }
 
         public int nestedness() {
