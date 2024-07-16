@@ -470,18 +470,18 @@ public class TypeDecoder {
                     if (elements.isEmpty()) {
                         throw new UnsupportedOperationException(
                                 "Zero length fixed array is invalid type");
-                    } else {
-                        return instantiateStruct(typeReference, elements);
                     }
+
+                    return instantiateStruct(typeReference, elements);
                 };
 
         if (typeReference.getClassType().isAssignableFrom(DynamicStruct.class)
                 && typeReference.getInnerTypes() != null) {
             return decodeDynamicStructElementsFromInnerTypes(
                     input, offset, typeReference, function);
-        } else {
-            return decodeDynamicStructElements(input, offset, typeReference, function);
         }
+
+        return decodeDynamicStructElements(input, offset, typeReference, function);
     }
 
     @SuppressWarnings("unchecked")
