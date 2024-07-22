@@ -1506,7 +1506,7 @@ public class SolidityFunctionWrapper extends Generator {
         // Create function that returns the ABI encoding of the Solidity function call.
         if (abiFuncs) {
             functionName = "getABI_" + functionName;
-            methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
+            methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC).addModifiers(Modifier.STATIC);
             addParameters(methodBuilder, functionDefinition.getInputs());
             buildAbiFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
             results.add(methodBuilder.build());

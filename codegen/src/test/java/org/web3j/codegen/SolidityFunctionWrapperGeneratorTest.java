@@ -61,6 +61,17 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testAbiFuncsGeneration() throws Exception {
+        testCodeGeneration(emptyList(),"abifuncs", "AbiFuncs", JAVA_TYPES_ARG, true, false, true);
+        testCodeGeneration(emptyList(),"abifuncs", "AbiFuncs", SOLIDITY_TYPES_ARG, true, false, true);
+    }
+
+    @Test
+    public void testAbiFuncsCompareJavaFileTest() throws Exception {
+        compareJavaFile("AbiFuncs", false, true);
+    }
+
+    @Test
     public void testGreeterGeneration() throws Exception {
         testCodeGenerationJvmTypes("greeter", "Greeter");
         testCodeGenerationSolidityTypes("greeter", "Greeter");
@@ -143,12 +154,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testStructOnlyInArrayCompareJavaFile() throws Exception {
-        compareJavaFile("OnlyInArrayStruct", false);
+        compareJavaFile("OnlyInArrayStruct", false, false);
     }
 
     @Test
     public void testArraysInStructCompareJavaFileTest() throws Exception {
-        compareJavaFile("ArraysInStruct", false);
+        compareJavaFile("ArraysInStruct", false, false);
     }
 
     @Test
@@ -199,12 +210,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testEventParametersNoNamedCompareJavaFile() throws Exception {
-        compareJavaFile("EventParameters", false);
+        compareJavaFile("EventParameters", false, false);
     }
 
     @Test
     public void testDeployMethodGenerated() throws Exception {
-        compareJavaFile("MetaCoin", true);
+        compareJavaFile("MetaCoin", true, false);
     }
 
     @Test
@@ -215,7 +226,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testSameInnerStructNameCompareJavaFile() throws Exception {
-        compareJavaFile("SameInnerStructName", true);
+        compareJavaFile("SameInnerStructName", true, false);
     }
 
     @Test
@@ -229,7 +240,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testArrayOfStructClassGenerationCompareJavaFile() throws Exception {
-        compareJavaFile("ArrayOfStructClassGeneration", true);
+        compareJavaFile("ArrayOfStructClassGeneration", true, false);
     }
 
     @Test
@@ -240,7 +251,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testArrayOfStructAndStructCompareJavaFile() throws Exception {
-        compareJavaFile("ArrayOfStructAndStruct", true);
+        compareJavaFile("ArrayOfStructAndStruct", true, false);
     }
 
     @Test
@@ -251,14 +262,14 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testStaticArrayOfStructsInStructGenerationCompareJavaFile() throws Exception {
-        compareJavaFile("StaticArrayOfStructsInStruct", true);
+        compareJavaFile("StaticArrayOfStructsInStruct", true, false);
     }
 
-    private void compareJavaFile(String inputFileName, boolean useBin) throws Exception {
+    private void compareJavaFile(String inputFileName, boolean useBin, boolean abiFuncs) throws Exception {
         String contract = inputFileName.toLowerCase();
         String packagePath =
                 generateCode(
-                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, useBin, false, false);
+                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, useBin, false, abiFuncs);
         File fileActual = new File(tempDirPath, packagePath + "/" + inputFileName + ".java");
         File fileExpected =
                 new File(
