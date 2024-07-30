@@ -6,7 +6,7 @@ import org.web3j.tuples.Tuple;
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
  * <p>Please use org.web3j.codegen.TupleGenerator in the 
- * <a href="https://github.com/web3j/web3j/tree/main/codegen">codegen module</a> to update.
+ * <a href="https://github.com/hyperledger/web3j/tree/main/codegen">codegen module</a> to update.
  */
 public final class Tuple2<T1, T2> implements Tuple {
     private static final int SIZE = 2;
