@@ -63,7 +63,7 @@ import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
  * href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  *
  * <p>The public API is composed of "decode*" methods and provides backward-compatibility. See
- * https://github.com/web3j/web3j/issues/1591 for a discussion about decoding and possible
+ * https://github.com/hyperledger/web3j/issues/1591 for a discussion about decoding and possible
  * improvements.
  */
 public class TypeDecoder {
