@@ -354,7 +354,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         /*
          * c.f., org.web3j.tx.ChainId
          *
-         * This should be updated with https://github.com/web3j/web3j/issues/234
+         * This should be updated with https://github.com/hyperledger/web3j/issues/234
          */
         enum Network {
             olympic(0),

@@ -36,7 +36,7 @@ class Generator {
                 + "<p>Please use "
                 + cls.getName()
                 + " in the \n"
-                + "<a href=\"https://github.com/web3j/web3j/tree/main/codegen\">"
+                + "<a href=\"https://github.com/hyperledger/web3j/tree/main/codegen\">"
                 + "codegen module</a> to update.\n";
     }
 }

@@ -7,7 +7,7 @@ import org.web3j.abi.datatypes.Int;
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
  * <p>Please use org.web3j.codegen.AbiTypesGenerator in the 
- * <a href="https://github.com/web3j/web3j/tree/main/codegen">codegen module</a> to update.
+ * <a href="https://github.com/hyperledger/web3j/tree/main/codegen">codegen module</a> to update.
  */
 public class Int192 extends Int {
     public static final Int192 DEFAULT = new Int192(BigInteger.ZERO);
