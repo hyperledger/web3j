@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
@@ -46,7 +47,8 @@ public class FunctionReturnDecoderTest {
                 new Function(
                         "test",
                         Collections.<Type>emptyList(),
-                        Collections.singletonList(new TypeReference<Uint>() {}));
+                        Collections.singletonList(new TypeReference<Uint>() {
+                        }));
 
         assertEquals(
                 FunctionReturnDecoder.decode(
@@ -61,7 +63,8 @@ public class FunctionReturnDecoderTest {
                 new Function(
                         "simple",
                         Arrays.asList(),
-                        Collections.singletonList(new TypeReference<Utf8String>() {}));
+                        Collections.singletonList(new TypeReference<Utf8String>() {
+                        }));
 
         List<Type> utf8Strings =
                 FunctionReturnDecoder.decode(
@@ -79,7 +82,8 @@ public class FunctionReturnDecoderTest {
                 new Function(
                         "test",
                         Collections.emptyList(),
-                        Collections.singletonList(new TypeReference<Utf8String>() {}));
+                        Collections.singletonList(new TypeReference<Utf8String>() {
+                        }));
 
         List<Type> utf8Strings =
                 FunctionReturnDecoder.decode(
@@ -96,7 +100,9 @@ public class FunctionReturnDecoderTest {
                 new Function(
                         "test",
                         Collections.<Type>emptyList(),
-                        Arrays.asList(new TypeReference<Uint>() {}, new TypeReference<Uint>() {}));
+                        Arrays.asList(new TypeReference<Uint>() {
+                        }, new TypeReference<Uint>() {
+                        }));
 
         assertEquals(
                 FunctionReturnDecoder.decode(
@@ -113,10 +119,14 @@ public class FunctionReturnDecoderTest {
                         "function",
                         Collections.<Type>emptyList(),
                         Arrays.asList(
-                                new TypeReference<Utf8String>() {},
-                                new TypeReference<Utf8String>() {},
-                                new TypeReference<Utf8String>() {},
-                                new TypeReference<Utf8String>() {}));
+                                new TypeReference<Utf8String>() {
+                                },
+                                new TypeReference<Utf8String>() {
+                                },
+                                new TypeReference<Utf8String>() {
+                                },
+                                new TypeReference<Utf8String>() {
+                                }));
 
         assertEquals(
                 FunctionReturnDecoder.decode(
@@ -144,8 +154,10 @@ public class FunctionReturnDecoderTest {
         List<TypeReference<Type>> outputParameters = new ArrayList<>(1);
         outputParameters.add(
                 (TypeReference)
-                        new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {});
-        outputParameters.add((TypeReference) new TypeReference<Uint256>() {});
+                        new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {
+                        });
+        outputParameters.add((TypeReference) new TypeReference<Uint256>() {
+        });
 
         List<Type> decoded =
                 FunctionReturnDecoder.decode(
@@ -177,7 +189,8 @@ public class FunctionReturnDecoderTest {
                 new Function(
                         "test",
                         Collections.emptyList(),
-                        Collections.singletonList(new TypeReference<Uint>() {}));
+                        Collections.singletonList(new TypeReference<Uint>() {
+                        }));
 
         assertEquals(
                 FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
@@ -190,7 +203,8 @@ public class FunctionReturnDecoderTest {
         String encoded = TypeEncoder.encodeNumeric(value);
 
         assertEquals(
-                FunctionReturnDecoder.decodeIndexedValue(encoded, new TypeReference<Uint256>() {}),
+                FunctionReturnDecoder.decodeIndexedValue(encoded, new TypeReference<Uint256>() {
+                }),
                 (value));
     }
 
@@ -201,7 +215,8 @@ public class FunctionReturnDecoderTest {
         String hash = Hash.sha3(encoded);
 
         assertEquals(
-                FunctionReturnDecoder.decodeIndexedValue(hash, new TypeReference<Utf8String>() {}),
+                FunctionReturnDecoder.decodeIndexedValue(hash, new TypeReference<Utf8String>() {
+                }),
                 (new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 
@@ -211,7 +226,8 @@ public class FunctionReturnDecoderTest {
         byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput);
 
         assertEquals(
-                FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes32>() {}),
+                FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes32>() {
+                }),
                 (new Bytes32(rawInputBytes)));
     }
 
@@ -221,19 +237,21 @@ public class FunctionReturnDecoderTest {
         byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput.substring(0, 34));
 
         assertEquals(
-                FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes16>() {}),
+                FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes16>() {
+                }),
                 (new Bytes16(rawInputBytes)));
     }
 
     @Test
     public void testDecodeIndexedDynamicBytesValue() {
-        DynamicBytes bytes = new DynamicBytes(new byte[] {1, 2, 3, 4, 5});
+        DynamicBytes bytes = new DynamicBytes(new byte[]{1, 2, 3, 4, 5});
         String encoded = TypeEncoder.encodeDynamicBytes(bytes);
         String hash = Hash.sha3(encoded);
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(
-                        hash, new TypeReference<DynamicBytes>() {}),
+                        hash, new TypeReference<DynamicBytes>() {
+                        }),
                 (new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 
@@ -247,7 +265,8 @@ public class FunctionReturnDecoderTest {
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(
-                        hash, new TypeReference<DynamicArray>() {}),
+                        hash, new TypeReference<DynamicArray>() {
+                        }),
                 (new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 
@@ -1262,8 +1281,10 @@ public class FunctionReturnDecoderTest {
         List outputParameters = new ArrayList<TypeReference<Type>>();
         outputParameters.addAll(
                 Arrays.asList(
-                        new TypeReference<StaticArray4<Utf8String>>() {},
-                        new TypeReference<StaticArray4<Uint256>>() {}));
+                        new TypeReference<StaticArray4<Utf8String>>() {
+                        },
+                        new TypeReference<StaticArray4<Uint256>>() {
+                        }));
 
         // tuple of (strings string[4]{"", "", "", ""}, ints int[4]{0, 0, 0, 0})
         String rawInput =
@@ -1315,5 +1336,50 @@ public class FunctionReturnDecoderTest {
                 Arrays.asList(
                         new AbiV2TestFixture.Qux(
                                 new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN), "data")));
+    }
+
+    @Test
+    public void testDynamicStructFix() throws ClassNotFoundException {
+        // Return data from 'testInputAndOutput' function of this contract
+        // https://sepolia.etherscan.io/address/0x009C10396226ECFE3E39b3f1AEFa072E37578e30#readContract
+        String returnedData =
+                "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000000b76616c75656265666f72650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000001320000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000063078313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a76616c7565616674657200000000000000000000000000000000000000000000";
+
+        List<TypeReference<?>> MyStruct2Types = new ArrayList<>();
+        List<TypeReference<?>> MyStructTypes = new ArrayList<>();
+        List<TypeReference<?>> MyParameters = new ArrayList<>();
+
+        MyStruct2Types.add(TypeReference.makeTypeReference("string"));
+        MyStruct2Types.add(TypeReference.makeTypeReference("string"));
+
+        MyStructTypes.add(TypeReference.makeTypeReference("uint256"));
+        MyStructTypes.add(TypeReference.makeTypeReference("string"));
+        MyStructTypes.add(TypeReference.makeTypeReference("string"));
+        MyStructTypes.add(new TypeReference<DynamicStruct>(false, MyStruct2Types) {
+        });
+
+        MyParameters.add(TypeReference.makeTypeReference("string"));
+        MyParameters.add(new TypeReference<DynamicStruct>(false, MyStructTypes) {
+        });
+
+        MyParameters.add(TypeReference.makeTypeReference("string"));
+
+        List<Type> decodedData =
+                FunctionReturnDecoder.decode(returnedData, Utils.convert(MyParameters));
+
+        assertEquals(decodedData.get(0).getValue(), "valuebefore");
+
+        List<Type> structData = ((DynamicStruct) decodedData.get(1)).getValue();
+
+        assertEquals(structData.get(0).getValue(), BigInteger.valueOf(1));
+        assertEquals(structData.get(1).getValue(), "2");
+        assertEquals(structData.get(2).getValue(), "3");
+
+        List<Type> innerStructData = ((DynamicStruct) structData.get(3)).getValue();
+
+        assertEquals(innerStructData.get(0).getValue(), "1234");
+        assertEquals(innerStructData.get(1).getValue(), "0x1234");
+
+        assertEquals(decodedData.get(2).getValue(), "valueafter");
     }
 }
