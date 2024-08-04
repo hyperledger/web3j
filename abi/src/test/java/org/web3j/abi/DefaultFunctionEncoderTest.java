@@ -60,7 +60,7 @@ public class DefaultFunctionEncoderTest {
     }
 
     @Test
-    public void testArrayOfDynamicStruct() throws ClassNotFoundException {
+    public void testBuildEventOfArrayOfDynamicStruct() throws ClassNotFoundException {
         // The full event signature is
         //
         //     Stamp3(uint256 indexed stampId, address indexed caller, bool odd,

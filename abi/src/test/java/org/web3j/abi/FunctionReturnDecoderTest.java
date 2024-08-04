@@ -1319,31 +1319,48 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
-    public void testDynamicStructFix() throws ClassNotFoundException {
+    public void testDynamicStructWithAdditionalParametersReturn() throws ClassNotFoundException {
         // Return data from 'testInputAndOutput' function of this contract
         // https://sepolia.etherscan.io/address/0x009C10396226ECFE3E39b3f1AEFa072E37578e30#readContract
+        //        struct MyStruct {
+        //            uint256 value1;
+        //            string value2;
+        //            string value3;
+        //            MyStruct2 value4;
+        //        }
+        //
+        //        struct MyStruct2 {
+        //            string value1;
+        //            string value2;
+        //        }
+        //        function testInputAndOutput(MyStruct memory struc) external pure
+        //        returns(string memory valueBefore, MyStruct memory, string memory valueAfter) {
+        //
+        //            return ("valuebefore", mystruc, "valueafter");
+        //
+        //        }
         String returnedData =
                 "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000000b76616c75656265666f72650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000001320000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000063078313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a76616c7565616674657200000000000000000000000000000000000000000000";
 
-        List<TypeReference<?>> MyStruct2Types = new ArrayList<>();
-        List<TypeReference<?>> MyStructTypes = new ArrayList<>();
-        List<TypeReference<?>> MyParameters = new ArrayList<>();
+        List<TypeReference<?>> myStruct2Types = new ArrayList<>();
+        List<TypeReference<?>> myStructTypes = new ArrayList<>();
+        List<TypeReference<?>> myParameters = new ArrayList<>();
 
-        MyStruct2Types.add(TypeReference.makeTypeReference("string"));
-        MyStruct2Types.add(TypeReference.makeTypeReference("string"));
+        myStruct2Types.add(TypeReference.makeTypeReference("string"));
+        myStruct2Types.add(TypeReference.makeTypeReference("string"));
 
-        MyStructTypes.add(TypeReference.makeTypeReference("uint256"));
-        MyStructTypes.add(TypeReference.makeTypeReference("string"));
-        MyStructTypes.add(TypeReference.makeTypeReference("string"));
-        MyStructTypes.add(new TypeReference<DynamicStruct>(false, MyStruct2Types) {});
+        myStructTypes.add(TypeReference.makeTypeReference("uint256"));
+        myStructTypes.add(TypeReference.makeTypeReference("string"));
+        myStructTypes.add(TypeReference.makeTypeReference("string"));
+        myStructTypes.add(new TypeReference<DynamicStruct>(false, myStruct2Types) {});
 
-        MyParameters.add(TypeReference.makeTypeReference("string"));
-        MyParameters.add(new TypeReference<DynamicStruct>(false, MyStructTypes) {});
+        myParameters.add(TypeReference.makeTypeReference("string"));
+        myParameters.add(new TypeReference<DynamicStruct>(false, myStructTypes) {});
 
-        MyParameters.add(TypeReference.makeTypeReference("string"));
+        myParameters.add(TypeReference.makeTypeReference("string"));
 
         List<Type> decodedData =
-                FunctionReturnDecoder.decode(returnedData, Utils.convert(MyParameters));
+                FunctionReturnDecoder.decode(returnedData, Utils.convert(myParameters));
 
         assertEquals(decodedData.get(0).getValue(), "valuebefore");
 
