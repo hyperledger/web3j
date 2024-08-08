@@ -62,8 +62,9 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testAbiFuncsGeneration() throws Exception {
-        testCodeGeneration(emptyList(),"abifuncs", "AbiFuncs", JAVA_TYPES_ARG, true, false, true);
-        testCodeGeneration(emptyList(),"abifuncs", "AbiFuncs", SOLIDITY_TYPES_ARG, true, false, true);
+        testCodeGeneration(emptyList(), "abifuncs", "AbiFuncs", JAVA_TYPES_ARG, true, false, true);
+        testCodeGeneration(
+                emptyList(), "abifuncs", "AbiFuncs", SOLIDITY_TYPES_ARG, true, false, true);
     }
 
     @Test
@@ -268,11 +269,18 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         compareJavaFile("StaticArrayOfStructsInStruct", true, false);
     }
 
-    private void compareJavaFile(String inputFileName, boolean useBin, boolean abiFuncs) throws Exception {
+    private void compareJavaFile(String inputFileName, boolean useBin, boolean abiFuncs)
+            throws Exception {
         String contract = inputFileName.toLowerCase();
         String packagePath =
                 generateCode(
-                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, useBin, false, abiFuncs);
+                        emptyList(),
+                        contract,
+                        inputFileName,
+                        JAVA_TYPES_ARG,
+                        useBin,
+                        false,
+                        abiFuncs);
         File fileActual = new File(tempDirPath, packagePath + "/" + inputFileName + ".java");
         File fileExpected =
                 new File(

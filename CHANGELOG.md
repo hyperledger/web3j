@@ -7,7 +7,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* Bug fix for Int256 decode range [2^248, type(int256).max] and [ type(int256.min), -(2^248) ) 
+* Bug fix for Int256 decode range [#2070](https://github.com/hyperledger/web3j/pull/2070)
+* Bug fix for BytesType.bytes32PaddedLength
 
 ### Features
 
