@@ -396,7 +396,8 @@ public class TypeDecoder {
             return 1;
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "countNestedFields failed for " + Utils.getTypeName(typeReference.getType()), e);
+                    "countNestedFields failed for " + Utils.getTypeName(typeReference.getType()),
+                    e);
         }
     }
 
