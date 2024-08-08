@@ -14,6 +14,7 @@ package org.web3j.abi;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,8 +40,15 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     private final Type type;
     private final boolean indexed;
 
+    protected List<TypeReference<?>> innerTypes;
+
     protected TypeReference() {
         this(false);
+    }
+
+    protected TypeReference(boolean indexed, List<TypeReference<?>> innerTypesIn) {
+        this(indexed);
+        this.innerTypes = innerTypesIn;
     }
 
     protected TypeReference(boolean indexed) {
@@ -59,8 +67,12 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      *
      * @return the type wrapped by this Array TypeReference, or null if not Array
      */
-    TypeReference getSubTypeReference() {
+    public TypeReference getSubTypeReference() {
         return null;
+    }
+
+    public List<TypeReference<?>> getInnerTypes() {
+        return this.innerTypes;
     }
 
     public int compareTo(TypeReference<T> o) {
@@ -175,7 +187,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                 arrayWrappedType =
                         new TypeReference<DynamicArray>(indexed) {
                             @Override
-                            TypeReference getSubTypeReference() {
+                            public TypeReference getSubTypeReference() {
                                 return baseTr;
                             }
 
@@ -213,7 +225,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                         new TypeReference.StaticArrayTypeReference<StaticArray>(arraySizeInt) {
 
                             @Override
-                            TypeReference getSubTypeReference() {
+                            public TypeReference getSubTypeReference() {
                                 return baseTr;
                             }
 

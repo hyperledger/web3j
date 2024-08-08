@@ -22,8 +22,10 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.StaticStruct;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
@@ -1258,6 +1260,69 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
+    public void testBuildDynamicArrayOfStaticStruct() throws ClassNotFoundException {
+        // This is a version of testDecodeStaticStructDynamicArray() that builds
+        // the decoding TypeReferences using inner types.
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "000000000000000000000000000000000000000000000000000000000000007b"
+                        + "000000000000000000000000000000000000000000000000000000000000007b"
+                        + "000000000000000000000000000000000000000000000000000000000000007b"
+                        + "000000000000000000000000000000000000000000000000000000000000007b";
+
+        // (uint256, uint256) static struct.
+        TypeReference<StaticStruct> staticStructTr =
+                new TypeReference<StaticStruct>(
+                        false,
+                        Arrays.asList(
+                                TypeReference.makeTypeReference("uint256"),
+                                TypeReference.makeTypeReference("uint256"))) {};
+
+        // (uint256, uint256)[] dynamic array of static struct.
+        TypeReference<DynamicArray> dynamicArray =
+                new TypeReference<DynamicArray>(false) {
+                    @Override
+                    public TypeReference getSubTypeReference() {
+                        return staticStructTr;
+                    }
+
+                    @Override
+                    public java.lang.reflect.Type getType() {
+                        return new java.lang.reflect.ParameterizedType() {
+                            @Override
+                            public java.lang.reflect.Type[] getActualTypeArguments() {
+                                return new java.lang.reflect.Type[] {staticStructTr.getType()};
+                            }
+
+                            @Override
+                            public java.lang.reflect.Type getRawType() {
+                                return DynamicArray.class;
+                            }
+
+                            @Override
+                            public java.lang.reflect.Type getOwnerType() {
+                                return Class.class;
+                            }
+                        };
+                    }
+                };
+
+        List<Type> decodedData =
+                FunctionReturnDecoder.decode(rawInput, Utils.convert(Arrays.asList(dynamicArray)));
+
+        List<Type> decodedArray = ((DynamicArray) decodedData.get(0)).getValue();
+
+        List<Type> decodedStaticStruct0 = ((StaticStruct) decodedArray.get(0)).getValue();
+        assertEquals(decodedStaticStruct0.get(0).getValue(), BigInteger.valueOf(123));
+        assertEquals(decodedStaticStruct0.get(1).getValue(), BigInteger.valueOf(123));
+
+        List<Type> decodedStaticStruct1 = ((StaticStruct) decodedArray.get(1)).getValue();
+        assertEquals(decodedStaticStruct1.get(0).getValue(), BigInteger.valueOf(123));
+        assertEquals(decodedStaticStruct1.get(1).getValue(), BigInteger.valueOf(123));
+    }
+
+    @Test
     public void testDecodeTupleOfStaticArrays() {
         List outputParameters = new ArrayList<TypeReference<Type>>();
         outputParameters.addAll(
@@ -1315,5 +1380,230 @@ public class FunctionReturnDecoderTest {
                 Arrays.asList(
                         new AbiV2TestFixture.Qux(
                                 new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN), "data")));
+    }
+
+    @Test
+    public void testBuildDynamicStructWithStaticStruct() throws ClassNotFoundException {
+        // This is a version of testDecodeDynamicStructWithStaticStruct() that builds
+        // the decoding TypeReferences using inner types.
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "0000000000000000000000000000000000000000000000000000000000000060"
+                        + "0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6461746100000000000000000000000000000000000000000000000000000000";
+        // (uint256, uint256) static struct.
+        TypeReference<StaticStruct> staticStruct =
+                new TypeReference<StaticStruct>(
+                        false,
+                        Arrays.asList(
+                                TypeReference.makeTypeReference("uint256"),
+                                TypeReference.makeTypeReference("uint256"))) {};
+
+        // ((uint256, uint256), string) dynamic struct containing static struct.
+        TypeReference<DynamicStruct> dynamicStruct =
+                new TypeReference<DynamicStruct>(
+                        false,
+                        Arrays.asList(staticStruct, TypeReference.makeTypeReference("string"))) {};
+
+        List<Type> decodedData =
+                FunctionReturnDecoder.decode(rawInput, Utils.convert(Arrays.asList(dynamicStruct)));
+        List<Type> decodedDynamicStruct = ((DynamicStruct) decodedData.get(0)).getValue();
+
+        List<Type> decodedStaticStruct = ((StaticStruct) decodedDynamicStruct.get(0)).getValue();
+        assertEquals(decodedStaticStruct.get(0).getValue(), BigInteger.ONE);
+        assertEquals(decodedStaticStruct.get(1).getValue(), BigInteger.TEN);
+
+        assertEquals(decodedDynamicStruct.get(1).getValue(), "data");
+    }
+
+    @Test
+    public void testDynamicStructOfDynamicStructWithAdditionalParametersReturn()
+            throws ClassNotFoundException {
+        // Return data from 'testInputAndOutput' function of this contract
+        // https://sepolia.etherscan.io/address/0x009C10396226ECFE3E39b3f1AEFa072E37578e30#readContract
+        //        struct MyStruct {
+        //            uint256 value1;
+        //            string value2;
+        //            string value3;
+        //            MyStruct2 value4;
+        //        }
+        //
+        //        struct MyStruct2 {
+        //            string value1;
+        //            string value2;
+        //        }
+        //        function testInputAndOutput(MyStruct memory struc) external pure
+        //        returns(string memory valueBefore, MyStruct memory, string memory valueAfter) {
+        //
+        //            return ("valuebefore", mystruc, "valueafter");
+        //
+        //        }
+        String returnedData =
+                "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000000b76616c75656265666f72650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000001320000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000063078313233340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a76616c7565616674657200000000000000000000000000000000000000000000";
+
+        List<TypeReference<?>> myStruct2Types = new ArrayList<>();
+        List<TypeReference<?>> myStructTypes = new ArrayList<>();
+        List<TypeReference<?>> myParameters = new ArrayList<>();
+
+        myStruct2Types.add(TypeReference.makeTypeReference("string"));
+        myStruct2Types.add(TypeReference.makeTypeReference("string"));
+
+        myStructTypes.add(TypeReference.makeTypeReference("uint256"));
+        myStructTypes.add(TypeReference.makeTypeReference("string"));
+        myStructTypes.add(TypeReference.makeTypeReference("string"));
+        myStructTypes.add(new TypeReference<DynamicStruct>(false, myStruct2Types) {});
+
+        myParameters.add(TypeReference.makeTypeReference("string"));
+        myParameters.add(new TypeReference<DynamicStruct>(false, myStructTypes) {});
+
+        myParameters.add(TypeReference.makeTypeReference("string"));
+
+        List<Type> decodedData =
+                FunctionReturnDecoder.decode(returnedData, Utils.convert(myParameters));
+
+        assertEquals(decodedData.get(0).getValue(), "valuebefore");
+
+        List<Type> structData = ((DynamicStruct) decodedData.get(1)).getValue();
+
+        assertEquals(structData.get(0).getValue(), BigInteger.valueOf(1));
+        assertEquals(structData.get(1).getValue(), "2");
+        assertEquals(structData.get(2).getValue(), "3");
+
+        List<Type> innerStructData = ((DynamicStruct) structData.get(3)).getValue();
+
+        assertEquals(innerStructData.get(0).getValue(), "1234");
+        assertEquals(innerStructData.get(1).getValue(), "0x1234");
+
+        assertEquals(decodedData.get(2).getValue(), "valueafter");
+    }
+
+    @Test
+    public void testDynamicStructOfStaticStructReturn() throws ClassNotFoundException {
+        String returnedData =
+                "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000004746573740000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000047465737400000000000000000000000000000000000000000000000000000000";
+
+        List<TypeReference<?>> myStruct2Types = new ArrayList<>();
+        List<TypeReference<?>> myStructTypes = new ArrayList<>();
+
+        myStruct2Types.add(TypeReference.makeTypeReference("uint256"));
+
+        myStructTypes.add(TypeReference.makeTypeReference("uint256"));
+        myStructTypes.add(TypeReference.makeTypeReference("string"));
+        myStructTypes.add(TypeReference.makeTypeReference("string"));
+        myStructTypes.add(new TypeReference<StaticStruct>(false, myStruct2Types) {});
+
+        TypeReference<DynamicStruct> dynamicStruct =
+                new TypeReference<DynamicStruct>(false, myStructTypes) {};
+
+        List<Type> decodedData =
+                FunctionReturnDecoder.decode(
+                        returnedData, Utils.convert(Arrays.asList(dynamicStruct)));
+
+        List<Type> decodedStruct = ((DynamicStruct) decodedData.get(0)).getValue();
+
+        assertEquals(decodedStruct.get(0).getValue(), BigInteger.valueOf(1));
+        assertEquals(decodedStruct.get(1).getValue(), "test");
+        assertEquals(decodedStruct.get(2).getValue(), "test");
+
+        List<Type> innerStructData = ((StaticStruct) decodedStruct.get(3)).getValue();
+
+        assertEquals(innerStructData.get(0).getValue(), BigInteger.valueOf(1));
+    }
+
+    @Test
+    public void testBuildEventOfArrayOfDynamicStruct() throws ClassNotFoundException {
+        // The full event signature is
+        //
+        //     Stamp3(uint256 indexed stampId, address indexed caller, bool odd,
+        // (uint256,bool,string) topMessage, (uint256,bool,string)[] messages),
+        //
+        // but we are only decoding the non-indexed data portion of it represented by
+        // 'bool odd, (uint256,bool,string) topMessage, (uint256,bool,string)[] messages'.
+        //
+        // Transaction:
+        // https://testnet.treasurescan.io/tx/0x041e53e7571283d462df99a95b2c21324279657f26a3adef907095d2d9c5ed85?tab=logs
+        // Contract:
+        // https://testnet.treasurescan.io/address/0x5167E9A422aCEd95C2D0b62bF05a7847a9a942B2
+        String data =
+                "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000568656c6c6f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001a00000000000000000000000000000000000000000000000000000000000000015000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000002676d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000002676d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000002676d000000000000000000000000000000000000000000000000000000000000";
+
+        TypeReference<DynamicStruct> tupleTr =
+                new TypeReference<DynamicStruct>(
+                        false,
+                        Arrays.asList(
+                                TypeReference.makeTypeReference("uint256"),
+                                TypeReference.makeTypeReference("bool"),
+                                TypeReference.makeTypeReference("string"))) {};
+
+        // Decode data according to the above signature for the non-indexed parameters.
+        List<Type> decodedData =
+                FunctionReturnDecoder.decode(
+                        data,
+                        Utils.convert(
+                                Arrays.asList(
+                                        // bool odd
+                                        TypeReference.makeTypeReference("bool"),
+
+                                        // (uint256,bool,string)
+                                        tupleTr,
+
+                                        // (uint256,bool,string)[]
+                                        new TypeReference<DynamicArray>(false) {
+                                            @Override
+                                            public TypeReference getSubTypeReference() {
+                                                return tupleTr;
+                                            }
+
+                                            @Override
+                                            public java.lang.reflect.Type getType() {
+                                                return new java.lang.reflect.ParameterizedType() {
+                                                    @Override
+                                                    public java.lang.reflect.Type[]
+                                                            getActualTypeArguments() {
+                                                        return new java.lang.reflect.Type[] {
+                                                            tupleTr.getType()
+                                                        };
+                                                    }
+
+                                                    @Override
+                                                    public java.lang.reflect.Type getRawType() {
+                                                        return DynamicArray.class;
+                                                    }
+
+                                                    @Override
+                                                    public java.lang.reflect.Type getOwnerType() {
+                                                        return Class.class;
+                                                    }
+                                                };
+                                            }
+                                        })));
+
+        assertEquals(decodedData.get(0).getValue(), false);
+
+        List<Type> tupleData = ((DynamicStruct) decodedData.get(1)).getValue();
+
+        assertEquals(tupleData.get(0).getValue(), BigInteger.valueOf(20));
+        assertEquals(tupleData.get(1).getValue(), false);
+        assertEquals(tupleData.get(2).getValue(), "hello");
+
+        List<DynamicStruct> tupleArrayData =
+                ((DynamicArray<DynamicStruct>) decodedData.get(2)).getValue();
+
+        List<Type> tupleArrayEntry0 = tupleArrayData.get(0).getValue();
+        assertEquals(tupleArrayEntry0.get(0).getValue(), BigInteger.valueOf(21));
+        assertEquals(tupleArrayEntry0.get(1).getValue(), true);
+        assertEquals(tupleArrayEntry0.get(2).getValue(), "gm");
+
+        List<Type> tupleArrayEntry1 = tupleArrayData.get(1).getValue();
+        assertEquals(tupleArrayEntry1.get(0).getValue(), BigInteger.valueOf(22));
+        assertEquals(tupleArrayEntry1.get(1).getValue(), false);
+        assertEquals(tupleArrayEntry1.get(2).getValue(), "gm");
+
+        List<Type> tupleArrayEntry2 = tupleArrayData.get(2).getValue();
+        assertEquals(tupleArrayEntry2.get(0).getValue(), BigInteger.valueOf(23));
+        assertEquals(tupleArrayEntry2.get(1).getValue(), true);
+        assertEquals(tupleArrayEntry2.get(2).getValue(), "gm");
     }
 }
