@@ -73,7 +73,11 @@ public class FastRawTransactionManager extends RawTransactionManager {
     }
 
     public synchronized void resetNonce() throws IOException {
-        nonce = super.getNonce();
+        nonce = super.getNonce().subtract(BigInteger.ONE);
+    }
+
+    public synchronized void clearNonce() {
+        nonce = BigInteger.valueOf(-1);
     }
 
     public synchronized void setNonce(BigInteger value) {
