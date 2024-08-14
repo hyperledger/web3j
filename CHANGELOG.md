@@ -10,7 +10,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Bug fix for Int256 decode range [#2070](https://github.com/hyperledger/web3j/pull/2070)
 * Bug fix for BytesType.bytes32PaddedLength [#2089](https://github.com/hyperledger/web3j/pull/2089)
 * Bug fix for FastRawTransactionManager.resetNonce [#2084](https://github.com/hyperledger/web3j/pull/2084)
-* Fix licence type 
+* Fix licence type [#2090](https://github.com/hyperledger/web3j/pull/2090)
 
 ### Features
 
