@@ -12,9 +12,20 @@
  */
 package org.web3j.protocol.scenarios;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Future;
+
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
 import org.web3j.protocol.Web3j;
@@ -26,16 +37,6 @@ import org.web3j.tx.response.Callback;
 import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.QueuingTransactionReceiptProcessor;
 import org.web3j.utils.Convert;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Future;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
@@ -74,11 +75,11 @@ public class FastRawTransactionManagerIT extends Scenario {
         }
 
         for (int i = 0;
-             i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !transactionReceipts.isEmpty();
-             i++) {
+                i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !transactionReceipts.isEmpty();
+                i++) {
 
             for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator();
-                 iterator.hasNext(); ) {
+                    iterator.hasNext(); ) {
                 Future<TransactionReceipt> transactionReceiptFuture = iterator.next();
 
                 if (transactionReceiptFuture.isDone()) {
@@ -140,8 +141,7 @@ public class FastRawTransactionManagerIT extends Scenario {
                                     }
 
                                     @Override
-                                    public void exception(Exception exception) {
-                                    }
+                                    public void exception(Exception exception) {}
                                 },
                                 DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH,
                                 POLLING_FREQUENCY));
@@ -156,8 +156,8 @@ public class FastRawTransactionManagerIT extends Scenario {
         }
 
         for (int i = 0;
-             i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !pendingTransactions.isEmpty();
-             i++) {
+                i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !pendingTransactions.isEmpty();
+                i++) {
             for (TransactionReceipt transactionReceipt : transactionReceipts) {
                 assertFalse(transactionReceipt.getBlockHash().isEmpty());
                 pendingTransactions.remove(transactionReceipt.getTransactionHash());
