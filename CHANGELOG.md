@@ -12,6 +12,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * bump snapshot version to 4.12.2 [#2093](https://github.com/hyperledger/web3j/pull/2093)
+* Adds Support for Linea ENS [#2094](https://github.com/hyperledger/web3j/pull/2094)
  
 ### BREAKING CHANGES
 
