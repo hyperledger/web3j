@@ -26,4 +26,5 @@ public class ChainIdLong {
     public static final long ETHEREUM_CLASSIC_MAINNET = 61;
     public static final long ETHEREUM_CLASSIC_TESTNET = 62;
     public static final long LINEA = 59144;
+    public static final long LINEA_SEPOLIA = 59141;
 }
