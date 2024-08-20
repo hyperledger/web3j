@@ -18,6 +18,8 @@ import org.web3j.tx.ChainIdLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.web3j.ens.Contracts.LINEA;
+import static org.web3j.ens.Contracts.LINEA_SEPOLIA;
 import static org.web3j.ens.Contracts.MAINNET;
 import static org.web3j.ens.Contracts.RINKEBY;
 import static org.web3j.ens.Contracts.ROPSTEN;
@@ -33,6 +35,8 @@ public class ContractsTest {
         assertEquals(resolveRegistryContract(ChainIdLong.ROPSTEN + ""), (ROPSTEN));
         assertEquals(resolveRegistryContract(ChainIdLong.RINKEBY + ""), (RINKEBY));
         assertEquals(resolveRegistryContract(ChainIdLong.SEPOLIA + ""), (SEPOLIA));
+        assertEquals(resolveRegistryContract(ChainIdLong.LINEA + ""), (LINEA));
+        assertEquals(resolveRegistryContract(ChainIdLong.LINEA_SEPOLIA + ""), (LINEA_SEPOLIA));
     }
 
     @Test
