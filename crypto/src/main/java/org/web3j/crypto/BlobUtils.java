@@ -26,7 +26,8 @@ public class BlobUtils {
     }
 
     private static void loadTrustedSetupParameters() {
-        CKZG4844JNI.loadTrustedSetupFromResource(BlobUtils.trustedSetupFilePath, BlobUtils.class);
+        CKZG4844JNI.loadTrustedSetupFromResource(
+                BlobUtils.trustedSetupFilePath, BlobUtils.class, 0);
     }
 
     public static Bytes getCommitment(Blob blobData) {

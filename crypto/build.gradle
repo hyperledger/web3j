@@ -10,7 +10,7 @@ dependencies {
             project(':utils'),
             "org.slf4j:slf4j-api:$slf4jVersion",
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
-            "tech.pegasys:jc-kzg-4844:$kzg4844Version"
+            "io.consensys.protocols:jc-kzg-4844:$kzg4844Version"
     implementation("io.tmio:tuweni-bytes:$tuweniVersion")
     implementation("io.tmio:tuweni-units:$tuweniVersion")
 }

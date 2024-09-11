@@ -40,7 +40,7 @@ public class BlobUtilsTest {
     @Test
     public void testBlobToCommitmentProofVersionedHashes() throws Exception {
         CKZG4844JNI.loadNativeLibrary();
-        CKZG4844JNI.loadTrustedSetupFromResource("/trusted_setup.txt", BlobUtils.class);
+        CKZG4844JNI.loadTrustedSetupFromResource("/trusted_setup.txt", BlobUtils.class, 0);
 
         Blob blob =
                 new Blob(
