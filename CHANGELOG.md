@@ -3,7 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [4.12.2]() (Upcoming)
+# [4.12.3]() (Upcoming)
+
+### Bug Fixes
+
+*
+
+### Features
+
+* bump snapshot version to 4.12.3 [#2101](https://github.com/hyperledger/web3j/pull/2101)
+
+### BREAKING CHANGES
+
+*
+
+# [4.12.2](https://github.com/hyperledger/web3j/releases/tag/v4.12.2) (2024-09-18)
 
 ### Bug Fixes
 
@@ -13,6 +27,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * bump snapshot version to 4.12.2 [#2093](https://github.com/hyperledger/web3j/pull/2093)
 * Adds Support for Linea ENS [#2094](https://github.com/hyperledger/web3j/pull/2094)
+* Upgrade jc-kzg-4844 to 2.0.0 [#2095](https://github.com/hyperledger/web3j/pull/2095)
  
 ### BREAKING CHANGES
 
