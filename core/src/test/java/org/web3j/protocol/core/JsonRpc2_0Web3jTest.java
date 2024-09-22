@@ -37,8 +37,7 @@ public class JsonRpc2_0Web3jTest {
     public void testStopExecutorOnShutdown() throws Exception {
         web3j.shutdown();
 
-        verify(scheduledExecutorService).shutdown();
-        verify(service).close();
+        verifyServicesClosed();
     }
 
     @Test
@@ -51,5 +50,16 @@ public class JsonRpc2_0Web3jTest {
 
                     web3j.shutdown();
                 });
+    }
+
+    @Test
+    public void shouldShutdownOnAutoClose() throws Exception {
+        try (Web3j web3j = Web3j.build(service, 10, scheduledExecutorService)) {}
+        verifyServicesClosed();
+    }
+
+    private void verifyServicesClosed() throws IOException {
+        verify(scheduledExecutorService).shutdown();
+        verify(service).close();
     }
 }
