@@ -12,6 +12,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * bump snapshot version to 4.12.3 [#2101](https://github.com/hyperledger/web3j/pull/2101)
+* Add HSM kms implementation [#2105](https://github.com/hyperledger/web3j/pull/2105)
 
 ### BREAKING CHANGES
 
