@@ -21,6 +21,7 @@ dependencies {
             "io.github.adraffy:ens-normalize:$ensAdraffyVersion",
             "io.tmio:tuweni-bytes:$tuweniVersion",
             "io.tmio:tuweni-units:$tuweniVersion"
+    implementation "software.amazon.awssdk:kms:$awsSdkVersion"
     testImplementation project(path: ':crypto', configuration: 'testArtifacts'),
     "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
     "ch.qos.logback:logback-classic:$logbackVersion"

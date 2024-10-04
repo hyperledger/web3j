@@ -26,6 +26,7 @@ ext {
     picocliVersion = '4.7.6'
     ensAdraffyVersion = '0.2.0'
     kzg4844Version = '2.0.0'
+    awsSdkVersion = '2.27.24'
     tuweniVersion = '2.4.2'
     // test dependencies
     equalsverifierVersion = '3.16.1'
