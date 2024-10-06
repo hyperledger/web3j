@@ -418,9 +418,19 @@ public class SolidityFunctionWrapper extends Generator {
                 .build();
     }
 
-    private FieldSpec createEventDefinition(String name, List<NamedTypeName> parameters) {
+    private FieldSpec createEventDefinition(
+            String name,
+            List<NamedTypeName> parameters,
+            Map<String, Integer> eventsCount,
+            AbiDefinition event) {
 
         CodeBlock initializer = buildVariableLengthEventInitializer(name, parameters);
+        Integer occurrences = eventsCount.get(name);
+        if (occurrences > 1) {
+            event.setName(name + (occurrences - 1));
+            eventsCount.replace(name, occurrences - 1);
+            name = event.getName();
+        }
 
         return FieldSpec.builder(Event.class, buildEventDefinitionName(name))
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
@@ -432,13 +442,14 @@ public class SolidityFunctionWrapper extends Generator {
         return eventName.toUpperCase() + "_EVENT";
     }
 
-    private List<MethodSpec> buildFunctionDefinitions(
+    List<MethodSpec> buildFunctionDefinitions(
             String className,
             TypeSpec.Builder classBuilder,
             List<AbiDefinition> functionDefinitions)
             throws ClassNotFoundException {
 
         Set<String> duplicateFunctionNames = getDuplicateFunctionNames(functionDefinitions);
+        Map<String, Integer> eventsCount = getDuplicatedEventNames(functionDefinitions);
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals(TYPE_FUNCTION)) {
@@ -446,10 +457,33 @@ public class SolidityFunctionWrapper extends Generator {
                 boolean useUpperCase = !duplicateFunctionNames.contains(functionName);
                 methodSpecs.addAll(buildFunctions(functionDefinition, useUpperCase));
             } else if (functionDefinition.getType().equals(TYPE_EVENT)) {
-                methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
+                methodSpecs.addAll(
+                        buildEventFunctions(functionDefinition, classBuilder, eventsCount));
             }
         }
         return methodSpecs;
+    }
+
+    Map<String, Integer> getDuplicatedEventNames(List<AbiDefinition> functionDefinitions) {
+
+        Map<String, Integer> countMap = new HashMap<>();
+
+        functionDefinitions.stream()
+                .filter(
+                        function ->
+                                TYPE_EVENT.equals(function.getType()) && function.getName() != null)
+                .forEach(
+                        function -> {
+                            String functionName = function.getName();
+                            if (countMap.containsKey(functionName)) {
+                                int count = countMap.get(functionName);
+                                countMap.put(functionName, count + 1);
+                            } else {
+                                countMap.put(functionName, 1);
+                            }
+                        });
+
+        return countMap;
     }
 
     private List<TypeSpec> buildStructTypes(final List<AbiDefinition> functionDefinitions)
@@ -1917,7 +1951,9 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     List<MethodSpec> buildEventFunctions(
-            AbiDefinition functionDefinition, TypeSpec.Builder classBuilder)
+            AbiDefinition functionDefinition,
+            TypeSpec.Builder classBuilder,
+            Map<String, Integer> eventsCount)
             throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
@@ -1946,7 +1982,10 @@ public class SolidityFunctionWrapper extends Generator {
             parameters.add(parameter);
         }
 
-        classBuilder.addField(createEventDefinition(functionName, parameters));
+        classBuilder.addField(
+                createEventDefinition(functionName, parameters, eventsCount, functionDefinition));
+
+        functionName = functionDefinition.getName();
 
         classBuilder.addType(
                 buildEventResponseObject(
