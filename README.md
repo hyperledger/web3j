@@ -254,7 +254,7 @@ Projects using Web3j
 <a href="https://argent.xyz">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent-dark.svg">
-    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="50">
+    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="100">
   </picture>
 </a>
 
