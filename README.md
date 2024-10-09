@@ -188,73 +188,73 @@ for more information on configuration options.
 Projects using Web3j
 ------------------
 
-<a href="https://alphawallet.com/" style="display:inline-block; margin: 10px;">
+<a href="https://alphawallet.com/">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/alphawallet-dark.svg">
-    <img alt="Alphawallet logo" src="static-imgs/alphawallet-light.svg" style="height:50px; width:auto;">
+    <img alt="Alphawallet logo" src="static-imgs/alphawallet-light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://linea.build" style="display:inline-block; margin: 10px;">
+<a href="https://linea.build">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/linea-dark.svg">
-    <img alt="Linea logo" src="static-imgs/linea-light.svg" style="height:50px; width:auto;">
+    <img alt="Linea logo" src="static-imgs/linea-light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://ens.domains" style="display:inline-block; margin: 10px;">
+<a href="https://ens.domains">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/ens-dark.svg">
-    <img alt="ENS logo" src="static-imgs/ens-light.svg" style="height:50px; width:auto;">
+    <img alt="ENS logo" src="static-imgs/ens-light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://web3auth.io" style="display:inline-block; margin: 10px;">
+<a href="https://web3auth.io">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/web3auth_dark.svg">
-    <img alt="Web3Auth logo" src="static-imgs/web3auth_light.svg" style="height:50px; width:auto;">
+    <img alt="Web3Auth logo" src="static-imgs/web3auth_light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://celo.org" style="display:inline-block; margin: 10px;">
+<a href="https://celo.org">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/celo-dark.svg">
-    <img alt="Celo logo" src="static-imgs/celo-light.svg" style="height:50px; width:auto;">
+    <img alt="Celo logo" src="static-imgs/celo-light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://explorer.walletconnect.com/" style="display:inline-block; margin: 10px;">
+<a href="https://explorer.walletconnect.com/">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/walletconnect-dark.svg">
-    <img alt="WalletConnect logo" src="static-imgs/walletconnect-light.svg" style="height:50px; width:auto;">
+    <img alt="WalletConnect logo" src="static-imgs/walletconnect-light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://unstoppabledomains.com" style="display:inline-block; margin: 10px;">
+<a href="https://unstoppabledomains.com">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/unstoppable_domains.png">
-    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains.png" style="height:50px; width:auto;">
+    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains.png" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://consensys.io/" style="display:inline-block; margin: 10px;">
+<a href="https://consensys.io/">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys-dark.svg">
-    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" style="height:50px; width:auto;">
+    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://github.com/hyperledger/besu" style="display:inline-block; margin: 10px;">
+<a href="https://github.com/hyperledger/besu">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/besu-dark.svg">
-    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" style="height:50px; width:auto;">
+    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" width="auto" height="50">
   </picture>
 </a>
 
-<a href="https://argent.xyz" style="display:inline-block; margin: 10px;">
+<a href="https://argent.xyz">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent-dark.svg">
-    <img alt="Argent logo" src="static-imgs/argent-light.svg" style="height:50px; width:auto;">
+    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="50">
   </picture>
 </a>
 
