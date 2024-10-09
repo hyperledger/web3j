@@ -240,28 +240,28 @@ Projects using Web3j
 <a href="https://consensys.io/">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys.svg">
-    <img alt="ConsenSys logo" src="static-imgs/consensys.svg" width="100" height="auto">
+    <img alt="ConsenSys logo" src="static-imgs/consensys.svg" width="300" height="auto">
   </picture>
 </a>
 
 <a href="https://github.com/hyperledger/besu">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/Besu.svg">
-    <img alt="Hyperledger Besu logo" src="static-imgs/Besu.svg.svg" width="auto" height="auto">
+    <img alt="Hyperledger Besu logo" src="static-imgs/Besu.svg.svg" width="300" height="auto">
   </picture>
 </a>
 
 <a href="https://argent.xyz">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent.svg">
-    <img alt="Argent logo" src="static-imgs/argent.svg" width="auto" height="50">
+    <img alt="Argent logo" src="static-imgs/argent.svg" width="300" height="auto">
   </picture>
 </a>
 
 <a href="https://hedera.com">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/hedera.svg">
-    <img alt="Hedera logo" src="static-imgs/hedera.svg" width="auto" height="50">
+    <img alt="Hedera logo" src="static-imgs/hedera.svg" width="300" height="auto">
   </picture>
 </a>
 
