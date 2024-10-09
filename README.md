@@ -195,7 +195,7 @@ Projects using Web3j
   </a>
 
   <a href="https://linea.build">
-    <img alt="Linea logo" src="https://lineascan.build/assets/linea/images/svg/logos/logo-light.svg?v=24.10.1.0" height="50">
+    <img alt="Linea logo" src="https://raw.githubusercontent.com/wevm/.github/main/content/sponsors/linea-dark.svg" height="50">
   </a>
 
   <a href="https://ens.domains">
@@ -207,7 +207,7 @@ Projects using Web3j
   </a>
 
   <a href="https://celo.org">
-    <img alt="Celo logo" src="https://images.ctfassets.net/wr0no19kwov9/5yVbTScDuXaZE0JL0w1kL0/f626c00085927069b473e684148c36f3/Union_1_.svg" height="50">
+    <img alt="Celo logo" src="https://raw.githubusercontent.com/wevm/.github/main/content/sponsors/celo-dark.svg" height="50">
   </a>
 
   <a href="https://explorer.walletconnect.com/">
