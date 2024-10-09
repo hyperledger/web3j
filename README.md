@@ -265,6 +265,13 @@ Projects using Web3j
   </picture>
 </a>
 
+<a href="https://www.fnality.org/home">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/fnality-dark.svg">
+    <img alt="Fnality logo" src="static-imgs/fnality-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
 Commercial support and training
 -------------------------------
 
