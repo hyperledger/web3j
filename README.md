@@ -188,89 +188,76 @@ for more information on configuration options.
 Projects using Web3j
 ------------------
 
-<a href="https://alphawallet.com/">
+<a href="https://alphawallet.com/" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/alphawallet-dark.svg">
-    <img alt="Alphawallet logo" src="static-imgs/alphawallet-light.svg" width="auto" height="50">
+    <img alt="Alphawallet logo" src="static-imgs/alphawallet-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://linea.build">
+<a href="https://linea.build" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/linea-dark.svg">
-    <img alt="Linea logo" src="static-imgs/linea-light.svg" width="auto" height="50">
+    <img alt="Linea logo" src="static-imgs/linea-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://ens.domains">
+<a href="https://ens.domains" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/ens-dark.svg">
-    <img alt="ENS logo" src="static-imgs/ens-light.svg" width="auto" height="50">
+    <img alt="ENS logo" src="static-imgs/ens-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://web3auth.io">
+<a href="https://web3auth.io" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/web3auth_dark.svg">
-    <img alt="Web3Auth logo" src="static-imgs/web3auth_light.svg" width="auto" height="50">
+    <img alt="Web3Auth logo" src="static-imgs/web3auth_light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://celo.org">
+<a href="https://celo.org" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/celo-dark.svg">
-    <img alt="Celo logo" src="static-imgs/celo-light.svg" width="auto" height="50">
+    <img alt="Celo logo" src="static-imgs/celo-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://explorer.walletconnect.com/">
+<a href="https://explorer.walletconnect.com/" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/walletconnect-dark.svg">
-    <img alt="WalletConnect logo" src="static-imgs/walletconnect-light.svg" width="auto" height="50">
+    <img alt="WalletConnect logo" src="static-imgs/walletconnect-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://unstoppabledomains.com">
+<a href="https://unstoppabledomains.com" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/unstoppable_domains.png">
-    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains.png" width="auto" height="50">
+    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains.png" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://consensys.io/">
+<a href="https://consensys.io/" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys-dark.svg">
-    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" width="auto" height="50">
+    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://github.com/hyperledger/besu">
+<a href="https://github.com/hyperledger/besu" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/besu-dark.svg">
-    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" width="auto" height="50">
+    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://argent.xyz">
+<a href="https://argent.xyz" style="display:inline-block; margin: 10px;">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent-dark.svg">
-    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="50">
+    <img alt="Argent logo" src="static-imgs/argent-light.svg" style="height:50px; width:auto;">
   </picture>
 </a>
 
-<a href="https://hedera.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/hedera.svg">
-    <img alt="Hedera logo" src="static-imgs/hedera.svg" width="200" height="50">
-  </picture>
-</a>
-
-<a href="https://www.fnality.org/home">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/fnality-dark.svg">
-    <img alt="Fnality logo" src="https://example.com/logos/fnality-light.svg" width="auto" height="50">
-  </picture>
-</a>
 
 Commercial support and training
 -------------------------------
