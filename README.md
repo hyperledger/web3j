@@ -202,6 +202,13 @@ Projects using Web3j
   </picture>
 </a>
 
+<a href="https://consensys.io/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys-dark.svg">
+    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
 <a href="https://ens.domains">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/ens-dark.svg">
@@ -209,10 +216,24 @@ Projects using Web3j
   </picture>
 </a>
 
+<a href="https://github.com/hyperledger/besu">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/besu-dark.svg">
+    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
 <a href="https://web3auth.io">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/web3auth_dark.svg">
     <img alt="Web3Auth logo" src="static-imgs/web3auth_light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://hedera.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/hedera-dark.svg">
+    <img alt="Hedera logo" src="static-imgs/hedera-light.svg" width="auto" height="50">
   </picture>
 </a>
 
@@ -230,34 +251,19 @@ Projects using Web3j
   </picture>
 </a>
 
-<a href="https://unstoppabledomains.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/unstoppable_domains.png">
-    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains.png" width="auto" height="50">
-  </picture>
-</a>
-
-<a href="https://consensys.io/">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys-dark.svg">
-    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" width="auto" height="50">
-  </picture>
-</a>
-
-<a href="https://github.com/hyperledger/besu">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/besu-dark.svg">
-    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" width="auto" height="50">
-  </picture>
-</a>
-
 <a href="https://argent.xyz">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent-dark.svg">
-    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="100">
+    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="50">
   </picture>
 </a>
 
+<a href="https://unstoppabledomains.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/unstoppable_domains-dark.svg">
+    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains-light.svg" width="auto" height="50">
+  </picture>
+</a>
 
 Commercial support and training
 -------------------------------
