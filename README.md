@@ -240,21 +240,28 @@ Projects using Web3j
 <a href="https://consensys.io/">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys.svg">
-    <img alt="ConsenSys logo" src="static-imgs/consensys.svg" width="auto" height="50">
+    <img alt="ConsenSys logo" src="static-imgs/consensys.svg" width="100" height="auto">
   </picture>
 </a>
 
 <a href="https://github.com/hyperledger/besu">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/hyperledger-dark.svg">
-    <img alt="Hyperledger Besu logo" src="https://example.com/logos/hyperledger-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/Besu.svg">
+    <img alt="Hyperledger Besu logo" src="static-imgs/Besu.svg.svg" width="auto" height="auto">
   </picture>
 </a>
 
 <a href="https://argent.xyz">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/argent-dark.svg">
-    <img alt="Argent logo" src="https://example.com/logos/argent-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent.svg">
+    <img alt="Argent logo" src="static-imgs/argent.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://hedera.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/hedera.svg">
+    <img alt="Hedera logo" src="static-imgs/hedera.svg" width="auto" height="50">
   </picture>
 </a>
 
@@ -262,13 +269,6 @@ Projects using Web3j
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/fnality-dark.svg">
     <img alt="Fnality logo" src="https://example.com/logos/fnality-light.svg" width="auto" height="50">
-  </picture>
-</a>
-
-<a href="https://hedera.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/hedera-dark.svg">
-    <img alt="Hedera logo" src="https://example.com/logos/hedera-light.svg" width="auto" height="50">
   </picture>
 </a>
 
