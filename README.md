@@ -239,22 +239,22 @@ Projects using Web3j
 
 <a href="https://consensys.io/">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys.svg">
-    <img alt="ConsenSys logo" src="static-imgs/consensys.svg" width="200" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys-dark.svg">
+    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" width="auto" height="50">
   </picture>
 </a>
 
 <a href="https://github.com/hyperledger/besu">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/Besu.svg">
-    <img alt="Hyperledger Besu logo" src="static-imgs/Besu.svg.svg" width="200" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/besu-dark.svg">
+    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" width="auto" height="50">
   </picture>
 </a>
 
 <a href="https://argent.xyz">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent.svg">
-    <img alt="Argent logo" src="static-imgs/argent.svg" width="200" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent-dark.svg">
+    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="50">
   </picture>
 </a>
 
