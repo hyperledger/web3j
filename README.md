@@ -211,8 +211,8 @@ Projects using Web3j
 
 <a href="https://web3auth.io">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/web3auth-dark.svg">
-    <img alt="Web3Auth logo" src="static-imgs/web3auth-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/web3auth_dark.svg">
+    <img alt="Web3Auth logo" src="static-imgs/web3auth_light.svg" width="auto" height="50">
   </picture>
 </a>
 
