@@ -190,8 +190,8 @@ Projects using Web3j
 
 <a href="https://alphawallet.com/">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/alphawallet-dark.svg">
-    <img alt="Alphawallet logo" src="https://example.com/logos/alphawallet-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/alphawallet-dark.svg">
+    <img alt="Alphawallet logo" src="static-imgs/alphawallet-light.svg" width="auto" height="50">
   </picture>
 </a>
 
@@ -204,15 +204,15 @@ Projects using Web3j
 
 <a href="https://ens.domains">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/ens-dark.svg">
-    <img alt="ENS logo" src="https://example.com/logos/ens-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/ens-dark.svg">
+    <img alt="ENS logo" src="static-imgs/ens-light.svg" width="auto" height="50">
   </picture>
 </a>
 
 <a href="https://web3auth.io">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/web3auth-dark.svg">
-    <img alt="Web3Auth logo" src="https://example.com/logos/web3auth-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/web3auth-dark.svg">
+    <img alt="Web3Auth logo" src="static-imgs/web3auth-light.svg" width="auto" height="50">
   </picture>
 </a>
 
@@ -232,15 +232,15 @@ Projects using Web3j
 
 <a href="https://unstoppabledomains.com">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/unstoppable-dark.svg">
-    <img alt="Unstoppable Domains logo" src="https://example.com/logos/unstoppable-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/unstoppable_domains.png">
+    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains.png" width="auto" height="50">
   </picture>
 </a>
 
 <a href="https://consensys.io/">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://example.com/logos/consensys-dark.svg">
-    <img alt="ConsenSys logo" src="https://example.com/logos/consensys-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys.svg">
+    <img alt="ConsenSys logo" src="static-imgs/consensys.svg" width="auto" height="50">
   </picture>
 </a>
 
