@@ -272,6 +272,13 @@ Projects using Web3j
   </picture>
 </a>
 
+<a href="https://zksync.io/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/zksync-dark.svg">
+    <img alt="zksync logo" src="static-imgs/zksync-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
 Commercial support and training
 -------------------------------
 
