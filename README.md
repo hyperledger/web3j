@@ -93,7 +93,7 @@ curl -L get.web3j.io | sh && source ~/.web3j/source.sh
 For Windows, in Powershell:
 
 ```shell script
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/web3j/web3j-installer/master/installer.ps1'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/hyperledger/web3j-installer/main/installer.ps1'))
 ```
 
 Create a new project by running:
@@ -183,6 +183,101 @@ $ ./gradlew -Pintegration-tests=false :test
 
 Check the [Docker client API](https://github.com/docker-java/docker-java/blob/master/docs/getting_started.md#instantiating-a-dockerclientconfig)
 for more information on configuration options.
+
+
+Projects using Web3j
+------------------
+
+<a href="https://alphawallet.com/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/alphawallet-dark.svg">
+    <img alt="Alphawallet logo" src="static-imgs/alphawallet-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://linea.build">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/linea-dark.svg">
+    <img alt="Linea logo" src="static-imgs/linea-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://consensys.io/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/consensys-dark.svg">
+    <img alt="ConsenSys logo" src="static-imgs/consensys-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://ens.domains">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/ens-dark.svg">
+    <img alt="ENS logo" src="static-imgs/ens-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://github.com/hyperledger/besu">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/hyperledger-besu-dark.svg">
+    <img alt="Hyperledger Besu logo" src="static-imgs/hyperledger-besu-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://web3auth.io">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/web3auth_dark.svg">
+    <img alt="Web3Auth logo" src="static-imgs/web3auth_light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://hedera.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/hedera-dark.svg">
+    <img alt="Hedera logo" src="static-imgs/hedera-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://celo.org">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/celo-dark.svg">
+    <img alt="Celo logo" src="static-imgs/celo-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://explorer.walletconnect.com/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/walletconnect-dark.svg">
+    <img alt="WalletConnect logo" src="static-imgs/walletconnect-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://argent.xyz">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/argent-dark.svg">
+    <img alt="Argent logo" src="static-imgs/argent-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://unstoppabledomains.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/unstoppable_domains-dark.svg">
+    <img alt="Unstoppable Domains logo" src="static-imgs/unstoppable_domains-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://www.fnality.org/home">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/fnality-dark.svg">
+    <img alt="Fnality logo" src="static-imgs/fnality-light.svg" width="auto" height="50">
+  </picture>
+</a>
+
+<a href="https://zksync.io/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/zksync-dark.svg">
+    <img alt="zksync logo" src="static-imgs/zksync-light.svg" width="auto" height="50">
+  </picture>
+</a>
 
 Commercial support and training
 -------------------------------
