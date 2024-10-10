@@ -218,8 +218,8 @@ Projects using Web3j
 
 <a href="https://github.com/hyperledger/besu">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/besu-dark.svg">
-    <img alt="Hyperledger Besu logo" src="static-imgs/besu-light.svg" width="auto" height="50">
+    <source media="(prefers-color-scheme: dark)" srcset="static-imgs/hyperledger-besu-dark.svg">
+    <img alt="Hyperledger Besu logo" src="static-imgs/hyperledger-besu-light.svg" width="auto" height="50">
   </picture>
 </a>
 
