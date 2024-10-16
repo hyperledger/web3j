@@ -27,6 +27,7 @@ import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
 
+import org.web3j.commons.ChainId;
 import org.web3j.utils.Numeric;
 
 import static org.bouncycastle.util.BigIntegers.TWO;
@@ -272,7 +273,7 @@ public class Sign {
      */
     public static BigInteger signedMessageToKey(byte[] message, SignatureData signatureData)
             throws SignatureException {
-        return signedMessageHashToKey(Hash.sha3(message), signatureData);
+        return signedMessageHashToKey(Hash.sha3(message), signatureData, ChainId.MAIN_NET);
     }
 
     /**
@@ -288,9 +289,12 @@ public class Sign {
      */
     public static BigInteger signedPrefixedMessageToKey(byte[] message, SignatureData signatureData)
             throws SignatureException {
-        return signedMessageHashToKey(getEthereumMessageHash(message), signatureData);
+        return signedPrefixedMessageToKey(message, signatureData, ChainId.MAIN_NET);
     }
-
+    public static BigInteger signedPrefixedMessageToKey(byte[] message, SignatureData signatureData, ChainId chainId)
+            throws SignatureException {
+        return signedMessageHashToKey(getEthereumMessageHash(message), signatureData, chainId);
+    }
     /**
      * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns
      * the public key that was used to sign it. This can then be compared to the expected public key
@@ -302,7 +306,25 @@ public class Sign {
      * @throws SignatureException If the public key could not be recovered or if there was a
      *     signature format error.
      */
+    @Deprecated
     public static BigInteger signedMessageHashToKey(byte[] messageHash, SignatureData signatureData)
+            throws SignatureException {
+        return signedPrefixedMessageToKey(messageHash, signatureData, ChainId.MAIN_NET);
+    }
+
+    /**
+     * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns
+     * the public key that was used to sign it. This can then be compared to the expected public key
+     * to determine if the signature was correct.
+     *
+     * @param messageHash The message hash.
+     * @param signatureData The message signature components
+     * @param chainId of the network
+     * @return the public key used to sign the message
+     * @throws SignatureException If the public key could not be recovered or if there was a
+     *     signature format error.
+     */
+    public static BigInteger signedMessageHashToKey(byte[] messageHash, SignatureData signatureData, ChainId chainId)
             throws SignatureException {
 
         byte[] r = signatureData.getR();
@@ -310,19 +332,12 @@ public class Sign {
         verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
         verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
 
-        int header = signatureData.getV()[0] & 0xFF;
-        // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
-        //                  0x1D = second key with even y, 0x1E = second key with odd y
-        if (header < 27 || header > 34) {
-            throw new SignatureException("Header byte out of range: " + header);
-        }
-
         ECDSASignature sig =
                 new ECDSASignature(
                         new BigInteger(1, signatureData.getR()),
                         new BigInteger(1, signatureData.getS()));
 
-        int recId = header - 27;
+        int recId = Sign.getRecId(signatureData, chainId.getId());
         BigInteger key = recoverFromSignature(recId, sig, messageHash);
         if (key == null) {
             throw new SignatureException("Could not recover public key from signature");
